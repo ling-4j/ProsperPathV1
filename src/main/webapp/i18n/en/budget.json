@@ -1,0 +1,30 @@
+{
+  "prosperPathApp": {
+    "budget": {
+      "home": {
+        "title": "Budgets",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Budget",
+        "createOrEditLabel": "Create or edit a Budget",
+        "notFound": "No Budgets found"
+      },
+      "created": "A new Budget is created with identifier {{ param }}",
+      "updated": "A Budget is updated with identifier {{ param }}",
+      "deleted": "A Budget is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Budget {{ id }}?"
+      },
+      "detail": {
+        "title": "Budget"
+      },
+      "id": "ID",
+      "budgetAmount": "Budget Amount",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "category": "Category",
+      "user": "User"
+    }
+  }
+}

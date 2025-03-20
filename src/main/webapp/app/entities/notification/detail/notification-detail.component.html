@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (notification(); as notificationRef) {
+      <div>
+        <h2 data-cy="notificationDetailsHeading"><span jhiTranslate="prosperPathApp.notification.detail.title">Notification</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ notificationRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.notification.message">Message</span></dt>
+          <dd>
+            <span>{{ notificationRef.message }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.notification.notificationType">Notification Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'prosperPathApp.NotificationType.' + (notificationRef.notificationType ?? 'null')">{{
+              { null: '', BUDGET_EXCEEDED: 'BUDGET_EXCEEDED', OTHER: 'OTHER' }[notificationRef.notificationType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.notification.isRead">Is Read</span></dt>
+          <dd>
+            <span>{{ notificationRef.isRead }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.notification.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ notificationRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.notification.user">User</span></dt>
+          <dd>
+            <span>{{ notificationRef.user?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/notification', notificationRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

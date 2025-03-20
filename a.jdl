@@ -1,0 +1,54 @@
+entity Category {
+  categoryName String required
+  categoryType CategoryType required
+  createdAt Instant
+  updatedAt Instant
+}
+
+entity Transaction {
+  amount BigDecimal required
+  transactionType TransactionType required
+  description String
+  transactionDate Instant required
+  createdAt Instant
+  updatedAt Instant
+}
+
+entity Budget {
+  budgetAmount BigDecimal required
+  startDate Instant required
+  endDate Instant required
+  createdAt Instant
+  updatedAt Instant
+}
+
+entity Notification {
+  message String required
+  notificationType NotificationType required
+  isRead Boolean
+  createdAt Instant
+}
+
+relationship ManyToOne {
+  Transaction{category} to Category
+  Budget{category} to Category
+}
+
+enum TransactionType {
+  INCOME,
+  EXPENSE
+}
+
+enum CategoryType {
+  INCOME,
+  EXPENSE
+}
+
+enum NotificationType {
+  BUDGET_EXCEEDED,
+  OTHER
+}
+
+service * with serviceImpl
+paginate * with pagination
+filter *

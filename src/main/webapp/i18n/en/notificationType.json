@@ -1,0 +1,9 @@
+{
+  "prosperPathApp": {
+    "NotificationType": {
+      "null": "",
+      "BUDGET_EXCEEDED": "BUDGET_EXCEEDED",
+      "OTHER": "OTHER"
+    }
+  }
+}

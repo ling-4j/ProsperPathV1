@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (transaction(); as transactionRef) {
+      <div>
+        <h2 data-cy="transactionDetailsHeading"><span jhiTranslate="prosperPathApp.transaction.detail.title">Transaction</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ transactionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.amount">Amount</span></dt>
+          <dd>
+            <span>{{ transactionRef.amount }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.transactionType">Transaction Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'prosperPathApp.TransactionType.' + (transactionRef.transactionType ?? 'null')">{{
+              { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transactionRef.transactionType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.description">Description</span></dt>
+          <dd>
+            <span>{{ transactionRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.transactionDate">Transaction Date</span></dt>
+          <dd>
+            <span>{{ transactionRef.transactionDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ transactionRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ transactionRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.category">Category</span></dt>
+          <dd>
+            @if (transaction()!.category) {
+              <div>
+                <a [routerLink]="['/category', transaction()!.category?.id, 'view']">{{ transactionRef.category?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.user">User</span></dt>
+          <dd>
+            <span>{{ transactionRef.user?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/transaction', transactionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

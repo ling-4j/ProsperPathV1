@@ -1,0 +1,9 @@
+{
+  "prosperPathApp": {
+    "TransactionType": {
+      "null": "",
+      "INCOME": "INCOME",
+      "EXPENSE": "EXPENSE"
+    }
+  }
+}

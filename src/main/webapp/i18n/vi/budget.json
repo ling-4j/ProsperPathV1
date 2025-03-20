@@ -1,0 +1,30 @@
+{
+  "prosperPathApp": {
+    "budget": {
+      "home": {
+        "title": "Budgets",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Budget",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Budget",
+        "notFound": "No Budgets found"
+      },
+      "created": "Một Budget mới được tạo với định danh {{ param }}",
+      "updated": "Một Budget cập nhật với định danh {{ param }}",
+      "deleted": "Một Budget đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Budget {{ id }}?"
+      },
+      "detail": {
+        "title": "Budget"
+      },
+      "id": "ID",
+      "budgetAmount": "Budget Amount",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "category": "Category",
+      "user": "User"
+    }
+  }
+}

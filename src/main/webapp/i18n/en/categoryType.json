@@ -1,0 +1,9 @@
+{
+  "prosperPathApp": {
+    "CategoryType": {
+      "null": "",
+      "INCOME": "INCOME",
+      "EXPENSE": "EXPENSE"
+    }
+  }
+}

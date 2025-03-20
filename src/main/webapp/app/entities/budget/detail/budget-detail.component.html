@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (budget(); as budgetRef) {
+      <div>
+        <h2 data-cy="budgetDetailsHeading"><span jhiTranslate="prosperPathApp.budget.detail.title">Budget</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ budgetRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</span></dt>
+          <dd>
+            <span>{{ budgetRef.budgetAmount }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.startDate">Start Date</span></dt>
+          <dd>
+            <span>{{ budgetRef.startDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.endDate">End Date</span></dt>
+          <dd>
+            <span>{{ budgetRef.endDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ budgetRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ budgetRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.category">Category</span></dt>
+          <dd>
+            @if (budget()!.category) {
+              <div>
+                <a [routerLink]="['/category', budget()!.category?.id, 'view']">{{ budgetRef.category?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.user">User</span></dt>
+          <dd>
+            <span>{{ budgetRef.user?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/budget', budgetRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
