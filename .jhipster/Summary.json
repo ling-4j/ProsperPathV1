@@ -1,0 +1,62 @@
+{
+  "annotations": {
+    "changelogDate": "20250320072040"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "periodType",
+      "fieldType": "PeriodType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "WEEK,MONTH,YEAR"
+    },
+    {
+      "fieldName": "periodValue",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalAssets",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalIncome",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalExpense",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalProfit",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "profitPercentage",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Summary",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

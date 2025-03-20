@@ -1,0 +1,10 @@
+{
+  "prosperPathApp": {
+    "PeriodType": {
+      "null": "",
+      "WEEK": "WEEK",
+      "MONTH": "MONTH",
+      "YEAR": "YEAR"
+    }
+  }
+}

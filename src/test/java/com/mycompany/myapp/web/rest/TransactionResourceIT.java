@@ -770,12 +770,7 @@ class TransactionResourceIT {
         Transaction partialUpdatedTransaction = new Transaction();
         partialUpdatedTransaction.setId(transaction.getId());
 
-        partialUpdatedTransaction
-            .transactionType(UPDATED_TRANSACTION_TYPE)
-            .description(UPDATED_DESCRIPTION)
-            .transactionDate(UPDATED_TRANSACTION_DATE)
-            .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+        partialUpdatedTransaction.amount(UPDATED_AMOUNT).createdAt(UPDATED_CREATED_AT).updatedAt(UPDATED_UPDATED_AT);
 
         restTransactionMockMvc
             .perform(

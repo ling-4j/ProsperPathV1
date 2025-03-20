@@ -11,7 +11,8 @@
         "budget": "Budget",
         "category": "Category",
         "notification": "Notification",
-        "transaction": "Transaction"
+        "transaction": "Transaction",
+        "summary": "Summary"
       },
       "account": {
         "main": "Tài khoản",

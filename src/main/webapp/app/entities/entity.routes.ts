@@ -26,6 +26,11 @@ const routes: Routes = [
     data: { pageTitle: 'prosperPathApp.transaction.home.title' },
     loadChildren: () => import('./transaction/transaction.routes'),
   },
+  {
+    path: 'summary',
+    data: { pageTitle: 'prosperPathApp.summary.home.title' },
+    loadChildren: () => import('./summary/summary.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

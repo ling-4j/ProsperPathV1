@@ -1,0 +1,22 @@
+
+entity Summary {
+  periodType PeriodType required
+  periodValue String required
+  totalAssets BigDecimal
+  totalIncome BigDecimal
+  totalExpense BigDecimal 
+  totalProfit BigDecimal 
+  profitPercentage BigDecimal
+  createdAt Instant
+  updatedAt Instant
+}
+
+enum PeriodType {
+  WEEK,
+  MONTH,
+  YEAR
+}
+
+service * with serviceImpl
+paginate * with pagination
+filter *

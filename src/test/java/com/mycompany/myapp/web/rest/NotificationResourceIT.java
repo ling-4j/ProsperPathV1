@@ -598,7 +598,7 @@ class NotificationResourceIT {
         Notification partialUpdatedNotification = new Notification();
         partialUpdatedNotification.setId(notification.getId());
 
-        partialUpdatedNotification.createdAt(UPDATED_CREATED_AT);
+        partialUpdatedNotification.notificationType(UPDATED_NOTIFICATION_TYPE).isRead(UPDATED_IS_READ).createdAt(UPDATED_CREATED_AT);
 
         restNotificationMockMvc
             .perform(

@@ -685,7 +685,7 @@ class BudgetResourceIT {
         Budget partialUpdatedBudget = new Budget();
         partialUpdatedBudget.setId(budget.getId());
 
-        partialUpdatedBudget.startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE).createdAt(UPDATED_CREATED_AT);
+        partialUpdatedBudget.budgetAmount(UPDATED_BUDGET_AMOUNT).startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
 
         restBudgetMockMvc
             .perform(

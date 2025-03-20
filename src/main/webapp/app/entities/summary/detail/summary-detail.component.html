@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (summary(); as summaryRef) {
+      <div>
+        <h2 data-cy="summaryDetailsHeading"><span jhiTranslate="prosperPathApp.summary.detail.title">Summary</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ summaryRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.periodType">Period Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'prosperPathApp.PeriodType.' + (summaryRef.periodType ?? 'null')">{{
+              { null: '', WEEK: 'WEEK', MONTH: 'MONTH', YEAR: 'YEAR' }[summaryRef.periodType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.periodValue">Period Value</span></dt>
+          <dd>
+            <span>{{ summaryRef.periodValue }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.totalAssets">Total Assets</span></dt>
+          <dd>
+            <span>{{ summaryRef.totalAssets }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.totalIncome">Total Income</span></dt>
+          <dd>
+            <span>{{ summaryRef.totalIncome }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.totalExpense">Total Expense</span></dt>
+          <dd>
+            <span>{{ summaryRef.totalExpense }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.totalProfit">Total Profit</span></dt>
+          <dd>
+            <span>{{ summaryRef.totalProfit }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.profitPercentage">Profit Percentage</span></dt>
+          <dd>
+            <span>{{ summaryRef.profitPercentage }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ summaryRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ summaryRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.summary.user">User</span></dt>
+          <dd>
+            <span>{{ summaryRef.user?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/summary', summaryRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,33 @@
+{
+  "prosperPathApp": {
+    "summary": {
+      "home": {
+        "title": "Summaries",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Summary",
+        "createOrEditLabel": "Create or edit a Summary",
+        "notFound": "No Summaries found"
+      },
+      "created": "A new Summary is created with identifier {{ param }}",
+      "updated": "A Summary is updated with identifier {{ param }}",
+      "deleted": "A Summary is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Summary {{ id }}?"
+      },
+      "detail": {
+        "title": "Summary"
+      },
+      "id": "ID",
+      "periodType": "Period Type",
+      "periodValue": "Period Value",
+      "totalAssets": "Total Assets",
+      "totalIncome": "Total Income",
+      "totalExpense": "Total Expense",
+      "totalProfit": "Total Profit",
+      "profitPercentage": "Profit Percentage",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "user": "User"
+    }
+  }
+}
