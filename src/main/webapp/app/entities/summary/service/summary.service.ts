@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 import dayjs from 'dayjs/esm';
 
@@ -69,14 +69,62 @@ export class SummaryService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
-
-  // Add getSummary method to retrieve summary data based on period
+  /**
+   * Retrieves summary data for a specific period.
+   * @param period The period for which to retrieve the summary (week, month, year).
+   * @returns An Observable of ISummary.
+   */
   getSummary(period: 'week' | 'month' | 'year'): Observable<ISummary> {
     const url = `${this.resourceUrl}/summary`;
     const params = { period };
-    return this.http
-      .get<RestSummary>(url, { params, observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res).body as ISummary));
+    return this.http.get<RestSummary>(url, { params, observe: 'response' }).pipe(
+      map(res => this.convertResponseFromServer(res).body as ISummary),
+      catchError(error => {
+        if (error.status === 404) {
+          console.warn(`No summary found for period: ${period}`);
+          return throwError(() => new Error('Summary not found'));
+        } else if (error.status === 401) {
+          console.warn('Unauthorized access');
+          return throwError(() => new Error('Unauthorized'));
+        }
+        console.error('Error fetching summary:', error);
+        return throwError(() => new Error('An error occurred while fetching the summary'));
+      }),
+    );
+  }
+
+  /**
+   * Retrieves financial change percentages for a specific period.
+   * @param period The period for which to retrieve the financial changes (week, month, year).
+   * @returns An Observable of FinancialChange containing percentage changes for assets, income, expense, and profit.
+   */
+  getFinancialChange(period: 'week' | 'month' | 'year'): Observable<{
+    assetsChangePercentage: number;
+    incomeChangePercentage: number;
+    expenseChangePercentage: number;
+    profitChangePercentage: number;
+  }> {
+    const url = `${this.resourceUrl}/financial-change`;
+    const params = { period };
+    return this.http.get(url, { params, observe: 'response' }).pipe(
+      map(
+        (res: HttpResponse<any>) =>
+          res.body as {
+            assetsChangePercentage: number;
+            incomeChangePercentage: number;
+            expenseChangePercentage: number;
+            profitChangePercentage: number;
+          },
+      ),
+      catchError(error => {
+        if (error.status === 401) {
+          console.warn('Unauthorized access');
+          return throwError(() => new Error('Unauthorized'));
+        }
+        console.error('Error fetching financial change:', error);
+        return throwError(() => new Error('An error occurred while fetching financial change'));
+      }),
+    );
   }
 
   getSummaryIdentifier(summary: Pick<ISummary, 'id'>): number {

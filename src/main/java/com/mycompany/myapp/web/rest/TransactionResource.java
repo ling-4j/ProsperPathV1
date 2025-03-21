@@ -1,9 +1,12 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Transaction;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.TransactionRepository;
+import com.mycompany.myapp.service.SummaryQueryService;
 import com.mycompany.myapp.service.TransactionQueryService;
 import com.mycompany.myapp.service.TransactionService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.TransactionCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -45,46 +48,49 @@ public class TransactionResource {
     private final TransactionRepository transactionRepository;
 
     private final TransactionQueryService transactionQueryService;
+    private final SummaryQueryService summaryQueryService;
+    private final UserService userService;
 
     public TransactionResource(
         TransactionService transactionService,
         TransactionRepository transactionRepository,
-        TransactionQueryService transactionQueryService
+        TransactionQueryService transactionQueryService,
+        SummaryQueryService summaryQueryService,
+        UserService userService
     ) {
         this.transactionService = transactionService;
         this.transactionRepository = transactionRepository;
         this.transactionQueryService = transactionQueryService;
+        this.summaryQueryService = summaryQueryService;
+        this.userService = userService;
     }
 
-    /**
-     * {@code POST  /transactions} : Create a new transaction.
-     *
-     * @param transaction the transaction to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new transaction, or with status {@code 400 (Bad Request)} if the transaction has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("")
     public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody Transaction transaction) throws URISyntaxException {
         LOG.debug("REST request to save Transaction : {}", transaction);
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        transaction = transactionService.save(transaction);
-        return ResponseEntity.created(new URI("/api/transactions/" + transaction.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))
-            .body(transaction);
+
+        // Gán người dùng hiện tại cho giao dịch
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+        transaction.setUser(currentUser.get());
+
+        // Lưu giao dịch
+        Transaction savedTransaction = transactionService.save(transaction);
+
+        // Cập nhật Summary
+        summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), null, savedTransaction);
+
+        return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, savedTransaction.getId().toString()))
+            .body(savedTransaction);
     }
 
-    /**
-     * {@code PUT  /transactions/:id} : Updates an existing transaction.
-     *
-     * @param id the id of the transaction to save.
-     * @param transaction the transaction to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated transaction,
-     * or with status {@code 400 (Bad Request)} if the transaction is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the transaction couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/{id}")
     public ResponseEntity<Transaction> updateTransaction(
         @PathVariable(value = "id", required = false) final Long id,
@@ -102,21 +108,46 @@ public class TransactionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        transaction = transactionService.update(transaction);
+        // Kiểm tra quyền truy cập
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+        Transaction existingTransaction = transactionRepository.findById(id).orElseThrow();
+        if (!existingTransaction.getUser().getId().equals(currentUser.get().getId())) {
+            LOG.warn("User {} attempted to update transaction {} that does not belong to them", currentUser.get().getId(), id);
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
+
+        // Lưu giao dịch cũ để cập nhật Summary
+        Transaction oldTransaction = transactionRepository.findById(id).orElseThrow();
+
+        // Cập nhật giao dịch
+        Transaction updatedTransaction = transactionService.update(transaction);
+
+        // Cập nhật Summary: trừ giá trị cũ và cộng giá trị mới trong một lần gọi
+        summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), oldTransaction, updatedTransaction);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))
-            .body(transaction);
+            .body(updatedTransaction);
     }
 
     /**
-     * {@code PATCH  /transactions/:id} : Partial updates given fields of an existing transaction, field will ignore if it is null
+     * {@code PATCH  /transactions/:id} : Partial updates given fields of an
+     * existing transaction, field will ignore if it is null
      *
-     * @param id the id of the transaction to save.
+     * @param id          the id of the transaction to save.
      * @param transaction the transaction to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated transaction,
-     * or with status {@code 400 (Bad Request)} if the transaction is not valid,
-     * or with status {@code 404 (Not Found)} if the transaction is not found,
-     * or with status {@code 500 (Internal Server Error)} if the transaction couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated transaction,
+     *         or with status {@code 400 (Bad Request)} if the transaction is not
+     *         valid,
+     *         or with status {@code 404 (Not Found)} if the transaction is not
+     *         found,
+     *         or with status {@code 500 (Internal Server Error)} if the transaction
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -149,7 +180,8 @@ public class TransactionResource {
      *
      * @param pageable the pagination information.
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of transactions in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of transactions in body.
      */
     @GetMapping("")
     public ResponseEntity<List<Transaction>> getAllTransactions(
@@ -167,7 +199,8 @@ public class TransactionResource {
      * {@code GET  /transactions/count} : count all the transactions.
      *
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count
+     *         in body.
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countTransactions(TransactionCriteria criteria) {
@@ -179,7 +212,8 @@ public class TransactionResource {
      * {@code GET  /transactions/:id} : get the "id" transaction.
      *
      * @param id the id of the transaction to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the transaction, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the transaction, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Transaction> getTransaction(@PathVariable("id") Long id) {
@@ -197,7 +231,29 @@ public class TransactionResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Transaction : {}", id);
+
+        // Lấy người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+
+        // Kiểm tra quyền truy cập
+        Transaction transaction = transactionRepository
+            .findById(id)
+            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+        if (!transaction.getUser().getId().equals(currentUser.get().getId())) {
+            LOG.warn("User {} attempted to delete transaction {} that does not belong to them", currentUser.get().getId(), id);
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
+
+        // Cập nhật Summary trước khi xóa (trường hợp xóa: newTransaction = null)
+        summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), transaction, null);
+
+        // Xóa giao dịch
         transactionService.delete(id);
+
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();

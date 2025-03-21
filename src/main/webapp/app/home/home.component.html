@@ -20,6 +20,13 @@
           }
         </div>
 
+        <!-- Hiển thị thông báo lỗi nếu có -->
+        @if (errorMessage()) {
+          <div class="alert alert-danger">
+            {{ errorMessage() }}
+          </div>
+        }
+
         <!-- Bộ lọc khoảng thời gian -->
         <div class="mb-3">
           <label for="periodSelect">Select period:</label>
@@ -30,68 +37,111 @@
           </select>
         </div>
 
-        <!-- Các thẻ thông tin tài chính -->
+        <!-- Add reusable card template with cardClass -->
+        <ng-template
+          #cardTemplate
+          let-title="title"
+          let-icon="icon"
+          let-value="value"
+          let-percentage="percentage"
+          let-period="period"
+          let-headerClass="headerClass"
+          let-cardClass="cardClass"
+        >
+          <div class="card mb-3" [ngClass]="cardClass" style="border-radius: 15px">
+            <div class="card-header" [ngClass]="headerClass">
+              <strong>{{ title }}</strong>
+              <i class="bi" [ngClass]="icon + ' float-end'"></i>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title fw-bold">{{ value | currency: 'VND' }}</h5>
+              <span
+                class="badge"
+                [ngStyle]="
+                  percentage < 0
+                    ? { color: '#dc3545', 'background-color': 'rgba(220,53,69,0.1)', 'border-radius': '12px' }
+                    : { color: '#28a745', 'background-color': 'rgba(40,167,69,0.1)', 'border-radius': '12px' }
+                "
+              >
+                <i class="bi bi-arrow-{{ percentage < 0 ? 'down' : 'up' }}"></i> {{ percentage }}%
+              </span>
+              <small class="text-muted">{{ period }}</small>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Replace card blocks with updated contexts -->
         <div class="row">
-          <!-- Thẻ Total Assets -->
+          <!-- Total Assets Card (full card primary) -->
           <div class="col-md-3">
-            <div class="card text-white bg-primary mb-3" style="border-radius: 15px">
-              <div class="card-header">
-                Total Assets
-                <i class="bi bi-wallet float-end"></i>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ totalAssets() | currency: 'VND' }}</h5>
-                <span class="badge bg-success"> <i class="bi bi-arrow-up"></i> 5% </span>
-                <small class="text-white">{{ selectedPeriod() }}</small>
-              </div>
-            </div>
+            <ng-container
+              *ngTemplateOutlet="
+                cardTemplate;
+                context: {
+                  title: 'Total Assets',
+                  icon: 'bi-wallet',
+                  value: totalAssets(),
+                  percentage: assetsChangePercentage(),
+                  period: selectedPeriod(),
+                  cardClass: 'bg-primary text-white',
+                }
+              "
+            >
+            </ng-container>
           </div>
 
-          <!-- Thẻ Total Income -->
+          <!-- Total Income Card -->
           <div class="col-md-3">
-            <div class="card mb-3" style="border-radius: 15px">
-              <div class="card-header text-dark">
-                Total Income
-                <i class="bi bi-cash-stack float-end"></i>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title text-dark">{{ totalIncome() | currency: 'VND' }}</h5>
-                <span class="badge bg-success"> <i class="bi bi-arrow-up"></i> 7% </span>
-                <small class="text-muted">{{ selectedPeriod() }}</small>
-              </div>
-            </div>
+            <ng-container
+              *ngTemplateOutlet="
+                cardTemplate;
+                context: {
+                  title: 'Total Income',
+                  icon: 'bi-cash-stack',
+                  value: totalIncome(),
+                  percentage: incomeChangePercentage(),
+                  period: selectedPeriod(),
+                  headerClass: 'text-dark',
+                }
+              "
+            >
+            </ng-container>
           </div>
 
-          <!-- Thẻ Total Expense -->
+          <!-- Total Expense Card -->
           <div class="col-md-3">
-            <div class="card mb-3" style="border-radius: 15px">
-              <div class="card-header text-dark">
-                Total Expense
-                <i class="bi bi-credit-card float-end"></i>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title text-dark">{{ totalExpense() | currency: 'VND' }}</h5>
-                <span class="badge bg-danger"> <i class="bi bi-arrow-down"></i> 5% </span>
-                <small class="text-muted">{{ selectedPeriod() }}</small>
-              </div>
-            </div>
+            <ng-container
+              *ngTemplateOutlet="
+                cardTemplate;
+                context: {
+                  title: 'Total Expense',
+                  icon: 'bi-credit-card',
+                  value: totalExpense(),
+                  percentage: expenseChangePercentage(),
+                  period: selectedPeriod(),
+                  headerClass: 'text-dark',
+                }
+              "
+            >
+            </ng-container>
           </div>
 
-          <!-- Thẻ Profit/Loss -->
+          <!-- Profit/Loss Card -->
           <div class="col-md-3">
-            <div class="card mb-3" style="border-radius: 15px">
-              <div class="card-header text-dark">
-                Profit/Loss
-                <i class="bi bi-graph-up float-end"></i>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title text-dark">{{ totalProfit() | currency: 'VND' }}</h5>
-                <span class="badge" [ngClass]="{ 'bg-success': totalProfit() > 0, 'bg-danger': totalProfit() < 0 }">
-                  <i class="bi bi-arrow-{{ totalProfit() > 0 ? 'up' : 'down' }}"></i> {{ profitPercentage() }}%
-                </span>
-                <small class="text-muted">{{ selectedPeriod() }}</small>
-              </div>
-            </div>
+            <ng-container
+              *ngTemplateOutlet="
+                cardTemplate;
+                context: {
+                  title: 'Profit/Loss',
+                  icon: 'bi-graph-up',
+                  value: totalProfit(),
+                  percentage: profitChangePercentage(),
+                  period: selectedPeriod(),
+                  headerClass: 'text-dark',
+                }
+              "
+            >
+            </ng-container>
           </div>
         </div>
       </div>

@@ -1,6 +1,8 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Summary;
+import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.domain.enumeration.PeriodType;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -40,4 +42,7 @@ public interface SummaryRepository extends JpaRepository<Summary, Long>, JpaSpec
 
     @Query("select summary from Summary summary left join fetch summary.user where summary.id =:id")
     Optional<Summary> findOneWithToOneRelationships(@Param("id") Long id);
+
+    // Thêm phương thức mới
+    Optional<Summary> findByUserAndPeriodTypeAndPeriodValue(User user, PeriodType periodType, String periodValue);
 }

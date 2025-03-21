@@ -1,16 +1,22 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Summary;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.SummaryRepository;
 import com.mycompany.myapp.service.SummaryQueryService;
 import com.mycompany.myapp.service.SummaryService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.SummaryCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -46,10 +52,18 @@ public class SummaryResource {
 
     private final SummaryQueryService summaryQueryService;
 
-    public SummaryResource(SummaryService summaryService, SummaryRepository summaryRepository, SummaryQueryService summaryQueryService) {
+    private final UserService userService;
+
+    public SummaryResource(
+        SummaryService summaryService,
+        SummaryRepository summaryRepository,
+        SummaryQueryService summaryQueryService,
+        UserService userService
+    ) {
         this.summaryService = summaryService;
         this.summaryRepository = summaryRepository;
         this.summaryQueryService = summaryQueryService;
+        this.userService = userService;
     }
 
     /**
@@ -185,19 +199,6 @@ public class SummaryResource {
     }
 
     /**
-     * {@code GET  /summary} : get the summary for a period.
-     *
-     * @param period the period for which to retrieve the summary.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the summary.
-     */
-    @GetMapping("/summary")
-    public ResponseEntity<Summary> getSummary(@RequestParam("period") String period) {
-        LOG.debug("REST request to get Summary for period: {}", period);
-        Summary summary = summaryQueryService.getSummaryForPeriod(period);
-        return ResponseEntity.ok(summary);
-    }
-
-    /**
      * {@code DELETE  /summaries/:id} : delete the "id" summary.
      *
      * @param id the id of the summary to delete.
@@ -210,5 +211,78 @@ public class SummaryResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code GET /summary} : get the summary for a period.
+     *
+     * @param period the period for which to retrieve the summary (week, month, year).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the summary,
+     *         or with status {@code 404 (Not Found)} if no summary is found.
+     */
+    @GetMapping("/summary")
+    public ResponseEntity<Summary> getSummary(@RequestParam("period") String period) {
+        LOG.debug("REST request to get Summary for period: {}", period);
+
+        // Lấy userId của người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+        Long userId = currentUser.get().getId();
+
+        // Xác định periodValue dựa trên period
+        LocalDate now = LocalDate.now();
+        String periodValue = getPeriodValue(now, period.toUpperCase());
+
+        // Lấy Summary cho kỳ hiện tại
+        Summary summary = summaryQueryService.getSummaryForPeriod(userId, period.toUpperCase(), periodValue);
+        if (summary == null) {
+            LOG.debug("No summary found for userId: {}, period: {}, periodValue: {}", userId, period, periodValue);
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(summary);
+    }
+
+    /**
+     * {@code GET /financial-change} : get the financial change percentages for a period.
+     *
+     * @param period the period for which to retrieve the financial changes (week, month, year).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the financial change percentages.
+     */
+    @GetMapping("/financial-change")
+    public ResponseEntity<SummaryQueryService.FinancialChange> getFinancialChange(@RequestParam("period") String period) {
+        LOG.debug("REST request to get FinancialChange for period: {}", period);
+
+        // Lấy userId của người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+        Long userId = currentUser.get().getId();
+
+        // Lấy phần trăm thay đổi
+        SummaryQueryService.FinancialChange change = summaryQueryService.getFinancialChangeForPeriod(userId, period);
+        return ResponseEntity.ok(change);
+    }
+
+    /**
+     * Tính periodValue dựa trên ngày và loại kỳ.
+     */
+    private String getPeriodValue(LocalDate date, String periodType) {
+        switch (periodType.toUpperCase()) {
+            case "WEEK":
+                int weekOfYear = date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+                return date.getYear() + "-" + String.format("%02d", weekOfYear);
+            case "MONTH":
+                return date.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            case "YEAR":
+                return String.valueOf(date.getYear());
+            default:
+                throw new IllegalArgumentException("Invalid period type: " + periodType);
+        }
     }
 }
