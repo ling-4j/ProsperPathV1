@@ -56,7 +56,7 @@
         },
         "register": {
           "noaccount": "Bạn vẫn chưa có tài khoản?",
-          "link": "Đăng ký tài khoản mới"
+          "link": "Đăng ký"
         }
       },
       "error": {

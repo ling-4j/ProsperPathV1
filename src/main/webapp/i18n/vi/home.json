@@ -14,6 +14,17 @@
       "follow": "Theo dõi @jhipster trên Twitter"
     },
     "like": "Nếu bạn thích JHipster, đừng quên cho chúng tôi thêm một ngôi sao trên",
-    "github": "GitHub"
+    "github": "GitHub",
+    "card": {
+      "title": "Thẻ tín dụng",
+      "description": "Thẻ tín dụng",
+      "cardNumber": "Số thẻ tín dụng",
+      "cardHolder": "Chủ thẻ",
+      "expirationDate": "Ngày hết hạn",
+      "securityCode": "Mã bảo mật",
+      "billingAddress": "Địa chỉ thanh toán",
+      "create": "Thêm tín dụng",
+      "update": "Cập nhật thẻ tín dụng"
+    }
   }
 }

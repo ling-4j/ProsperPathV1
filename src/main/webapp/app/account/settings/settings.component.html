@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
       @if (settingsForm.value.login) {
@@ -150,6 +150,69 @@
           </button>
         </form>
       }
+    </div>
+  </div>
+</div> -->
+<div class="settings-container">
+  <div class="d-flex justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <h1 class="settings-title">
+        <span jhiTranslate="settings.title">User setting for</span>
+        <!-- <span class="username" [translateValues]="{ username: settingsForm.value.login }">@{{ settingsForm.value.login }}</span> -->
+      </h1>
+      <form class="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            name="firstName"
+            placeholder="{{ 'settings.form.firstname.placeholder' | translate }}"
+            formControlName="firstName"
+            data-cy="firstname"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            name="lastName"
+            placeholder="{{ 'settings.form.lastname.placeholder' | translate }}"
+            formControlName="lastName"
+            data-cy="lastname"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="email" jhiTranslate="global.form.email.label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="{{ 'global.form.email.placeholder' | translate }}"
+            formControlName="email"
+            data-cy="email"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="langKey" jhiTranslate="settings.form.language">Language</label>
+          <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
+            @for (language of languages; track $index) {
+              <option [value]="language">{{ language | findLanguageFromKey }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-save" data-cy="submit" jhiTranslate="settings.form.button">Save</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

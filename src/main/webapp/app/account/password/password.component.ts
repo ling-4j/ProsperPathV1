@@ -10,6 +10,7 @@ import PasswordStrengthBarComponent from './password-strength-bar/password-stren
 
 @Component({
   selector: 'jhi-password',
+  styleUrl: './password.component.scss',
   imports: [SharedModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './password.component.html',
 })

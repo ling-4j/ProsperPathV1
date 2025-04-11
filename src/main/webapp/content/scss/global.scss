@@ -5,7 +5,6 @@
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
-
 body,
 h1,
 h2,
@@ -105,6 +104,7 @@ Generic styles
 
 .footer {
   border-top: 1px solid rgba(0, 0, 0, 0.125);
+  background-color: seagreen;
 }
 
 .hand,
@@ -210,19 +210,6 @@ ui bootstrap tweaks
 
 .dropdown-menu {
   padding-left: 0;
-}
-
-/* ==========================================================================
-angular-cli removes postcss-rtl processed inline css, processed rules must be added here instead
-========================================================================== */
-/* page-ribbon.component.scss */
-.ribbon {
-  left: -3.5em;
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
 }
 
 /* navbar.component.scss */

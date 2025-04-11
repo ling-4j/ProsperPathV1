@@ -1,36 +1,172 @@
+// Import Bootstrap variables and mixins
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
 
-/* ==========================================================================
-Navbar
-========================================================================== */
+// Định nghĩa màu sắc
+$dark: #212529; // Đen đậm
+$gray: #6c757d; // Xám
+$light-gray: #e8ecef; // Xám nhạt
+$white: #ffffff; // Trắng
+$red: #ff4d4f; // Đỏ (cho badge thông báo)
 
-.navbar-version {
-  font-size: 0.65em;
-  color: $navbar-dark-color;
-}
+// Định nghĩa font
+$font-family-base: 'Roboto', sans-serif;
 
-.profile-image {
-  height: 1.75em;
-  width: 1.75em;
-}
-
+// Navbar
 .navbar {
-  padding: 0.2rem 1rem;
+  background-color: $light-gray;
+  padding: 10px 20px;
+  border-bottom: 1px solid #d1d5db;
+  border-radius: 15px 15px 0 0;
 
-  a.nav-link {
-    font-weight: 400;
+  .container-fluid {
+    display: flex;
+    align-items: center;
+
+    // Logo
+    .navbar-brand {
+      font-size: 20px;
+      font-weight: 700;
+      color: $dark;
+      text-transform: uppercase;
+
+      .navbar-version {
+        font-size: 0.65em;
+        color: $gray;
+        margin-left: 5px;
+      }
+    }
+
+    // Navbar toggler
+    .navbar-toggler {
+      border: none;
+      color: $gray;
+
+      fa-icon {
+        font-size: 20px;
+      }
+    }
+
+    // Menu và icons
+    .navbar-collapse {
+      .navbar-nav {
+        &.ms-auto {
+          display: flex;
+          align-items: center;
+
+          .nav-item {
+            &.position-relative {
+              .badge-notification {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background-color: $red;
+                color: $white;
+                font-size: 10px;
+                padding: 2px 5px;
+                border-radius: 50%;
+              }
+            }
+
+            .nav-link {
+              color: $gray;
+              font-size: 14px;
+              font-weight: 400;
+              padding: 5px 15px;
+              transition: color 0.3s ease;
+
+              &:hover {
+                color: $dark;
+              }
+
+              fa-icon {
+                font-size: 16px;
+              }
+
+              &.dropdown-toggle {
+                display: flex;
+                align-items: center;
+
+                .profile-image {
+                  height: 30px;
+                  width: 30px;
+                  margin-right: 5px;
+                }
+
+                &::after {
+                  margin-left: 5px;
+                  border-top-color: $gray;
+                }
+              }
+            }
+
+            .dropdown-menu {
+              border-radius: 10px;
+              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+              border: none;
+              margin-top: 5px;
+
+              .dropdown-item {
+                font-size: 14px;
+                padding: 8px 15px;
+                color: $dark;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                  background-color: $light-gray;
+                }
+
+                fa-icon {
+                  margin-right: 10px;
+                }
+              }
+            }
+          }
+        }
+
+        .nav-item {
+          .nav-link {
+            color: $gray;
+            font-size: 14px;
+            font-weight: 400;
+            padding: 5px 15px;
+            transition: color 0.3s ease;
+
+            &:hover {
+              color: $dark;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
-/* ==========================================================================
-Logo styles
-========================================================================== */
-.logo-img {
-  height: 45px;
-  width: 45px;
-  display: inline-block;
-  vertical-align: middle;
-  background: url('/content/images/logo-jhipster.png') no-repeat center center;
-  background-size: contain;
+// Responsive adjustments
+@media (max-width: 991px) {
+  .navbar {
+    .container-fluid {
+      .navbar-collapse {
+        background-color: $white;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 10px;
+
+        .navbar-nav {
+          &.ms-auto {
+            margin-top: 10px;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+
+          .nav-item {
+            .nav-link {
+              padding: 10px 15px;
+            }
+          }
+        }
+      }
+    }
+  }
 }

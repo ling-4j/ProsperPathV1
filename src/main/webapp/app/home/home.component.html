@@ -1,167 +1,196 @@
 <div class="container-fluid">
-  <!-- Tiêu đề -->
-  <div class="row">
-    <div class="col-md-12">
-      <h1 class="display-4">Welcome to ProsperPath!</h1>
-      <p class="lead">Your personal finance management dashboard</p>
-    </div>
-  </div>
-
   <!-- Nội dung chính: Dashboard hoặc thông tin đăng nhập -->
   <div class="row">
     @if (account() !== null) {
-      <!-- Dashboard khi đã đăng nhập -->
-      <div class="col-md-12">
-        <div class="alert alert-success">
-          @if (account(); as accountRef) {
-            <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }"
-              >You are logged in as user "{{ accountRef.login }}".</span
-            >
-          }
-        </div>
-
-        <!-- Hiển thị thông báo lỗi nếu có -->
-        @if (errorMessage()) {
-          <div class="alert alert-danger">
-            {{ errorMessage() }}
-          </div>
-        }
-
-        <!-- Bộ lọc khoảng thời gian -->
-        <div class="mb-3">
-          <label for="periodSelect">Select period:</label>
-          <select id="periodSelect" class="form-control" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="year">This Year</option>
-          </select>
-        </div>
-
-        <!-- Add reusable card template with cardClass -->
-        <ng-template
-          #cardTemplate
-          let-title="title"
-          let-icon="icon"
-          let-value="value"
-          let-percentage="percentage"
-          let-period="period"
-          let-headerClass="headerClass"
-          let-cardClass="cardClass"
-        >
-          <div class="card mb-3" [ngClass]="cardClass" style="border-radius: 15px">
-            <div class="card-header" [ngClass]="headerClass">
-              <strong>{{ title }}</strong>
-              <i class="bi" [ngClass]="icon + ' float-end'"></i>
-            </div>
-            <div class="card-body">
-              <h5 class="card-title fw-bold">{{ value | currency: 'VND' }}</h5>
-              <span
-                class="badge"
-                [ngStyle]="
+    <!-- Dashboard khi đã đăng nhập -->
+    <div class="col-md-12">
+      <!-- Add reusable card template with cardClass -->
+      <ng-template #cardTemplate let-title="title" let-icon="icon" let-value="value" let-percentage="percentage"
+        let-period="period" let-headerClass="headerClass" let-cardClass="cardClass">
+        <div class="card mb-3" [ngClass]="cardClass" style="border-radius: 15px">
+          <div class="card-body">
+            <h5 class="card-title">{{ title }}</h5>
+            <h3 class="card-value fw-bold">{{ value | currency: 'VND' }}</h3>
+            <span class="badge" [ngStyle]="
                   percentage < 0
                     ? { color: '#dc3545', 'background-color': 'rgba(220,53,69,0.1)', 'border-radius': '12px' }
                     : { color: '#28a745', 'background-color': 'rgba(40,167,69,0.1)', 'border-radius': '12px' }
-                "
-              >
-                <i class="bi bi-arrow-{{ percentage < 0 ? 'down' : 'up' }}"></i> {{ percentage }}%
-              </span>
-              <small class="text-muted">{{ period }}</small>
+                ">
+              {{ percentage }}%
+            </span>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Dashboard layout -->
+      <div class="dashboard-content">
+        <!-- Cột trái: Thẻ tín dụng -->
+        <div class="dashboard-left">
+          <div class="title">
+            <h2><b>Cards</b></h2>
+          </div>
+          <div class="card credit-card">
+            <div class="card-body">
+              <div class="credit-card-header">
+                <span>VISA CARD</span>
+                <span>Platinum</span>
+              </div>
+              <div class="credit-card-number">
+                <span>XXXX</span>
+                <span>XXXX</span>
+                <span>XXXX</span>
+                <span>XXXX</span>
+              </div>
+              <div class="credit-card-footer">
+                <div>
+                  <small>Cardholder</small>
+                  <p>Card name</p>
+                </div>
+                <div>
+                  <small>Expiry date</small>
+                  <p>XX/XX</p>
+                </div>
+              </div>
             </div>
           </div>
-        </ng-template>
+          <div class="card-btn"> <button id="jh-create-entity" data-cy="entityCreateButton"
+              class="btn btn-primary jh-create-entity" [routerLink]="['/']">
+              <fa-icon icon="plus"></fa-icon>
+              <span jhiTranslate="home.card.create">CReate card</span>
+            </button></div>
+        </div>
 
-        <!-- Replace card blocks with updated contexts -->
-        <div class="row">
-          <!-- Total Assets Card (full card primary) -->
-          <div class="col-md-3">
-            <ng-container
-              *ngTemplateOutlet="
-                cardTemplate;
-                context: {
-                  title: 'Total Assets',
-                  icon: 'bi-wallet',
-                  value: totalAssets(),
-                  percentage: assetsChangePercentage(),
-                  period: selectedPeriod(),
-                  cardClass: 'bg-primary text-white',
-                }
-              "
-            >
-            </ng-container>
+        <!-- Cột giữa: 4 card-->
+        <div class="dashboard-center">
+          <div class="dashboard-header">
+            <!-- Bộ lọc khoảng thời gian -->
+            <div class="mb-3 d-flex justify-content-left">
+              <select id="periodSelect" class="form-control w-auto" [(ngModel)]="selectedPeriod"
+                (change)="onPeriodChange()">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
           </div>
+          <!-- 4 card 2x2 grid -->
+          <div class="cards-wrapper">
+            <!-- Total Assets Card -->
+            <ng-container *ngTemplateOutlet="
+                  cardTemplate;
+                  context: {
+                    title: 'Total Assets',
+                    value: totalAssets(),
+                    percentage: assetsChangePercentage(),
+                    period: selectedPeriod(),
+                    cardClass: 'bg-primary text-white'
+                  }
+                "></ng-container>
 
-          <!-- Total Income Card -->
-          <div class="col-md-3">
-            <ng-container
-              *ngTemplateOutlet="
-                cardTemplate;
-                context: {
-                  title: 'Total Income',
-                  icon: 'bi-cash-stack',
-                  value: totalIncome(),
-                  percentage: incomeChangePercentage(),
-                  period: selectedPeriod(),
-                  headerClass: 'text-dark',
-                }
-              "
-            >
-            </ng-container>
+            <!-- Profit/Loss Card -->
+            <ng-container *ngTemplateOutlet="
+                  cardTemplate;
+                  context: {
+                    title: 'Profit/Loss',
+                    value: totalProfit(),
+                    percentage: profitChangePercentage(),
+                    period: selectedPeriod(),
+                    cardClass: 'bg-success text-white'
+                  }
+                "></ng-container>
+
+            <!-- Total Income Card -->
+            <ng-container *ngTemplateOutlet="
+                  cardTemplate;
+                  context: {
+                    title: 'Total Income',
+                    value: totalIncome(),
+                    percentage: incomeChangePercentage(),
+                    period: selectedPeriod(),
+                    cardClass: 'bg-teal text-white' 
+                  }
+                "></ng-container>
+
+            <!-- Total Expense Card -->
+            <ng-container *ngTemplateOutlet="
+                  cardTemplate;
+                  context: {
+                    title: 'Total Expense',
+                    value: totalExpense(),
+                    percentage: expenseChangePercentage(),
+                    period: selectedPeriod(),
+                    cardClass: 'bg-danger text-white'
+                  }
+                "></ng-container>
           </div>
+        </div>
 
-          <!-- Total Expense Card -->
-          <div class="col-md-3">
-            <ng-container
-              *ngTemplateOutlet="
-                cardTemplate;
-                context: {
-                  title: 'Total Expense',
-                  icon: 'bi-credit-card',
-                  value: totalExpense(),
-                  percentage: expenseChangePercentage(),
-                  period: selectedPeriod(),
-                  headerClass: 'text-dark',
-                }
-              "
-            >
-            </ng-container>
+        <!-- Cột phải: Lịch -->
+        <div class="dashboard-right">
+          <div class="card calendar-card">
+            <div class="card-body">
+              <h5>July 2022</h5>
+              <!-- Placeholder cho lịch -->
+              <div class="calendar-placeholder">Calendar Placeholder</div>
+            </div>
           </div>
+        </div>
 
-          <!-- Profit/Loss Card -->
-          <div class="col-md-3">
-            <ng-container
-              *ngTemplateOutlet="
-                cardTemplate;
-                context: {
-                  title: 'Profit/Loss',
-                  icon: 'bi-graph-up',
-                  value: totalProfit(),
-                  percentage: profitChangePercentage(),
-                  period: selectedPeriod(),
-                  headerClass: 'text-dark',
-                }
-              "
-            >
-            </ng-container>
+        <!-- Phần biểu đồ -->
+        <div class="dashboard-bot">
+          <div class="charts-wrapper">
+            <div class="chart-card progress-rate">
+              <div class="card-body">
+                <h5>Progress Rate</h5>
+                <div class="chart-placeholder">Line Chart placeholder</div>
+              </div>
+            </div>
+            <div class="chart-card income-vs-expense-donut">
+              <div class="card-body">
+                <h5>Income vs Expense</h5>
+                <div class="chart-placeholder">Donut Chart placeholder</div>
+              </div>
+            </div>
+            <div class="chart-card income-vs-expense-line">
+              <div class="card-body">
+                <h5>Income vs Expense</h5>
+                <div class="chart-placeholder">Line Chart placeholder</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
     } @else {
-      <!-- Thông tin khi chưa đăng nhập -->
-      <div class="col-md-12">
+    <!-- Thông tin khi chưa đăng nhập -->
+    <div class="col-md-12">
+      <!-- Header với logo và chữ Preview -->
+      <div class="preview-header text-center">
+        <div class="logo" style="color: red;">
+          <h1><b>Prosper Path</b></h1>
+        </div>
+        <div class="preview-text">
+          <h4><b>Prosper Path</b></h4>
+        </div>
+      </div>
+
+      <!-- Alerts căn giữa -->
+      <div class="alerts-container">
         <div class="alert alert-warning">
           <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>
-          <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a
-          ><span jhiTranslate="global.messages.info.authenticated.suffix"
-            >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
-            password="user").</span
-          >
+          <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a>
+          <span jhiTranslate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br />-
+            Administrator (login="admin" and password="admin") <br />- User (login="user" and
+            password="user").</span>
         </div>
 
         <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span> 
-          <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
+          <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
+          <a class="alert-link" routerLink="/account/register"
+            jhiTranslate="global.messages.info.register.link">Register a new account</a>
         </div>
       </div>
+    </div>
     }
   </div>
 </div>

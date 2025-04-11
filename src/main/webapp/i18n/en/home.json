@@ -14,6 +14,17 @@
       "follow": "follow @jhipster on Twitter"
     },
     "like": "If you like JHipster, don't forget to give us a star on",
-    "github": "GitHub"
+    "github": "GitHub",
+    "card": {
+      "title": "Credit Card",
+      "description": "Credit Card",
+      "cardNumber": "Card number",
+      "cardHolder": "Card holder",
+      "expirationDate": "Expiration date",
+      "securityCode": "Security code",
+      "billingAddress": "Billing address",
+      "create": "Add credit card",
+      "update": "Update credit card"
+    }
   }
 }

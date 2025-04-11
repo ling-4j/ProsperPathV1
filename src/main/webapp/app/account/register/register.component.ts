@@ -11,6 +11,7 @@ import { RegisterService } from './register.service';
 
 @Component({
   selector: 'jhi-register',
+  styleUrl: './register.component.scss',
   imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './register.component.html',
 })

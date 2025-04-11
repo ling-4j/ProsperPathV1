@@ -2,22 +2,607 @@
 Main page styles
 ========================================================================== */
 
-.hipster {
-  display: inline-block;
-  width: 347px;
-  height: 497px;
-  background: url('../../content/images/jhipster_family_member_0.svg') no-repeat center top;
-  background-size: contain;
-}
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (-moz-min-device-pixel-ratio: 2),
-  only screen and (-o-min-device-pixel-ratio: 2/1),
-  only screen and (min-resolution: 192dpi),
-  only screen and (min-resolution: 2dppx) {
-  .hipster {
-    background: url('../../content/images/jhipster_family_member_0.svg') no-repeat center top;
-    background-size: contain;
+only screen and (-moz-min-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2/1),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {}
+
+// Định nghĩa màu sắc chủ đạo
+$primary: #007bff; // Xanh dương
+$warning: #ffc107; // Vàng
+$danger: #dc3545; // Đỏ
+$success: #28a745; // Xanh lá
+$dark: #212529; // Đen đậm
+$light: #f8f9fa; // Xám nhạt
+$white: #ffffff; // Trắng
+$blue: #1890ff; // Xanh dương cho thẻ tín dụng
+$teal: #00c4b4; // Teal cho Total Income
+
+// Định nghĩa font
+$font-family-base: 'Roboto', sans-serif;
+
+// Container chính
+.container-fluid {
+  padding: 20px;
+  background-color: $white;
+  // min-height: 87.5vh;
+
+  .row {
+    margin: 0;
+
+    // Dashboard content
+    .dashboard-content {
+      display: flex;
+      gap: 5%;
+      flex-wrap: wrap;
+      row-gap: 40px;
+
+      // Cột trái: Thẻ tín dụng
+      .dashboard-left {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+        background-color: #f5f7fa;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+        .credit-card {
+          background: linear-gradient(135deg, $blue, #40c4ff);
+          color: $white;
+          border-radius: 15px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+
+          .credit-card-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 20px;
+          }
+
+          .credit-card-number {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            margin-bottom: 20px;
+          }
+
+          .credit-card-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+
+            small {
+              display: block;
+              opacity: 0.7;
+            }
+          }
+        }
+
+        .card-btn {
+          margin-top: 40px;
+          text-align: end;
+          .btn {
+            border-radius: 15px;
+            background-color: $warning;
+          }
+        }
+      }
+
+      // Cột giữa: 4 card và biểu đồ
+      .dashboard-center {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+        background-color: #f5f7fa;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+        // Header
+        .dashboard-header {
+          .mb-3 {
+            max-width: 200px;
+
+            .form-control {
+              border-radius: 10px;
+              border: 1px solid #e8ecef;
+              padding: 8px 12px;
+              font-size: 14px;
+              background-color: $white;
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+              transition: all 0.3s ease;
+
+              &:hover {
+                border-color: $primary;
+                box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
+              }
+
+              &:focus {
+                border-color: $primary;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+              }
+            }
+          }
+        }
+
+        .cards-wrapper {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          row-gap: 10px;
+
+          .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+
+            &:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .card-body {
+              padding: 20px;
+              text-align: center;
+
+              .card-title {
+                font-size: 16px;
+                margin-bottom: 10px;
+                font-weight: 500;
+              }
+
+              .card-value {
+                font-size: 24px;
+                margin-bottom: 10px;
+              }
+
+              .badge {
+                font-size: 12px;
+                padding: 5px 10px;
+              }
+            }
+
+            &.bg-primary {
+              background-color: $blue;
+              color: $white;
+            }
+
+            &.bg-success {
+              background-color: $success;
+              color: $white;
+            }
+
+            &.bg-teal {
+              background-color: $teal;
+              color: $white;
+            }
+
+            &.bg-danger {
+              background-color: $danger;
+              color: $white;
+            }
+          }
+        }
+      }
+
+      // Phần biểu đồ
+      .dashboard-bot {
+        flex: 2;
+        min-width: 600px;
+        margin-top: 20px;
+
+        .charts-wrapper {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+
+          .chart-card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+            .card-body {
+              padding: 20px;
+
+              h5 {
+                font-size: 16px;
+                margin-bottom: 15px;
+              }
+
+              .chart-placeholder {
+                height: 150px;
+                background-color: #f5f7fa;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #999;
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+
+      // Cột phải: Lịch
+      .dashboard-right {
+        flex: 1;
+        min-width: 300px;
+
+        .calendar-card {
+          border-radius: 15px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+          .card-body {
+            padding: 20px;
+
+            h5 {
+              font-size: 16px;
+              margin-bottom: 15px;
+            }
+
+            .calendar-placeholder {
+              height: 200px;
+              background-color: #f5f7fa;
+              border-radius: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #999;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+
+    // Alert khi chưa đăng nhập
+    .alert {
+      border-radius: 10px;
+      padding: 15px;
+      background: linear-gradient(135deg, #fff3cd, #ffeeba);
+      border: none;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+      .alert-link {
+        color: $primary;
+        font-weight: 500;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: darken($primary, 10%);
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+// Màn hình lớn (desktop, >1200px): Giữ nguyên bố cục 3 cột
+@media (max-width: 1200px) {
+  .container-fluid {
+    padding: 15px;
+
+    .dashboard-content {
+      flex-direction: column;
+      gap: 15px;
+
+      .dashboard-left,
+      .dashboard-center,
+      .dashboard-right {
+        flex: 1;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0;
+      }
+
+      // Cột trái: Thẻ tín dụng
+      .dashboard-left {
+        padding: 15px;
+
+        .credit-card {
+          padding: 15px;
+
+          .credit-card-header {
+            font-size: 12px;
+            margin-bottom: 15px;
+          }
+
+          .credit-card-number {
+            font-size: 16px;
+            margin-bottom: 15px;
+          }
+
+          .credit-card-footer {
+            font-size: 10px;
+          }
+        }
+      }
+
+      // Cột giữa: 4 card
+      .dashboard-center {
+        padding: 15px;
+
+        .cards-wrapper {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
+
+          .card {
+            .card-body {
+              padding: 15px;
+
+              .card-title {
+                font-size: 14px;
+              }
+
+              .card-value {
+                font-size: 20px;
+              }
+
+              .badge {
+                font-size: 10px;
+                padding: 4px 8px;
+              }
+            }
+          }
+        }
+      }
+
+      // Cột phải: Lịch
+      .dashboard-right {
+        padding: 15px;
+
+        .calendar-card {
+          .card-body {
+            padding: 15px;
+
+            h5 {
+              font-size: 14px;
+              margin-bottom: 10px;
+            }
+
+            .calendar-placeholder {
+              height: 180px;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+
+    // Phần biểu đồ
+    .dashboard-bot {
+      .charts-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+
+        .chart-card {
+          .card-body {
+            padding: 15px;
+
+            h5 {
+              font-size: 14px;
+              margin-bottom: 10px;
+            }
+
+            .chart-placeholder {
+              height: 120px;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .container-fluid {
+    padding: 10px;
+
+    .dashboard-content {
+      gap: 10px;
+
+      .dashboard-left,
+      .dashboard-center,
+      .dashboard-right {
+        padding: 10px;
+      }
+
+      .dashboard-center {
+        .cards-wrapper {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+
+          .card {
+            .card-body {
+              padding: 10px;
+
+              .card-title {
+                font-size: 12px;
+              }
+
+              .card-value {
+                font-size: 18px;
+              }
+
+              .badge {
+                font-size: 9px;
+                padding: 3px 6px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .dashboard-bot {
+      .charts-wrapper {
+        grid-template-columns: repeat(1, 1fr);
+
+        .chart-card {
+          .card-body {
+            padding: 10px;
+
+            h5 {
+              font-size: 12px;
+            }
+
+            .chart-placeholder {
+              height: 100px;
+              font-size: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Màn hình nhỏ (mobile, <768px): Chuyển thành 1 cột hoàn toàn, cards và charts cũng xếp chồng
+@media (max-width: 767px) {
+  .container-fluid {
+    padding: 5px;
+
+    .dashboard-content {
+      gap: 20px;
+      flex-direction: column;
+
+      .dashboard-left,
+      .dashboard-center,
+      .dashboard-bot,
+      .dashboard-right {
+        padding: 0;
+        background-color: transparent;
+        box-shadow: none;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      // Cột trái: Thẻ tín dụng
+      .dashboard-left {
+        .credit-card {
+          padding: 15px;
+          width: 100%;
+          max-width: 100%;
+
+          .credit-card-header {
+            font-size: 12px;
+            margin-bottom: 15px;
+          }
+
+          .credit-card-number {
+            font-size: 16px;
+            margin-bottom: 15px;
+          }
+
+          .credit-card-footer {
+            font-size: 10px;
+          }
+        }
+      }
+
+      // Cột giữa: 4 card
+      .dashboard-center {
+        .cards-wrapper {
+          grid-template-columns: 1fr;
+          gap: 10px;
+
+          .card {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 10px;
+
+            .card-body {
+              padding: 15px;
+
+              .card-title {
+                font-size: 14px;
+              }
+
+              .card-value {
+                font-size: 20px;
+              }
+
+              .badge {
+                font-size: 10px;
+                padding: 4px 8px;
+              }
+            }
+          }
+        }
+      }
+
+      .dashboard-bot {
+        .charts-wrapper {
+          grid-template-columns: repeat(1, 1fr); // 1 biểu đồ trên 1 hàng
+
+          .chart-card {
+            &.progress-rate {
+              grid-column: 1 / 2;
+              grid-row: 1 / 2;
+            }
+
+            &.income-vs-expense-donut {
+              grid-column: 1 / 2;
+              grid-row: 2 / 3;
+            }
+
+            &.income-vs-expense-line {
+              grid-column: 1 / 2;
+              grid-row: 3 / 4;
+            }
+
+            .card-body {
+              padding: 10px;
+
+              h5 {
+                font-size: 12px;
+              }
+
+              .chart-placeholder {
+                height: 100px;
+                font-size: 10px;
+              }
+            }
+          }
+        }
+      }
+
+      .dashboard-right {
+        .calendar-card {
+          .card-body {
+            padding: 8px;
+
+            h5 {
+              font-size: 10px;
+              margin-bottom: 5px;
+            }
+
+            .calendar-placeholder {
+              height: 150px;
+              font-size: 10px;
+            }
+          }
+        }
+      }
+    }
+
+    // Alert khi chưa đăng nhập
+    .alert {
+      padding: 10px;
+      font-size: 12px;
+
+      .alert-link {
+        font-size: 12px;
+      }
+    }
   }
 }
