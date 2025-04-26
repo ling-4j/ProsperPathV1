@@ -35,13 +35,6 @@
       <table class="table table-striped" aria-describedby="page-heading">
         <thead>
           <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
             <th scope="col" jhiSortBy="budgetAmount">
               <div class="d-flex">
                 <span jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</span>
@@ -63,29 +56,9 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="createdAt">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.createdAt">Created At</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="updatedAt">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.updatedAt">Updated At</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
             <th scope="col" jhiSortBy="category.id">
               <div class="d-flex">
                 <span jhiTranslate="prosperPathApp.budget.category">Category</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="user.login">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.user">User</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
@@ -95,23 +68,15 @@
         <tbody>
           @for (budget of budgets(); track trackId(budget)) {
             <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/budget', budget.id, 'view']">{{ budget.id }}</a>
-              </td>
               <td>{{ budget.budgetAmount }}</td>
               <td>{{ budget.startDate | formatMediumDatetime }}</td>
               <td>{{ budget.endDate | formatMediumDatetime }}</td>
-              <td>{{ budget.createdAt | formatMediumDatetime }}</td>
-              <td>{{ budget.updatedAt | formatMediumDatetime }}</td>
               <td>
                 @if (budget.category) {
                   <div>
                     <a [routerLink]="['/category', budget.category.id, 'view']">{{ budget.category.id }}</a>
                   </div>
                 }
-              </td>
-              <td>
-                {{ budget.user?.login }}
               </td>
               <td class="text-end">
                 <div class="btn-group">

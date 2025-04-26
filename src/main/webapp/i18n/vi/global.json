@@ -8,11 +8,11 @@
       "entities": {
         "main": "Thực thể",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "budget": "Budget",
-        "category": "Category",
-        "notification": "Notification",
-        "transaction": "Transaction",
-        "summary": "Summary"
+        "budget": "Ngân sách",
+        "category": "Danh mục",
+        "notification": "Thông báo",
+        "transaction": "Giao dịch",
+        "summary": "Thống kê"
       },
       "account": {
         "main": "Tài khoản",

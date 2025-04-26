@@ -88,6 +88,7 @@ $font-family-base: 'Roboto', sans-serif;
         .card-btn {
           margin-top: 40px;
           text-align: end;
+
           .btn {
             border-radius: 15px;
             background-color: $warning;
@@ -95,7 +96,7 @@ $font-family-base: 'Roboto', sans-serif;
         }
       }
 
-      // Cột giữa: 4 card và biểu đồ
+      // Cột giữa: 4 card 
       .dashboard-center {
         flex: 1;
         min-width: 300px;
@@ -191,38 +192,144 @@ $font-family-base: 'Roboto', sans-serif;
         }
       }
 
-      // Phần biểu đồ
+      /* Phần biểu đồ */
       .dashboard-bot {
         flex: 2;
         min-width: 600px;
         margin-top: 20px;
 
-        .charts-wrapper {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
+        .row {
+          margin: 0; // Remove default Bootstrap margins if needed
+        }
 
-          .chart-card {
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .chart-card {
+          border-radius: 15px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          background-color: $white;
+          min-height: 140px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          transition: transform 0.2s ease;
 
+          &:hover {
+            transform: translateY(-3px);
+          }
+
+          .card-body {
+            padding: 15px;
+
+            h5 {
+              font-size: 12px;
+              font-weight: 500;
+              margin-bottom: 10px;
+              color: $dark;
+              text-transform: uppercase;
+            }
+
+            canvas {
+              width: 100% !important;
+              height: 260px !important;
+              min-height: 140px;
+              margin: 0 auto;
+            }
+          }
+
+          &.income-vs-expense-donut {
+            margin: 0 50px;
             .card-body {
-              padding: 20px;
+              canvas {
+                height: 260px !important; // Reduced size for donut chart
+                min-height: 140px;
+              }
+            }
+          }
+        }
+      }
+
+      // Responsive adjustments for Bootstrap grid
+      @media (max-width: 1200px) {
+        .dashboard-bot {
+          .chart-card {
+            .card-body {
+              padding: 12px;
 
               h5 {
-                font-size: 16px;
-                margin-bottom: 15px;
+                font-size: 11px;
+                margin-bottom: 8px;
               }
 
-              .chart-placeholder {
-                height: 150px;
-                background-color: #f5f7fa;
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #999;
-                font-size: 14px;
+              canvas {
+                height: 120px !important;
+                min-height: 120px;
+              }
+            }
+
+            &.income-vs-expense-donut {
+              .card-body {
+                canvas {
+                  height: 100px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      @media (max-width: 991px) {
+        .dashboard-bot {
+          width: 100%;
+          .chart-card {
+            .card-body {
+              padding: 10px;
+
+              h5 {
+                font-size: 11px;
+              }
+
+              canvas {
+                height: 140px !important;
+                min-height: 100px;
+              }
+            }
+
+            &.income-vs-expense-donut {
+              margin: 10px 0;
+              .card-body {
+                canvas {
+                  height: 250px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      @media (max-width: 767px) {
+        .dashboard-bot {
+          min-width: 0; // Allow full width on small screens
+
+          .chart-card {
+            .card-body {
+              padding: 10px;
+
+              h5 {
+                font-size: 11px;
+                margin-bottom: 8px;
+              }
+
+              canvas {
+                height: 120px !important;
+                min-height: 100px;
+              }
+            }
+
+            &.income-vs-expense-donut {
+              margin: 10px 0;
+              .card-body {
+                canvas {
+                  height: 250px !important;
+                }
               }
             }
           }
@@ -236,29 +343,188 @@ $font-family-base: 'Roboto', sans-serif;
 
         .calendar-card {
           border-radius: 15px;
+          background-color: $white;
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
           .card-body {
-            padding: 20px;
+            padding: 15px;
 
             h5 {
-              font-size: 16px;
-              margin-bottom: 15px;
+              font-size: 14px;
+              font-weight: 500;
+              margin-bottom: 10px;
+              color: $dark;
+              text-transform: uppercase;
+              text-align: center;
             }
 
-            .calendar-placeholder {
-              height: 200px;
-              background-color: #f5f7fa;
-              border-radius: 10px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: #999;
-              font-size: 14px;
+            /* Định dạng FullCalendar */
+            .fc {
+              font-family: $font-family-base;
+
+              .fc-toolbar {
+                margin-bottom: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .fc-toolbar-title {
+                  display: none; // Hide the title since we're using h5
+                }
+
+                .fc-button {
+                  background-color: transparent;
+                  border: none;
+                  color: $dark;
+                  padding: 5px;
+                  font-size: 14px;
+
+                  &:hover {
+                    background-color: $light;
+                  }
+
+                  &.fc-prev-button,
+                  &.fc-next-button {
+                    font-size: 18px;
+                  }
+                }
+              }
+
+              .fc-daygrid-day {
+                .fc-daygrid-day-number {
+                  font-size: 12px;
+                  color: $dark;
+                  padding: 5px;
+                  border-radius: 50%;
+                  display: inline-block;
+                  width: 24px;
+                  height: 24px;
+                  line-height: 24px;
+                  text-align: center;
+                }
+
+                &.fc-day-today {
+                  .fc-daygrid-day-number {
+                    background-color: $primary;
+                    color: $white;
+                  }
+                }
+              }
+
+              .fc-daygrid-day-frame {
+                min-height: 40px !important; // Ensure consistent height for each day cell
+              }
+
+              .fc-col-header-cell {
+                padding: 5px;
+                font-size: 10px;
+                font-weight: 500;
+                color: $dark;
+                text-transform: uppercase;
+              }
+
+              .fc-event {
+                background-color: $primary;
+                border: none;
+                border-radius: 3px;
+                font-size: 10px;
+                padding: 2px 5px;
+                color: $white;
+                margin-top: 2px;
+              }
             }
           }
         }
       }
+
+      // // Responsive adjustments
+      // @media (max-width: 991px) {
+      //   .dashboard-right {
+      //     padding: 0;
+      //     min-width: 0;
+      //     width: 100%;
+
+      //     .calendar-card {
+      //       .card-body {
+      //         padding: 10px;
+
+      //         h5 {
+      //           font-size: 12px;
+      //           margin-bottom: 8px;
+      //         }
+
+      //         .fc {
+      //           .fc-toolbar {
+      //             .fc-button {
+      //               padding: 4px 8px;
+      //               font-size: 11px;
+      //             }
+      //           }
+
+      //           .fc-daygrid-day {
+      //             .fc-daygrid-day-number {
+      //               font-size: 11px;
+      //               width: 20px;
+      //               height: 20px;
+      //               line-height: 20px;
+      //             }
+      //           }
+
+      //           .fc-col-header-cell {
+      //             font-size: 9px;
+      //           }
+
+      //           .fc-event {
+      //             font-size: 9px;
+      //             padding: 1px 4px;
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+
+      // @media (max-width: 767px) {
+      //   .dashboard-right {
+      //     .calendar-card {
+      //       .card-body {
+      //         padding: 10px;
+
+      //         h5 {
+      //           font-size: 12px;
+      //           margin-bottom: 8px;
+      //         }
+
+      //         .fc {
+      //           .fc-toolbar {
+      //             .fc-button {
+      //               padding: 4px 8px;
+      //               font-size: 11px;
+      //             }
+      //           }
+
+      //           .fc-daygrid-day {
+      //             .fc-daygrid-day-number {
+      //               font-size: 11px;
+      //               width: 20px;
+      //               height: 20px;
+      //               line-height: 20px;
+      //             }
+      //           }
+
+      //           .fc-col-header-cell {
+      //             font-size: 9px;
+      //           }
+
+      //           .fc-event {
+      //             font-size: 9px;
+      //             padding: 1px 4px;
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     }
 
     // Alert khi chưa đăng nhập

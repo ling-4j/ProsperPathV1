@@ -2,7 +2,8 @@ import { Component, NgZone, OnInit, inject, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDateStruct, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { Injectable } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
@@ -17,6 +18,28 @@ import { ITransaction } from '../transaction.model';
 import { EntityArrayResponseType, TransactionService } from '../service/transaction.service';
 import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-dialog.component';
 
+import { ICategory } from '../../category/category.model';
+import { NgSelectModule } from '@ng-select/ng-select';
+// Custom Date Parser Formatter
+@Injectable()
+export class CustomDateParserFormatter extends NgbDateParserFormatter {
+  parse(value: string): NgbDateStruct | null {
+    if (!value) {
+      return null;
+    }
+    const parts = value.split('/').map(part => parseInt(part, 10));
+    return {
+      day: parts[0] || 1,
+      month: parts[1] || 1,
+      year: parts[2] || new Date().getFullYear(),
+    };
+  }
+
+  format(date: NgbDateStruct | null): string {
+    return date ? `${date.day}/${date.month}/${date.year}` : '';
+  }
+}
+
 @Component({
   selector: 'jhi-transaction',
   templateUrl: './transaction.component.html',
@@ -29,11 +52,13 @@ import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-d
     FormatMediumDatetimePipe,
     FilterComponent,
     ItemCountComponent,
+    NgSelectModule,
   ],
 })
 export class TransactionComponent implements OnInit {
   subscription: Subscription | null = null;
   transactions = signal<ITransaction[]>([]);
+  categories = signal<ICategory[]>([]);
   isLoading = false;
 
   sortState = sortStateSignal({});
@@ -42,6 +67,14 @@ export class TransactionComponent implements OnInit {
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
   page = 1;
+
+  category: number | null = null;
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+  type: string | null = null;
+
+  fromDateStruct: NgbDateStruct | null = null;
+  toDateStruct: NgbDateStruct | null = null;
 
   public readonly router = inject(Router);
   protected readonly transactionService = inject(TransactionService);
@@ -91,6 +124,24 @@ export class TransactionComponent implements OnInit {
     this.handleNavigation(page, this.sortState(), this.filters.filterOptions);
   }
 
+  search(): void {
+    this.queryS().subscribe({
+      next: (res: EntityArrayResponseType) => {
+        this.onResponseSuccess(res);
+      },
+    });
+  }
+
+  onFromDateSelect(date: NgbDateStruct): void {
+    this.fromDateStruct = date;
+    this.fromDate = new Date(date.year, date.month - 1, date.day);
+  }
+
+  onToDateSelect(date: NgbDateStruct): void {
+    this.toDateStruct = date;
+    this.toDate = new Date(date.year, date.month - 1, date.day);
+  }
+
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     const page = params.get(PAGE_HEADER);
     this.page = +(page ?? 1);
@@ -126,6 +177,32 @@ export class TransactionComponent implements OnInit {
     filters.filterOptions.forEach(filterOption => {
       queryObject[filterOption.name] = filterOption.values;
     });
+    return this.transactionService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+  }
+
+  protected queryS(): Observable<EntityArrayResponseType> {
+    const { page } = this;
+    this.isLoading = true;
+
+    const queryObject: any = {
+      page: page - 1,
+      size: this.itemsPerPage,
+      sort: this.sortService.buildSortParam(this.sortState()),
+    };
+
+    if (this.type) {
+      queryObject['transactionType.equals'] = this.type;
+    }
+    if (this.category) {
+      queryObject['category.id'] = this.category.toString();
+    }
+    if (this.fromDate) {
+      queryObject['transactionDate.greaterOrEqualThan'] = this.fromDate.toISOString();
+    }
+    if (this.toDate) {
+      queryObject['transactionDate.lessOrEqualThan'] = this.toDate.toISOString();
+    }
+
     return this.transactionService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 

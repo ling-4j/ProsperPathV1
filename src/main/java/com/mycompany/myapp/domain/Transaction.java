@@ -44,7 +44,7 @@ public class Transaction implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
     @ManyToOne(optional = false)

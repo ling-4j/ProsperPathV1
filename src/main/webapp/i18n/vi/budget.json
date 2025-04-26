@@ -2,29 +2,29 @@
   "prosperPathApp": {
     "budget": {
       "home": {
-        "title": "Budgets",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Budget",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Budget",
-        "notFound": "No Budgets found"
+        "title": "Ngân sách",
+        "refreshListLabel": "Làm mới danh sách",
+        "createLabel": "Thêm mới một Ngân sách",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Ngân sách",
+        "notFound": "Không có Ngân sách nào"
       },
-      "created": "Một Budget mới được tạo với định danh {{ param }}",
-      "updated": "Một Budget cập nhật với định danh {{ param }}",
-      "deleted": "Một Budget đã xóa với định danh {{ param }}",
+      "created": "Một Ngân sách mới được tạo với định danh {{ param }}",
+      "updated": "Một Ngân sách cập nhật với định danh {{ param }}",
+      "deleted": "Một Ngân sách đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Budget {{ id }}?"
+        "question": "Bạn có chắc là muốn xóa Ngân sách {{ id }}?"
       },
       "detail": {
-        "title": "Budget"
+        "title": "Ngân sách"
       },
       "id": "ID",
-      "budgetAmount": "Budget Amount",
-      "startDate": "Start Date",
-      "endDate": "End Date",
-      "createdAt": "Created At",
-      "updatedAt": "Updated At",
-      "category": "Category",
-      "user": "User"
+      "budgetAmount": "Số tiền ngân sách",
+      "startDate": "Ngày bắt đầu",
+      "endDate": "Ngày kết thúc",
+      "createdAt": "Ngày tạo",
+      "updatedAt": "Ngay cập nhật",
+      "category": "Danh mục",
+      "user": "Người dùng"
     }
   }
 }

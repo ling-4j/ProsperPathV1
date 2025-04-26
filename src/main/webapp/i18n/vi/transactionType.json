@@ -2,8 +2,8 @@
   "prosperPathApp": {
     "TransactionType": {
       "null": "",
-      "INCOME": "INCOME",
-      "EXPENSE": "EXPENSE"
+      "INCOME": "THU NHẬP",
+      "EXPENSE": "CHI TIÊU"
     }
   }
 }

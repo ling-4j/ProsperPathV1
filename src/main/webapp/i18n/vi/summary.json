@@ -27,7 +27,15 @@
       "profitPercentage": "Profit Percentage",
       "createdAt": "Created At",
       "updatedAt": "Updated At",
-      "user": "User"
+      "user": "User",
+      "timePeriod": {
+        "null": "",
+        "DAILY": "Trong Ngày",
+        "WEEKLY": "Trong Tuần",
+        "MONTHLY": "Trong Tháng",
+        "QUARTERLY": "Trong Quý",
+        "YEARLY": "Trong Năm"
+      }
     }
   }
 }

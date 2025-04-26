@@ -67,9 +67,9 @@
             <div class="mb-3 d-flex justify-content-left">
               <select id="periodSelect" class="form-control w-auto" [(ngModel)]="selectedPeriod"
                 (change)="onPeriodChange()">
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="year">This Year</option>
+                <option value="week" jhiTranslate="prosperPathApp.summary.timePeriod.WEEKLY">This Week</option>
+                <option value="month" jhiTranslate="prosperPathApp.summary.timePeriod.MONTHLY">This Month</option>
+                <option value="year" jhiTranslate="prosperPathApp.summary.timePeriod.YEARLY">This Year</option>
               </select>
             </div>
           </div>
@@ -129,32 +129,52 @@
         <div class="dashboard-right">
           <div class="card calendar-card">
             <div class="card-body">
-              <h5>July 2022</h5>
-              <!-- Placeholder cho lịch -->
-              <div class="calendar-placeholder">Calendar Placeholder</div>
+              <h5>{{ currentMonthYear }}</h5>
+              <!-- FullCalendar with simplified options -->
+              <full-calendar [options]="calendarOptions"></full-calendar>
             </div>
           </div>
         </div>
 
         <!-- Phần biểu đồ -->
         <div class="dashboard-bot">
-          <div class="charts-wrapper">
-            <div class="chart-card progress-rate">
-              <div class="card-body">
-                <h5>Progress Rate</h5>
-                <div class="chart-placeholder">Line Chart placeholder</div>
+          <div class="row">
+            <!-- Progress Rate Line Chart -->
+            <div class="col-12 col-md-6 col-lg-5">
+              <div class="chart-card progress-rate">
+                <div class="card-body">
+                  <h5>Overall Progress</h5>
+                  <div>
+                    <canvas baseChart [data]="progressRateChartData" [options]="progressRateChartOptions"
+                      [type]="progressRateChartType"></canvas>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="chart-card income-vs-expense-donut">
-              <div class="card-body">
-                <h5>Income vs Expense</h5>
-                <div class="chart-placeholder">Donut Chart placeholder</div>
+
+            <!-- Income vs Expense Donut Chart -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="chart-card income-vs-expense-donut">
+                <div class="card-body">
+                  <h5>Income vs Expense</h5>
+                  <div>
+                    <canvas baseChart [data]="incomeVsExpenseDonutChartData"
+                      [options]="incomeVsExpenseDonutChartOptions" [type]="incomeVsExpenseDonutChartType"></canvas>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="chart-card income-vs-expense-line">
-              <div class="card-body">
-                <h5>Income vs Expense</h5>
-                <div class="chart-placeholder">Line Chart placeholder</div>
+
+            <!-- Income vs Expense Line Chart -->
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="chart-card income-vs-expense-line">
+                <div class="card-body">
+                  <h5>Income vs Expense</h5>
+                  <div>
+                    <canvas baseChart [data]="incomeVsExpenseLineChartData" [options]="incomeVsExpenseLineChartOptions"
+                      [type]="incomeVsExpenseLineChartType"></canvas>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
