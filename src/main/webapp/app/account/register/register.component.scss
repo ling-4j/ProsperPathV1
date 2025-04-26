@@ -1,7 +1,6 @@
 /* ==========================================================================
-Register page styles
+Sign up page styles
 ========================================================================== */
-
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
@@ -17,32 +16,27 @@ $gray: #e9ecef; // Xám nhạt cho input
 $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 
 .register-container {
-  min-height: 100vh; // Đảm bảo chiều cao tối thiểu là toàn màn hình
+  min-height: 81vh; // Đảm bảo chiều cao tối thiểu
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: #f5f7fa;
+  border-radius: 15px;
 
   .register-title {
-    font-size: 24px;
-    font-weight: 500;
-    color: $primary;
-    text-align: center;
-    margin-bottom: 20px;
+    color: teal;
+    font-weight: bold;
   }
 
   .form {
-    background-color: $white; // Đổi màu nền thành trắng
+    background-color: #f5f7fa;// Đổi màu nền thành trắng
     padding: 15px; // Giảm padding để form nhỏ gọn hơn
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    max-width: 400px; // Giá trị mặc định cho form
     width: 100%;
     font-family: $font-family-base;
 
     .mb-3 {
-      margin-bottom: 8px; // Giảm khoảng cách giữa các trường để khớp với hình
+      margin-bottom: 12px; // Tăng khoảng cách để thoáng hơn
 
       label {
         font-size: 14px;
@@ -71,14 +65,18 @@ $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
           color: #999;
         }
       }
+
+      .form-text.text-danger {
+        font-size: 12px; // Đảm bảo thông báo lỗi nhỏ gọn
+      }
     }
 
-    .btn-sign-up {
+    .btn-sign-in {
       background-color: $primary;
       color: $white;
       border: none;
       border-radius: 5px;
-      padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
+      padding: 6px 18px;
       font-size: 14px;
       font-weight: 500;
       text-transform: uppercase;
@@ -89,12 +87,12 @@ $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
       }
     }
 
-    .btn-sign-in {
+    .btn-sign-up {
       background-color: $warning;
       color: $white;
       border: none;
       border-radius: 5px;
-      padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
+      padding: 6px 18px;
       font-size: 14px;
       font-weight: 500;
       text-transform: uppercase;
@@ -105,222 +103,41 @@ $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
       }
     }
   }
-}
 
-// Responsive adjustments
-// Desktop rất lớn (>1920px): Thu nhỏ form dựa trên kích thước màn hình
-@media (min-width: 1920px) {
-  .register-container {
-    padding: 40px;
-
-    .register-title {
-      font-size: 26px;
-      margin-bottom: 25px;
-    }
-
-    .form {
-      padding: 12px;
-      max-width: calc(400px - (100vw - 1920px) * 0.05); // Thu nhỏ form dựa trên kích thước màn hình
-      min-width: 350px; // Đảm bảo form không quá nhỏ
-
-      .mb-3 {
-        margin-bottom: 6px;
-
-        label {
-          font-size: 13px;
-        }
-
-        .form-control {
-          padding: 5px 8px;
-          font-size: 13px;
-        }
-      }
-
-      .btn-sign-up,
-      .btn-sign-in {
-        padding: 5px 16px;
-        font-size: 13px;
-      }
-    }
-  }
-}
-
-// Desktop lớn (1200px - 1919px): Giữ kích thước form nhỏ gọn
-@media (min-width: 1200px) and (max-width: 1919px) {
-  .register-container {
-    padding: 40px;
-
-    .register-title {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    .form {
-      padding: 15px;
-      max-width: 400px; // Giữ max-width nhỏ gọn để khớp với thiết kế
-
-      .mb-3 {
-        margin-bottom: 8px;
-
-        label {
-          font-size: 14px;
-        }
-
-        .form-control {
-          padding: 6px 10px;
-          font-size: 14px;
-        }
-      }
-
-      .btn-sign-up,
-      .btn-sign-in {
-        padding: 6px 18px;
-        font-size: 14px;
-      }
-    }
-  }
-}
-
-// Desktop vừa (992px - 1199px): Giảm nhẹ kích thước
-@media (min-width: 992px) and (max-width: 1199px) {
-  .register-container {
-    padding: 30px;
-
-    .register-title {
-      font-size: 22px;
-      margin-bottom: 18px;
-    }
-
-    .form {
-      padding: 12px;
-      max-width: 350px;
-
-      .mb-3 {
-        margin-bottom: 6px;
-
-        label {
-          font-size: 13px;
-        }
-
-        .form-control {
-          padding: 5px 8px;
-          font-size: 13px;
-        }
-      }
-
-      .btn-sign-up,
-      .btn-sign-in {
-        padding: 5px 16px;
-        font-size: 13px;
-      }
-    }
-  }
-}
-
-// Tablet (768px - 991px): Giảm kích thước và padding
-@media (min-width: 768px) and (max-width: 991px) {
-  .register-container {
-    padding: 25px;
-
-    .register-title {
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-
-    .form {
-      padding: 10px;
-      max-width: 320px;
-
-      .mb-3 {
-        margin-bottom: 5px;
-
-        label {
-          font-size: 12px;
-        }
-
-        .form-control {
-          padding: 4px 8px;
-          font-size: 12px;
-        }
-      }
-
-      .btn-sign-up,
-      .btn-sign-in {
-        padding: 4px 14px;
-        font-size: 12px;
-      }
-    }
-  }
-}
-
-// Mobile (<768px): Tối ưu cho màn hình nhỏ
-@media (max-width: 767px) {
-  .register-container {
+  .alert {
+    border-radius: 10px;
     padding: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
 
-    .register-title {
-      font-size: 18px;
-      margin-bottom: 12px;
+    &.alert-danger {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      border: none;
+      color: #721c24;
     }
 
-    .form {
-      padding: 10px;
-      max-width: 100%; // Chiếm toàn bộ chiều rộng trên mobile
-      border-radius: 10px;
+    &.alert-success {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      border: none;
+      color: #155724;
+    }
 
-      .mb-3 {
-        margin-bottom: 4px;
-
-        label {
-          font-size: 11px;
-        }
-
-        .form-control {
-          padding: 4px 6px;
-          font-size: 11px;
-        }
-      }
-
-      .btn-sign-up,
-      .btn-sign-in {
-        padding: 4px 12px;
-        font-size: 11px;
-      }
+    &.alert-warning {
+      display: none; // Ẩn thông báo không liên quan
     }
   }
-}
 
-// Mobile rất nhỏ (<576px, ví dụ iPhone SE): Tinh chỉnh thêm
-@media (max-width: 576px) {
-  .register-container {
-    padding: 10px;
-
-    .register-title {
-      font-size: 16px;
-      margin-bottom: 10px;
+  // Responsive adjustments
+  @media (max-width: 576px) {
+    .form {
+      padding: 10px;
+      max-width: 100%;
     }
 
-    .form {
-      padding: 8px;
-
-      .mb-3 {
-        margin-bottom: 3px;
-
-        label {
-          font-size: 10px;
-        }
-
-        .form-control {
-          padding: 3px 5px;
-          font-size: 10px;
-        }
-      }
-
-      .btn-sign-up,
-      .btn-sign-in {
-        padding: 3px 10px;
-        font-size: 10px;
-      }
+    .btn-sign-in,
+    .btn-sign-up {
+      padding: 5px 12px;
+      font-size: 12px;
     }
   }
 }
