@@ -3,25 +3,25 @@
     "category": {
       "home": {
         "title": "Categories",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Category",
+        "refreshListLabel": "Làm mới",
+        "createLabel": "Thêm mới",
         "createOrEditLabel": "Thêm mới hoặc cập nhật Category",
-        "notFound": "No Categories found"
+        "notFound": "Không tìm thấy"
       },
-      "created": "Một Category mới được tạo với định danh {{ param }}",
-      "updated": "Một Category cập nhật với định danh {{ param }}",
-      "deleted": "Một Category đã xóa với định danh {{ param }}",
+      "created": "Một Danh mục mới được tạo với định danh {{ param }}",
+      "updated": "Một Danh mục cập nhật với định danh {{ param }}",
+      "deleted": "Một Danh mục đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Category {{ id }}?"
+        "question": "Xóa Danh mục {{ id }}?"
       },
       "detail": {
-        "title": "Category"
+        "title": "Danh mục"
       },
       "id": "ID",
-      "categoryName": "Category Name",
-      "categoryType": "Category Type",
-      "createdAt": "Created At",
-      "updatedAt": "Updated At"
+      "categoryName": "tên danh mục",
+      "categoryType": "Loại danh mục",
+      "createdAt": "Ngày tạo",
+      "updatedAt": "Ngày cập nhật"
     }
   }
 }

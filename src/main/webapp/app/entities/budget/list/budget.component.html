@@ -1,28 +1,24 @@
 <div>
   <h2 id="page-heading" data-cy="BudgetHeading">
-    <span jhiTranslate="prosperPathApp.budget.home.title">Budgets</span>
-
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-        <span jhiTranslate="prosperPathApp.budget.home.refreshListLabel">Refresh list</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-budget"
-        [routerLink]="['/budget/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="prosperPathApp.budget.home.createLabel">Create a new Budget</span>
-      </button>
+    <div class="row align-items-center header-row">
+      <div class="col-12 d-flex align-items-center header-container">
+        <div class="header-items">
+          <span class="title" jhiTranslate="prosperPathApp.budget.home.title">Budgets</span>
+        </div>
+        <div class="header-items create-btn-container">
+          <button
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-primary jh-create-entity create-budget"
+            [routerLink]="['/budget/new']"
+          >
+            <fa-icon icon="plus"></fa-icon>
+            <span jhiTranslate="prosperPathApp.budget.home.createLabel">Create a new Budget</span>
+          </button>
+        </div>
+      </div>
     </div>
   </h2>
-
-  <jhi-alert-error></jhi-alert-error>
-
-  <jhi-alert></jhi-alert>
 
   <jhi-filter [filters]="filters"></jhi-filter>
 
@@ -31,28 +27,25 @@
       <span jhiTranslate="prosperPathApp.budget.home.notFound">No Budgets found</span>
     </div>
   } @else {
-    <div class="table-responsive table-entities" id="entities">
+    <div class="table-responsive table-entities budget-table-wrapper" id="entities">
       <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
+        <thead class="budget-thead">
           <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
             <th scope="col" jhiSortBy="budgetAmount">
               <div class="d-flex">
                 <span jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="startDate">
               <div class="d-flex">
                 <span jhiTranslate="prosperPathApp.budget.startDate">Start Date</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="endDate">
               <div class="d-flex">
                 <span jhiTranslate="prosperPathApp.budget.endDate">End Date</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
@@ -62,12 +55,12 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col"></th>
+            <th scope="col" class="action-column"></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="budget-tbody">
           @for (budget of budgets(); track trackId(budget)) {
-            <tr data-cy="entityTable">
+            <tr data-cy="entityTable" class="budget-row">
               <td>{{ budget.budgetAmount }}</td>
               <td>{{ budget.startDate | formatMediumDatetime }}</td>
               <td>{{ budget.endDate | formatMediumDatetime }}</td>
@@ -78,21 +71,22 @@
                   </div>
                 }
               </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/budget', budget.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </a>
-
-                  <a [routerLink]="['/budget', budget.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <td class="text-end action-column">
+                <div class="btn-group action-buttons">
+                  <a
+                    [routerLink]="['/budget', budget.id, 'edit']"
+                    class="btn btn-primary btn-sm edit-btn"
+                    data-cy="entityEditButton"
+                  >
                     <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                   </a>
-
-                  <button type="submit" (click)="delete(budget)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <button
+                    type="submit"
+                    (click)="delete(budget)"
+                    class="btn btn-danger btn-sm delete-btn"
+                    data-cy="entityDeleteButton"
+                  >
                     <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                   </button>
                 </div>
               </td>
@@ -102,22 +96,28 @@
       </table>
     </div>
   }
-  @if (budgets().length > 0) {
-    <div>
-      <div class="d-flex justify-content-center">
-        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-      </div>
 
-      <div class="d-flex justify-content-center">
-        <ngb-pagination
-          [collectionSize]="totalItems"
-          [page]="page"
-          [pageSize]="itemsPerPage"
-          [maxSize]="5"
-          [rotate]="true"
-          [boundaryLinks]="true"
-          (pageChange)="navigateToPage($event)"
-        ></ngb-pagination>
+  @if (budgets().length > 0) {
+    <div class="pagination-container mt-3">
+      <div class="row align-items-center">
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+          <!-- <jhi-item-count
+            [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"
+            class="item-count"
+          ></jhi-item-count> -->
+        </div>
+        <div class="col-12 col-md-6 d-flex justify-content-md-end">
+          <ngb-pagination
+            [collectionSize]="totalItems"
+            [page]="page"
+            [pageSize]="itemsPerPage"
+            [maxSize]="5"
+            [rotate]="true"
+            [boundaryLinks]="true"
+            (pageChange)="navigateToPage($event)"
+            class="custom-pagination"
+          ></ngb-pagination>
+        </div>
       </div>
     </div>
   }

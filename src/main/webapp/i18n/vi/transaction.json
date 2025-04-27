@@ -3,16 +3,16 @@
     "transaction": {
       "home": {
         "title": "Giao dịch",
-        "refreshListLabel": "Làm mới danh sách",
-        "createLabel": "Thêm mới một Giao dịch",
+        "refreshListLabel": "Làm mới",
+        "createLabel": "Thêm mới",
         "createOrEditLabel": "Thêm mới hoặc cập nhật Giao dịch",
-        "notFound": "Không có Giao dịch nào"
+        "notFound": "Không tìm thấy Giao dịch nào"
       },
       "created": "Một Giao dịch mới được tạo với định danh {{ param }}",
       "updated": "Một Giao dịch cập nhật với định danh {{ param }}",
       "deleted": "Một Giao dịch đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Giao dịch {{ id }}?"
+        "question": "Xóa Giao dịch {{ id }}?"
       },
       "detail": {
         "title": "Giao dịch"
@@ -25,7 +25,11 @@
       "createdAt": "Ngày tạo",
       "updatedAt": "Ngày cập nhật",
       "category": "Danh mục",
-      "user": "Người dùng"
+      "user": "Người dùng",
+      "btn": {
+        "search": "Tìm",
+        "export": "Xuất file"
+      }
     }
   }
 }

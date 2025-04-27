@@ -1,5 +1,5 @@
 // src/app/home/home.component.ts
-import { Component, OnDestroy, OnInit, inject, signal, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal, ViewChild, ChangeDetectorRef, Renderer2, AfterViewChecked, AfterViewInit, ElementRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -38,10 +38,11 @@ import { BaseChartDirective } from 'ng2-charts';
   ],
   standalone: true,
 })
-export default class HomeComponent implements OnInit, OnDestroy {
+export default class HomeComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
   @ViewChild('donutChart') donutChart: BaseChartDirective | undefined;
   @ViewChild('lineChart') lineChart: BaseChartDirective | undefined;
   @ViewChild('progressRateChart') progressRateChart: BaseChartDirective | undefined;
+  @ViewChild('dashboardContainer', { static: true }) dashboardContainer!: ElementRef;
 
   account = signal<Account | null>(null);
   isLoading = signal<boolean>(false);
@@ -144,6 +145,10 @@ export default class HomeComponent implements OnInit, OnDestroy {
   private readonly summaryService = inject(SummaryService);
   private readonly router = inject(Router);
 
+  private chartsRendered = false;
+
+  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2) {}
+
   ngOnInit(): void {
     this.accountService
       .getAuthenticationState()
@@ -158,6 +163,50 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
     const currentDate = new Date();
     this.currentMonthYear = currentDate.toLocaleString('vi-VN', { month: 'long', year: 'numeric' });
+  }
+
+  ngAfterViewInit(): void {
+    // Ensure charts are rendered correctly after the view is fully initialized
+    setTimeout(() => {
+      this.updateAllCharts();
+      window.dispatchEvent(new Event('resize'));
+    }, 1000);
+
+    // Listen for layout changes and trigger chart updates
+    const observer = new MutationObserver(() => {
+      this.updateAllCharts();
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+
+    // Force chart updates after a delay to ensure proper rendering
+    setTimeout(() => {
+      this.updateAllCharts();
+    }, 2000);
+
+    // Additional manual resize trigger for stubborn rendering issues
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+        this.updateAllCharts();
+      }, 500);
+    });
+  }
+
+  private updateAllCharts(): void {
+    this.progressRateChart?.update();
+    this.donutChart?.update();
+    this.lineChart?.update();
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.chartsRendered) {
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+        this.chartsRendered = true;
+      }, 1);
+    }
   }
 
   onPeriodChange(): void {

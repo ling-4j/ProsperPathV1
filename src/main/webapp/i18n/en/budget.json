@@ -3,8 +3,8 @@
     "budget": {
       "home": {
         "title": "Budgets",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Budget",
+        "refreshListLabel": "Refresh",
+        "createLabel": "New Budget",
         "createOrEditLabel": "Create or edit a Budget",
         "notFound": "No Budgets found"
       },

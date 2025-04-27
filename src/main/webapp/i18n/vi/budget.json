@@ -3,8 +3,8 @@
     "budget": {
       "home": {
         "title": "Ngân sách",
-        "refreshListLabel": "Làm mới danh sách",
-        "createLabel": "Thêm mới một Ngân sách",
+        "refreshListLabel": "Làm mới",
+        "createLabel": "Thêm mới",
         "createOrEditLabel": "Thêm mới hoặc cập nhật Ngân sách",
         "notFound": "Không có Ngân sách nào"
       },
@@ -12,7 +12,7 @@
       "updated": "Một Ngân sách cập nhật với định danh {{ param }}",
       "deleted": "Một Ngân sách đã xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Ngân sách {{ id }}?"
+        "question": "Xóa Ngân sách {{ id }}?"
       },
       "detail": {
         "title": "Ngân sách"

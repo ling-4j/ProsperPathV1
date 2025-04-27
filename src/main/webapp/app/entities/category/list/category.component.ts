@@ -19,16 +19,18 @@ import { CategoryDeleteDialogComponent } from '../delete/category-delete-dialog.
 
 @Component({
   selector: 'jhi-category',
+  styleUrls: ['./category.component.scss'],
   templateUrl: './category.component.html',
+  standalone: true,
   imports: [
     RouterModule,
     FormsModule,
     SharedModule,
     SortDirective,
     SortByDirective,
-    FormatMediumDatetimePipe,
+    // FormatMediumDatetimePipe,
     FilterComponent,
-    ItemCountComponent,
+    // ItemCountComponent,
   ],
 })
 export class CategoryComponent implements OnInit {

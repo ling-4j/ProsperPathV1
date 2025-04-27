@@ -19,6 +19,7 @@ import { BudgetDeleteDialogComponent } from '../delete/budget-delete-dialog.comp
 
 @Component({
   selector: 'jhi-budget',
+  styleUrls: ['./budget.component.scss'],
   templateUrl: './budget.component.html',
   imports: [
     RouterModule,
@@ -28,7 +29,7 @@ import { BudgetDeleteDialogComponent } from '../delete/budget-delete-dialog.comp
     SortByDirective,
     FormatMediumDatetimePipe,
     FilterComponent,
-    ItemCountComponent,
+    // ItemCountComponent,
   ],
 })
 export class BudgetComponent implements OnInit {

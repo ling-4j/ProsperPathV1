@@ -3,8 +3,8 @@
     "transaction": {
       "home": {
         "title": "Transactions",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Transaction",
+        "refreshListLabel": "Refresh",
+        "createLabel": "New Transaction",
         "createOrEditLabel": "Create or edit a Transaction",
         "notFound": "No Transactions found"
       },
@@ -25,7 +25,11 @@
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "category": "Category",
-      "user": "User"
+      "user": "User",
+      "btn": {
+        "search": "Search",
+        "export": "Export"
+      }
     }
   }
 }

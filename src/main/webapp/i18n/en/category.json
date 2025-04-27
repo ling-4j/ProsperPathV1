@@ -3,8 +3,8 @@
     "category": {
       "home": {
         "title": "Categories",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Category",
+        "refreshListLabel": "Refresh",
+        "createLabel": "New Category",
         "createOrEditLabel": "Create or edit a Category",
         "notFound": "No Categories found"
       },

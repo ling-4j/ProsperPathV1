@@ -20,6 +20,9 @@ import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-d
 
 import { ICategory } from '../../category/category.model';
 import { NgSelectModule } from '@ng-select/ng-select';
+
+import { CategoryComponent } from '../../category/list/category.component';
+import { BudgetComponent } from 'app/entities/budget/list/budget.component';
 // Custom Date Parser Formatter
 @Injectable()
 export class CustomDateParserFormatter extends NgbDateParserFormatter {
@@ -42,6 +45,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 
 @Component({
   selector: 'jhi-transaction',
+  styleUrls: ['./transaction.component.scss'],
   templateUrl: './transaction.component.html',
   imports: [
     RouterModule,
@@ -53,6 +57,8 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
     FilterComponent,
     ItemCountComponent,
     NgSelectModule,
+    CategoryComponent,
+    BudgetComponent,    
   ],
 })
 export class TransactionComponent implements OnInit {

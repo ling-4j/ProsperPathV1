@@ -1,152 +1,158 @@
-<div>
-  <h2 id="page-heading" data-cy="TransactionHeading">
-    <span jhiTranslate="prosperPathApp.transaction.home.title">Transactions</span>
+<div class="parent">
+  <div class="div1">
+    <div>
+      <h2 id="page-heading" data-cy="TransactionHeading">
+        <div class="row align-items-center">
+          <div class="col-md-6 col-12 mb-2 mb-md-0 title">
+            <span jhiTranslate="prosperPathApp.transaction.home.title">Transactions</span>
+          </div>
+          <div class="col-md-6 col-12 d-flex justify-content-end gap-2">
+            <button class="btn btn-info refresh-btn" (click)="load()" [disabled]="isLoading">
+              <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.home.refreshListLabel" class="ms-1">Refresh list</span>
+            </button>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-        <span jhiTranslate="prosperPathApp.transaction.home.refreshListLabel">Refresh list</span>
-      </button>
+            <button id="jh-create-entity" data-cy="entityCreateButton"
+              class="btn btn-primary jh-create-entity create-transaction" [routerLink]="['/transaction/new']">
+              <fa-icon icon="plus"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.home.createLabel" class="ms-1">Create a new
+                Transaction</span>
+            </button>
+          </div>
+        </div>
+      </h2>
 
-      <button id="jh-create-entity" data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-transaction" [routerLink]="['/transaction/new']">
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="prosperPathApp.transaction.home.createLabel">Create a new Transaction</span>
-      </button>
-    </div>
-  </h2>
+      <jhi-filter [filters]="filters"></jhi-filter>
 
-  <jhi-alert-error></jhi-alert-error>
+      <div class="row align-items-center mb-3 filter-row">
+        <div class="col-12 filter-container">
+          <div class="filter-items">
+            <div class="filter-item">
+              <ng-select id="ctg" placeholder="category" [items]="categories()" bindLabel="categoryName" bindValue="id"
+                [(ngModel)]="category" class="custom-ng-select">
+              </ng-select>
+            </div>
+            <div class="filter-item">
+              <input type="text" class="form-control custom-input" placeholder="From date" id="f-fdate"
+                [(ngModel)]="fromDateStruct" ngbDatepicker #fromDatePicker="ngbDatepicker"
+                (click)="fromDatePicker.toggle()" />
+            </div>
+            <div class="filter-item">
+              <input type="text" class="form-control custom-input" placeholder="To date" id="f-tdate"
+                [(ngModel)]="toDateStruct" ngbDatepicker #toDatePicker="ngbDatepicker"
+                (click)="toDatePicker.toggle()" />
+            </div>
+            <div class="filter-item">
+              <select class="form-select custom-select" id="f-type" [(ngModel)]="type">
+                <option value="">Select type</option>
+                <option value="INCOME" jhiTranslate="prosperPathApp.TransactionType.INCOME">income</option>
+                <option value="EXPENSE" jhiTranslate="prosperPathApp.TransactionType.EXPENSE">expense</option>
+              </select>
+            </div>
+          </div>
+          <div class="search-btn-container">
+            <button class="btn btn-primary search-btn" (click)="search()"
+              jhiTranslate="prosperPathApp.transaction.btn.search">
+              Tìm kiếm
+            </button>
+          </div>
+          <div class="search-btn-container">
+            <button class="btn btn-primary search-btn" (click)="search()"
+              jhiTranslate="prosperPathApp.transaction.btn.export">
+              Tìm kiếm
+            </button>
+          </div>
+        </div>
+      </div>
 
-  <jhi-alert></jhi-alert>
+      @if (transactions().length === 0) {
+      <div class="alert alert-warning" id="no-result">
+        <span jhiTranslate="prosperPathApp.transaction.home.notFound">No Transactions found</span>
+      </div>
+      } @else {
+      <div class="table-responsive table-entities" id="entities">
+        <table class="table table-striped" aria-describedby="page-heading">
+          <thead>
+            <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+              <th scope="col" jhiSortBy="category.id">
+                <div class="d-flex align-items-center">
+                  <span jhiTranslate="prosperPathApp.transaction.category">Category</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
+                </div>
+              </th>
+              <th scope="col" jhiSortBy="transactionType">
+                <div class="d-flex align-items-center">
+                  <span jhiTranslate="prosperPathApp.transaction.transactionType">Transaction Type</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
+                </div>
+              </th>
+              <th scope="col" jhiSortBy="description">
+                <div class="d-flex align-items-center">
+                  <span jhiTranslate="prosperPathApp.transaction.description">Description</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
+                </div>
+              </th>
+              <th scope="col" jhiSortBy="transactionDate">
+                <div class="d-flex align-items-center">
+                  <span jhiTranslate="prosperPathApp.transaction.transactionDate">Transaction Date</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
+                </div>
+              </th>
+              <th scope="col" jhiSortBy="amount">
+                <div class="d-flex justify-content-end align-items-center">
+                  <span jhiTranslate="prosperPathApp.transaction.amount">Amount</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
+                </div>
+              </th>
+              <th scope="col" class="action-column"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (transaction of transactions(); track trackId(transaction)) {
+            <tr data-cy="entityTable">
+              <td class="text-break">{{ transaction.category?.categoryName }}</td>
+              <td [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')">
+                {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
+              </td>
+              <td class="text-break">{{ transaction.description }}</td>
+              <td>{{ transaction.transactionDate | formatMediumDatetime }}</td>
+              <td class="text-end">{{ transaction.amount }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/transaction', transaction.id, 'edit']" class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                  </a>
+                  <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm"
+                    data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
 
-  <jhi-filter [filters]="filters"></jhi-filter>
-
-  <div class="row">
-    <div class="col-md-2">
-      <ng-select id="ctg" placeholder="category" [items]="categories()" bindLabel="categoryName" bindValue="id"
-        [(ngModel)]="category">
-      </ng-select>
-
-    </div>
-    <div class="col-md-2">
-      <input type="text" class="form-control" placeholder="From date" id="f-fdate" [(ngModel)]="fromDateStruct"
-        ngbDatepicker #fromDatePicker="ngbDatepicker" (click)="fromDatePicker.toggle()" />
-    </div>
-    <div class="col-md-2">
-      <input type="text" class="form-control" placeholder="To date" id="f-tdate" [(ngModel)]="toDateStruct"
-        ngbDatepicker #toDatePicker="ngbDatepicker" (click)="toDatePicker.toggle()" />
-    </div>
-    <div class="col-md-2">
-      <select class="form-select" id="f-type" [(ngModel)]="type">
-        <option value="">Select type</option>
-        <option value="INCOME" jhiTranslate="prosperPathApp.TransactionType.INCOME">income</option>
-        <option value="EXPENSE" jhiTranslate="prosperPathApp.TransactionType.EXPENSE">expense</option>
-      </select>
-    </div>
-
-    <div class="col-md-1 text-end">
-      <button class="btn btn-primary" (click)="search()">Tìm kiếm</button>
+      @if (transactions().length > 0) {
+      <div class="pagination-container mt-3">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-6 mb-2 mb-md-0">
+            <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"
+              class="item-count"></jhi-item-count>
+          </div>
+          <div class="col-12 col-md-6 d-flex justify-content-md-end">
+            <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+              [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)"
+              class="custom-pagination"></ngb-pagination>
+          </div>
+        </div>
+      </div>
+      }
     </div>
   </div>
-
-  @if (transactions().length === 0) {
-  <div class="alert alert-warning" id="no-result">
-    <span jhiTranslate="prosperPathApp.transaction.home.notFound">No Transactions found</span>
-  </div>
-  } @else {
-  <div class="table-responsive table-entities" id="entities">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-          <th scope="col" jhiSortBy="category.id">
-            <div class="d-flex">
-              <span jhiTranslate="prosperPathApp.transaction.category">Category</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="amount">
-            <div class="d-flex">
-              <span jhiTranslate="prosperPathApp.transaction.amount">Amount</span>
-
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="transactionType">
-            <div class="d-flex">
-              <span jhiTranslate="prosperPathApp.transaction.transactionType">Transaction Type</span>
-
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="description">
-            <div class="d-flex">
-              <span jhiTranslate="prosperPathApp.transaction.description">Description</span>
-
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="transactionDate">
-            <div class="d-flex">
-              <span jhiTranslate="prosperPathApp.transaction.transactionDate">Transaction Date</span>
-
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <!-- <th scope="col" jhiSortBy="user.login">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.transaction.user">User</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th> -->
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (transaction of transactions(); track trackId(transaction)) {
-        <tr data-cy="entityTable">
-          <td>{{ transaction.category?.categoryName }}</td>
-          <td>{{ transaction.amount }}</td>
-          <td [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')">
-            {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
-          </td>
-          <td>{{ transaction.description }}</td>
-          <td>{{ transaction.transactionDate | formatMediumDatetime }}</td>
-          <!-- <td>
-                {{ transaction.user?.login }}
-              </td> -->
-          <td class="text-end">
-            <div class="btn-group">
-
-              <a [routerLink]="['/transaction', transaction.id, 'edit']" class="btn btn-primary btn-sm"
-                data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </a>
-
-              <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm"
-                data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-  }
-  @if (transactions().length > 0) {
-  <div>
-    <div class="d-flex justify-content-center">
-      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-    </div>
-
-    <div class="d-flex justify-content-center">
-      <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5"
-        [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)"></ngb-pagination>
-    </div>
-  </div>
-  }
+  <div class="div2"><jhi-category></jhi-category></div>
+  <div class="div3"><jhi-budget></jhi-budget></div>
 </div>
