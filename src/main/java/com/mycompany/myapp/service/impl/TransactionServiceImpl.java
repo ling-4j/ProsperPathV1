@@ -1,18 +1,25 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Transaction;
+import com.mycompany.myapp.domain.User;
+
 import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.service.TransactionService;
+import com.mycompany.myapp.service.UserService;
+
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link com.mycompany.myapp.domain.Transaction}.
+ * Service Implementation for managing
+ * {@link com.mycompany.myapp.domain.Transaction}.
  */
 @Service
 @Transactional
@@ -21,14 +28,23 @@ public class TransactionServiceImpl implements TransactionService {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionServiceImpl.class);
 
     private final TransactionRepository transactionRepository;
+    private final UserService userService;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository, UserService userService) {
         this.transactionRepository = transactionRepository;
+        this.userService = userService;
     }
 
     @Override
     public Transaction save(Transaction transaction) {
         LOG.debug("Request to save Transaction : {}", transaction);
+        if (transaction.getUser() == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                Optional<User> currentUser = userService.getUserWithAuthorities();
+                currentUser.ifPresent(transaction::setUser);
+            }
+        }
         return transactionRepository.save(transaction);
     }
 
@@ -43,30 +59,30 @@ public class TransactionServiceImpl implements TransactionService {
         LOG.debug("Request to partially update Transaction : {}", transaction);
 
         return transactionRepository
-            .findById(transaction.getId())
-            .map(existingTransaction -> {
-                if (transaction.getAmount() != null) {
-                    existingTransaction.setAmount(transaction.getAmount());
-                }
-                if (transaction.getTransactionType() != null) {
-                    existingTransaction.setTransactionType(transaction.getTransactionType());
-                }
-                if (transaction.getDescription() != null) {
-                    existingTransaction.setDescription(transaction.getDescription());
-                }
-                if (transaction.getTransactionDate() != null) {
-                    existingTransaction.setTransactionDate(transaction.getTransactionDate());
-                }
-                if (transaction.getCreatedAt() != null) {
-                    existingTransaction.setCreatedAt(transaction.getCreatedAt());
-                }
-                if (transaction.getUpdatedAt() != null) {
-                    existingTransaction.setUpdatedAt(transaction.getUpdatedAt());
-                }
+                .findById(transaction.getId())
+                .map(existingTransaction -> {
+                    if (transaction.getAmount() != null) {
+                        existingTransaction.setAmount(transaction.getAmount());
+                    }
+                    if (transaction.getTransactionType() != null) {
+                        existingTransaction.setTransactionType(transaction.getTransactionType());
+                    }
+                    if (transaction.getDescription() != null) {
+                        existingTransaction.setDescription(transaction.getDescription());
+                    }
+                    if (transaction.getTransactionDate() != null) {
+                        existingTransaction.setTransactionDate(transaction.getTransactionDate());
+                    }
+                    if (transaction.getCreatedAt() != null) {
+                        existingTransaction.setCreatedAt(transaction.getCreatedAt());
+                    }
+                    if (transaction.getUpdatedAt() != null) {
+                        existingTransaction.setUpdatedAt(transaction.getUpdatedAt());
+                    }
 
-                return existingTransaction;
-            })
-            .map(transactionRepository::save);
+                    return existingTransaction;
+                })
+                .map(transactionRepository::save);
     }
 
     public Page<Transaction> findAllWithEagerRelationships(Pageable pageable) {

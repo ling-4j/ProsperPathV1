@@ -73,9 +73,7 @@ export class TransactionFormService {
       createdAt: new FormControl(transactionRawValue.createdAt),
       updatedAt: new FormControl(transactionRawValue.updatedAt),
       category: new FormControl(transactionRawValue.category),
-      user: new FormControl(transactionRawValue.user, {
-        validators: [Validators.required],
-      }),
+      user: new FormControl(transactionRawValue.user),
     });
   }
 

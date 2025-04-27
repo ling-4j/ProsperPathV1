@@ -47,8 +47,7 @@ public class Transaction implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

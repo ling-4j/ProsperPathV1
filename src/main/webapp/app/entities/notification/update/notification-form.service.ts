@@ -63,9 +63,7 @@ export class NotificationFormService {
       }),
       isRead: new FormControl(notificationRawValue.isRead),
       createdAt: new FormControl(notificationRawValue.createdAt),
-      user: new FormControl(notificationRawValue.user, {
-        validators: [Validators.required],
-      }),
+      user: new FormControl(notificationRawValue.user),
     });
   }
 

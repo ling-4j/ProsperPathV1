@@ -36,8 +36,7 @@ public class Notification implements Serializable {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

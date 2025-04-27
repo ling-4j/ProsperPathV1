@@ -78,7 +78,7 @@ public class TransactionResource {
             LOG.warn("Current user not found");
             return ResponseEntity.status(401).build(); // Unauthorized
         }
-        transaction.setUser(currentUser.get());
+        // transaction.setUser(currentUser.get());
 
         // Lưu giao dịch
         Transaction savedTransaction = transactionService.save(transaction);
