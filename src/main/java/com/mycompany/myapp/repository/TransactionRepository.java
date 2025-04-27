@@ -1,6 +1,8 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Transaction;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -40,4 +42,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     @Query("select transaction from Transaction transaction left join fetch transaction.user where transaction.id =:id")
     Optional<Transaction> findOneWithToOneRelationships(@Param("id") Long id);
+
+    // Thêm phương thức để tìm giao dịch theo userId và khoảng thời gian
+    List<Transaction> findByUserIdAndTransactionDateBetween(Long userId, Instant startDate, Instant endDate);
 }

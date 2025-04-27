@@ -25,6 +25,14 @@ export type PartialUpdateRestSummary = RestOf<PartialUpdateSummary>;
 export type EntityResponseType = HttpResponse<ISummary>;
 export type EntityArrayResponseType = HttpResponse<ISummary[]>;
 
+// Định nghĩa interface cho dữ liệu chi tiết tài chính
+export interface DetailedFinancialData {
+  labels: string[];
+  incomeData: number[];
+  expenseData: number[];
+  progressRateData: number[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class SummaryService {
   protected readonly http = inject(HttpClient);
@@ -69,10 +77,11 @@ export class SummaryService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+  
   /**
-   * Retrieves summary data for a specific period.
-   * @param period The period for which to retrieve the summary (week, month, year).
-   * @returns An Observable of ISummary.
+   * Lấy dữ liệu tổng quan cho một kỳ cụ thể.
+   * @param period Kỳ muốn lấy dữ liệu (week, month, year).
+   * @returns Observable của ISummary.
    */
   getSummary(period: 'week' | 'month' | 'year'): Observable<ISummary> {
     const url = `${this.resourceUrl}/summary`;
@@ -94,9 +103,9 @@ export class SummaryService {
   }
 
   /**
-   * Retrieves financial change percentages for a specific period.
-   * @param period The period for which to retrieve the financial changes (week, month, year).
-   * @returns An Observable of FinancialChange containing percentage changes for assets, income, expense, and profit.
+   * Lấy phần trăm thay đổi tài chính cho một kỳ cụ thể.
+   * @param period Kỳ muốn lấy dữ liệu (week, month, year).
+   * @returns Observable của đối tượng chứa phần trăm thay đổi cho tài sản, thu nhập, chi phí và lợi nhuận.
    */
   getFinancialChange(period: 'week' | 'month' | 'year'): Observable<{
     assetsChangePercentage: number;
@@ -123,6 +132,30 @@ export class SummaryService {
         }
         console.error('Error fetching financial change:', error);
         return throwError(() => new Error('An error occurred while fetching financial change'));
+      }),
+    );
+  }
+
+  /**
+   * Lấy dữ liệu chi tiết tài chính cho biểu đồ.
+   * @param period Kỳ muốn lấy dữ liệu (week, month, year).
+   * @returns Observable của DetailedFinancialData chứa nhãn và dữ liệu cho biểu đồ.
+   */
+  getDetailedFinancialData(period: 'week' | 'month' | 'year'): Observable<DetailedFinancialData> {
+    const url = `${this.resourceUrl}/detailed`;
+    const params = { period };
+    return this.http.get<DetailedFinancialData>(url, { params }).pipe(
+      map(res => res),
+      catchError(error => {
+        if (error.status === 404) {
+          console.warn(`Không tìm thấy dữ liệu chi tiết cho kỳ: ${period}`);
+          return throwError(() => new Error('Detailed data not found'));
+        } else if (error.status === 401) {
+          console.warn('Không có quyền truy cập');
+          return throwError(() => new Error('Unauthorized'));
+        }
+        console.error('Lỗi khi lấy dữ liệu chi tiết tài chính:', error);
+        return throwError(() => new Error('Đã xảy ra lỗi khi lấy dữ liệu chi tiết tài chính'));
       }),
     );
   }

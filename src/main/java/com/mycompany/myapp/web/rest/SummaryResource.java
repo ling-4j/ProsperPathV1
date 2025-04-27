@@ -8,6 +8,7 @@ import com.mycompany.myapp.service.SummaryService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.SummaryCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -17,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -269,6 +271,43 @@ public class SummaryResource {
         return ResponseEntity.ok(change);
     }
 
+    /**
+     * {@code GET /summaries/detailed} : Lấy dữ liệu chi tiết tài chính cho biểu đồ.
+     *
+     * @param period Loại kỳ (WEEK, MONTH, YEAR)
+     * @return Dữ liệu chi tiết tài chính (labels, incomeData, expenseData, progressRateData)
+     */
+    @GetMapping("/detailed")
+    public ResponseEntity<Map<String, Object>> getDetailedFinancialData(
+        @RequestParam(value = "period", defaultValue = "MONTH") String period,
+        @RequestHeader("Authorization") String authorization
+    ) {
+        LOG.debug("REST request to get detailed financial data for period: {}", period);
+
+        // Lấy userId của người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+        Long userId = currentUser.get().getId();
+
+        try {
+            Map<String, Object> detailedData = summaryQueryService.getDetailedFinancialData(userId, period.toUpperCase());
+            if (detailedData == null || detailedData.isEmpty()) {
+                LOG.debug("No detailed data found for userId: {}, period: {}", userId, period);
+                return ResponseEntity.notFound().build();
+            }
+
+            LOG.debug("Detailed data for userId: {}, period: {}: {}", userId, period, detailedData);
+            return ResponseEntity.ok(detailedData);
+        } catch (Exception e) {
+            LOG.error("Error fetching detailed financial data for userId: {}, period: {}", userId, period, e);
+            throw new BadRequestAlertException("Error fetching detailed data", ENTITY_NAME, "fetcherror");
+        }
+    }
+
+    
     /**
      * Tính periodValue dựa trên ngày và loại kỳ.
      */

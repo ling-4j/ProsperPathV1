@@ -1,3 +1,4 @@
+// src/app/home/home.component.ts
 import { Component, OnDestroy, OnInit, inject, signal, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -7,7 +8,7 @@ import { forkJoin } from 'rxjs';
 import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
-import { SummaryService } from 'app/entities/summary/service/summary.service';
+import { SummaryService, DetailedFinancialData } from 'app/entities/summary/service/summary.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -39,8 +40,11 @@ import { BaseChartDirective } from 'ng2-charts';
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('donutChart') donutChart: BaseChartDirective | undefined;
+  @ViewChild('lineChart') lineChart: BaseChartDirective | undefined;
+  @ViewChild('progressRateChart') progressRateChart: BaseChartDirective | undefined;
 
   account = signal<Account | null>(null);
+  isLoading = signal<boolean>(false);
 
   // Signals for current period data
   selectedPeriod = signal<'week' | 'month' | 'year'>('month');
@@ -65,9 +69,9 @@ export default class HomeComponent implements OnInit, OnDestroy {
     plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
-      left: 'prev,next today',
+      left: 'prev',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+      right: 'next today',
     },
     events: [],
     editable: true,
@@ -80,14 +84,14 @@ export default class HomeComponent implements OnInit, OnDestroy {
   public progressRateChartData: ChartData<'line'> = {
     datasets: [
       {
-        data: [1000, 900, 1200, 1100, 1500, 1700, 2000, 2100, 2300, 2400, 2500, 2523],
-        label: 'Progress Rate',
+        data: [],
+        label: 'Lợi nhuận',
         fill: false,
         borderColor: '#1e90ff',
         tension: 0.4,
       },
     ],
-    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+    labels: [],
   };
   public progressRateChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -98,11 +102,11 @@ export default class HomeComponent implements OnInit, OnDestroy {
   public incomeVsExpenseDonutChartData: ChartData<'doughnut'> = {
     datasets: [
       {
-        data: [1000000, 1000000],
+        data: [0, 0],
         backgroundColor: ['#00c4b4', '#ff6f61'],
       },
     ],
-    labels: ['Income', 'Expenses'],
+    labels: ['Thu nhập', 'Chi phí'],
   };
   public incomeVsExpenseDonutChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -113,21 +117,21 @@ export default class HomeComponent implements OnInit, OnDestroy {
   public incomeVsExpenseLineChartData: ChartData<'line'> = {
     datasets: [
       {
-        data: [1200, 1500, 1100, 1300, 1600, 1400, 1700],
-        label: 'Income',
+        data: [],
+        label: 'Thu nhập',
         borderColor: '#00c4b4',
         fill: false,
         tension: 0.4,
       },
       {
-        data: [1000, 1200, 1300, 1100, 1400, 1200, 1300],
-        label: 'Expenses',
+        data: [],
+        label: 'Chi phí',
         borderColor: '#ff6f61',
         fill: false,
         tension: 0.4,
       },
     ],
-    labels: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    labels: [],
   };
   public incomeVsExpenseLineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -147,86 +151,117 @@ export default class HomeComponent implements OnInit, OnDestroy {
       .subscribe(account => {
         this.account.set(account);
         if (account) {
-          this.loadSummary();
+          this.loadAllData();
           this.loadCalendarEvents();
-          this.updateChartData();
         }
       });
 
     const currentDate = new Date();
-    this.currentMonthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+    this.currentMonthYear = currentDate.toLocaleString('vi-VN', { month: 'long', year: 'numeric' });
   }
 
   onPeriodChange(): void {
     if (this.account()) {
-      this.loadSummary();
-      this.updateChartData();
+      this.loadAllData();
     }
   }
 
-  private updateChartData(): void {
-    const income = this.totalIncome() || 1000000;
-    const expense = this.totalExpense() || 1000000;
-    this.incomeVsExpenseDonutChartData.datasets[0].data = [income, expense];
-    this.donutChart?.update();
-  }
-
-  private loadSummary(): void {
+  private loadAllData(): void {
+    this.isLoading.set(true);
     const period = this.selectedPeriod();
     forkJoin({
       summary: this.summaryService.getSummary(period),
       financialChange: this.summaryService.getFinancialChange(period),
+      detailedData: this.summaryService.getDetailedFinancialData(period),
     }).subscribe({
-      next: ({ summary, financialChange }) => {
+      next: ({ summary, financialChange, detailedData }) => {
         this.errorMessage.set(null);
 
+        // Cập nhật dữ liệu tổng quan
         this.totalAssets.set(summary.totalAssets ?? 0);
         this.totalIncome.set(summary.totalIncome ?? 0);
         this.totalExpense.set(summary.totalExpense ?? 0);
         this.totalProfit.set(summary.totalProfit ?? 0);
         this.profitPercentage.set(summary.profitPercentage ?? 0);
 
+        // Cập nhật phần trăm thay đổi
         this.assetsChangePercentage.set(financialChange.assetsChangePercentage ?? 0);
         this.incomeChangePercentage.set(financialChange.incomeChangePercentage ?? 0);
         this.expenseChangePercentage.set(financialChange.expenseChangePercentage ?? 0);
         this.profitChangePercentage.set(financialChange.profitChangePercentage ?? 0);
+
+        // Cập nhật dữ liệu biểu đồ
+        this.updateChartData(detailedData);
+        this.isLoading.set(false);
       },
       error: error => {
-        this.totalAssets.set(0);
-        this.totalIncome.set(0);
-        this.totalExpense.set(0);
-        this.totalProfit.set(0);
-        this.profitPercentage.set(0);
-        this.assetsChangePercentage.set(0);
-        this.incomeChangePercentage.set(0);
-        this.expenseChangePercentage.set(0);
-        this.profitChangePercentage.set(0);
-
-        if (error.message === 'Summary not found') {
-          this.errorMessage.set(`No summary data available for the selected period: ${period}`);
+        this.resetData();
+        this.isLoading.set(false);
+        if (error.message === 'Summary not found' || error.message === 'Detailed data not found') {
+          this.errorMessage.set(`Không có dữ liệu cho kỳ: ${period}`);
         } else if (error.message === 'Unauthorized') {
-          this.errorMessage.set('You are not authorized to access this data. Please log in again.');
+          this.errorMessage.set('Bạn không có quyền truy cập dữ liệu này. Vui lòng đăng nhập lại.');
           this.router.navigate(['/login']);
         } else {
-          this.errorMessage.set('An error occurred while loading the dashboard data.');
+          this.errorMessage.set('Đã xảy ra lỗi khi tải dữ liệu.');
         }
       },
     });
   }
 
+  private updateChartData(detailedData: DetailedFinancialData): void {
+    // Cập nhật biểu đồ Progress Rate (Lợi nhuận)
+    this.progressRateChartData.datasets[0].data = detailedData.progressRateData || [];
+    this.progressRateChartData.labels = detailedData.labels || [];
+    this.progressRateChart?.update();
+
+    // Cập nhật biểu đồ Donut (Thu nhập vs Chi phí)
+    this.incomeVsExpenseDonutChartData.datasets[0].data = [this.totalIncome() || 0, this.totalExpense() || 0];
+    this.donutChart?.update();
+
+    // Cập nhật biểu đồ Line (Thu nhập vs Chi phí theo thời gian)
+    this.incomeVsExpenseLineChartData.datasets[0].data = detailedData.incomeData || [];
+    this.incomeVsExpenseLineChartData.datasets[1].data = detailedData.expenseData || [];
+    this.incomeVsExpenseLineChartData.labels = detailedData.labels || [];
+    this.lineChart?.update();
+  }
+
+  private resetData(): void {
+    this.totalAssets.set(0);
+    this.totalIncome.set(0);
+    this.totalExpense.set(0);
+    this.totalProfit.set(0);
+    this.profitPercentage.set(0);
+    this.assetsChangePercentage.set(0);
+    this.incomeChangePercentage.set(0);
+    this.expenseChangePercentage.set(0);
+    this.profitChangePercentage.set(0);
+
+    // Reset biểu đồ
+    this.progressRateChartData.datasets[0].data = [];
+    this.progressRateChartData.labels = [];
+    this.incomeVsExpenseDonutChartData.datasets[0].data = [0, 0];
+    this.incomeVsExpenseLineChartData.datasets[0].data = [];
+    this.incomeVsExpenseLineChartData.datasets[1].data = [];
+    this.incomeVsExpenseLineChartData.labels = [];
+    this.progressRateChart?.update();
+    this.donutChart?.update();
+    this.lineChart?.update();
+  }
+
   private loadCalendarEvents(): void {
     this.calendarOptions.events = [
-      { title: 'Payment Due', date: '2025-04-26' },
-      { title: 'Budget Review', date: '2025-04-28' },
+      { title: 'Thanh toán hóa đơn', date: '2025-04-26' },
+      { title: 'Xem xét ngân sách', date: '2025-04-28' },
     ];
   }
 
   handleEventClick(info: EventClickArg): void {
-    alert(`Event: ${info.event.title}\nDate: ${info.event.start?.toISOString().split('T')[0]}`);
+    alert(`Sự kiện: ${info.event.title}\nNgày: ${info.event.start?.toISOString().split('T')[0]}`);
   }
 
   handleDateClick(info: DateSelectArg): void {
-    const title = prompt('Enter event title:');
+    const title = prompt('Nhập tiêu đề sự kiện:');
     if (title) {
       const calendarApi = info.view.calendar;
       calendarApi.addEvent({

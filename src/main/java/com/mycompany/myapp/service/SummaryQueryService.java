@@ -4,18 +4,25 @@ import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.enumeration.PeriodType;
 import com.mycompany.myapp.domain.enumeration.TransactionType;
 import com.mycompany.myapp.repository.SummaryRepository;
+import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.criteria.SummaryCriteria;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.JoinType;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Locale;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -41,13 +48,155 @@ public class SummaryQueryService extends QueryService<Summary> {
 
     private final SummaryRepository summaryRepository;
     private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository; // Thêm TransactionRepository
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public SummaryQueryService(SummaryRepository summaryRepository, UserRepository userRepository) {
+    public SummaryQueryService(SummaryRepository summaryRepository, UserRepository userRepository,       TransactionRepository transactionRepository) {
         this.summaryRepository = summaryRepository;
         this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository; // Khởi tạo TransactionRepository
+    }
+
+    /**
+     * Lấy dữ liệu chi tiết tài chính (thu nhập, chi phí, lợi nhuận) theo kỳ cho biểu đồ.
+     *
+     * @param userId ID của người dùng
+     * @param period Loại kỳ (WEEK, MONTH, YEAR)
+     * @return Map chứa nhãn (labels) và dữ liệu (incomeData, expenseData, progressRateData)
+     */
+    public Map<String, Object> getDetailedFinancialData(Long userId, String period) {
+        // Xác định khoảng thời gian dựa trên period, sử dụng múi giờ UTC
+        LocalDate now = LocalDate.now(ZoneId.of("UTC"));
+        LocalDate startDate;
+        LocalDate endDate;
+
+        switch (period.toUpperCase()) {
+            case "WEEK":
+                startDate = now.minusDays(6); // 7 ngày trước
+                endDate = now;
+                break;
+            case "MONTH":
+                startDate = now.withDayOfMonth(1); // Đầu tháng
+                endDate = now.withDayOfMonth(now.lengthOfMonth()); // Cuối tháng
+                break;
+            case "YEAR":
+                startDate = now.minusYears(1).withMonth(5).withDayOfMonth(1); // Bắt đầu từ tháng 5 năm trước
+                endDate = now.withDayOfMonth(now.lengthOfMonth()); // Đến tháng hiện tại (4/2025)
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid period: " + period);
+        }
+
+        Instant startInstant = startDate.atStartOfDay(ZoneId.of("UTC")).toInstant();
+        Instant endInstant = endDate.atTime(23, 59, 59).atZone(ZoneId.of("UTC")).toInstant();
+
+        // Lấy danh sách giao dịch
+        List<Transaction> transactions = transactionRepository.findByUserIdAndTransactionDateBetween(userId, startInstant, endInstant);
+        LOG.info("Transactions found for userId: {}, period: {}, from: {}, to: {}, count: {}", userId, period, startInstant, endInstant, transactions.size());
+        for (Transaction transaction : transactions) {
+            LOG.debug("Transaction: id={}, userId={}, date={}, type={}, amount={}",
+                    transaction.getId(), transaction.getUser().getId(), transaction.getTransactionDate(),
+                    transaction.getTransactionType(), transaction.getAmount());
+        }
+
+        // Tạo dữ liệu cho biểu đồ
+        List<String> labels = new ArrayList<>();
+        List<BigDecimal> incomeData = new ArrayList<>();
+        List<BigDecimal> expenseData = new ArrayList<>();
+        List<BigDecimal> progressRateData = new ArrayList<>();
+
+        if (period.equalsIgnoreCase("WEEK")) {
+            for (int i = 0; i < 7; i++) {
+                LocalDate date = startDate.plusDays(i);
+                labels.add(date.format(DateTimeFormatter.ofPattern("dd/MM")));
+
+                BigDecimal income = BigDecimal.ZERO;
+                BigDecimal expense = BigDecimal.ZERO;
+                for (Transaction transaction : transactions) {
+                    LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC")).toLocalDate();
+                    if (transactionDate.equals(date)) {
+                        if (transaction.getTransactionType() == TransactionType.INCOME) {
+                            income = income.add(transaction.getAmount());
+                        } else if (transaction.getTransactionType() == TransactionType.EXPENSE) {
+                            expense = expense.add(transaction.getAmount());
+                        }
+                    }
+                }
+                incomeData.add(income);
+                expenseData.add(expense);
+                progressRateData.add(income.subtract(expense));
+            }
+        } else if (period.equalsIgnoreCase("MONTH")) {
+            // Dùng ngày đầu tiên và cuối cùng của tháng dựa trên giao dịch hoặc thời gian hiện tại
+            LocalDate monthStart = startDate;
+            LocalDate monthEnd = endDate;
+            if (!transactions.isEmpty()) {
+                // Lấy tháng từ giao dịch đầu tiên để đảm bảo đúng tháng
+                LocalDate firstTransactionDate = transactions.get(0).getTransactionDate().atZone(ZoneId.of("UTC")).toLocalDate();
+                monthStart = firstTransactionDate.withDayOfMonth(1);
+                monthEnd = firstTransactionDate.withDayOfMonth(firstTransactionDate.lengthOfMonth());
+            }
+
+            int daysInMonth = monthEnd.getDayOfMonth();
+            for (int i = 1; i <= daysInMonth; i += 5) {
+                LocalDate startRange = monthStart.withDayOfMonth(i);
+                LocalDate endRange = monthStart.withDayOfMonth(Math.min(i + 4, daysInMonth));
+                labels.add(startRange.format(DateTimeFormatter.ofPattern("dd/MM")) + "-" + endRange.format(DateTimeFormatter.ofPattern("dd/MM")));
+
+                BigDecimal income = BigDecimal.ZERO;
+                BigDecimal expense = BigDecimal.ZERO;
+                for (Transaction transaction : transactions) {
+                    LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC")).toLocalDate();
+                    LOG.debug("Transaction date: {}, startRange: {}, endRange: {}", transactionDate, startRange, endRange);
+                    if (!transactionDate.isBefore(startRange) && !transactionDate.isAfter(endRange)) {
+                        if (transaction.getTransactionType() == TransactionType.INCOME) {
+                            income = income.add(transaction.getAmount());
+                        } else if (transaction.getTransactionType() == TransactionType.EXPENSE) {
+                            expense = expense.add(transaction.getAmount());
+                        }
+                    }
+                }
+                incomeData.add(income);
+                expenseData.add(expense);
+                progressRateData.add(income.subtract(expense));
+            }
+        } else if (period.equalsIgnoreCase("YEAR")) {
+            LocalDate current = startDate;
+            while (!current.isAfter(endDate)) {
+                labels.add(current.format(DateTimeFormatter.ofPattern("yyyy-MM")));
+
+                BigDecimal income = BigDecimal.ZERO;
+                BigDecimal expense = BigDecimal.ZERO;
+                for (Transaction transaction : transactions) {
+                    LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC")).toLocalDate();
+                    LOG.debug("Transaction date: {}, current month: {}-{}", transactionDate, current.getYear(), current.getMonthValue());
+                    if (transactionDate.getYear() == current.getYear() && transactionDate.getMonthValue() == current.getMonthValue()) {
+                        if (transaction.getTransactionType() == TransactionType.INCOME) {
+                            income = income.add(transaction.getAmount());
+                        } else if (transaction.getTransactionType() == TransactionType.EXPENSE) {
+                            expense = expense.add(transaction.getAmount());
+                        }
+                    }
+                }
+                incomeData.add(income);
+                expenseData.add(expense);
+                progressRateData.add(income.subtract(expense));
+                current = current.plusMonths(1);
+            }
+        }
+
+        // Log dữ liệu trước khi trả về
+        LOG.debug("Chart data for userId: {}, period: {}: labels={}, incomeData={}, expenseData={}, progressRateData={}",
+                userId, period, labels, incomeData, expenseData, progressRateData);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("labels", labels);
+        result.put("incomeData", incomeData);
+        result.put("expenseData", expenseData);
+        result.put("progressRateData", progressRateData);
+        return result;
     }
 
     /**
