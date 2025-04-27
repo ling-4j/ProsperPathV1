@@ -2,7 +2,7 @@
   "userManagement": {
     "home": {
       "title": "Tài khoản",
-      "refreshListLabel": "Refresh list",
+      "refreshListLabel": "Làm mới",
       "createLabel": "Tạo tài khoản mới",
       "createOrEditLabel": "Tạo hoặc sửa tài khoản"
     },

@@ -2,7 +2,11 @@
   "prosperPathApp": {
     "NotificationType": {
       "null": "",
-      "BUDGET_EXCEEDED": "BUDGET_EXCEEDED",
+      "BUDGET_EXCEEDED": "BUDGET EXCEEDED",
+      "BUDGET_EXPIRED": "BUDGET EXPIRED",
+      "TRANSACTION_ADDED": "TRANSACTION ADDED",
+      "TRANSACTION_UPDATED": "TRANSACTION UPDATED",
+      "TRANSACTION_DELETED": "TRANSACTION DELETED",
       "OTHER": "OTHER"
     }
   }

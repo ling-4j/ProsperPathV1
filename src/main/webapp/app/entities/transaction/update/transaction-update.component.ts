@@ -18,6 +18,7 @@ import { TransactionFormGroup, TransactionFormService } from './transaction-form
 
 @Component({
   selector: 'jhi-transaction-update',
+  styleUrls: ['./transaction-update.component.scss'],
   templateUrl: './transaction-update.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })

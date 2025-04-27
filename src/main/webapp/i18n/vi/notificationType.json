@@ -2,8 +2,8 @@
   "prosperPathApp": {
     "NotificationType": {
       "null": "",
-      "BUDGET_EXCEEDED": "BUDGET_EXCEEDED",
-      "OTHER": "OTHER"
+      "BUDGET_EXCEEDED": "VƯỢT NGÂN SÁCH",
+      "OTHER": "KHÁC"
     }
   }
 }

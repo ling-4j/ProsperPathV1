@@ -2,8 +2,8 @@
   "prosperPathApp": {
     "CategoryType": {
       "null": "",
-      "INCOME": "INCOME",
-      "EXPENSE": "EXPENSE"
+      "INCOME": "THU NHẬP",
+      "EXPENSE": "CHI TIÊU"
     }
   }
 }

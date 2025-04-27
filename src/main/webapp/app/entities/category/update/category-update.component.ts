@@ -14,6 +14,7 @@ import { CategoryFormGroup, CategoryFormService } from './category-form.service'
 
 @Component({
   selector: 'jhi-category-update',
+  styleUrls: ['./category-update.component.scss'],
   templateUrl: './category-update.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })

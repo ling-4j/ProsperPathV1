@@ -17,6 +17,7 @@ import { BudgetFormGroup, BudgetFormService } from './budget-form.service';
 
 @Component({
   selector: 'jhi-budget-update',
+  styleUrls: ['./budget-update.component.scss'],
   templateUrl: './budget-update.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })

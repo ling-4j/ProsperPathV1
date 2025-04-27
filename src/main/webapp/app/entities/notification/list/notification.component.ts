@@ -19,6 +19,7 @@ import { NotificationDeleteDialogComponent } from '../delete/notification-delete
 
 @Component({
   selector: 'jhi-notification',
+  styleUrls: ['./notification.component.scss'],
   templateUrl: './notification.component.html',
   imports: [
     RouterModule,
@@ -28,7 +29,6 @@ import { NotificationDeleteDialogComponent } from '../delete/notification-delete
     SortByDirective,
     FormatMediumDatetimePipe,
     FilterComponent,
-    ItemCountComponent,
   ],
 })
 export class NotificationComponent implements OnInit {
@@ -39,7 +39,7 @@ export class NotificationComponent implements OnInit {
   sortState = sortStateSignal({});
   filters: IFilterOptions = new FilterOptions();
 
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 100;
   totalItems = 0;
   page = 1;
 

@@ -1,14 +1,7 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2
-        id="jhi-transaction-heading"
-        data-cy="TransactionCreateUpdateHeading"
-        jhiTranslate="prosperPathApp.transaction.home.createOrEditLabel"
-      >
-        Create or edit a Transaction
-      </h2>
-
+<div class="transaction-container d-flex justify-content-center ">
+  <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
+    <h1 data-cy="transactionTitle" jhiTranslate="prosperPathApp.transaction.home.createOrEditLabel" class="transaction-title">Create or edit a Transaction</h1>
+    <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
         <jhi-alert-error></jhi-alert-error>
 
@@ -155,29 +148,10 @@
             }
           </select>
         </div>
-<!-- 
-        <div class="mb-3">
-          <label class="form-label" for="field_user" jhiTranslate="prosperPathApp.transaction.user">User</label>
-          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
-            @if (!editForm.get('user')!.value) {
-              <option [ngValue]="null" selected></option>
-            }
-            @for (userOption of usersSharedCollection; track $index) {
-              <option [ngValue]="userOption">{{ userOption.login }}</option>
-            }
-          </select>
-        </div>
-        @if (editForm.get(['user'])!.invalid && (editForm.get(['user'])!.dirty || editForm.get(['user'])!.touched)) {
-          <div>
-            @if (editForm.get(['user'])?.errors?.required) {
-              <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-            }
-          </div>
-        } -->
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
@@ -186,7 +160,7 @@
           id="save-entity"
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
+          class="btn btn-primary btn-save"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
