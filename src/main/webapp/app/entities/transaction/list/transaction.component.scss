@@ -10,6 +10,8 @@ $white: #ffffff; // Trắng
 $gray: #e9ecef; // Xám nhạt cho input
 $border-color: #dee2e6; // Màu viền
 $teal: #20c997; // Màu teal cho tiêu đề
+$hover-bg: rgba(0, 123, 255, 0.05); // Màu nền khi hover vào dòng
+$dark-text: #212529; // Màu chữ đậm để tương phản với nền trắng
 
 // Định nghĩa font
 $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -99,6 +101,14 @@ $breakpoint-xl: 1200px;
 .table {
     font-size: 0.9rem;
 
+    thead.bg-white {
+        background-color: $white; // Đặt màu trắng cho thead với class bg-white
+        th {
+            background-color: $white; // Ghi đè màu của th để đảm bảo trắng
+            color: $dark-text; // Đặt màu chữ đậm để tương phản với nền trắng
+        }
+    }
+
     th,
     td {
         padding: 0.75rem;
@@ -106,12 +116,18 @@ $breakpoint-xl: 1200px;
     }
 
     th {
-        background-color: $light;
         border-bottom: 2px solid $border-color;
     }
 
     td {
         border-bottom: 1px solid $border-color;
+    }
+
+    // Đảm bảo cột cuối có không gian cố định
+    .action-column {
+        position: relative; // Để định vị nút bằng position: absolute
+        width: 80px; // Chiều rộng cố định cho cột chứa nút
+        min-width: 80px; // Đảm bảo không bị co lại
     }
 
     // Responsive cho bảng
@@ -123,15 +139,38 @@ $breakpoint-xl: 1200px;
             padding: 0.5rem;
         }
 
-        // Ẩn cột Description trên màn hình nhỏ
-        th:nth-child(3),
-        td:nth-child(3) {
-            display: none;
+        .action-column {
+            width: 60px; // Giảm chiều rộng trên màn hình nhỏ
+            min-width: 60px;
+        }
+    }
+
+    // Hiệu ứng hover cho dòng
+    .budget-row {
+        transition: background-color 0.7s ease-in-out, box-shadow 0.7s ease-in-out, transform 0.7s ease-in-out; // Làm chậm và mượt
+
+        .action-buttons {
+            display: none; // Ẩn theo mặc định
+            opacity: 0; // Để tạo hiệu ứng "hờ hờ"
+            transform: scale(0.9); // Thu nhỏ nhẹ ban đầu
+            transition: all 0.5s ease-in-out; // Hiệu ứng của nút
+            transition-delay: 0.1s; // Thêm độ trễ
+            position: absolute; // Định vị tuyệt đối để không ảnh hưởng layout
+            right: 10px; // Căn phải trong cột
+            top: 50%; // Căn giữa theo chiều dọc
+            transform: translateY(-50%) scale(0.9); // Căn giữa và thu nhỏ ban đầu
         }
 
-        // Đảm bảo cột Action không bị bẹp
-        .action-column {
-            min-width: 80px;
+        &:hover {
+            background-color: $hover-bg; // Màu nền nhẹ khi hover vào dòng
+            box-shadow: inset 0 0 0 1px rgba($primary, 0.1); // Viền nhẹ khi hover
+            transform: translateY(-2px); // Dịch chuyển nhẹ lên trên
+
+            .action-buttons {
+                display: flex; // Hiển thị khi hover
+                opacity: 1; // Hiển thị hoàn toàn
+                transform: translateY(-50%) scale(0.7); // Phóng to về kích thước bình thường và giữ căn giữa
+            }
         }
     }
 }
@@ -180,6 +219,28 @@ $breakpoint-xl: 1200px;
         height: 38px;
         display: flex;
         align-items: center;
+    }
+
+    &.edit-btn {
+        background-color: $primary;
+        border-color: $primary;
+
+        &:hover {
+            background-color: darken($primary, 15%);
+            transform: scale(1.1); // Phóng to nhẹ
+            box-shadow: 0 2px 8px rgba($primary, 0.4);
+        }
+    }
+
+    &.delete-btn {
+        background-color: #dc3545;
+        border-color: #dc3545;
+
+        &:hover {
+            background-color: darken(#dc3545, 15%);
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(#dc3545, 0.4);
+        }
     }
 }
 

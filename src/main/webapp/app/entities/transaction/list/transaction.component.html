@@ -109,7 +109,7 @@
           </thead>
           <tbody>
             @for (transaction of transactions(); track trackId(transaction)) {
-            <tr data-cy="entityTable">
+            <tr data-cy="entityTable" class="budget-row">
               <td class="text-break">{{ transaction.category?.categoryName }}</td>
               <td [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')">
                 {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
@@ -117,13 +117,13 @@
               <td class="text-break">{{ transaction.description }}</td>
               <td>{{ transaction.transactionDate | formatMediumDatetime }}</td>
               <td class="text-end">{{ transaction.amount }}</td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/transaction', transaction.id, 'edit']" class="btn btn-primary btn-sm"
+              <td class="text-end action-column">
+                <div class="btn-group action-buttons">
+                  <a [routerLink]="['/transaction', transaction.id, 'edit']" class="btn btn-primary btn-sm edit-btn"
                     data-cy="entityEditButton">
                     <fa-icon icon="pencil-alt"></fa-icon>
                   </a>
-                  <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm"
+                  <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm delete-btn"
                     data-cy="entityDeleteButton">
                     <fa-icon icon="times"></fa-icon>
                   </button>

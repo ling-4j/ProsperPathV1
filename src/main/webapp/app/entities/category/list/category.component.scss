@@ -11,6 +11,7 @@ $gray: #e9ecef; // Xám nhạt cho input
 $border-color: #dee2e6; // Màu viền
 $teal: #20c997; // Màu teal cho tiêu đề
 $hover-bg: rgba(0, 123, 255, 0.05); // Màu nền khi hover vào dòng
+$dark-text: #212529; // Màu chữ đậm để tương phản với nền trắng
 
 // Định nghĩa font
 $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -138,9 +139,12 @@ $breakpoint-xl: 1200px;
 .table {
     font-size: 0.9rem;
 
-    //   overflow-y: auto; 
-    thead {
-        background: #000;
+    thead.bg-white {
+        background-color: $white; // Đặt màu trắng cho thead với class bg-white
+        th {
+            background-color: $white; // Ghi đè màu của th để đảm bảo trắng
+            color: $dark-text; // Đặt màu chữ đậm để tương phản với nền trắng
+        }
     }
 
     th,
@@ -150,7 +154,6 @@ $breakpoint-xl: 1200px;
     }
 
     th {
-        background-color: $light;
         border-bottom: 2px solid $border-color;
     }
 
