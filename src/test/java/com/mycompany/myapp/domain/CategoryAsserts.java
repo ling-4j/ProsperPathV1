@@ -50,7 +50,8 @@ public class CategoryAsserts {
             .satisfies(a -> assertThat(a.getCategoryName()).as("check categoryName").isEqualTo(expected.getCategoryName()))
             .satisfies(a -> assertThat(a.getCategoryType()).as("check categoryType").isEqualTo(expected.getCategoryType()))
             .satisfies(a -> assertThat(a.getCreatedAt()).as("check createdAt").isEqualTo(expected.getCreatedAt()))
-            .satisfies(a -> assertThat(a.getUpdatedAt()).as("check updatedAt").isEqualTo(expected.getUpdatedAt()));
+            .satisfies(a -> assertThat(a.getUpdatedAt()).as("check updatedAt").isEqualTo(expected.getUpdatedAt()))
+            .satisfies(a -> assertThat(a.getCategoryIcon()).as("check categoryIcon").isEqualTo(expected.getCategoryIcon()));
     }
 
     /**

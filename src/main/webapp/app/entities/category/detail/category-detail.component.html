@@ -33,6 +33,10 @@
           <dd>
             <span>{{ categoryRef.updatedAt | formatMediumDatetime }}</span>
           </dd>
+          <dt><span jhiTranslate="prosperPathApp.category.categoryIcon">Category Icon</span></dt>
+          <dd>
+            <span>{{ categoryRef.categoryIcon }}</span>
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

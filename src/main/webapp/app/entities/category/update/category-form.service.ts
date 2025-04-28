@@ -36,6 +36,7 @@ type CategoryFormGroupContent = {
   categoryType: FormControl<CategoryFormRawValue['categoryType']>;
   createdAt: FormControl<CategoryFormRawValue['createdAt']>;
   updatedAt: FormControl<CategoryFormRawValue['updatedAt']>;
+  categoryIcon: FormControl<CategoryFormRawValue['categoryIcon']>;
 };
 
 export type CategoryFormGroup = FormGroup<CategoryFormGroupContent>;
@@ -63,6 +64,7 @@ export class CategoryFormService {
       }),
       createdAt: new FormControl(categoryRawValue.createdAt),
       updatedAt: new FormControl(categoryRawValue.updatedAt),
+      categoryIcon: new FormControl(categoryRawValue.categoryIcon),
     });
   }
 

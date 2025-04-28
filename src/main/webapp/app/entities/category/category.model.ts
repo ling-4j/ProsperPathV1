@@ -7,6 +7,7 @@ export interface ICategory {
   categoryType?: keyof typeof CategoryType | null;
   createdAt?: dayjs.Dayjs | null;
   updatedAt?: dayjs.Dayjs | null;
+  categoryIcon?: string | null;
 }
 
 export type NewCategory = Omit<ICategory, 'id'> & { id: null };

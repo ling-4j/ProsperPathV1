@@ -55,6 +55,9 @@ public class CategoryServiceImpl implements CategoryService {
                 if (category.getUpdatedAt() != null) {
                     existingCategory.setUpdatedAt(category.getUpdatedAt());
                 }
+                if (category.getCategoryIcon() != null) {
+                    existingCategory.setCategoryIcon(category.getCategoryIcon());
+                }
 
                 return existingCategory;
             })

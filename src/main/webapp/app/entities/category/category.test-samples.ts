@@ -9,11 +9,12 @@ export const sampleWithRequiredData: ICategory = {
 };
 
 export const sampleWithPartialData: ICategory = {
-  id: 7001,
-  categoryName: 'mmm summarise far',
-  categoryType: 'EXPENSE',
-  createdAt: dayjs('2025-03-19T04:22'),
-  updatedAt: dayjs('2025-03-19T08:55'),
+  id: 23998,
+  categoryName: 'appropriate functional',
+  categoryType: 'INCOME',
+  createdAt: dayjs('2025-03-19T22:15'),
+  updatedAt: dayjs('2025-03-19T21:51'),
+  categoryIcon: 'midst bah within',
 };
 
 export const sampleWithFullData: ICategory = {
@@ -22,6 +23,7 @@ export const sampleWithFullData: ICategory = {
   categoryType: 'INCOME',
   createdAt: dayjs('2025-03-19T07:00'),
   updatedAt: dayjs('2025-03-19T15:41'),
+  categoryIcon: 'upon gee',
 };
 
 export const sampleWithNewData: NewCategory = {

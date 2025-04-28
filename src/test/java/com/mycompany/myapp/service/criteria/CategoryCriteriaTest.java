@@ -80,6 +80,7 @@ class CategoryCriteriaTest {
         categoryCriteria.categoryType();
         categoryCriteria.createdAt();
         categoryCriteria.updatedAt();
+        categoryCriteria.categoryIcon();
         categoryCriteria.distinct();
     }
 
@@ -91,6 +92,7 @@ class CategoryCriteriaTest {
                 condition.apply(criteria.getCategoryType()) &&
                 condition.apply(criteria.getCreatedAt()) &&
                 condition.apply(criteria.getUpdatedAt()) &&
+                condition.apply(criteria.getCategoryIcon()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
         );
@@ -104,6 +106,7 @@ class CategoryCriteriaTest {
                 condition.apply(criteria.getCategoryType(), copy.getCategoryType()) &&
                 condition.apply(criteria.getCreatedAt(), copy.getCreatedAt()) &&
                 condition.apply(criteria.getUpdatedAt(), copy.getUpdatedAt()) &&
+                condition.apply(criteria.getCategoryIcon(), copy.getCategoryIcon()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"
         );

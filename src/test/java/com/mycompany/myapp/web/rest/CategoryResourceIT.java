@@ -47,6 +47,9 @@ class CategoryResourceIT {
     private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final String DEFAULT_CATEGORY_ICON = "AAAAAAAAAA";
+    private static final String UPDATED_CATEGORY_ICON = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/categories";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -80,7 +83,8 @@ class CategoryResourceIT {
             .categoryName(DEFAULT_CATEGORY_NAME)
             .categoryType(DEFAULT_CATEGORY_TYPE)
             .createdAt(DEFAULT_CREATED_AT)
-            .updatedAt(DEFAULT_UPDATED_AT);
+            .updatedAt(DEFAULT_UPDATED_AT)
+            .categoryIcon(DEFAULT_CATEGORY_ICON);
     }
 
     /**
@@ -94,7 +98,8 @@ class CategoryResourceIT {
             .categoryName(UPDATED_CATEGORY_NAME)
             .categoryType(UPDATED_CATEGORY_TYPE)
             .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+            .updatedAt(UPDATED_UPDATED_AT)
+            .categoryIcon(UPDATED_CATEGORY_ICON);
     }
 
     @BeforeEach
@@ -196,7 +201,8 @@ class CategoryResourceIT {
             .andExpect(jsonPath("$.[*].categoryName").value(hasItem(DEFAULT_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
+            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].categoryIcon").value(hasItem(DEFAULT_CATEGORY_ICON)));
     }
 
     @Test
@@ -214,7 +220,8 @@ class CategoryResourceIT {
             .andExpect(jsonPath("$.categoryName").value(DEFAULT_CATEGORY_NAME))
             .andExpect(jsonPath("$.categoryType").value(DEFAULT_CATEGORY_TYPE.toString()))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
-            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
+            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()))
+            .andExpect(jsonPath("$.categoryIcon").value(DEFAULT_CATEGORY_ICON));
     }
 
     @Test
@@ -381,6 +388,62 @@ class CategoryResourceIT {
         defaultCategoryFiltering("updatedAt.specified=true", "updatedAt.specified=false");
     }
 
+    @Test
+    @Transactional
+    void getAllCategoriesByCategoryIconIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedCategory = categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where categoryIcon equals to
+        defaultCategoryFiltering("categoryIcon.equals=" + DEFAULT_CATEGORY_ICON, "categoryIcon.equals=" + UPDATED_CATEGORY_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByCategoryIconIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedCategory = categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where categoryIcon in
+        defaultCategoryFiltering(
+            "categoryIcon.in=" + DEFAULT_CATEGORY_ICON + "," + UPDATED_CATEGORY_ICON,
+            "categoryIcon.in=" + UPDATED_CATEGORY_ICON
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByCategoryIconIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedCategory = categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where categoryIcon is not null
+        defaultCategoryFiltering("categoryIcon.specified=true", "categoryIcon.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByCategoryIconContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCategory = categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where categoryIcon contains
+        defaultCategoryFiltering("categoryIcon.contains=" + DEFAULT_CATEGORY_ICON, "categoryIcon.contains=" + UPDATED_CATEGORY_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByCategoryIconNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCategory = categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where categoryIcon does not contain
+        defaultCategoryFiltering(
+            "categoryIcon.doesNotContain=" + UPDATED_CATEGORY_ICON,
+            "categoryIcon.doesNotContain=" + DEFAULT_CATEGORY_ICON
+        );
+    }
+
     private void defaultCategoryFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
         defaultCategoryShouldBeFound(shouldBeFound);
         defaultCategoryShouldNotBeFound(shouldNotBeFound);
@@ -398,7 +461,8 @@ class CategoryResourceIT {
             .andExpect(jsonPath("$.[*].categoryName").value(hasItem(DEFAULT_CATEGORY_NAME)))
             .andExpect(jsonPath("$.[*].categoryType").value(hasItem(DEFAULT_CATEGORY_TYPE.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
+            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].categoryIcon").value(hasItem(DEFAULT_CATEGORY_ICON)));
 
         // Check, that the count call also returns 1
         restCategoryMockMvc
@@ -450,7 +514,8 @@ class CategoryResourceIT {
             .categoryName(UPDATED_CATEGORY_NAME)
             .categoryType(UPDATED_CATEGORY_TYPE)
             .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+            .updatedAt(UPDATED_UPDATED_AT)
+            .categoryIcon(UPDATED_CATEGORY_ICON);
 
         restCategoryMockMvc
             .perform(
@@ -560,7 +625,8 @@ class CategoryResourceIT {
             .categoryName(UPDATED_CATEGORY_NAME)
             .categoryType(UPDATED_CATEGORY_TYPE)
             .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+            .updatedAt(UPDATED_UPDATED_AT)
+            .categoryIcon(UPDATED_CATEGORY_ICON);
 
         restCategoryMockMvc
             .perform(

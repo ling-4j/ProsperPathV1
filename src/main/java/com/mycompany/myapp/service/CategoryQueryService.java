@@ -83,6 +83,9 @@ public class CategoryQueryService extends QueryService<Category> {
             if (criteria.getUpdatedAt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUpdatedAt(), Category_.updatedAt));
             }
+            if (criteria.getCategoryIcon() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCategoryIcon(), Category_.categoryIcon));
+            }
         }
         return specification;
     }

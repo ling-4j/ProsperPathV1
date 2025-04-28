@@ -36,6 +36,9 @@ public class Category implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @Column(name = "category_icon")
+    private String categoryIcon;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -103,6 +106,19 @@ public class Category implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getCategoryIcon() {
+        return this.categoryIcon;
+    }
+
+    public Category categoryIcon(String categoryIcon) {
+        this.setCategoryIcon(categoryIcon);
+        return this;
+    }
+
+    public void setCategoryIcon(String categoryIcon) {
+        this.categoryIcon = categoryIcon;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -131,6 +147,7 @@ public class Category implements Serializable {
             ", categoryType='" + getCategoryType() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
+            ", categoryIcon='" + getCategoryIcon() + "'" +
             "}";
     }
 }

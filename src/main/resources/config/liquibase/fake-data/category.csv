@@ -1,11 +1,11 @@
-id;category_name;category_type;created_at;updated_at
-1;afterwards fast;INCOME;2025-03-20T00:54:01;2025-03-20T02:09:12
-2;duh archaeology;INCOME;2025-03-19T20:32:40;2025-03-19T08:33:42
-3;thoughtfully;INCOME;2025-03-20T00:46:51;2025-03-19T21:38:08
-4;honestly sympathetically within;EXPENSE;2025-03-19T07:53:58;2025-03-20T00:02:47
-5;inasmuch uh-huh nearly;INCOME;2025-03-19T20:06:55;2025-03-19T17:08:16
-6;cemetery near unimportant;EXPENSE;2025-03-19T06:54:29;2025-03-19T21:01:26
-7;shimmering since;EXPENSE;2025-03-19T07:46:29;2025-03-19T12:55:06
-8;psst following;INCOME;2025-03-19T15:09:56;2025-03-19T13:12:18
-9;yet;INCOME;2025-03-19T17:53:43;2025-03-19T04:26:27
-10;finally;INCOME;2025-03-19T09:29:50;2025-03-20T02:06:33
+id;category_name;category_type;created_at;updated_at;category_icon
+1;afterwards fast;INCOME;2025-03-20T00:54:01;2025-03-20T02:09:12;duh archaeology
+2;so ack;INCOME;2025-03-20T02:43:51;2025-03-19T19:32:10;yowza nor
+3;mmm charlatan;INCOME;2025-03-19T04:32:22;2025-03-19T14:53:38;however jittery violently
+4;palatable;EXPENSE;2025-03-19T09:32:43;2025-03-19T15:03:16;extension sad crumble
+5;rationalise climb;INCOME;2025-03-19T09:34:09;2025-03-19T15:09:56;tenderly off
+6;valuable devoted;INCOME;2025-03-19T11:11:44;2025-03-19T17:14:47;accomplished account profuse
+7;because mentor dearly;EXPENSE;2025-03-20T00:23:57;2025-03-20T00:51:07;denitrify midwife gee
+8;vague both whereas;EXPENSE;2025-03-19T17:04:54;2025-03-19T21:19:22;gym wiggly spectacles
+9;ah;EXPENSE;2025-03-19T12:47:07;2025-03-19T23:28:42;license scholarship
+10;but pish;INCOME;2025-03-19T22:33:11;2025-03-19T23:31:07;when collectivization lox
