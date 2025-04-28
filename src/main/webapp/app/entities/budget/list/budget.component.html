@@ -57,8 +57,8 @@
       <tbody class="budget-tbody">
         @for (budget of budgets(); track trackId(budget)) {
         <tr data-cy="entityTable" class="budget-row">
-          <td>{{ budget.budgetAmount }}</td>
-          <td>{{ budget.category?.categoryName }}</td>
+          <td class="fw-bold">{{ budget.budgetAmount | currency: 'VND' }}</td>
+          <td><fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{ budget.category?.categoryName }}</td>
           <td>{{ budget.startDate | formatMediumDatetime }}</td>
           <td>{{ budget.endDate | formatMediumDatetime }}</td>
 

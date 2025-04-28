@@ -35,14 +35,14 @@
             <div class="filter-item">
               <input type="text" name="fromDate" class="form-control custom-input" placeholder="From date" id="f-fdate"
                 [value]="fromDateStruct ? (fromDateStruct.day + '/' + fromDateStruct.month + '/' + fromDateStruct.year) : ''"
-                ngbDatepicker #fromDatePicker="ngbDatepicker"
-                (click)="fromDatePicker.toggle()" (dateSelect)="onFromDateSelect($event)" />
+                ngbDatepicker #fromDatePicker="ngbDatepicker" (click)="fromDatePicker.toggle()"
+                (dateSelect)="onFromDateSelect($event)" />
             </div>
             <div class="filter-item">
               <input type="text" name="toDate" class="form-control custom-input" placeholder="Yo date" id="f-tdate"
                 [value]="toDateStruct ? (toDateStruct.day + '/' + toDateStruct.month + '/' + toDateStruct.year) : ''"
-                ngbDatepicker #toDatePicker="ngbDatepicker"
-                (click)="toDatePicker.toggle()" (dateSelect)="onToDateSelect($event)" />
+                ngbDatepicker #toDatePicker="ngbDatepicker" (click)="toDatePicker.toggle()"
+                (dateSelect)="onToDateSelect($event)" />
             </div>
             <div class="filter-item">
               <select class="form-select custom-select" id="f-type" [(ngModel)]="type">
@@ -53,15 +53,15 @@
             </div>
           </div>
           <div class="search-btn-container">
-            <button class="btn btn-primary search-btn" (click)="search()"
-              jhiTranslate="prosperPathApp.transaction.btn.search">
-              Tìm kiếm
+            <button class="btn btn-primary search-btn" (click)="search()">
+              <fa-icon icon="search"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.btn.search" class="ms-1">Search</span>
             </button>
           </div>
-          <div class="search-btn-container">
-            <button class="btn btn-primary search-btn" (click)="search()"
-              jhiTranslate="prosperPathApp.transaction.btn.export">
-              Tìm kiếm
+          <div class="export-btn-container">
+            <button class="btn btn-primary export-btn" (click)="search()">
+              <fa-icon icon="file-export"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.btn.export" class="ms-1">Export</span>
             </button>
           </div>
         </div>
@@ -76,6 +76,9 @@
         <table class="table table-striped" aria-describedby="page-heading">
           <thead>
             <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+              <th scope="col" jhiSortBy="category.id">
+                <div class="d-flex justify-content-center">STT
+                </div>
               <th scope="col" jhiSortBy="category.id">
                 <div class="d-flex align-items-center">
                   <span jhiTranslate="prosperPathApp.transaction.category">Category</span>
@@ -110,15 +113,24 @@
             </tr>
           </thead>
           <tbody>
-            @for (transaction of transactions(); track trackId(transaction)) {
+            @for (transaction of transactions(); track trackId(transaction); let i = $index) {
             <tr data-cy="entityTable" class="budget-row">
-              <td class="text-break">{{ transaction.category?.categoryName }}</td>
+              <td class="text-center">{{ i + 1 }}</td>
+              <td class="text-break"><fa-icon
+                  [icon]="['fas', (transaction.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
+                transaction.category?.categoryName }}</td>
               <td [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')">
                 {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
               </td>
               <td class="text-break">{{ transaction.description }}</td>
               <td>{{ transaction.transactionDate | formatMediumDatetime }}</td>
-              <td class="text-end">{{ transaction.amount }}</td>
+              <td class="text-end fw-bold" [ngClass]="{
+                'text-danger': transaction.transactionType === 'EXPENSE',
+                'text-primary': transaction.transactionType === 'INCOME'
+              }">
+                {{ (transaction.transactionType === 'EXPENSE' ? -(transaction.amount ?? 0) : (transaction.amount ?? 0))
+                | currency: 'VND' }}
+              </td>
               <td class="text-end action-column">
                 <div class="btn-group action-buttons">
                   <a [routerLink]="['/transaction', transaction.id, 'edit']" class="btn btn-primary btn-sm edit-btn"

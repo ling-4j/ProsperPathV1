@@ -18,10 +18,12 @@
         "title": "Danh mục"
       },
       "id": "ID",
-      "categoryName": "tên danh mục",
-      "categoryType": "Loại danh mục",
+      "categoryName": "Tên danh mục",
+      "categoryType": "Loại",
       "createdAt": "Ngày tạo",
-      "updatedAt": "Ngày cập nhật"
+      "updatedAt": "Ngày cập nhật",
+      "categoryIcon": "Category Icon",
+      "category": "Danh mục"
     }
   }
 }

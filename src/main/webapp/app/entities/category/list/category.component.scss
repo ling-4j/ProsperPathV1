@@ -138,6 +138,11 @@ $breakpoint-xl: 1200px;
 // Tùy chỉnh bảng
 .table {
     font-size: 0.9rem;
+    font-family: "Roboto", sans-serif;
+    
+    thead {
+        text-transform: uppercase;
+    }
 
     thead.bg-white {
         background-color: $white; // Đặt màu trắng cho thead với class bg-white

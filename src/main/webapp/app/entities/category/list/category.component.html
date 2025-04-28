@@ -12,12 +12,8 @@
           </button>
         </div> -->
         <div class="header-items create-btn-container">
-          <button
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-primary jh-create-entity create-category"
-            [routerLink]="['/category/new']"
-          >
+          <button id="jh-create-entity" data-cy="entityCreateButton"
+            class="btn btn-primary jh-create-entity create-category" [routerLink]="['/category/new']">
             <fa-icon icon="plus"></fa-icon>
             <span jhiTranslate="prosperPathApp.category.home.createLabel">Create a new Category</span>
           </button>
@@ -29,84 +25,70 @@
   <jhi-filter [filters]="filters"></jhi-filter>
 
   @if (categories().length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="prosperPathApp.category.home.notFound">No Categories found</span>
-    </div>
+  <div class="alert alert-warning" id="no-result">
+    <span jhiTranslate="prosperPathApp.category.home.notFound">No Categories found</span>
+  </div>
   } @else {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)" class="budget-row">
-            <th scope="col" jhiSortBy="categoryName">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.category.categoryName">Category Name</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="categoryType">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.category.categoryType">Category Type</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (category of categories(); track trackId(category)) {
-            <tr data-cy="entityTable" class="budget-row">
-              <td>{{ category.categoryName }}</td>
-              <td [jhiTranslate]="'prosperPathApp.CategoryType.' + (category.categoryType ?? 'null')">
-                {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[category.categoryType ?? 'null'] }}
-              </td>
-              <td class="text-end">
-                <div class="btn-group action-buttons">
-                  <a
-                    [routerLink]="['/category', category.id, 'edit']"
-                    class="btn btn-primary btn-sm edit-btn"
-                    data-cy="entityEditButton"
-                  >
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                  </a>
-                  <button
-                    type="submit"
-                    (click)="delete(category)"
-                    class="btn btn-danger btn-sm delete-btn"
-                    data-cy="entityDeleteButton"
-                  >
-                    <fa-icon icon="times"></fa-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+  <div class="table-responsive table-entities" id="entities">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)" class="budget-row">
+          <th scope="col" jhiSortBy="categoryName">
+            <div class="d-flex">
+              <span jhiTranslate="prosperPathApp.category.category">Category </span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="categoryType">
+            <div class="d-flex">
+              <span jhiTranslate="prosperPathApp.category.categoryType">Category Type</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (category of categories(); track trackId(category)) {
+        <tr data-cy="entityTable" class="budget-row">
+          <td><fa-icon [icon]="['fas', (category.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{ category.categoryName }}</td>
+          <td [jhiTranslate]="'prosperPathApp.CategoryType.' + (category.categoryType ?? 'null')">
+            {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[category.categoryType ?? 'null'] }}
+          </td>
+          <td class="text-end">
+            <div class="btn-group action-buttons">
+              <a [routerLink]="['/category', category.id, 'edit']" class="btn btn-primary btn-sm edit-btn"
+                data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+              </a>
+              <button type="submit" (click)="delete(category)" class="btn btn-danger btn-sm delete-btn"
+                data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
   }
 
   @if (categories().length > 0) {
-    <div class="pagination-container mt-3">
-      <div class="row align-items-center">
-        <div class="col-12 col-md-6 mb-2 mb-md-0">
-          <!-- <jhi-item-count
+  <div class="pagination-container mt-3">
+    <div class="row align-items-center">
+      <div class="col-12 col-md-6 mb-2 mb-md-0">
+        <!-- <jhi-item-count
             [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"
             class="item-count"
           ></jhi-item-count> -->
-        </div>
-        <div class="col-12 col-md-6 d-flex justify-content-md-end">
-          <ngb-pagination
-            [collectionSize]="totalItems"
-            [page]="page"
-            [pageSize]="itemsPerPage"
-            [maxSize]="5"
-            [rotate]="true"
-            [boundaryLinks]="true"
-            (pageChange)="navigateToPage($event)"
-            class="custom-pagination"
-          ></ngb-pagination>
-        </div>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-md-end">
+        <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+          [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)"
+          class="custom-pagination"></ngb-pagination>
       </div>
     </div>
+  </div>
   }
 </div>

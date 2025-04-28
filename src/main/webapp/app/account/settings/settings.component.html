@@ -1,7 +1,7 @@
 <div class="settings-container d-flex justify-content-center ">
   <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
     @if (settingsForm.value.login) {
-    <h1 data-cy="settingTitle" jhiTranslate="settings.title" [translateValues]="{ username: settingsForm.value.login }"
+    <h1 data-cy="settingTitle" jhiTranslate="settings.title" [translateValues]="{ username: settingsForm.value.login | uppercase}"
       class="settings-title">
       User settings for [<strong>{{ settingsForm.value.login }}</strong>]
     </h1>

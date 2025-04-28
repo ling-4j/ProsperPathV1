@@ -4,14 +4,6 @@
     <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
         <jhi-alert-error></jhi-alert-error>
-
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" for="field_id" jhiTranslate="prosperPathApp.transaction.id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
-
         @let amountRef = editForm.get('amount')!;
         <div class="mb-3">
           <label class="form-label" for="field_amount" jhiTranslate="prosperPathApp.transaction.amount">Amount</label>

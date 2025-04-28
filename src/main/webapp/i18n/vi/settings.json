@@ -1,6 +1,6 @@
 {
   "settings": {
-    "title": "Cài đặt người dùng của [<strong>{{username}}</strong>]",
+    "title": "Thông tin của <strong><i>{{username}}</strong></u>",
     "form": {
       "firstname": "Tên",
       "firstname.placeholder": "Nhập tên của bạn",

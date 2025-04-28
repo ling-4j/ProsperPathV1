@@ -37,6 +37,26 @@ import {
   faUsers,
   faUsersCog,
   faWrench,
+  // Các icon cho Financier App (đã thêm trước đó)
+  faCartShopping,  // Mua sắm
+  faMoneyBill,     // Hóa đơn
+  faWallet,        // Lương
+  faEllipsisH,     // Khác
+  faUtensils,      // Ăn uống
+  faCar,           // Di chuyển
+  faFilm,          // Giải trí
+  faPiggyBank,     // Tiết kiệm
+  faChartLine,     // Đầu tư
+  faHeartbeat,     // Sức khỏe
+  faPlane,         // Du lịch
+  faCreditCard,    // Nợ (Thẻ tín dụng)
+  faGift,          // Quà tặng
+  // Các icon cho Budgets, Categories, Transactions
+  faMoneyCheckAlt, // Ngân sách
+  faTags,          // Danh mục
+  faExchangeAlt,   // Giao dịch
+  // Thêm icon cho Export
+  faFileExport,    // Xuất dữ liệu
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -79,5 +99,25 @@ export const fontAwesomeIcons = [
   faUsers,
   faUsersCog,
   faWrench,
+  // Các icon cho Financier App (đã thêm trước đó)
+  faCartShopping,  // Mua sắm
+  faMoneyBill,     // Hóa đơn
+  faWallet,        // Lương
+  faEllipsisH,     // Khác
+  faUtensils,      // Ăn uống
+  faCar,           // Di chuyển
+  faFilm,          // Giải trí
+  faPiggyBank,     // Tiết kiệm
+  faChartLine,     // Đầu tư
+  faHeartbeat,     // Sức khỏe
+  faPlane,         // Du lịch
+  faCreditCard,    // Nợ (Thẻ tín dụng)
+  faGift,          // Quà tặng
+  // Các icon cho Budgets, Categories, Transactions
+  faMoneyCheckAlt, // Ngân sách
+  faTags,          // Danh mục
+  faExchangeAlt,   // Giao dịch
+  // Thêm icon cho Export
+  faFileExport,    // Xuất dữ liệu
   // jhipster-needle-add-icon-import
 ];

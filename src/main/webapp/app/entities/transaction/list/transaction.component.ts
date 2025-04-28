@@ -103,7 +103,13 @@ export class TransactionComponent implements OnInit {
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-        tap(() => this.load()),
+        tap(() => {
+          // Nếu không có sort param trong URL, đặt sortState mặc định
+          if (!this.activatedRoute.snapshot.queryParamMap.get(SORT)) {
+            this.sortState.set({ predicate: 'transactionDate', order: 'desc' });
+          }
+          this.load();
+        }),
       )
       .subscribe();
     this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
@@ -123,8 +129,8 @@ export class TransactionComponent implements OnInit {
 
   load(): void {
     this.category = null;
-    this.fromDateStruct = null; 
-    this.toDateStruct = null; 
+    this.fromDateStruct = null;
+    this.toDateStruct = null;
     this.type = null;
     this.queryBackend().subscribe({
       next: (res: EntityArrayResponseType) => {
@@ -162,7 +168,10 @@ export class TransactionComponent implements OnInit {
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     const page = params.get(PAGE_HEADER);
     this.page = +(page ?? 1);
-    this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
+    const sortParam = params.get(SORT);
+    if (sortParam) {
+      this.sortState.set(this.sortService.parseSortParam(sortParam));
+    }
     this.filters.initializeFromParams(params);
   }
 
@@ -204,7 +213,7 @@ export class TransactionComponent implements OnInit {
     const queryObject: any = {
       page: page - 1,
       size: this.itemsPerPage,
-      sort: this.sortService.buildSortParam(this.sortState()),
+      sort: this.sortService.buildSortParam(this.sortState(),'id'),
     };
 
     if (this.fromDate) {

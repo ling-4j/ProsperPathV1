@@ -19,9 +19,11 @@
       },
       "id": "ID",
       "categoryName": "Category Name",
-      "categoryType": "Category Type",
+      "categoryType": "Type",
       "createdAt": "Created At",
-      "updatedAt": "Updated At"
+      "updatedAt": "Updated At",
+      "categoryIcon": "Category Icon",
+      "category": "Category"
     }
   }
 }
