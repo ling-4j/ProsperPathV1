@@ -89,7 +89,7 @@ $breakpoint-xl: 1200px;
     width: 100%;
     font-family: $font-family-base;
     background-color: $white;
-    overflow-y: auto; 
+    overflow-y: auto;
 
     @media (max-width: $breakpoint-md) {
         grid-column: 1 / -1;
@@ -103,6 +103,7 @@ $breakpoint-xl: 1200px;
 
     thead.bg-white {
         background-color: $white; // Đặt màu trắng cho thead với class bg-white
+
         th {
             background-color: $white; // Ghi đè màu của th để đảm bảo trắng
             color: $dark-text; // Đặt màu chữ đậm để tương phản với nền trắng
@@ -266,6 +267,15 @@ $breakpoint-xl: 1200px;
         border-radius: 5px;
         border: 1px solid $border-color;
         background-color: $white;
+        padding: 0 0 0 12px;
+
+        .ng-clear-wrapper {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: red;
+        }
 
         .ng-value-container {
             height: 100%;
@@ -289,6 +299,28 @@ $breakpoint-xl: 1200px;
         display: flex;
         align-items: center;
         height: 100%;
+        color: #6c757d;
+    }
+
+    // Sửa nền trong suốt của dropdown
+    ::ng-deep .ng-dropdown-panel {
+        background-color: $white !important;
+        border: 1px solid $border-color;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    // Đảm bảo văn bản trong dropdown dễ đọc
+    ::ng-deep .ng-option {
+        padding: 5px 10px;
+        color: $dark-text !important;
+        background-color: $white;
+
+        &.ng-option-selected,
+        &.ng-option-marked {
+            background-color: $light !important;
+            color: $dark-text !important;
+        }
     }
 }
 

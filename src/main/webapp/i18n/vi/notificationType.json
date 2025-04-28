@@ -3,6 +3,10 @@
     "NotificationType": {
       "null": "",
       "BUDGET_EXCEEDED": "VƯỢT NGÂN SÁCH",
+      "BUDGET_EXPIRED": "HẾT HẠN NGÂN SÁCH",
+      "TRANSACTION_ADDED": "GIAO DỊCH MỚI",
+      "TRANSACTION_UPDATED": "GIAO DỊCH CẬP NHẬT",
+      "TRANSACTION_DELETED": "GIAO DỊCH ĐÃ XÓA",
       "OTHER": "KHÁC"
     }
   }

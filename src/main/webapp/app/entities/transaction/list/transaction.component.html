@@ -28,19 +28,21 @@
         <div class="col-12 filter-container">
           <div class="filter-items">
             <div class="filter-item">
-              <ng-select id="ctg" placeholder="category" [items]="categories()" bindLabel="categoryName" bindValue="id"
+              <ng-select id="ctg" placeholder="Category" [items]="categories()" bindLabel="categoryName" bindValue="id"
                 [(ngModel)]="category" class="custom-ng-select">
               </ng-select>
             </div>
             <div class="filter-item">
-              <input type="text" class="form-control custom-input" placeholder="From date" id="f-fdate"
-                [(ngModel)]="fromDateStruct" ngbDatepicker #fromDatePicker="ngbDatepicker"
-                (click)="fromDatePicker.toggle()" />
+              <input type="text" name="fromDate" class="form-control custom-input" placeholder="From date" id="f-fdate"
+                [value]="fromDateStruct ? (fromDateStruct.day + '/' + fromDateStruct.month + '/' + fromDateStruct.year) : ''"
+                ngbDatepicker #fromDatePicker="ngbDatepicker"
+                (click)="fromDatePicker.toggle()" (dateSelect)="onFromDateSelect($event)" />
             </div>
             <div class="filter-item">
-              <input type="text" class="form-control custom-input" placeholder="To date" id="f-tdate"
-                [(ngModel)]="toDateStruct" ngbDatepicker #toDatePicker="ngbDatepicker"
-                (click)="toDatePicker.toggle()" />
+              <input type="text" name="toDate" class="form-control custom-input" placeholder="Yo date" id="f-tdate"
+                [value]="toDateStruct ? (toDateStruct.day + '/' + toDateStruct.month + '/' + toDateStruct.year) : ''"
+                ngbDatepicker #toDatePicker="ngbDatepicker"
+                (click)="toDatePicker.toggle()" (dateSelect)="onToDateSelect($event)" />
             </div>
             <div class="filter-item">
               <select class="form-select custom-select" id="f-type" [(ngModel)]="type">

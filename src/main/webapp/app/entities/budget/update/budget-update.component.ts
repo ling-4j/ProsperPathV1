@@ -91,7 +91,7 @@ export class BudgetUpdateComponent implements OnInit {
 
     this.categoriesSharedCollection = this.categoryService.addCategoryToCollectionIfMissing<ICategory>(
       this.categoriesSharedCollection,
-      budget.category,
+      budget.category
     );
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, budget.user);
   }
@@ -102,15 +102,19 @@ export class BudgetUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ICategory[]>) => res.body ?? []))
       .pipe(
         map((categories: ICategory[]) =>
-          this.categoryService.addCategoryToCollectionIfMissing<ICategory>(categories, this.budget?.category),
-        ),
+          this.categoryService.addCategoryToCollectionIfMissing<ICategory>(categories, this.budget?.category)
+        )
       )
-      .subscribe((categories: ICategory[]) => (this.categoriesSharedCollection = categories));
+      .subscribe((categories: ICategory[]) => {
+        this.categoriesSharedCollection = categories;
+      });
 
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
       .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.budget?.user)))
-      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
+      .subscribe((users: IUser[]) => {
+        this.usersSharedCollection = users;
+      });
   }
 }

@@ -45,4 +45,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     // Thêm phương thức để tìm giao dịch theo userId và khoảng thời gian
     List<Transaction> findByUserIdAndTransactionDateBetween(Long userId, Instant startDate, Instant endDate);
+
+    /**
+     * Get all transactions by userId.
+     *
+     * @param userId the id of the user.
+     * @return the list of transactions.
+     */
+    List<Transaction> findByUserId(Long userId);
 }

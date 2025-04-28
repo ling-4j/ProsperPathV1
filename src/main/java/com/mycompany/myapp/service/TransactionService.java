@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Transaction;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,4 +56,12 @@ public interface TransactionService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Get all transactions by userId.
+     *
+     * @param userId the id of the user.
+     * @return the list of transactions.
+     */
+    List<Transaction> findByUserId(Long userId);
 }

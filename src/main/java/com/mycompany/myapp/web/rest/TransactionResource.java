@@ -28,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
+import tech.jhipster.service.filter.LongFilter;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Transaction}.
@@ -190,6 +191,19 @@ public class TransactionResource {
     ) {
         LOG.debug("REST request to get Transactions by criteria: {}", criteria);
 
+        // Lấy người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+
+        // Gán userId của người dùng hiện tại vào criteria
+        LongFilter userIdFilter = new LongFilter();
+        userIdFilter.setEquals(currentUser.get().getId());
+        criteria.setUserId(userIdFilter);
+
+        // Tìm kiếm giao dịch dựa trên criteria và phân trang
         Page<Transaction> page = transactionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

@@ -7,6 +7,7 @@ import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,5 +101,11 @@ public class TransactionServiceImpl implements TransactionService {
     public void delete(Long id) {
         LOG.debug("Request to delete Transaction : {}", id);
         transactionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Transaction> findByUserId(Long userId) {
+        LOG.debug("Request to get Transactions by userId : {}", userId);
+        return transactionRepository.findByUserId(userId);
     }
 }

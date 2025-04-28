@@ -143,9 +143,9 @@
             [compareWith]="compareCategory"
           >
             <option [ngValue]="null"></option>
-            @for (categoryOption of categoriesSharedCollection; track $index) {
-              <option [ngValue]="categoryOption">{{ categoryOption.id }}</option>
-            }
+            <ng-container *ngFor="let categoryOption of categoriesSharedCollection">
+              <option [ngValue]="categoryOption">{{ categoryOption.categoryName }}</option>
+            </ng-container>
           </select>
         </div>
       </div>
