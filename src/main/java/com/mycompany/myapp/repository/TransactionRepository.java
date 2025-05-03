@@ -2,6 +2,7 @@ package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Transaction;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +32,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         return this.findAllWithToOneRelationships(pageable);
     }
 
-    @Query(
-        value = "select transaction from Transaction transaction left join fetch transaction.user",
-        countQuery = "select count(transaction) from Transaction transaction"
-    )
+    @Query(value = "select transaction from Transaction transaction left join fetch transaction.user", countQuery = "select count(transaction) from Transaction transaction")
     Page<Transaction> findAllWithToOneRelationships(Pageable pageable);
 
     @Query("select transaction from Transaction transaction left join fetch transaction.user")
@@ -53,4 +51,17 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
      * @return the list of transactions.
      */
     List<Transaction> findByUserId(Long userId);
+
+    @Query("""
+             SELECT COALESCE(SUM(t.amount), 0)
+             FROM Transaction t
+             WHERE t.category.id = :categoryId
+               AND t.user.id = :userId
+               AND t.transactionDate BETWEEN :startDate AND :endDate
+            """)
+    BigDecimal sumAmountByCategoryIdAndUserIdAndDateRange(
+            @Param("categoryId") Long categoryId,
+            @Param("userId") Long userId,
+            @Param("startDate") Instant startDate,
+            @Param("endDate") Instant endDate);
 }

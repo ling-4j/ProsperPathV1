@@ -3,6 +3,7 @@ package com.mycompany.myapp.repository;
 import com.mycompany.myapp.domain.Budget;
 import java.util.List;
 import java.util.Optional;
+import java.time.Instant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -37,4 +38,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long>, JpaSpecif
 
     @Query("select budget from Budget budget left join fetch budget.user where budget.id =:id")
     Optional<Budget> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("SELECT b FROM Budget b WHERE b.user.id = :userId AND b.endDate >= :date")
+    List<Budget> findByUserIdAndEndDateAfter(@Param("userId") Long userId, @Param("date") Instant date);
 }

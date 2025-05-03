@@ -69,31 +69,29 @@
           </thead>
           <tbody>
             @for (notification of notifications(); track trackId(notification)) {
-            <tr data-cy="entityTable">
-              <td>{{ notification.message }}</td>
-              <td [jhiTranslate]="'prosperPathApp.NotificationType.' + (notification.notificationType ?? 'null')">
-                {{ { null: '', BUDGET_EXCEEDED: 'BUDGET_EXCEEDED', OTHER: 'OTHER' }[notification.notificationType ??
-                'null'] }}
-              </td>
-              <td>{{ notification.isRead }}</td>
-              <td>{{ notification.createdAt | formatMediumDatetime }}</td>
-              <!-- <td>
-                {{ notification.user?.login }}
-              </td> -->
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/notification', notification.id, 'view']" class="btn btn-info btn-sm"
-                    data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                  </a>
-
-                  <button type="submit" (click)="delete(notification)" class="btn btn-danger btn-sm"
-                    data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>
+              <tr data-cy="entityTable">
+                <!-- <td [innerHTML]="formatNotificationMessage(notification.message) | safeHtml"></td> -->
+                <td>
+                  <span>{{ formatNotificationMessageText(notification.message ?? '') }}</span>
+                  <fa-icon *ngIf="getCategoryIcon(notification.message ?? '')" [icon]="['fas', getCategoryIcon(notification.message ?? '')]"></fa-icon>
+                  <span>{{ getCategoryName(notification.message ?? '') }}</span>
+                </td>
+                <td [jhiTranslate]="'prosperPathApp.NotificationType.' + (notification.notificationType ?? 'null')">
+                  {{ { null: '', BUDGET_EXCEEDED: 'BUDGET_EXCEEDED', OTHER: 'OTHER' }[notification.notificationType ?? 'null'] }}
+                </td>
+                <td>{{ notification.isRead }}</td>
+                <td>{{ notification.createdAt | formatMediumDatetime }}</td>
+                <td class="text-end">
+                  <div class="btn-group">
+                    <a [routerLink]="['/notification', notification.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                      <fa-icon icon="eye"></fa-icon>
+                    </a>
+                    <button type="submit" (click)="delete(notification)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                      <fa-icon icon="times"></fa-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
             }
           </tbody>
         </table>

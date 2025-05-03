@@ -1,9 +1,11 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Notification;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.NotificationRepository;
 import com.mycompany.myapp.service.NotificationQueryService;
 import com.mycompany.myapp.service.NotificationService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.NotificationCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -22,6 +24,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -45,15 +49,18 @@ public class NotificationResource {
     private final NotificationRepository notificationRepository;
 
     private final NotificationQueryService notificationQueryService;
+    private final UserService userService;
 
     public NotificationResource(
         NotificationService notificationService,
         NotificationRepository notificationRepository,
-        NotificationQueryService notificationQueryService
+        NotificationQueryService notificationQueryService,
+        UserService userService
     ) {
         this.notificationService = notificationService;
         this.notificationRepository = notificationRepository;
         this.notificationQueryService = notificationQueryService;
+        this.userService = userService;
     }
 
     /**
@@ -157,6 +164,18 @@ public class NotificationResource {
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Notifications by criteria: {}", criteria);
+
+         // Lấy người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        if (!currentUser.isPresent()) {
+            LOG.warn("Current user not found");
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+
+        // Gán userId của người dùng hiện tại vào criteria
+        LongFilter userIdFilter = new LongFilter();
+        userIdFilter.setEquals(currentUser.get().getId());
+        criteria.setUserId(userIdFilter);
 
         Page<Notification> page = notificationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

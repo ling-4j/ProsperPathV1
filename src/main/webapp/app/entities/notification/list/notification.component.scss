@@ -1,4 +1,20 @@
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 
+// Định nghĩa màu sắc chủ đạo
+$primary: #007bff; // Xanh dương
+$warning: #ffc107; // Vàng
+$light: #f8f9fa; // Xám nhạt
+$white: #ffffff; // Trắng
+$gray: #e9ecef; // Xám nhạt cho input
+$border-color: #dee2e6; // Màu viền
+$teal: #20c997; // Màu teal cho tiêu đề
+$hover-bg: rgba(0, 123, 255, 0.05); // Màu nền khi hover vào dòng
+$dark-text: #212529; // Màu chữ đậm để tương phản với nền trắng
+
+// Định nghĩa font
+$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 .parent {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

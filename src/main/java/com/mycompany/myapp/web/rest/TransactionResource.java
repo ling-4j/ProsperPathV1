@@ -4,6 +4,7 @@ import com.mycompany.myapp.domain.Transaction;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.service.SummaryQueryService;
+import com.mycompany.myapp.service.NotificationQueryService;
 import com.mycompany.myapp.service.TransactionQueryService;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
@@ -50,15 +51,17 @@ public class TransactionResource {
 
     private final TransactionQueryService transactionQueryService;
     private final SummaryQueryService summaryQueryService;
+    private final NotificationQueryService notificationQueryService;
     private final UserService userService;
 
     public TransactionResource(
-        TransactionService transactionService,
-        TransactionRepository transactionRepository,
-        TransactionQueryService transactionQueryService,
-        SummaryQueryService summaryQueryService,
-        UserService userService
-    ) {
+            TransactionService transactionService,
+            TransactionRepository transactionRepository,
+            TransactionQueryService transactionQueryService,
+            SummaryQueryService summaryQueryService,
+            UserService userService, 
+            NotificationQueryService notificationQueryService) {
+        this.notificationQueryService = notificationQueryService;
         this.transactionService = transactionService;
         this.transactionRepository = transactionRepository;
         this.transactionQueryService = transactionQueryService;
@@ -67,7 +70,8 @@ public class TransactionResource {
     }
 
     @PostMapping("")
-    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody Transaction transaction) throws URISyntaxException {
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction)
+            throws URISyntaxException {
         LOG.debug("REST request to save Transaction : {}", transaction);
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
@@ -87,6 +91,10 @@ public class TransactionResource {
         // Cập nhật Summary
         summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), null, savedTransaction);
 
+        // Call NotificationService to check and create notifications
+        // notificationService.checkAndCreateNotificationForTransaction(result);
+        notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), savedTransaction);
+
         return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, savedTransaction.getId().toString()))
             .body(savedTransaction);
@@ -94,9 +102,8 @@ public class TransactionResource {
 
     @PutMapping("/{id}")
     public ResponseEntity<Transaction> updateTransaction(
-        @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Transaction transaction
-    ) throws URISyntaxException {
+            @PathVariable(value = "id", required = false) final Long id,
+            @Valid @RequestBody Transaction transaction) throws URISyntaxException {
         LOG.debug("REST request to update Transaction : {}, {}", id, transaction);
         if (transaction.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -117,7 +124,8 @@ public class TransactionResource {
         }
         Transaction existingTransaction = transactionRepository.findById(id).orElseThrow();
         if (!existingTransaction.getUser().getId().equals(currentUser.get().getId())) {
-            LOG.warn("User {} attempted to update transaction {} that does not belong to them", currentUser.get().getId(), id);
+            LOG.warn("User {} attempted to update transaction {} that does not belong to them",
+                    currentUser.get().getId(), id);
             return ResponseEntity.status(403).build(); // Forbidden
         }
 
@@ -130,9 +138,13 @@ public class TransactionResource {
         // Cập nhật Summary: trừ giá trị cũ và cộng giá trị mới trong một lần gọi
         summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), oldTransaction, updatedTransaction);
 
+        notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), updatedTransaction);
+
+
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))
-            .body(updatedTransaction);
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
+                        transaction.getId().toString()))
+                .body(updatedTransaction);
     }
 
     /**
@@ -153,9 +165,8 @@ public class TransactionResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Transaction> partialUpdateTransaction(
-        @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Transaction transaction
-    ) throws URISyntaxException {
+            @PathVariable(value = "id", required = false) final Long id,
+            @NotNull @RequestBody Transaction transaction) throws URISyntaxException {
         LOG.debug("REST request to partial update Transaction partially : {}, {}", id, transaction);
         if (transaction.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -171,9 +182,8 @@ public class TransactionResource {
         Optional<Transaction> result = transactionService.partialUpdate(transaction);
 
         return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString())
-        );
+                result,
+                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()));
     }
 
     /**
@@ -186,9 +196,8 @@ public class TransactionResource {
      */
     @GetMapping("")
     public ResponseEntity<List<Transaction>> getAllTransactions(
-        TransactionCriteria criteria,
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
-    ) {
+            TransactionCriteria criteria,
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get Transactions by criteria: {}", criteria);
 
         // Lấy người dùng hiện tại
@@ -205,7 +214,8 @@ public class TransactionResource {
 
         // Tìm kiếm giao dịch dựa trên criteria và phân trang
         Page<Transaction> page = transactionQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil
+                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -255,10 +265,11 @@ public class TransactionResource {
 
         // Kiểm tra quyền truy cập
         Transaction transaction = transactionRepository
-            .findById(id)
-            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+                .findById(id)
+                .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
         if (!transaction.getUser().getId().equals(currentUser.get().getId())) {
-            LOG.warn("User {} attempted to delete transaction {} that does not belong to them", currentUser.get().getId(), id);
+            LOG.warn("User {} attempted to delete transaction {} that does not belong to them",
+                    currentUser.get().getId(), id);
             return ResponseEntity.status(403).build(); // Forbidden
         }
 
@@ -269,7 +280,7 @@ public class TransactionResource {
         transactionService.delete(id);
 
         return ResponseEntity.noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
     }
 }
