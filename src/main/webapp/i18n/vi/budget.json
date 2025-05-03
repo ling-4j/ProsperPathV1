@@ -23,6 +23,7 @@
       "endDate": "Ngày kết thúc",
       "createdAt": "Ngày tạo",
       "updatedAt": "Ngay cập nhật",
+      "status": "Trạng thái",
       "category": "Danh mục",
       "user": "Người dùng"
     }

@@ -44,10 +44,10 @@ public class Budget implements Serializable {
     @Column(name = "status")
     private BudgeStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

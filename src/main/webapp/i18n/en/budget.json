@@ -23,6 +23,7 @@
       "endDate": "End Date",
       "createdAt": "Created At",
       "updatedAt": "Updated At",
+      "status": "Status",
       "category": "Category",
       "user": "User"
     }

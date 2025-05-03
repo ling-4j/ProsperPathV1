@@ -18,7 +18,7 @@
         "title": "Giao dịch"
       },
       "id": "ID",
-      "amount": "Số lượng",
+      "amount": "Số tiền",
       "transactionType": "Loại",
       "description": "Mô tả",
       "transactionDate": "Ngày",

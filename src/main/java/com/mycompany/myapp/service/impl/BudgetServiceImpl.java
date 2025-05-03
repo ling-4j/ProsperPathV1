@@ -1,13 +1,17 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Budget;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.BudgetRepository;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.BudgetService;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +25,23 @@ public class BudgetServiceImpl implements BudgetService {
     private static final Logger LOG = LoggerFactory.getLogger(BudgetServiceImpl.class);
 
     private final BudgetRepository budgetRepository;
+    private final UserService userService;
 
-    public BudgetServiceImpl(BudgetRepository budgetRepository) {
+    public BudgetServiceImpl(BudgetRepository budgetRepository, UserService userService) {
+        this.userService = userService;
         this.budgetRepository = budgetRepository;
     }
 
     @Override
     public Budget save(Budget budget) {
         LOG.debug("Request to save Budget : {}", budget);
+        if (budget.getUser() == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                Optional<User> currentUser = userService.getUserWithAuthorities();
+                currentUser.ifPresent(budget::setUser);
+            }
+        }
         return budgetRepository.save(budget);
     }
 
