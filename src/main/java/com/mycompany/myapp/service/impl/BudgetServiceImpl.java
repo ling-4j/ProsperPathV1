@@ -44,6 +44,8 @@ public class BudgetServiceImpl implements BudgetService {
                 currentUser.ifPresent(budget::setUser);
             }
         }
+        budget.setCreatedAt(Instant.now());
+        budget.setUpdatedAt(Instant.now());
         // Set status based on endDate
         if (budget.getEndDate() != null && budget.getEndDate().isAfter(Instant.now())) {
             budget.setStatus(BudgeStatus.ACTIVE);
@@ -63,6 +65,7 @@ public class BudgetServiceImpl implements BudgetService {
                 currentUser.ifPresent(budget::setUser);
             }
         }
+        budget.setUpdatedAt(Instant.now());
         // Set status based on endDate
         if (budget.getEndDate() != null && budget.getEndDate().isAfter(Instant.now())) {
             budget.setStatus(BudgeStatus.ACTIVE);

@@ -1,0 +1,104 @@
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+// Định nghĩa màu sắc và font
+$primary: #1da1f2; // Màu xanh đặc trưng của X
+$light: #ffffff; // Nền trắng
+$dark-text: #14171a;
+$gray-text: #657786;
+$border-color: #e1e8ed;
+$hover-bg: #f5f8fa; // Nền xám nhạt khi hover
+$warning-red: #dc3545; // Màu đỏ cho icon cảnh báo
+
+$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+
+.notification-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  padding: 20px;
+  min-height: 80vh; // Đảm bảo chiều cao tối thiểu
+
+  .notification-title {
+    color: $primary;
+    font-weight: 700;
+    font-size: 1.75rem;
+    text-align: center; // Căn giữa tiêu đề
+  }
+
+  .block {
+    background-color: $light;
+    padding: 30px; // Tăng padding để thoáng hơn
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    font-family: $font-family-base;
+    border: 1px solid $border-color; // Thêm viền nhẹ
+
+    .icon-container {
+      .warning-icon {
+        font-size: 2.5rem; // Tăng kích thước icon
+        color: $warning-red; // Màu đỏ cho icon
+      }
+    }
+
+    .block-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $dark-text;
+      margin-bottom: 0.5rem;
+    }
+
+    .jh-entity-details {
+      dt {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: $gray-text;
+        margin-bottom: 0.5rem;
+      }
+
+      dd {
+        font-size: 1rem;
+        color: $dark-text;
+        margin-bottom: 1.5rem;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9; // Nền nhẹ để làm nổi bật giá trị
+      }
+
+      .notification-message {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        background-color: #f1f8ff; // Nền xanh nhạt nhẹ để làm nổi bật thông điệp
+        border-left: 4px solid $primary; // Viền trái xanh
+      }
+
+      .notification-timestamp {
+        font-size: 0.9rem;
+        color: $gray-text;
+      }
+    }
+
+    .action-buttons {
+      .btn {
+        padding: 0.75rem 1.5rem; // Tăng padding cho nút
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border-radius: 30px;
+
+        &.btn-info {
+          background-color: #6c757d; // Màu xám cho nút Back
+          border-color: #6c757d;
+          color: #fff;
+
+          &:hover {
+            background-color: darken(#6c757d, 10%);
+            border-color: darken(#6c757d, 10%);
+          }
+        }
+      }
+    }
+  }
+}

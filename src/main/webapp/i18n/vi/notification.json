@@ -2,8 +2,8 @@
   "prosperPathApp": {
     "notification": {
       "home": {
-        "title": "Notifications",
-        "refreshListLabel": "Refresh list",
+        "title": "Thông báo",
+        "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới một Notification",
         "createOrEditLabel": "Thêm mới hoặc cập nhật Notification",
         "notFound": "No Notifications found"
@@ -15,14 +15,19 @@
         "question": "Bạn có chắc là muốn xóa Notification {{ id }}?"
       },
       "detail": {
-        "title": "Notification"
+        "title": "Thông báo"
       },
       "id": "ID",
-      "message": "Message",
-      "notificationType": "Notification Type",
+      "message": "Tin nhắn",
+      "notificationType": "Loại",
       "isRead": "Is Read",
-      "createdAt": "Created At",
-      "user": "User"
+      "createdAt": "Thời gian",
+      "user": "Người dùng",
+      "tab": {
+        "all": "Tất cả",
+        "unread": "Chưa đọc",
+        "read": "Đã đọc"
+      }
     }
   }
 }

@@ -57,6 +57,10 @@ import {
   faExchangeAlt,   // Giao dịch
   // Thêm icon cho Export
   faFileExport,    // Xuất dữ liệu
+  // Thêm các icon mới
+  faTriangleExclamation, // Cảnh báo
+  faCircleCheck,         // Đánh dấu hoàn thành
+  faFileInvoiceDollar,   // Hóa đơn tiền tệ
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -119,5 +123,9 @@ export const fontAwesomeIcons = [
   faExchangeAlt,   // Giao dịch
   // Thêm icon cho Export
   faFileExport,    // Xuất dữ liệu
+  // Thêm các icon mới
+  faTriangleExclamation, // Cảnh báo
+  faCircleCheck,         // Đánh dấu hoàn thành
+  faFileInvoiceDollar,   // Hóa đơn tiền tệ
   // jhipster-needle-add-icon-import
 ];

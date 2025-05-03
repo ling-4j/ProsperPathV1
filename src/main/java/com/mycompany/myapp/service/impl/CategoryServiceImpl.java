@@ -3,6 +3,8 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.service.CategoryService;
+
+import java.time.Instant;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +29,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category save(Category category) {
         LOG.debug("Request to save Category : {}", category);
+        category.setCreatedAt(Instant.now());
+        category.setUpdatedAt(Instant.now());
         return categoryRepository.save(category);
     }
 
     @Override
     public Category update(Category category) {
         LOG.debug("Request to update Category : {}", category);
+        category.setUpdatedAt(Instant.now());
         return categoryRepository.save(category);
     }
 

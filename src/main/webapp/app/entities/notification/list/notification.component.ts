@@ -1,9 +1,9 @@
-import { Component, NgZone, OnInit, inject, signal } from '@angular/core';
+import { Component, NgZone, OnInit, inject, signal, computed } from '@angular/core'; // Thêm computed
 import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; // Thêm import này
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
@@ -16,7 +16,6 @@ import { FilterComponent, FilterOptions, IFilterOption, IFilterOptions } from 'a
 import { INotification } from '../notification.model';
 import { EntityArrayResponseType, NotificationService } from '../service/notification.service';
 import { NotificationDeleteDialogComponent } from '../delete/notification-delete-dialog.component';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'jhi-notification',
@@ -26,21 +25,28 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     RouterModule,
     FormsModule,
     SharedModule,
-    SortDirective,
-    SortByDirective,
+    // SortDirective,
+    // SortByDirective,
     FormatMediumDatetimePipe,
-    FilterComponent,
-    FontAwesomeModule // Thêm FontAwesomeModule
+    // FilterComponent,
+    FontAwesomeModule
   ],
   standalone: true,
 })
 export class NotificationComponent implements OnInit {
   subscription: Subscription | null = null;
   notifications = signal<INotification[]>([]);
+  filteredNotifications = computed(() => { // Sử dụng computed thay vì signal với hàm
+    const allNotifications = this.notifications();
+    return this.filterType() === 'all' ? allNotifications : allNotifications.filter(n => 
+      this.filterType() === 'unread' ? !n.isRead : n.isRead
+    );
+  });
   isLoading = false;
 
   sortState = sortStateSignal({});
   filters: IFilterOptions = new FilterOptions();
+  filterType = signal<'all' | 'unread' | 'read'>('all');
 
   itemsPerPage = 100;
   totalItems = 0;
@@ -52,7 +58,6 @@ export class NotificationComponent implements OnInit {
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
-  protected sanitizer = inject(DomSanitizer);
 
   trackId = (item: INotification): number => this.notificationService.getNotificationIdentifier(item);
 
@@ -60,7 +65,13 @@ export class NotificationComponent implements OnInit {
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-        tap(() => this.load()),
+        tap(() => {
+          // Nếu không có sort param trong URL, đặt sortState mặc định
+          if (!this.activatedRoute.snapshot.queryParamMap.get(SORT)) {
+            this.sortState.set({ predicate: 'createdAt', order: 'desc' });
+          }
+          this.load();
+        }),
       )
       .subscribe();
 
@@ -185,5 +196,18 @@ export class NotificationComponent implements OnInit {
     const regex = /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d\.]+)₫ với số tiền vượt là ([\d\.]+)₫ trong khoảng thời gian đã thiết lập từ ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
     const match = message.match(regex);
     return match ? match[6] : '';
+  }
+
+  // Phương thức để thay đổi filterType
+  setFilterType(type: 'all' | 'unread' | 'read'): void {
+    this.filterType.set(type);
+  }
+
+  handleNotificationClick(notification: INotification): void {
+    if (!notification.isRead) {
+      notification.isRead = true;
+      this.notificationService.update(notification).subscribe();
+    }
+    this.router.navigate(['/notification', notification.id, 'view']);
   }
 }

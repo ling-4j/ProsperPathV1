@@ -1,6 +1,6 @@
 {
     "prosperPathApp": {
-      "Budget": {
+      "BudgetStatus": {
         "null": "",
         "ACTIVE": "HOẠT ĐỘNG",
         "ENDED": "KẾT THÚC"

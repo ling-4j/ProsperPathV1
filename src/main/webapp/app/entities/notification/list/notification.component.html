@@ -1,100 +1,38 @@
-<div class="parent">
-  <div class="div2">
-    <div class="bg-light p-4 shadow-sm rounded-4">
-      <h2 id="page-heading" data-cy="NotificationHeading">
-        <div class="row align-items-center">
-          <div class="col-md-6 col-12 mb-2 mb-md-0 title">
-            <span jhiTranslate="prosperPathApp.notification.home.title">Notifications</span>
-          </div>
-          <div class="col-md-6 col-12 d-flex justify-content-end gap-2">
-            <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-              <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-              <span jhiTranslate="prosperPathApp.notification.home.refreshListLabel">Refresh list</span>
-            </button>
-          </div>
-        </div>
-      </h2>
-
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <jhi-filter [filters]="filters"></jhi-filter>
-
-      @if (notifications().length === 0) {
+<div class="notification-container d-flex justify-content-center">
+  <div class="col-lg-6 bg-light p-5 shadow-sm rounded-4">
+    <h1 class="notification-title mb-4" data-cy="notificationTitle" jhiTranslate="prosperPathApp.notification.home.title">
+      Notifications
+    </h1>
+    <div class="block">
+      <div class="notification-tabs mb-4">
+        <button class="btn" [class.btn-primary]="filterType() === 'all'" (click)="setFilterType('all')" data-cy="tabAll">
+          <span jhiTranslate="prosperPathApp.notification.tab.all">Tất cả</span>
+        </button>
+        <button class="btn" [class.btn-primary]="filterType() === 'unread'" (click)="setFilterType('unread')" data-cy="tabUnread">
+          <span jhiTranslate="prosperPathApp.notification.tab.unread">Chưa đọc</span>
+        </button>
+        <button class="btn" [class.btn-primary]="filterType() === 'read'" (click)="setFilterType('read')" data-cy="tabRead">
+          <span jhiTranslate="prosperPathApp.notification.tab.read">Đã đọc</span>
+        </button>
+      </div>
+      @if (filteredNotifications().length === 0) {
       <div class="alert alert-warning" id="no-result">
         <span jhiTranslate="prosperPathApp.notification.home.notFound">No Notifications found</span>
       </div>
       } @else {
-      <div class="table-responsive table-entities" id="entities">
-        <table class="table" aria-describedby="page-heading">
-          <thead>
-            <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-              <th scope="col" jhiSortBy="message">
-                <div class="d-flex">
-                  <span jhiTranslate="prosperPathApp.notification.message">Message</span>
-
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                </div>
-              </th>
-              <th scope="col" jhiSortBy="notificationType">
-                <div class="d-flex">
-                  <span jhiTranslate="prosperPathApp.notification.notificationType">Notification Type</span>
-
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                </div>
-              </th>
-              <th scope="col" jhiSortBy="isRead">
-                <div class="d-flex">
-                  <span jhiTranslate="prosperPathApp.notification.isRead">Is Read</span>
-
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                </div>
-              </th>
-              <th scope="col" jhiSortBy="createdAt">
-                <div class="d-flex">
-                  <span jhiTranslate="prosperPathApp.notification.createdAt">Created At</span>
-
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                </div>
-              </th>
-              <!-- <th scope="col" jhiSortBy="user.login">
-                <div class="d-flex">
-                  <span jhiTranslate="prosperPathApp.notification.user">User</span>
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                </div>
-              </th> -->
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (notification of notifications(); track trackId(notification)) {
-              <tr data-cy="entityTable">
-                <!-- <td [innerHTML]="formatNotificationMessage(notification.message) | safeHtml"></td> -->
-                <td>
-                  <span>{{ formatNotificationMessageText(notification.message ?? '') }}</span>
-                  <fa-icon *ngIf="getCategoryIcon(notification.message ?? '')" [icon]="['fas', getCategoryIcon(notification.message ?? '')]"></fa-icon>
-                  <span>{{ getCategoryName(notification.message ?? '') }}</span>
-                </td>
-                <td [jhiTranslate]="'prosperPathApp.NotificationType.' + (notification.notificationType ?? 'null')">
-                  {{ { null: '', BUDGET_EXCEEDED: 'BUDGET_EXCEEDED', OTHER: 'OTHER' }[notification.notificationType ?? 'null'] }}
-                </td>
-                <td>{{ notification.isRead }}</td>
-                <td>{{ notification.createdAt | formatMediumDatetime }}</td>
-                <td class="text-end">
-                  <div class="btn-group">
-                    <a [routerLink]="['/notification', notification.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                      <fa-icon icon="eye"></fa-icon>
-                    </a>
-                    <button type="submit" (click)="delete(notification)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                      <fa-icon icon="times"></fa-icon>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+      <div class="notification-list">
+        @for (notification of filteredNotifications(); track trackId(notification)) {
+        <div class="notification-item" [class.unread]="!notification.isRead" data-cy="entityTable" (click)="handleNotificationClick(notification)">
+          <div class="notification-content">
+            <span>{{ formatNotificationMessageText(notification.message ?? '') }}</span>
+            <fa-icon *ngIf="getCategoryIcon(notification.message ?? '')" [icon]="['fas', getCategoryIcon(notification.message ?? '')]"></fa-icon>
+            <span>{{ getCategoryName(notification.message ?? '') }}</span>
+          </div>
+          <div class="notification-timestamp">
+            {{ notification.createdAt | formatMediumDatetime }}
+          </div>
+        </div>
+        }
       </div>
       }
     </div>

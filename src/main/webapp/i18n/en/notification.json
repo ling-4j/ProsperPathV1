@@ -19,10 +19,15 @@
       },
       "id": "ID",
       "message": "Message",
-      "notificationType": "Notification Type",
+      "notificationType": "Type",
       "isRead": "Is Read",
-      "createdAt": "Created At",
-      "user": "User"
+      "createdAt": "Time",
+      "user": "User",
+      "tab": {
+        "all": "All",
+        "unread": "Unread",
+        "read": "Read"
+      }
     }
   }
 }

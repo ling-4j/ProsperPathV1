@@ -1,52 +1,41 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+<div class="notification-container d-flex justify-content-center">
+  <div class="col-lg-6 bg-light p-5 shadow-sm rounded-4">
     @if (notification(); as notificationRef) {
-      <div>
-        <h2 data-cy="notificationDetailsHeading"><span jhiTranslate="prosperPathApp.notification.detail.title">Notification</span></h2>
+    <h1 data-cy="notificationTitle" jhiTranslate="prosperPathApp.notification.detail.title" class="notification-title mb-4">
+      Notification
+    </h1>
 
-        <hr />
+    <div class="block">
+      <div class="icon-container text-center mb-4">
+        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="warning-icon"></fa-icon>
+      </div>
 
-        <jhi-alert-error></jhi-alert-error>
+      <dl class="row jh-entity-details">
+        <dt class="block-title text-center">
+          <span [jhiTranslate]="'prosperPathApp.NotificationType.' + (notificationRef.notificationType ?? 'null')">
+            {{ { null: '', BUDGET_EXCEEDED: 'BUDGET_EXCEEDED', OTHER: 'OTHER' }[notificationRef.notificationType ?? 'null'] }}
+          </span>
+        </dt>
 
-        <jhi-alert></jhi-alert>
+        <dt><span jhiTranslate="prosperPathApp.notification.message">Message</span></dt>
+        <dd class="notification-message">
+          <span>{{ formatNotificationMessageText(notificationRef.message ?? '') }}</span>
+          <fa-icon *ngIf="getCategoryIcon(notificationRef.message ?? '')" [icon]="['fas', getCategoryIcon(notificationRef.message ?? '')]"></fa-icon>
+          <span>{{ getCategoryName(notificationRef.message ?? '') }}</span>
+        </dd>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ notificationRef.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="prosperPathApp.notification.message">Message</span></dt>
-          <dd>
-            <span>{{ notificationRef.message }}</span>
-          </dd>
-          <dt><span jhiTranslate="prosperPathApp.notification.notificationType">Notification Type</span></dt>
-          <dd>
-            <span [jhiTranslate]="'prosperPathApp.NotificationType.' + (notificationRef.notificationType ?? 'null')">{{
-              { null: '', BUDGET_EXCEEDED: 'BUDGET_EXCEEDED', OTHER: 'OTHER' }[notificationRef.notificationType ?? 'null']
-            }}</span>
-          </dd>
-          <dt><span jhiTranslate="prosperPathApp.notification.isRead">Is Read</span></dt>
-          <dd>
-            <span>{{ notificationRef.isRead }}</span>
-          </dd>
-          <dt><span jhiTranslate="prosperPathApp.notification.createdAt">Created At</span></dt>
-          <dd>
-            <span>{{ notificationRef.createdAt | formatMediumDatetime }}</span>
-          </dd>
-          <dt><span jhiTranslate="prosperPathApp.notification.user">User</span></dt>
-          <dd>
-            <span>{{ notificationRef.user?.login }}</span>
-          </dd>
-        </dl>
+        <dt><span jhiTranslate="prosperPathApp.notification.createdAt">Created At</span></dt>
+        <dd class="notification-timestamp">
+          <span>{{ notificationRef.createdAt | formatMediumDatetime }}</span>
+        </dd>
+      </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
-
-        <button type="button" [routerLink]="['/notification', notificationRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      <div class="action-buttons text-center mt-4">
+        <button type="submit" (click)="previousState()" class="btn btn-info me-2" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon> <span jhiTranslate="entity.action.back">Back</span>
         </button>
       </div>
+    </div>
     }
   </div>
 </div>

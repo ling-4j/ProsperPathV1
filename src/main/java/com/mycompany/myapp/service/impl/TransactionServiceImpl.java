@@ -7,6 +7,7 @@ import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -46,12 +47,16 @@ public class TransactionServiceImpl implements TransactionService {
                 currentUser.ifPresent(transaction::setUser);
             }
         }
+        transaction.setCreatedAt(Instant.now());
+        transaction.setUpdatedAt(Instant.now());
+        // Set createdAt and updatedAt to current time
         return transactionRepository.save(transaction);
     }
 
     @Override
     public Transaction update(Transaction transaction) {
         LOG.debug("Request to update Transaction : {}", transaction);
+        transaction.setUpdatedAt(Instant.now());
         return transactionRepository.save(transaction);
     }
 

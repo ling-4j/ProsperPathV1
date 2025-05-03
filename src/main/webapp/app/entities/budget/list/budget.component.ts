@@ -149,4 +149,8 @@ export class BudgetComponent implements OnInit {
       });
     });
   }
+  
+  handleBudgetClick(notification: IBudget): void {
+      this.router.navigate(['/budget', notification.id, 'view']);
+    }
 }
