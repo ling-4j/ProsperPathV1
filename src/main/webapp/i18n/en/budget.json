@@ -18,7 +18,7 @@
         "title": "Budget"
       },
       "id": "ID",
-      "budgetAmount": "Budget Amount",
+      "budgetAmount": "Amount",
       "startDate": "Start Date",
       "endDate": "End Date",
       "createdAt": "Created At",

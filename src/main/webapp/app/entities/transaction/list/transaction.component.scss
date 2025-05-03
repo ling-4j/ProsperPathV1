@@ -263,6 +263,21 @@ $breakpoint-xl: 1200px;
         border-color: $primary;
         box-shadow: 0 0 5px rgba($primary, 0.3);
     }
+
+    &::placeholder {
+        color: #6c757d; // Màu placeholder
+        font-style: italic; // Kiểu chữ nghiêng để phân biệt
+    }
+
+    option[value=""] {
+        color: #6c757d; // Màu chữ của option placeholder
+        font-style: italic; // Kiểu chữ nghiêng
+        display: none; // Ẩn placeholder trong danh sách dropdown
+    }
+
+    &:invalid {
+        color: #6c757d; // Màu chữ của placeholder
+    }
 }
 
 .custom-ng-select {

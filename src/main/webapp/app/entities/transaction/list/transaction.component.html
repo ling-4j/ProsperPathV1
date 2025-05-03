@@ -39,14 +39,14 @@
                 (dateSelect)="onFromDateSelect($event)" />
             </div>
             <div class="filter-item">
-              <input type="text" name="toDate" class="form-control custom-input" placeholder="Yo date" id="f-tdate"
+              <input type="text" name="toDate" class="form-control custom-input" placeholder="To date" id="f-tdate"
                 [value]="toDateStruct ? (toDateStruct.day + '/' + toDateStruct.month + '/' + toDateStruct.year) : ''"
                 ngbDatepicker #toDatePicker="ngbDatepicker" (click)="toDatePicker.toggle()"
                 (dateSelect)="onToDateSelect($event)" />
             </div>
             <div class="filter-item">
               <select class="form-select custom-select" id="f-type" [(ngModel)]="type">
-                <option value="">Select type</option>
+                <option value="" disabled selected>Select Type</option>
                 <option value="INCOME" jhiTranslate="prosperPathApp.TransactionType.INCOME">income</option>
                 <option value="EXPENSE" jhiTranslate="prosperPathApp.TransactionType.EXPENSE">expense</option>
               </select>

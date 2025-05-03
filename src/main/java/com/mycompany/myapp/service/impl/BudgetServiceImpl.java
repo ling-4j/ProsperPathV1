@@ -5,6 +5,8 @@ import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.BudgetRepository;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.BudgetService;
+import com.mycompany.myapp.domain.enumeration.BudgeStatus;
+import java.time.Instant;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +44,31 @@ public class BudgetServiceImpl implements BudgetService {
                 currentUser.ifPresent(budget::setUser);
             }
         }
+        // Set status based on endDate
+        if (budget.getEndDate() != null && budget.getEndDate().isAfter(Instant.now())) {
+            budget.setStatus(BudgeStatus.ACTIVE);
+        } else {
+            budget.setStatus(BudgeStatus.ENDED);
+        }
         return budgetRepository.save(budget);
     }
 
     @Override
     public Budget update(Budget budget) {
         LOG.debug("Request to update Budget : {}", budget);
+        if (budget.getUser() == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                Optional<User> currentUser = userService.getUserWithAuthorities();
+                currentUser.ifPresent(budget::setUser);
+            }
+        }
+        // Set status based on endDate
+        if (budget.getEndDate() != null && budget.getEndDate().isAfter(Instant.now())) {
+            budget.setStatus(BudgeStatus.ACTIVE);
+        } else {
+            budget.setStatus(BudgeStatus.ENDED);
+        }
         return budgetRepository.save(budget);
     }
 

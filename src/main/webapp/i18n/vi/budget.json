@@ -18,7 +18,7 @@
         "title": "Ngân sách"
       },
       "id": "ID",
-      "budgetAmount": "Số tiền ngân sách",
+      "budgetAmount": "Số tiền",
       "startDate": "Ngày bắt đầu",
       "endDate": "Ngày kết thúc",
       "createdAt": "Ngày tạo",

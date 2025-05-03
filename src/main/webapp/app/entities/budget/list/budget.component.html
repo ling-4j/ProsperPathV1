@@ -65,8 +65,8 @@
         <tr data-cy="entityTable" class="budget-row">
           <td class="fw-bold">{{ budget.budgetAmount | currency: 'VND' }}</td>
           <td><fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{ budget.category?.categoryName }}</td>
-          <td>{{ budget.startDate | formatMediumDatetime }}</td>
-          <td>{{ budget.endDate | formatMediumDatetime }}</td>
+          <td>{{ budget.startDate | formatMediumDate }}</td>
+          <td>{{ budget.endDate | formatMediumDate }}</td>
           <td [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (budget.status ?? 'null')">
             {{ { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED' }[budget.status ?? 'null'] }}
           </td>
