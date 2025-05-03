@@ -2,6 +2,7 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.enumeration.NotificationType;
+import com.mycompany.myapp.domain.enumeration.TransactionType;
 import com.mycompany.myapp.repository.NotificationRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.TransactionRepository;
@@ -18,6 +19,8 @@ import tech.jhipster.service.QueryService;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -73,27 +76,62 @@ public class NotificationQueryService extends QueryService<Notification> {
                 transaction.getTransactionDate());
 
         for (Budget budget : matchingBudgets) {
-            // Tính tổng amount của tất cả giao dịch trong khoảng thời gian của budget
+            // Định dạng số tiền và ngày
+            NumberFormat numberFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                    .withZone(ZoneId.systemDefault());
+
+            // Logic cho các giao dịch
             BigDecimal totalSpent = transactionRepository.sumAmountByCategoryIdAndUserIdAndDateRange(
                     transaction.getCategory().getId(),
                     userId,
                     budget.getStartDate(),
                     budget.getEndDate());
 
-            // Kiểm tra nếu tổng vượt quá budgetAmount
-            if (totalSpent.compareTo(budget.getBudgetAmount()) > 0) {
-                // Điều chỉnh thông điệp để khớp với regex ở frontend
-                NumberFormat numberFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
+            String categoryIcon = budget.getCategory().getCategoryIcon();
+            String categoryName = budget.getCategory().getCategoryName();
+
+            // Kiểm tra loại giao dịch
+            if (totalSpent.subtract(budget.getBudgetAmount()).compareTo(BigDecimal.ZERO) > 0
+                    && transaction.getTransactionType() == TransactionType.INCOME) {
+                // Định dạng thông điệp cho giao dịch INCOME
+                String budgetAmountFormatted = numberFormat.format(budget.getBudgetAmount());
+                String startDateFormatted = dateFormatter.format(budget.getStartDate());
+                String endDateFormatted = dateFormatter.format(budget.getEndDate());
+                String transactionDateFormatted = dateFormatter.format(transaction.getTransactionDate());
+                String message = String.format(
+                        "Bạn đã hoàn thành mục tiêu ngân sách với khối lượng %s₫ trong khoảng thời gian đã thiết lập từ %s đến %s vào ngày %s của danh mục %s %s",
+                        budgetAmountFormatted,
+                        startDateFormatted,
+                        endDateFormatted,
+                        transactionDateFormatted,
+                        categoryIcon,
+                        categoryName);
+
+                Notification notification = new Notification()
+                        .message(message)
+                        .notificationType(NotificationType.OTHER)
+                        .isRead(false)
+                        .createdAt(Instant.now())
+                        .user(user);
+
+                notificationRepository.save(notification);
+                LOG.debug("Notification created for INCOME transaction: {} with budget: {}", transaction.getId(),
+                        budget.getId());
+            } else if (totalSpent.subtract(budget.getBudgetAmount()).compareTo(BigDecimal.ZERO) > 0
+                    && transaction.getTransactionType() == TransactionType.EXPENSE) {
                 String budgetAmountFormatted = numberFormat.format(budget.getBudgetAmount());
                 String exceededAmountFormatted = numberFormat.format(totalSpent.subtract(budget.getBudgetAmount()));
+                String startDateFormatted = dateFormatter.format(budget.getStartDate());
+                String endDateFormatted = dateFormatter.format(budget.getEndDate());
                 String message = String.format(
-                        "Bạn đã chi tiêu vượt quá ngân sách có khối lượng %s₫ với số tiền vượt là %s₫ trong khoảng thời gian đã thiết lập từ ngày %s đến ngày %s của danh mục %s %s",
+                        "Bạn đã chi tiêu vượt quá ngân sách có khối lượng %s₫ với số tiền vượt là %s₫ trong khoảng thời gian đã thiết lập từ %s đến %s của danh mục %s %s",
                         budgetAmountFormatted,
                         exceededAmountFormatted,
-                        budget.getStartDate(),
-                        budget.getEndDate(),
-                        budget.getCategory().getCategoryIcon(),
-                        budget.getCategory().getCategoryName());
+                        startDateFormatted,
+                        endDateFormatted,
+                        categoryIcon,
+                        categoryName);
 
                 Notification notification = new Notification()
                         .message(message)

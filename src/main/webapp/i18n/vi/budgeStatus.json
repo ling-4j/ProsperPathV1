@@ -2,8 +2,11 @@
   "prosperPathApp": {
     "BudgetStatus": {
       "null": "",
-      "ACTIVE": "HOẠT ĐỘNG",
-      "ENDED": "KẾT THÚC"
+      "ACTIVE": "ĐANG TIẾN HÀNH",
+      "ENDED": "KẾT THÚC",
+      "CANCELED": "ĐÃ HỦY",
+      "PENDING": "ĐANG CHỜ",
+      "SUCCESS": "HOÀN THÀNH"
     }
   }
 }

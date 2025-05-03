@@ -1,23 +1,17 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+
+
+<div class="budget-container d-flex justify-content-center">
+  <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
     @if (budget(); as budgetRef) {
-      <div>
-        <h2 data-cy="budgetDetailsHeading"><span jhiTranslate="prosperPathApp.budget.detail.title">Budget</span></h2>
+    <h1 data-cy="budgetTitle" jhiTranslate="prosperPathApp.budget.detail.title" class="budget-title mb-4">
+      budget
+    </h1>
 
-        <hr />
-
-        <jhi-alert-error></jhi-alert-error>
-
-        <jhi-alert></jhi-alert>
-
+    <div class="block">
         <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ budgetRef.id }}</span>
-          </dd>
           <dt><span jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</span></dt>
           <dd>
-            <span>{{ budgetRef.budgetAmount }}</span>
+            <span class="fw-bold">{{ budgetRef.budgetAmount |currency: "VND"  }}</span>
           </dd>
           <dt><span jhiTranslate="prosperPathApp.budget.startDate">Start Date</span></dt>
           <dd>
@@ -37,31 +31,30 @@
           </dd>
           <dt><span jhiTranslate="prosperPathApp.budget.status">Status</span></dt>
           <dd>
-            <span [jhiTranslate]="'prosperPathApp.BudgeStatus.' + (budgetRef.status ?? 'null')">{{
+            <span [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (budgetRef.status ?? 'null')">{{
               { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED' }[budgetRef.status ?? 'null']
             }}</span>
           </dd>
           <dt><span jhiTranslate="prosperPathApp.budget.category">Category</span></dt>
           <dd>
-            @if (budget()!.category) {
-              <div>
-                <a [routerLink]="['/category', budget()!.category?.id, 'view']">{{ budgetRef.category?.id }}</a>
-              </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="prosperPathApp.budget.user">User</span></dt>
-          <dd>
-            <span>{{ budgetRef.user?.login }}</span>
+            @if(budget()!.category){
+              <fa-icon [icon]="['fas', (budgetRef.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
+              budgetRef.category?.categoryName }}
+              }@else{
+              &nbsp;{{ budgetRef.category?.categoryName }}
+              }
           </dd>
         </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
-
-        <button type="button" [routerLink]="['/budget', budgetRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
+        <div class="action-buttons text-center mt-4">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>
+          </button>
+  
+          <button type="button" [routerLink]="['/transaction', budgetRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+        </div>
       </div>
     }
   </div>

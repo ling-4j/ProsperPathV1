@@ -58,7 +58,13 @@ export class BudgetComponent implements OnInit {
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-        tap(() => this.load()),
+        tap(() => {
+          // Nếu không có sort param trong URL, đặt sortState mặc định
+          if (!this.activatedRoute.snapshot.queryParamMap.get(SORT)) {
+            this.sortState.set({ predicate: 'createdAt', order: 'desc' });
+          }
+          this.load();
+        }),
       )
       .subscribe();
 
@@ -150,7 +156,7 @@ export class BudgetComponent implements OnInit {
     });
   }
   
-  handleBudgetClick(notification: IBudget): void {
-      this.router.navigate(['/budget', notification.id, 'view']);
+  handleBudgetClick(budget: IBudget): void {
+      this.router.navigate(['/budget', budget.id, 'view']);
     }
 }

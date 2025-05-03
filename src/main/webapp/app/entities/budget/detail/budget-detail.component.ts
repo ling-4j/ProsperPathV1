@@ -7,6 +7,7 @@ import { IBudget } from '../budget.model';
 
 @Component({
   selector: 'jhi-budget-detail',
+  styleUrls: ['./budget-detail.component.scss'],
   templateUrl: './budget-detail.component.html',
   imports: [SharedModule, RouterModule, FormatMediumDatetimePipe],
 })

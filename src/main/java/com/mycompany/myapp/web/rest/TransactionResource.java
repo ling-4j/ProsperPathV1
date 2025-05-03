@@ -83,7 +83,6 @@ public class TransactionResource {
             LOG.warn("Current user not found");
             return ResponseEntity.status(401).build(); // Unauthorized
         }
-        // transaction.setUser(currentUser.get());
 
         // Lưu giao dịch
         Transaction savedTransaction = transactionService.save(transaction);
@@ -92,8 +91,9 @@ public class TransactionResource {
         summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), null, savedTransaction);
 
         // Call NotificationService to check and create notifications
-        // notificationService.checkAndCreateNotificationForTransaction(result);
-        notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), savedTransaction);
+        if(savedTransaction.getCategory() != null) {
+            notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), savedTransaction);
+        }
 
         return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, savedTransaction.getId().toString()))

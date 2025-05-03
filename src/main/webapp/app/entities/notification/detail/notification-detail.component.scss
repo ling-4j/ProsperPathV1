@@ -5,7 +5,8 @@
 // Định nghĩa màu sắc và font
 $primary: #1da1f2; // Màu xanh đặc trưng của X
 $light: #ffffff; // Nền trắng
-$dark-text: #14171a;
+$teal: #008080;
+$dark-text: #000000;
 $gray-text: #657786;
 $border-color: #e1e8ed;
 $hover-bg: #f5f8fa; // Nền xám nhạt khi hover
@@ -13,34 +14,76 @@ $warning-red: #dc3545; // Màu đỏ cho icon cảnh báo
 
 $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 
+// Breakpoints cho responsive (dựa trên Bootstrap)
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
 .notification-container {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  padding: 20px;
+  padding: 2rem; // Dùng rem để co giãn linh hoạt
   min-height: 80vh; // Đảm bảo chiều cao tối thiểu
+
+  // Responsive cho container
+  @media (max-width: $breakpoint-md) {
+    padding: 1rem;
+    min-height: 60vh; // Giảm chiều cao trên mobile
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 0.5rem;
+    min-height: 50vh;
+  }
 
   .notification-title {
     color: $primary;
     font-weight: 700;
     font-size: 1.75rem;
     text-align: center; // Căn giữa tiêu đề
+
+    // Responsive cho tiêu đề
+    @media (max-width: $breakpoint-md) {
+      font-size: 1.5rem;
+    }
+    @media (max-width: $breakpoint-sm) {
+      font-size: 1.25rem;
+    }
   }
 
   .block {
     background-color: $light;
-    padding: 30px; // Tăng padding để thoáng hơn
+    padding: 2rem; // Dùng rem
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     font-family: $font-family-base;
     border: 1px solid $border-color; // Thêm viền nhẹ
 
+    // Responsive cho block
+    @media (max-width: $breakpoint-md) {
+      padding: 1.5rem;
+      max-width: 90%; // Giảm chiều rộng trên tablet
+    }
+    @media (max-width: $breakpoint-sm) {
+      padding: 1rem;
+      max-width: 100%; // Toàn màn hình trên mobile
+    }
+
     .icon-container {
       .warning-icon {
         font-size: 2.5rem; // Tăng kích thước icon
-        color: $warning-red; // Màu đỏ cho icon
+
+        // Responsive cho icon
+        @media (max-width: $breakpoint-md) {
+          font-size: 2rem;
+        }
+        @media (max-width: $breakpoint-sm) {
+          font-size: 1.5rem;
+        }
       }
     }
 
@@ -49,6 +92,14 @@ $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
       font-weight: 600;
       color: $dark-text;
       margin-bottom: 0.5rem;
+
+      // Responsive cho block-title
+      @media (max-width: $breakpoint-md) {
+        font-size: 1.1rem;
+      }
+      @media (max-width: $breakpoint-sm) {
+        font-size: 1rem;
+      }
     }
 
     .jh-entity-details {
@@ -57,27 +108,86 @@ $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         font-weight: 500;
         color: $gray-text;
         margin-bottom: 0.5rem;
+
+        // Responsive cho dt
+        @media (max-width: $breakpoint-md) {
+          font-size: 1rem;
+        }
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9rem;
+        }
       }
 
       dd {
         font-size: 1rem;
         color: $dark-text;
         margin-bottom: 1.5rem;
-        padding: 10px;
+        padding: 0.75rem; // Dùng rem
         border-radius: 5px;
         background-color: #f9f9f9; // Nền nhẹ để làm nổi bật giá trị
+
+        // Responsive cho dd
+        @media (max-width: $breakpoint-md) {
+          font-size: 0.9rem;
+          padding: 0.5rem;
+        }
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.85rem;
+          margin-bottom: 1rem;
+        }
       }
 
       .notification-message {
-        font-size: 1.05rem;
+        font-size: 1.3rem;
         line-height: 1.6;
         background-color: #f1f8ff; // Nền xanh nhạt nhẹ để làm nổi bật thông điệp
         border-left: 4px solid $primary; // Viền trái xanh
+        text-align: justify; // Căn đều hai bên
+        // display: flex;
+        align-items: center;
+        gap: 0.75rem; // Khoảng cách giữa các phần tử
+        flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
+
+        fa-icon {
+          font-size: 1.1rem;
+          color: $primary;
+          flex-shrink: 0; // Ngăn icon bị co lại
+
+          // Responsive cho icon
+          @media (max-width: $breakpoint-sm) {
+            font-size: 1rem;
+          }
+        }
+
+        span {
+          flex-grow: 1; // Cho phép text giãn ra để lấp đầy không gian
+
+          // Responsive cho text
+          @media (max-width: $breakpoint-md) {
+            font-size: 1.1rem;
+          }
+          @media (max-width: $breakpoint-sm) {
+            font-size: 0.95rem;
+          }
+        }
+
+        .fw-bold {
+          // Đảm bảo tên danh mục không bị xuống dòng không cần thiết
+          white-space: nowrap;
+        }
       }
 
       .notification-timestamp {
         font-size: 0.9rem;
         color: $gray-text;
+
+        // Responsive cho timestamp
+        @media (max-width: $breakpoint-md) {
+          font-size: 0.85rem;
+        }
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.8rem;
+        }
       }
     }
 
@@ -87,6 +197,16 @@ $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         font-size: 1rem;
         transition: all 0.3s ease;
         border-radius: 30px;
+
+        // Responsive cho button
+        @media (max-width: $breakpoint-md) {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+        @media (max-width: $breakpoint-sm) {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.85rem;
+        }
 
         &.btn-info {
           background-color: #6c757d; // Màu xám cho nút Back

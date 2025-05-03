@@ -115,16 +115,23 @@
           <tbody>
             @for (transaction of transactions(); track trackId(transaction); let i = $index) {
             <tr data-cy="entityTable" class="budget-row">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td class="text-break"><fa-icon
+              <td class="text-center" (click)="handleBudgetClick(transaction)">{{ i + 1 }}</td>
+              <td class="text-break" (click)="handleBudgetClick(transaction)">
+                @if(transaction.category?.id!=null){
+                <fa-icon
                   [icon]="['fas', (transaction.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
-                transaction.category?.categoryName }}</td>
-              <td [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')">
+                transaction.category?.categoryName }}
+                }@else{
+                &nbsp;{{ transaction.category?.categoryName }}
+                }
+              </td>
+              <td [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')"
+                (click)="handleBudgetClick(transaction)">
                 {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
               </td>
-              <td class="text-break">{{ transaction.description }}</td>
-              <td>{{ transaction.transactionDate | formatMediumDatetime }}</td>
-              <td class="text-end fw-bold" [ngClass]="{
+              <td class="text-break" (click)="handleBudgetClick(transaction)">{{ transaction.description }}</td>
+              <td (click)="handleBudgetClick(transaction)">{{ transaction.transactionDate | formatMediumDatetime }}</td>
+              <td (click)="handleBudgetClick(transaction)" class="text-end fw-bold" [ngClass]="{
                 'text-danger': transaction.transactionType === 'EXPENSE',
                 'text-primary': transaction.transactionType === 'INCOME'
               }">

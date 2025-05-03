@@ -62,12 +62,19 @@
       </thead>
       <tbody class="budget-tbody">
         @for (budget of budgets(); track trackId(budget)) {
-        <tr data-cy="entityTable" class="budget-row" (click)="handleBudgetClick(budget)">
-          <td class="fw-bold">{{ budget.budgetAmount | currency: 'VND' }}</td>
-          <td><fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{ budget.category?.categoryName }}</td>
-          <td>{{ budget.startDate | formatMediumDate }}</td>
-          <td>{{ budget.endDate | formatMediumDate }}</td>
-          <td [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (budget.status ?? 'null')">
+        <tr data-cy="entityTable" class="budget-row">
+          <td class="fw-bold" (click)="handleBudgetClick(budget)">{{ budget.budgetAmount | currency: 'VND' }}</td>
+          <td (click)="handleBudgetClick(budget)">
+            @if(budget.category?.id!=null){
+            <fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
+            budget.category?.categoryName }}
+            }@else{
+            &nbsp;{{ budget.category?.categoryName }}
+            }
+          <td (click)="handleBudgetClick(budget)">{{ budget.startDate | formatMediumDate }}</td>
+          <td (click)="handleBudgetClick(budget)">{{ budget.endDate | formatMediumDate }}</td>
+          <td (click)="handleBudgetClick(budget)"
+            [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (budget.status ?? 'null')">
             {{ { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED' }[budget.status ?? 'null'] }}
           </td>
           <td class="text-end action-column">

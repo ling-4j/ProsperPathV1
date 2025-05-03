@@ -7,7 +7,7 @@
 
     <div class="block">
       <div class="icon-container text-center mb-4">
-        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="warning-icon"></fa-icon>
+        <fa-icon [icon]="['fas', getIconName(notificationRef.notificationType ?? null)]" [ngStyle]="{'color': getIconColor(notificationRef.notificationType ?? null)}" class="warning-icon"></fa-icon>
       </div>
 
       <dl class="row jh-entity-details">
@@ -19,9 +19,12 @@
 
         <dt><span jhiTranslate="prosperPathApp.notification.message">Message</span></dt>
         <dd class="notification-message">
+          <!-- Thông điệp chính (căn đều hai bên) -->
           <span>{{ formatNotificationMessageText(notificationRef.message ?? '') }}</span>
+          <!-- Icon danh mục -->
           <fa-icon *ngIf="getCategoryIcon(notificationRef.message ?? '')" [icon]="['fas', getCategoryIcon(notificationRef.message ?? '')]"></fa-icon>
-          <span>{{ getCategoryName(notificationRef.message ?? '') }}</span>
+          <!-- Tên danh mục -->
+          <span class="fw-bold">{{ getCategoryName(notificationRef.message ?? '') }}</span>
         </dd>
 
         <dt><span jhiTranslate="prosperPathApp.notification.createdAt">Created At</span></dt>

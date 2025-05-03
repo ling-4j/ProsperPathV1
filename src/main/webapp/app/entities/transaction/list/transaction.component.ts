@@ -261,4 +261,7 @@ export class TransactionComponent implements OnInit {
       },
     });
   }
+  handleBudgetClick(transaction: ITransaction): void {
+        this.router.navigate(['/transaction', transaction.id, 'view']);
+      }
 }

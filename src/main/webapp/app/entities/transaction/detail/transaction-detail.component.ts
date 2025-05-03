@@ -7,6 +7,7 @@ import { ITransaction } from '../transaction.model';
 
 @Component({
   selector: 'jhi-transaction-detail',
+  styleUrls: ['./transaction-detail.component.scss'],
   templateUrl: './transaction-detail.component.html',
   imports: [SharedModule, RouterModule, FormatMediumDatetimePipe],
 })

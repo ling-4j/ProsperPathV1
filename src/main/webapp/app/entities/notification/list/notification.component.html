@@ -24,9 +24,12 @@
         @for (notification of filteredNotifications(); track trackId(notification)) {
         <div class="notification-item" [class.unread]="!notification.isRead" data-cy="entityTable" (click)="handleNotificationClick(notification)">
           <div class="notification-content">
+            <!-- Thông điệp chính (căn đều hai bên) -->
             <span>{{ formatNotificationMessageText(notification.message ?? '') }}</span>
+            <!-- Icon danh mục -->
             <fa-icon *ngIf="getCategoryIcon(notification.message ?? '')" [icon]="['fas', getCategoryIcon(notification.message ?? '')]"></fa-icon>
-            <span>{{ getCategoryName(notification.message ?? '') }}</span>
+            <!-- Tên danh mục -->
+            <span class="fw-bold">{{ getCategoryName(notification.message ?? '') }}</span>
           </div>
           <div class="notification-timestamp">
             {{ notification.createdAt | formatMediumDatetime }}

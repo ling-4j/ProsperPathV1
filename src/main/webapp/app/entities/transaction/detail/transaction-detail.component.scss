@@ -1,0 +1,180 @@
+/* ==========================================================================
+Transaction Detail page styles
+========================================================================== */
+
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+// Định nghĩa màu sắc chủ đạo
+$primary: #007bff; // Xanh dương
+$warning: #ffc107; // Vàng
+$light: #f8f9fa; // Xám nhạt
+$white: #f5f7fa; // Trắng
+$gray: #e9ecef; // Xám nhạt cho nền
+$dark-text: #333; // Màu chữ tối
+$gray-text: #999; // Màu chữ xám
+$border-color: #e1e8ed;
+$teal: #20c997; // Màu teal dưới dạng hex
+
+// Định nghĩa font
+$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+
+// Breakpoints cho responsive
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+.transaction-container {
+  min-height: 81vh; // Đảm bảo chiều cao tối thiểu
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  padding: 2rem; // Dùng rem để co giãn linh hoạt
+
+  // Responsive cho container
+  @media (max-width: $breakpoint-md) {
+    padding: 1.5rem;
+  }
+  @media (max-width: $breakpoint-sm) {
+    padding: 1rem;
+  }
+
+  .transaction-title {
+    color: $teal !important; // Sử dụng biến $teal với !important để tăng độ ưu tiên
+    font-weight: bold;
+    font-size: 1.75rem;
+    text-align: center; // Căn giữa tiêu đề
+    margin-bottom: 1.5rem; // Thêm khoảng cách dưới tiêu đề
+
+    // Responsive cho tiêu đề
+    @media (max-width: $breakpoint-md) {
+      font-size: 1.5rem;
+    }
+    @media (max-width: $breakpoint-sm) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .block {
+    background-color: $white; // Nền trắng, đồng bộ với settings
+    padding: 1.5rem; // Giảm padding để giống settings
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px; // Giới hạn chiều rộng tối đa
+    font-family: $font-family-base;
+    border: 1px solid $border-color;
+
+    // Responsive cho block
+    @media (max-width: $breakpoint-md) {
+      padding: 1rem;
+      max-width: 90%;
+    }
+    @media (max-width: $breakpoint-sm) {
+      padding: 0.75rem;
+      max-width: 100%;
+    }
+
+    .jh-entity-details {
+      dt {
+        font-size: 1rem; // Tương tự settings
+        font-weight: 500;
+        color: $dark-text;
+        margin-bottom: 0.5rem;
+
+        // Responsive cho dt
+        @media (max-width: $breakpoint-md) {
+          font-size: 0.9rem;
+        }
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.85rem;
+        }
+      }
+
+      dd {
+        font-size: 1rem;
+        color: $dark-text;
+        margin-bottom: 1rem; // Giảm khoảng cách, tương tự settings
+        padding: 0.75rem;
+        border-radius: 5px;
+        background-color: $light; // Nền nhẹ
+        text-align: justify; // Căn đều hai bên
+        display: flex;
+        align-items: center;
+        gap: 0.5rem; // Khoảng cách giữa icon và text
+        flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
+
+        fa-icon {
+          font-size: 1rem;
+          color: $primary;
+          flex-shrink: 0;
+
+          // Responsive cho icon
+          @media (max-width: $breakpoint-sm) {
+            font-size: 0.9rem;
+          }
+        }
+
+        span {
+          flex-grow: 1;
+
+          // Responsive cho text
+          @media (max-width: $breakpoint-md) {
+            font-size: 0.9rem;
+          }
+          @media (max-width: $breakpoint-sm) {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .action-buttons {
+      text-align: center;
+      margin-top: 1.5rem; // Thêm khoảng cách trên
+
+      .btn {
+        padding: 0.6rem 1.5rem; // Tương tự padding của nút save trong settings
+        font-size: 0.875rem; // Tương tự settings
+        transition: all 0.3s ease;
+        border-radius: 5px; // Đồng bộ với settings
+        margin: 0.25rem;
+
+        // Responsive cho button
+        @media (max-width: $breakpoint-md) {
+          padding: 0.5rem 1.2rem;
+          font-size: 0.8rem;
+        }
+        @media (max-width: $breakpoint-sm) {
+          padding: 0.4rem 1rem;
+          font-size: 0.75rem;
+        }
+
+        &.btn-info {
+          background-color: #6c757d;
+          border-color: #6c757d;
+          color: $white;
+
+          &:hover {
+            background-color: darken(#6c757d, 10%);
+            border-color: darken(#6c757d, 10%);
+          }
+        }
+
+        &.btn-primary {
+          background-color: $primary;
+          border-color: $primary;
+          color: $white;
+
+          &:hover {
+            background-color: darken($primary, 10%);
+            border-color: darken($primary, 10%);
+          }
+        }
+      }
+    }
+  }
+}
