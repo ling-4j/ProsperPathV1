@@ -14,6 +14,7 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Budget;
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.domain.enumeration.BudgeStatus;
 import com.mycompany.myapp.repository.BudgetRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.BudgetService;
@@ -64,6 +65,9 @@ class BudgetResourceIT {
     private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final BudgeStatus DEFAULT_STATUS = BudgeStatus.ACTIVE;
+    private static final BudgeStatus UPDATED_STATUS = BudgeStatus.ENDED;
+
     private static final String ENTITY_API_URL = "/api/budgets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -107,7 +111,8 @@ class BudgetResourceIT {
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
             .createdAt(DEFAULT_CREATED_AT)
-            .updatedAt(DEFAULT_UPDATED_AT);
+            .updatedAt(DEFAULT_UPDATED_AT)
+            .status(DEFAULT_STATUS);
     }
 
     /**
@@ -122,7 +127,8 @@ class BudgetResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+            .updatedAt(UPDATED_UPDATED_AT)
+            .status(UPDATED_STATUS);
     }
 
     @BeforeEach
@@ -241,7 +247,8 @@ class BudgetResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
+            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -277,7 +284,8 @@ class BudgetResourceIT {
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
-            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
+            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test
@@ -496,6 +504,36 @@ class BudgetResourceIT {
 
     @Test
     @Transactional
+    void getAllBudgetsByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBudget = budgetRepository.saveAndFlush(budget);
+
+        // Get all the budgetList where status equals to
+        defaultBudgetFiltering("status.equals=" + DEFAULT_STATUS, "status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllBudgetsByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedBudget = budgetRepository.saveAndFlush(budget);
+
+        // Get all the budgetList where status in
+        defaultBudgetFiltering("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS, "status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllBudgetsByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBudget = budgetRepository.saveAndFlush(budget);
+
+        // Get all the budgetList where status is not null
+        defaultBudgetFiltering("status.specified=true", "status.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllBudgetsByCategoryIsEqualToSomething() throws Exception {
         Category category;
         if (TestUtil.findAll(em, Category.class).isEmpty()) {
@@ -556,7 +594,8 @@ class BudgetResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
+            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
 
         // Check, that the count call also returns 1
         restBudgetMockMvc
@@ -609,7 +648,8 @@ class BudgetResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+            .updatedAt(UPDATED_UPDATED_AT)
+            .status(UPDATED_STATUS);
 
         restBudgetMockMvc
             .perform(
@@ -718,7 +758,8 @@ class BudgetResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT);
+            .updatedAt(UPDATED_UPDATED_AT)
+            .status(UPDATED_STATUS);
 
         restBudgetMockMvc
             .perform(

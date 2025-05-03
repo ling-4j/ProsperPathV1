@@ -1,0 +1,9 @@
+{
+  "prosperPathApp": {
+    "BudgeStatus": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "ENDED": "ENDED"
+    }
+  }
+}

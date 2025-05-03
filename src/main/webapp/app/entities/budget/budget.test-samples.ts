@@ -10,11 +10,12 @@ export const sampleWithRequiredData: IBudget = {
 };
 
 export const sampleWithPartialData: IBudget = {
-  id: 1197,
-  budgetAmount: 22926.42,
-  startDate: dayjs('2025-03-19T20:38'),
-  endDate: dayjs('2025-03-19T21:44'),
-  updatedAt: dayjs('2025-03-19T21:17'),
+  id: 22927,
+  budgetAmount: 23840.47,
+  startDate: dayjs('2025-03-19T21:44'),
+  endDate: dayjs('2025-03-19T21:17'),
+  updatedAt: dayjs('2025-03-19T11:13'),
+  status: 'ENDED',
 };
 
 export const sampleWithFullData: IBudget = {
@@ -24,6 +25,7 @@ export const sampleWithFullData: IBudget = {
   endDate: dayjs('2025-03-19T22:06'),
   createdAt: dayjs('2025-03-19T14:58'),
   updatedAt: dayjs('2025-03-19T20:46'),
+  status: 'ACTIVE',
 };
 
 export const sampleWithNewData: NewBudget = {

@@ -35,6 +35,12 @@
           <dd>
             <span>{{ budgetRef.updatedAt | formatMediumDatetime }}</span>
           </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.status">Status</span></dt>
+          <dd>
+            <span [jhiTranslate]="'prosperPathApp.BudgeStatus.' + (budgetRef.status ?? 'null')">{{
+              { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED' }[budgetRef.status ?? 'null']
+            }}</span>
+          </dd>
           <dt><span jhiTranslate="prosperPathApp.budget.category">Category</span></dt>
           <dd>
             @if (budget()!.category) {

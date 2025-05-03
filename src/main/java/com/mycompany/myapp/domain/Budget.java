@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import com.mycompany.myapp.domain.enumeration.BudgeStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -39,10 +40,14 @@ public class Budget implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private BudgeStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -125,6 +130,19 @@ public class Budget implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public BudgeStatus getStatus() {
+        return this.status;
+    }
+
+    public Budget status(BudgeStatus status) {
+        this.setStatus(status);
+        return this;
+    }
+
+    public void setStatus(BudgeStatus status) {
+        this.status = status;
+    }
+
     public Category getCategory() {
         return this.category;
     }
@@ -180,6 +198,7 @@ public class Budget implements Serializable {
             ", endDate='" + getEndDate() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

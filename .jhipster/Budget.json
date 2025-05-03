@@ -26,6 +26,11 @@
     {
       "fieldName": "updatedAt",
       "fieldType": "Instant"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "BudgeStatus",
+      "fieldValues": "ACTIVE,ENDED"
     }
   ],
   "jpaMetamodelFiltering": true,

@@ -81,6 +81,7 @@ class BudgetCriteriaTest {
         budgetCriteria.endDate();
         budgetCriteria.createdAt();
         budgetCriteria.updatedAt();
+        budgetCriteria.status();
         budgetCriteria.categoryId();
         budgetCriteria.userId();
         budgetCriteria.distinct();
@@ -95,6 +96,7 @@ class BudgetCriteriaTest {
                 condition.apply(criteria.getEndDate()) &&
                 condition.apply(criteria.getCreatedAt()) &&
                 condition.apply(criteria.getUpdatedAt()) &&
+                condition.apply(criteria.getStatus()) &&
                 condition.apply(criteria.getCategoryId()) &&
                 condition.apply(criteria.getUserId()) &&
                 condition.apply(criteria.getDistinct()),
@@ -111,6 +113,7 @@ class BudgetCriteriaTest {
                 condition.apply(criteria.getEndDate(), copy.getEndDate()) &&
                 condition.apply(criteria.getCreatedAt(), copy.getCreatedAt()) &&
                 condition.apply(criteria.getUpdatedAt(), copy.getUpdatedAt()) &&
+                condition.apply(criteria.getStatus(), copy.getStatus()) &&
                 condition.apply(criteria.getCategoryId(), copy.getCategoryId()) &&
                 condition.apply(criteria.getUserId(), copy.getUserId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),

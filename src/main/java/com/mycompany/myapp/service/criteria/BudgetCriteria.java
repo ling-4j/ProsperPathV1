@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.criteria;
 
+import com.mycompany.myapp.domain.enumeration.BudgeStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,6 +21,23 @@ import tech.jhipster.service.filter.*;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class BudgetCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering BudgeStatus
+     */
+    public static class BudgeStatusFilter extends Filter<BudgeStatus> {
+
+        public BudgeStatusFilter() {}
+
+        public BudgeStatusFilter(BudgeStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public BudgeStatusFilter copy() {
+            return new BudgeStatusFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -33,6 +51,8 @@ public class BudgetCriteria implements Serializable, Criteria {
     private InstantFilter createdAt;
 
     private InstantFilter updatedAt;
+
+    private BudgeStatusFilter status;
 
     private LongFilter categoryId;
 
@@ -49,6 +69,7 @@ public class BudgetCriteria implements Serializable, Criteria {
         this.endDate = other.optionalEndDate().map(InstantFilter::copy).orElse(null);
         this.createdAt = other.optionalCreatedAt().map(InstantFilter::copy).orElse(null);
         this.updatedAt = other.optionalUpdatedAt().map(InstantFilter::copy).orElse(null);
+        this.status = other.optionalStatus().map(BudgeStatusFilter::copy).orElse(null);
         this.categoryId = other.optionalCategoryId().map(LongFilter::copy).orElse(null);
         this.userId = other.optionalUserId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
@@ -173,6 +194,25 @@ public class BudgetCriteria implements Serializable, Criteria {
         this.updatedAt = updatedAt;
     }
 
+    public BudgeStatusFilter getStatus() {
+        return status;
+    }
+
+    public Optional<BudgeStatusFilter> optionalStatus() {
+        return Optional.ofNullable(status);
+    }
+
+    public BudgeStatusFilter status() {
+        if (status == null) {
+            setStatus(new BudgeStatusFilter());
+        }
+        return status;
+    }
+
+    public void setStatus(BudgeStatusFilter status) {
+        this.status = status;
+    }
+
     public LongFilter getCategoryId() {
         return categoryId;
     }
@@ -246,6 +286,7 @@ public class BudgetCriteria implements Serializable, Criteria {
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(updatedAt, that.updatedAt) &&
+            Objects.equals(status, that.status) &&
             Objects.equals(categoryId, that.categoryId) &&
             Objects.equals(userId, that.userId) &&
             Objects.equals(distinct, that.distinct)
@@ -254,7 +295,7 @@ public class BudgetCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, budgetAmount, startDate, endDate, createdAt, updatedAt, categoryId, userId, distinct);
+        return Objects.hash(id, budgetAmount, startDate, endDate, createdAt, updatedAt, status, categoryId, userId, distinct);
     }
 
     // prettier-ignore
@@ -267,6 +308,7 @@ public class BudgetCriteria implements Serializable, Criteria {
             optionalEndDate().map(f -> "endDate=" + f + ", ").orElse("") +
             optionalCreatedAt().map(f -> "createdAt=" + f + ", ").orElse("") +
             optionalUpdatedAt().map(f -> "updatedAt=" + f + ", ").orElse("") +
+            optionalStatus().map(f -> "status=" + f + ", ").orElse("") +
             optionalCategoryId().map(f -> "categoryId=" + f + ", ").orElse("") +
             optionalUserId().map(f -> "userId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +

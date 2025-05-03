@@ -39,6 +39,7 @@ type BudgetFormGroupContent = {
   endDate: FormControl<BudgetFormRawValue['endDate']>;
   createdAt: FormControl<BudgetFormRawValue['createdAt']>;
   updatedAt: FormControl<BudgetFormRawValue['updatedAt']>;
+  status: FormControl<BudgetFormRawValue['status']>;
   category: FormControl<BudgetFormRawValue['category']>;
   user: FormControl<BudgetFormRawValue['user']>;
 };
@@ -71,6 +72,7 @@ export class BudgetFormService {
       }),
       createdAt: new FormControl(budgetRawValue.createdAt),
       updatedAt: new FormControl(budgetRawValue.updatedAt),
+      status: new FormControl(budgetRawValue.status),
       category: new FormControl(budgetRawValue.category),
       user: new FormControl(budgetRawValue.user),
     });

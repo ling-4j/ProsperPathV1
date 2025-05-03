@@ -87,6 +87,9 @@ public class BudgetQueryService extends QueryService<Budget> {
             if (criteria.getUpdatedAt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUpdatedAt(), Budget_.updatedAt));
             }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getStatus(), Budget_.status));
+            }
             if (criteria.getCategoryId() != null) {
                 specification = specification.and(
                     buildSpecification(criteria.getCategoryId(), root -> root.join(Budget_.category, JoinType.LEFT).get(Category_.id))
