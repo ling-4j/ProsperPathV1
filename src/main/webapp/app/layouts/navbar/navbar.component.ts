@@ -57,7 +57,7 @@ export default class NavbarComponent implements OnInit, OnDestroy { // Thêm OnD
     // Bắt đầu polling: gọi loadNotifications mỗi 30 giây
     this.pollingInterval = setInterval(() => {
       this.loadNotifications();
-    }, 3600000); // 1 giờ = 3600000 ms
+    }, 30000); // 30s
   }
 
   ngOnDestroy(): void {

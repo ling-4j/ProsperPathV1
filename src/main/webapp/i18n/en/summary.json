@@ -35,6 +35,20 @@
         "MONTHLY": "This Month",
         "QUARTERLY": "This Quarter",
         "YEARLY": "This Year"
+      },
+      "chart": {
+        "Donut": {
+          "title": "Income vs Expense",
+          "label": "Total Assets"
+        },
+        "Bar": {
+          "title": "Income vs Expense",
+          "label": "Total Income"
+        },
+        "Line": {
+          "title": "Overall Progress",
+          "label": "Total Expense"
+        }
       }
     }
   }

@@ -143,10 +143,12 @@
             <div class="col-12 col-md-6 col-lg-5">
               <div class="chart-card progress-rate">
                 <div class="card-body">
-                  <h5>Overall Progress</h5>
+                  <h5 jhiTranslate="prosperPathApp.summary.chart.Line.title">Overall Progress</h5>
                   <div>
-                    <canvas baseChart [data]="progressRateChartData" [options]="progressRateChartOptions"
-                      [type]="progressRateChartType"></canvas>
+                    <apx-chart [series]="progressRateChartOptions.series!" [chart]="progressRateChartOptions.chart!"
+                      [xaxis]="progressRateChartOptions.xaxis!" [dataLabels]="progressRateChartOptions.dataLabels!"
+                      [stroke]="progressRateChartOptions.stroke!" [colors]="progressRateChartOptions.colors!"
+                      [tooltip]="progressRateChartOptions.tooltip!"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -156,10 +158,16 @@
             <div class="col-12 col-md-6 col-lg-3">
               <div class="chart-card income-vs-expense-donut">
                 <div class="card-body">
-                  <h5>Income vs Expense</h5>
+                  <h5 jhiTranslate="prosperPathApp.summary.chart.Donut.title">Income vs Expense</h5>
                   <div>
-                    <canvas baseChart [data]="incomeVsExpenseDonutChartData"
-                      [options]="incomeVsExpenseDonutChartOptions" [type]="incomeVsExpenseDonutChartType"></canvas>
+                    <apx-chart [series]="incomeVsExpenseDonutChartOptions.series!"
+                      [chart]="incomeVsExpenseDonutChartOptions.chart!"
+                      [labels]="incomeVsExpenseDonutChartOptions.labels!"
+                      [colors]="incomeVsExpenseDonutChartOptions.colors!"
+                      [legend]="incomeVsExpenseDonutChartOptions.legend!"
+                      [dataLabels]="incomeVsExpenseDonutChartOptions.dataLabels!"
+                      [plotOptions]="incomeVsExpenseDonutChartOptions.plotOptions!"
+                      [responsive]="incomeVsExpenseDonutChartOptions.responsive!"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -169,10 +177,15 @@
             <div class="col-12 col-md-6 col-lg-4">
               <div class="chart-card income-vs-expense-line">
                 <div class="card-body">
-                  <h5>Income vs Expense</h5>
+                  <h5 jhiTranslate="prosperPathApp.summary.chart.Bar.title">Income vs Expense</h5>
                   <div>
-                    <canvas baseChart [data]="incomeVsExpenseLineChartData" [options]="incomeVsExpenseLineChartOptions"
-                      [type]="incomeVsExpenseLineChartType"></canvas>
+                    <apx-chart [series]="incomeVsExpenseLineChartOptions.series!"
+                      [chart]="incomeVsExpenseLineChartOptions.chart!" [xaxis]="incomeVsExpenseLineChartOptions.xaxis!"
+                      [dataLabels]="incomeVsExpenseLineChartOptions.dataLabels!"
+                      [stroke]="incomeVsExpenseLineChartOptions.stroke!"
+                      [colors]="incomeVsExpenseLineChartOptions.colors!"
+                      [legend]="incomeVsExpenseLineChartOptions.legend!"
+                      [tooltip]="incomeVsExpenseLineChartOptions.tooltip!"></apx-chart>
                   </div>
                 </div>
               </div>

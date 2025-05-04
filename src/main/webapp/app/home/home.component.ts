@@ -1,5 +1,4 @@
-// src/app/home/home.component.ts
-import { Component, OnDestroy, OnInit, inject, signal, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -19,10 +18,37 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { FullCalendarModule } from '@fullcalendar/angular';
 
-// Import Chart.js and ng2-charts
-import { NgChartsModule } from 'ng2-charts';
-import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
+// Import ApexCharts
+import { NgApexchartsModule } from 'ng-apexcharts';
+import {
+  ApexChart,
+  ApexAxisChartSeries,
+  ApexDataLabels,
+  ApexFill,
+  ApexLegend,
+  ApexNonAxisChartSeries,
+  ApexPlotOptions,
+  ApexResponsive,
+  ApexStroke,
+  ApexTooltip,
+  ApexXAxis,
+} from 'ng-apexcharts';
+
+// Định nghĩa type cho biểu đồ ApexCharts
+export type ChartOptions = {
+  series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+  chart: ApexChart;
+  xaxis?: ApexXAxis;
+  dataLabels: ApexDataLabels;
+  stroke?: ApexStroke;
+  fill?: ApexFill;
+  legend?: ApexLegend;
+  plotOptions?: ApexPlotOptions;
+  tooltip?: ApexTooltip;
+  labels?: string[];
+  responsive?: ApexResponsive[];
+  colors?: string[];
+};
 
 @Component({
   selector: 'jhi-home',
@@ -34,15 +60,11 @@ import { BaseChartDirective } from 'ng2-charts';
     CommonModule,
     FormsModule,
     FullCalendarModule,
-    NgChartsModule,
+    NgApexchartsModule, // Thêm NgApexchartsModule
   ],
   standalone: true,
 })
 export default class HomeComponent implements OnInit, OnDestroy {
-  @ViewChild('donutChart') donutChart: BaseChartDirective | undefined;
-  @ViewChild('lineChart') lineChart: BaseChartDirective | undefined;
-  @ViewChild('progressRateChart') progressRateChart: BaseChartDirective | undefined;
-
   account = signal<Account | null>(null);
   isLoading = signal<boolean>(false);
 
@@ -79,65 +101,171 @@ export default class HomeComponent implements OnInit, OnDestroy {
     eventClick: this.handleEventClick.bind(this),
     select: this.handleDateClick.bind(this),
   };
-
-  // Chart configurations
-  public progressRateChartData: ChartData<'line'> = {
-    datasets: [
+  // ApexCharts configurations
+  public progressRateChartOptions: Partial<ChartOptions> = {
+    series: [
       {
+        name: 'Lợi nhuận',
         data: [],
-        label: 'Lợi nhuận',
-        fill: false,
-        borderColor: '#1e90ff',
-        tension: 0.4,
       },
     ],
-    labels: [],
+    chart: {
+      type: 'line',
+      height: 280,
+      animations: {
+        enabled: true,
+        speed: 800,
+      },
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+        },
+      },
+    },
+    stroke: {
+      curve: 'smooth',
+      width: 2,
+    },
+    xaxis: {
+      categories: [],
+      labels: {
+        style: {
+          colors: '#6b7280',
+          fontSize: '12px',
+        },
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    colors: ['#1e90ff'],
+    tooltip: {
+      y: {
+        formatter: (val: number) => `${val.toLocaleString('vi-VN')} VND`, // Định dạng số tiền
+      },
+    },
   };
-  public progressRateChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    plugins: { legend: { display: false } },
-  };
-  public progressRateChartType: ChartType = 'line';
 
-  public incomeVsExpenseDonutChartData: ChartData<'doughnut'> = {
-    datasets: [
-      {
-        data: [0, 0],
-        backgroundColor: ['#00c4b4', '#ff6f61'],
-      },
-    ],
+  public incomeVsExpenseDonutChartOptions: Partial<ChartOptions> = {
+    series: [0, 0],
+    chart: {
+      type: 'donut',
+      height: 240,
+    },
     labels: ['Thu nhập', 'Chi phí'],
-  };
-  public incomeVsExpenseDonutChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    plugins: { legend: { position: 'top' } },
-  };
-  public incomeVsExpenseDonutChartType: ChartType = 'doughnut';
-
-  public incomeVsExpenseLineChartData: ChartData<'line'> = {
-    datasets: [
-      {
-        data: [],
-        label: 'Thu nhập',
-        borderColor: '#00c4b4',
-        fill: false,
-        tension: 0.4,
+    colors: ['#00c4b4', '#ff6f61'],
+    legend: {
+      position: 'top',
+      fontSize: '12px',
+      labels: {
+        colors: '#6b7280',
       },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: number) => `${val.toFixed(1)}%`,
+      style: {
+        fontSize: '12px',
+        colors: ['#fff'],
+      },
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: 'Tổng',
+              formatter: (w: any) => {
+                const total = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
+                return `${total.toLocaleString('vi-VN')} VND`; // Định dạng số tiền
+              },
+            },
+          },
+        },
+      },
+    },
+    responsive: [
       {
-        data: [],
-        label: 'Chi phí',
-        borderColor: '#ff6f61',
-        fill: false,
-        tension: 0.4,
+        breakpoint: 767,
+        options: {
+          chart: {
+            height: 200,
+          },
+        },
       },
     ],
-    labels: [],
   };
-  public incomeVsExpenseLineChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    plugins: { legend: { position: 'top' } },
+
+  public incomeVsExpenseLineChartOptions: Partial<ChartOptions> = {
+    series: [
+      {
+        name: 'Thu nhập',
+        data: [],
+      },
+      {
+        name: 'Chi phí',
+        data: [],
+      },
+    ],
+    chart: {
+      type: 'line',
+      height: 280,
+      animations: {
+        enabled: true,
+        speed: 800,
+      },
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+        },
+      },
+    },
+    stroke: {
+      curve: 'smooth',
+      width: 2,
+    },
+    xaxis: {
+      categories: [],
+      labels: {
+        style: {
+          colors: '#6b7280',
+          fontSize: '12px',
+        },
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    colors: ['#00c4b4', '#ff6f61'],
+    legend: {
+      position: 'top',
+      fontSize: '12px',
+      labels: {
+        colors: '#6b7280',
+      },
+    },
+    tooltip: {
+      y: {
+        formatter: (val: number) => `${val.toLocaleString('vi-VN')} VND`, // Định dạng số tiền
+      },
+    },
   };
-  public incomeVsExpenseLineChartType: ChartType = 'line';
 
   private readonly destroy$ = new Subject<void>();
   private readonly accountService = inject(AccountService);
@@ -211,19 +339,45 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
   private updateChartData(detailedData: DetailedFinancialData): void {
     // Cập nhật biểu đồ Progress Rate (Lợi nhuận)
-    this.progressRateChartData.datasets[0].data = detailedData.progressRateData || [];
-    this.progressRateChartData.labels = detailedData.labels || [];
-    this.progressRateChart?.update();
+    this.progressRateChartOptions.series = [
+      {
+        name: 'Lợi nhuận',
+        data: detailedData.progressRateData || [],
+      },
+    ];
+    this.progressRateChartOptions.xaxis = {
+      categories: detailedData.labels || [],
+      labels: {
+        style: {
+          colors: '#6b7280',
+          fontSize: '12px',
+        },
+      },
+    };
 
     // Cập nhật biểu đồ Donut (Thu nhập vs Chi phí)
-    this.incomeVsExpenseDonutChartData.datasets[0].data = [this.totalIncome() || 0, this.totalExpense() || 0];
-    this.donutChart?.update();
+    this.incomeVsExpenseDonutChartOptions.series = [this.totalIncome() || 0, this.totalExpense() || 0];
 
     // Cập nhật biểu đồ Line (Thu nhập vs Chi phí theo thời gian)
-    this.incomeVsExpenseLineChartData.datasets[0].data = detailedData.incomeData || [];
-    this.incomeVsExpenseLineChartData.datasets[1].data = detailedData.expenseData || [];
-    this.incomeVsExpenseLineChartData.labels = detailedData.labels || [];
-    this.lineChart?.update();
+    this.incomeVsExpenseLineChartOptions.series = [
+      {
+        name: 'Thu nhập',
+        data: detailedData.incomeData || [],
+      },
+      {
+        name: 'Chi phí',
+        data: detailedData.expenseData || [],
+      },
+    ];
+    this.incomeVsExpenseLineChartOptions.xaxis = {
+      categories: detailedData.labels || [],
+      labels: {
+        style: {
+          colors: '#6b7280',
+          fontSize: '12px',
+        },
+      },
+    };
   }
 
   private resetData(): void {
@@ -238,15 +392,14 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.profitChangePercentage.set(0);
 
     // Reset biểu đồ
-    this.progressRateChartData.datasets[0].data = [];
-    this.progressRateChartData.labels = [];
-    this.incomeVsExpenseDonutChartData.datasets[0].data = [0, 0];
-    this.incomeVsExpenseLineChartData.datasets[0].data = [];
-    this.incomeVsExpenseLineChartData.datasets[1].data = [];
-    this.incomeVsExpenseLineChartData.labels = [];
-    this.progressRateChart?.update();
-    this.donutChart?.update();
-    this.lineChart?.update();
+    this.progressRateChartOptions.series = [{ name: 'Lợi nhuận', data: [] }];
+    this.progressRateChartOptions.xaxis = { categories: [] };
+    this.incomeVsExpenseDonutChartOptions.series = [0, 0];
+    this.incomeVsExpenseLineChartOptions.series = [
+      { name: 'Thu nhập', data: [] },
+      { name: 'Chi phí', data: [] },
+    ];
+    this.incomeVsExpenseLineChartOptions.xaxis = { categories: [] };
   }
 
   private loadCalendarEvents(): void {

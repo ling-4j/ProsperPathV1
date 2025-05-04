@@ -35,6 +35,20 @@
         "MONTHLY": "Trong Tháng",
         "QUARTERLY": "Trong Quý",
         "YEARLY": "Trong Năm"
+      },
+      "chart": {
+        "Donut": {
+          "title": "Doanh thu vs Chi phí",
+          "label": "Tổng tài sản"
+        },
+        "Bar": {
+          "title": "Doanh thu vs Chi phí",
+          "label": "Tổng doanh thu"
+        },
+        "Line": {
+          "title": "Tổng quan",
+          "label": "Tổng chi phí"
+        }
       }
     }
   }
