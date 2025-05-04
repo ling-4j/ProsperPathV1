@@ -65,6 +65,11 @@ export class NotificationService {
       .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
+  query2(req?: { sort?: string }): Observable<EntityArrayResponseType> {
+    const params = req || {};
+    return this.http.get<INotification[]>(this.resourceUrl, { params, observe: 'response' });
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

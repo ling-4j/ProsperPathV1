@@ -1,11 +1,13 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.domain.*; // for static metamodels
+import com.mycompany.myapp.domain.*;
+import com.mycompany.myapp.domain.enumeration.BudgeStatus; // Sửa từ BudgeStatus thành BudgetStatus
 import com.mycompany.myapp.domain.enumeration.NotificationType;
 import com.mycompany.myapp.domain.enumeration.TransactionType;
+import com.mycompany.myapp.repository.BudgetRepository;
 import com.mycompany.myapp.repository.NotificationRepository;
-import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.TransactionRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.criteria.NotificationCriteria;
 import jakarta.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -27,13 +29,10 @@ import java.util.Optional;
 import java.text.NumberFormat;
 
 /**
- * Service for executing complex queries for {@link Notification} entities in
- * the database.
- * The main input is a {@link NotificationCriteria} which gets converted to
- * {@link Specification},
+ * Service for executing complex queries for {@link Notification} entities in the database.
+ * The main input is a {@link NotificationCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link Page} of {@link Notification} which fulfills the
- * criteria.
+ * It returns a {@link Page} of {@link Notification} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -44,18 +43,19 @@ public class NotificationQueryService extends QueryService<Notification> {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
+    private final BudgetRepository budgetRepository; // Thêm BudgetRepository
 
     public NotificationQueryService(NotificationRepository notificationRepository, UserRepository userRepository,
-            TransactionRepository transactionRepository) {
+            TransactionRepository transactionRepository, BudgetRepository budgetRepository) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
+        this.budgetRepository = budgetRepository; // Khởi tạo BudgetRepository
     }
 
     /**
-     * Create notifications for transactions matching active budgets if total amount
-     * exceeds budget.
-     * 
+     * Create notifications for transactions matching active budgets if total amount exceeds budget.
+     *
      * @param userId      The ID of the user.
      * @param transaction The transaction to check.
      */
@@ -115,11 +115,18 @@ public class NotificationQueryService extends QueryService<Notification> {
                         .createdAt(Instant.now())
                         .user(user);
 
+                        
+                budget.setStatus(BudgeStatus.ENDED);
+                budgetRepository.save(budget);
                 notificationRepository.save(notification);
                 LOG.debug("Notification created for INCOME transaction: {} with budget: {}", transaction.getId(),
                         budget.getId());
             } else if (totalSpent.subtract(budget.getBudgetAmount()).compareTo(BigDecimal.ZERO) > 0
                     && transaction.getTransactionType() == TransactionType.EXPENSE) {
+                LOG.info("Budget ID: {} status updated to ENDED because total spent {} exceeds budget amount {}",
+                        budget.getId(), totalSpent, budget.getBudgetAmount());
+
+                // Định dạng thông điệp cho giao dịch EXPENSE
                 String budgetAmountFormatted = numberFormat.format(budget.getBudgetAmount());
                 String exceededAmountFormatted = numberFormat.format(totalSpent.subtract(budget.getBudgetAmount()));
                 String startDateFormatted = dateFormatter.format(budget.getStartDate());
@@ -140,6 +147,9 @@ public class NotificationQueryService extends QueryService<Notification> {
                         .createdAt(Instant.now())
                         .user(user);
 
+                // Cập nhật trạng thái Budget thành ENDED
+                budget.setStatus(BudgeStatus.ENDED);
+                budgetRepository.save(budget);
                 notificationRepository.save(notification);
                 LOG.debug("Notification created for budget: {} because total spent {} exceeds budget amount {}",
                         budget.getId(), totalSpent, budget.getBudgetAmount());
@@ -151,11 +161,9 @@ public class NotificationQueryService extends QueryService<Notification> {
     }
 
     /**
-     * Return a {@link Page} of {@link Notification} which matches the criteria from
-     * the database.
-     * 
-     * @param criteria The object which holds all the filters, which the entities
-     *                 should match.
+     * Return a {@link Page} of {@link Notification} which matches the criteria from the database.
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
      * @param page     The page, which should be returned.
      * @return the matching entities.
      */
@@ -168,9 +176,8 @@ public class NotificationQueryService extends QueryService<Notification> {
 
     /**
      * Return the number of matching entities in the database.
-     * 
-     * @param criteria The object which holds all the filters, which the entities
-     *                 should match.
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
      * @return the number of matching entities.
      */
     @Transactional(readOnly = true)
@@ -182,15 +189,13 @@ public class NotificationQueryService extends QueryService<Notification> {
 
     /**
      * Function to convert {@link NotificationCriteria} to a {@link Specification}
-     * 
-     * @param criteria The object which holds all the filters, which the entities
-     *                 should match.
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
      */
     protected Specification<Notification> createSpecification(NotificationCriteria criteria) {
         Specification<Notification> specification = Specification.where(null);
         if (criteria != null) {
-            // This has to be called first, because the distinct method returns null
             if (criteria.getDistinct() != null) {
                 specification = specification.and(distinct(criteria.getDistinct()));
             }

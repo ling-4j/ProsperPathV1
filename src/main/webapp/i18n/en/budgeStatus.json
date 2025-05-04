@@ -3,7 +3,9 @@
     "BudgetStatus": {
       "null": "",
       "ACTIVE": "ACTIVE",
-      "ENDED": "ENDED"
+      "ENDED": "ENDED",
+      "PENDING": "PENDING",
+      "INACTIVE": "INACTIVE"
     }
   }
 }

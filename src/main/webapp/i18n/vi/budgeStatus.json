@@ -4,9 +4,8 @@
       "null": "",
       "ACTIVE": "ĐANG TIẾN HÀNH",
       "ENDED": "KẾT THÚC",
-      "CANCELED": "ĐÃ HỦY",
       "PENDING": "ĐANG CHỜ",
-      "SUCCESS": "HOÀN THÀNH"
+      "INACTIVE": "ĐÃ DỪNG"
     }
   }
 }

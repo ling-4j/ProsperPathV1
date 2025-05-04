@@ -42,7 +42,6 @@ export class TransactionUpdateComponent implements OnInit {
   compareCategory = (o1: ICategory | null, o2: ICategory | null): boolean => this.categoryService.compareCategory(o1, o2);
 
   compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
-  // compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ transaction }) => {
@@ -52,8 +51,18 @@ export class TransactionUpdateComponent implements OnInit {
       }
 
       this.loadRelationshipsOptions();
+
+      // Tự động fill transactionType theo category.categoryType
+      this.editForm.get('category')?.valueChanges.subscribe((category: ICategory | null | undefined) => {
+        if (category && category.categoryType) {
+          this.editForm.get('transactionType')?.setValue(category.categoryType, { emitEvent: false });
+        } else {
+          this.editForm.get('transactionType')?.setValue(null, { emitEvent: false });
+        }
+      });
     });
   }
+
 
   previousState(): void {
     window.history.back();
@@ -115,5 +124,31 @@ export class TransactionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
       .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.transaction?.user)))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
+  }
+
+  formatAmount(value: number | string | null): string {
+    if (value === null || value === undefined || value === '') return '';
+    const numeric = Number(value.toString().replace(/,/g, ''));
+    return isNaN(numeric) ? '' : numeric.toLocaleString('en-US');
+  }
+
+  onAmountInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const rawValue = input.value.replace(/,/g, '');
+    const numericValue = parseFloat(rawValue);
+
+    if (!isNaN(numericValue)) {
+      this.editForm.get('amount')?.setValue(numericValue, { emitEvent: false });
+    } else {
+      this.editForm.get('amount')?.setValue(null, { emitEvent: false });
+    }
+
+    // Re-render formatted string
+    input.value = this.formatAmount(rawValue);
+  }
+  onAmountBlur(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const amountValue = this.editForm.get('amount')?.value ?? null;
+    input.value = this.formatAmount(amountValue);
   }
 }
