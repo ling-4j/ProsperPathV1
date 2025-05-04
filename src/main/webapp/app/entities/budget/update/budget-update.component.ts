@@ -6,7 +6,7 @@ import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { NumberFormatDirective } from 'app/shared/directive/number-format.directive';
 import { ICategory } from 'app/entities/category/category.model';
 import { CategoryService } from 'app/entities/category/service/category.service';
 import { IUser } from 'app/entities/user/user.model';
@@ -19,7 +19,7 @@ import { BudgetFormGroup, BudgetFormService } from './budget-form.service';
   selector: 'jhi-budget-update',
   styleUrls: ['./budget-update.component.scss'],
   templateUrl: './budget-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, NumberFormatDirective],
 })
 export class BudgetUpdateComponent implements OnInit {
   isSaving = false;

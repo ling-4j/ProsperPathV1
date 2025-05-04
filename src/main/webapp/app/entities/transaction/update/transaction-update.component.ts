@@ -7,6 +7,7 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { NumberFormatDirective } from 'app/shared/directive/number-format.directive';
 import { ICategory } from 'app/entities/category/category.model';
 import { CategoryService } from 'app/entities/category/service/category.service';
 import { IUser } from 'app/entities/user/user.model';
@@ -20,7 +21,7 @@ import { TransactionFormGroup, TransactionFormService } from './transaction-form
   selector: 'jhi-transaction-update',
   styleUrls: ['./transaction-update.component.scss'],
   templateUrl: './transaction-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, NumberFormatDirective],
 })
 export class TransactionUpdateComponent implements OnInit {
   isSaving = false;
@@ -124,31 +125,5 @@ export class TransactionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
       .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.transaction?.user)))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
-  }
-
-  formatAmount(value: number | string | null): string {
-    if (value === null || value === undefined || value === '') return '';
-    const numeric = Number(value.toString().replace(/,/g, ''));
-    return isNaN(numeric) ? '' : numeric.toLocaleString('en-US');
-  }
-
-  onAmountInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const rawValue = input.value.replace(/,/g, '');
-    const numericValue = parseFloat(rawValue);
-
-    if (!isNaN(numericValue)) {
-      this.editForm.get('amount')?.setValue(numericValue, { emitEvent: false });
-    } else {
-      this.editForm.get('amount')?.setValue(null, { emitEvent: false });
-    }
-
-    // Re-render formatted string
-    input.value = this.formatAmount(rawValue);
-  }
-  onAmountBlur(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const amountValue = this.editForm.get('amount')?.value ?? null;
-    input.value = this.formatAmount(amountValue);
   }
 }

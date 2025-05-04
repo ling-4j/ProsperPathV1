@@ -10,8 +10,8 @@
         <div class="mb-3">
           <label class="form-label" for="field_budgetAmount" jhiTranslate="prosperPathApp.budget.budgetAmount">Budget
             Amount</label>
-          <input type="number" class="form-control" name="budgetAmount" id="field_budgetAmount" data-cy="budgetAmount"
-            formControlName="budgetAmount" />
+          <input type="text" class="form-control" name="budgetAmount" id="field_budgetAmount" data-cy="budgetAmount"
+            formControlName="budgetAmount" appNumberFormat />
           @if (budgetAmountRef.invalid && (budgetAmountRef.dirty || budgetAmountRef.touched)) {
           <div>
             @if (editForm.get('budgetAmount')?.errors?.required) {
@@ -77,29 +77,34 @@
         <div class="mb-3">
           <label class="form-label" for="field_status" jhiTranslate="prosperPathApp.budget.status">Status</label>
           <div class="d-flex">
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'ACTIVE'" [icon]="['fas', 'circle-check']" class="text-success"></fa-icon>
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'ENDED'" [icon]="['fas', 'circle-xmark']" class="text-danger"></fa-icon>
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'INACTIVE'" [icon]="['fas', 'circle-exclamation']" class="text-warning"></fa-icon>
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'PENDING'" [icon]="['fas', 'circle']" class="text-warning"></fa-icon>
+            <fa-icon *ngIf="editForm.get('status')?.value  === 'ACTIVE'" [icon]="['fas', 'circle-check']"
+              class="text-success"></fa-icon>
+            <fa-icon *ngIf="editForm.get('status')?.value  === 'ENDED'" [icon]="['fas', 'circle-xmark']"
+              class="text-danger"></fa-icon>
+            <fa-icon *ngIf="editForm.get('status')?.value  === 'INACTIVE'" [icon]="['fas', 'circle-exclamation']"
+              class="text-warning"></fa-icon>
+            <fa-icon *ngIf="editForm.get('status')?.value  === 'PENDING'" [icon]="['fas', 'circle']"
+              class="text-warning"></fa-icon>
 
-            &nbsp;<span [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (editForm.get('status')?.value ?? 'null')" class="fw-bold">
+            &nbsp;<span [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (editForm.get('status')?.value ?? 'null')"
+              class="fw-bold">
               {{ { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED', INACTIVE: 'INACTIVE', PENDING: 'PENDING'
               }[editForm.get('status')?.value ?? 'null'] }}
             </span>
           </div>
         </div>
       </div>
-  <div>
-    <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel"
-      (click)="previousState()">
-      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-    </button>
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel"
+          (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
 
-    <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving"
-      class="btn btn-primary btn-save">
-      <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-    </button>
+        <button type="submit" id="save-entity" data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving" class="btn btn-primary btn-save">
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
   </div>
-  </form>
-</div>
 </div>
