@@ -191,6 +191,29 @@ export class TransactionComponent implements OnInit {
     });
   }
 
+  exportToPDF(): void {
+    const queryParams: any = {
+      category: this.category,
+      fromDate: this.fromDate ? this.fromDate.toISOString() : null,
+      toDate: this.toDate ? this.toDate.toISOString() : null,
+      type: this.type,
+    };
+
+    this.transactionService.exportToPDF(queryParams).subscribe({
+      next: (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'transactions.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        console.error('Export to PDF failed');
+      },
+    });
+  }
+
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     const page = params.get(PAGE_HEADER);
     this.page = +(page ?? 1);

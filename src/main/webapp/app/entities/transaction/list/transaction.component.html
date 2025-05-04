@@ -59,15 +59,15 @@
             </button>
           </div>
           <div class="export-btn-container">
-            <button class="btn btn-primary export-btn" (click)="search()">
-              <fa-icon icon="file-export"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.btn.export" class="ms-1">Export</span>
+            <button class="btn btn-success export-btn" (click)="exportTransactions()">
+              <fa-icon icon="file-excel"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.btn.exportExcel" class="ms-1">Export</span>
             </button>
           </div>
           <div class="export-btn-container">
-            <button class="btn btn-success export-btn" (click)="exportTransactions()">
-              <fa-icon icon="file-export"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.btn.export" class="ms-1">Export</span>
+            <button class="btn btn-danger export-btn" (click)="exportToPDF()">
+              <fa-icon icon="file-pdf"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.btn.exportExcel" class="ms-1">Export</span>
             </button>
           </div>
         </div>

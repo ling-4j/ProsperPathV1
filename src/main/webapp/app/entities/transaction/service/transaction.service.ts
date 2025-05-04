@@ -80,6 +80,11 @@ export class TransactionService {
     return this.http.get(`${this.resourceUrl}/export`, { params: options, headers, responseType: 'blob' });
   }
 
+  exportToPDF(queryParams: any): Observable<Blob> {
+    const options = createRequestOption(queryParams);
+    return this.http.get(`${this.resourceUrl}/export-pdf`, { params: options, responseType: 'blob' });
+  }
+
   getTransactionIdentifier(transaction: Pick<ITransaction, 'id'>): number {
     return transaction.id;
   }

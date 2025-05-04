@@ -57,6 +57,8 @@ import {
   faExchangeAlt,   // Giao dịch
   // Thêm icon cho Export
   faFileExport,    // Xuất dữ liệu
+  faFileExcel,    // Xuất dữ liệu Excel
+  faFilePdf,    // Xuất dữ liệu PDF
   // Thêm các icon mới
   faTriangleExclamation, // Cảnh báo
   faCircleCheck,         // Đánh dấu hoàn thành
@@ -125,6 +127,8 @@ export const fontAwesomeIcons = [
   faExchangeAlt,   // Giao dịch
   // Thêm icon cho Export
   faFileExport,    // Xuất dữ liệu
+  faFileExcel,    // Xuất dữ liệu Excel
+  faFilePdf,    // Xuất dữ liệu PDF
   // Thêm các icon mới
   faTriangleExclamation, // Cảnh báo
   faCircleCheck,         // Đánh dấu hoàn thành

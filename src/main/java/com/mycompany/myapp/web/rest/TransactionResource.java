@@ -312,4 +312,30 @@ public class TransactionResource {
 
         return ResponseEntity.ok().headers(headers).body(excelFile);
     }
+
+    @GetMapping("/export-pdf")
+    public ResponseEntity<byte[]> exportTransactionsToPDF(
+        @RequestParam(required = false) Long category,
+        @RequestParam(required = false) String fromDate,
+        @RequestParam(required = false) String toDate,
+        @RequestParam(required = false) String type
+    ) {
+        LOG.debug("REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}", category, fromDate, toDate, type);
+
+        // Convert date strings to LocalDate
+        LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
+        LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;
+
+        // Fetch filtered transactions
+        List<Transaction> transactions = transactionQueryService.findByFilters(category, from, to, type);
+
+        // Generate PDF file
+        byte[] pdfFile = transactionQueryService.exportToPDF(transactions);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=transactions.pdf");
+        headers.setContentType(MediaType.APPLICATION_PDF);
+
+        return ResponseEntity.ok().headers(headers).body(pdfFile);
+    }
 }

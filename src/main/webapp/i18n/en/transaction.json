@@ -28,7 +28,8 @@
       "user": "User",
       "btn": {
         "search": "Search",
-        "export": "Export"
+        "exportExcel": "Excel",
+        "exportPdf": "PDF"
       }
     }
   }

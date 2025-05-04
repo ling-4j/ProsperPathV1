@@ -28,7 +28,8 @@
       "user": "Người dùng",
       "btn": {
         "search": "Tìm",
-        "export": "Xuất file"
+        "exportExcel": "Excel",
+        "exportPdf": "PDF"
       }
     }
   }
