@@ -95,6 +95,7 @@ public class TransactionResource {
         // Call NotificationService to check and create notifications
         if(savedTransaction.getCategory() != null) {
             notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), savedTransaction);
+            notificationQueryService.createWarningNotificationForTransaction(currentUser.get().getId(), savedTransaction);
         }
 
         return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))

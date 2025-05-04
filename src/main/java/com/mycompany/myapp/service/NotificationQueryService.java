@@ -29,16 +29,24 @@ import java.util.Optional;
 import java.text.NumberFormat;
 
 /**
- * Service for executing complex queries for {@link Notification} entities in the database.
- * The main input is a {@link NotificationCriteria} which gets converted to {@link Specification},
+ * Service for executing complex queries for {@link Notification} entities in
+ * the database.
+ * The main input is a {@link NotificationCriteria} which gets converted to
+ * {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link Page} of {@link Notification} which fulfills the criteria.
+ * It returns a {@link Page} of {@link Notification} which fulfills the
+ * criteria.
  */
 @Service
 @Transactional(readOnly = true)
 public class NotificationQueryService extends QueryService<Notification> {
 
     private static final Logger LOG = LoggerFactory.getLogger(NotificationQueryService.class);
+    private static final BigDecimal WARNING_THRESHOLD = new BigDecimal("0.85");
+    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
+            .ofPattern("dd/MM/yyyy")
+            .withZone(ZoneId.systemDefault());
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
@@ -54,7 +62,109 @@ public class NotificationQueryService extends QueryService<Notification> {
     }
 
     /**
-     * Create notifications for transactions matching active budgets if total amount exceeds budget.
+     * Creates warning notifications for transactions matching active budgets if
+     * total spent
+     * reaches or exceeds 85% of the budget.
+     *
+     * @param userId      The ID of the user.
+     * @param transaction The transaction to check.
+     */
+    @Transactional
+    public void createWarningNotificationForTransaction(Long userId, Transaction transaction) {
+        LOG.debug("Checking transaction for notification: {}", transaction);
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            LOG.warn("User not found for userId: {}", userId);
+            return;
+        }
+
+        List<Budget> matchingBudgets = findMatchingBudgets(transaction);
+        createNotificationsForBudgets(userOpt.get(), transaction, matchingBudgets);
+    }
+
+    /**
+     * Creates notifications for each matching budget if the spending threshold is
+     * reached.
+     *
+     * @param user            The user to associate with the notification.
+     * @param transaction     The transaction to check.
+     * @param matchingBudgets List of budgets to process.
+     */
+    private void createNotificationsForBudgets(User user, Transaction transaction, List<Budget> matchingBudgets) {
+        for (Budget budget : matchingBudgets) {
+            BigDecimal totalSpent = calculateTotalSpent(budget, transaction);
+            if (shouldCreateWarning(totalSpent, budget, transaction)) {
+                createBudgetWarningNotification(user, budget, totalSpent, transaction);
+            } else {
+                logNoNotificationCreated(budget, totalSpent);
+            }
+        }
+    }
+
+    /**
+     * Calculates the total spent amount for a budget within its date range.
+     *
+     * @param budget      The budget to calculate for.
+     * @param transaction The transaction to determine user and category.
+     * @return Total spent amount.
+     */
+    private BigDecimal calculateTotalSpent(Budget budget, Transaction transaction) {
+        return transactionRepository.sumAmountByCategoryIdAndUserIdAndDateRange(
+                transaction.getCategory().getId(),
+                transaction.getUser().getId(),
+                budget.getStartDate(),
+                budget.getEndDate());
+    }
+
+    /**
+     * Determines if a warning notification should be created based on the spending
+     * threshold.
+     *
+     * @param totalSpent  Total spent amount.
+     * @param budget      The budget to check against.
+     * @param transaction The transaction to check.
+     * @return True if a warning should be created, false otherwise.
+     */
+    private boolean shouldCreateWarning(BigDecimal totalSpent, Budget budget, Transaction transaction) {
+        BigDecimal budgetThreshold = budget.getBudgetAmount().multiply(WARNING_THRESHOLD);
+        return totalSpent.compareTo(budgetThreshold) >= 0
+                && totalSpent.compareTo(budget.getBudgetAmount()) < 0
+                && transaction.getTransactionType() == TransactionType.EXPENSE;
+    }
+
+    /**
+     * Creates and saves a budget warning notification.
+     *
+     * @param user        The user to associate with the notification.
+     * @param budget      The budget that triggered the warning.
+     * @param totalSpent  Total spent amount.
+     * @param transaction The transaction that triggered the check.
+     */
+    private void createBudgetWarningNotification(User user, Budget budget, BigDecimal totalSpent,
+            Transaction transaction) {
+        LOG.info(
+                "Budget ID: {} triggered a warning because total spent {} reaches or exceeds 85% of budget amount {}",
+                budget.getId(), totalSpent, budget.getBudgetAmount());
+
+        String message = formatWarningMessage(budget, transaction.getCategory());
+        Notification notification = new Notification()
+                .message(message)
+                .notificationType(NotificationType.WARNING)
+                .isRead(false)
+                .createdAt(Instant.now())
+                .user(user);
+
+        notificationRepository.save(notification);
+        LOG.debug(
+                "Notification created for budget: {} because total spent {} reaches or exceeds 85% of budget amount {}",
+                budget.getId(), totalSpent, budget.getBudgetAmount());
+    }
+
+    /**
+     * Creates notifications for transactions matching active budgets if total
+     * amount
+     * exceeds or completes the budget.
      *
      * @param userId      The ID of the user.
      * @param transaction The transaction to check.
@@ -64,106 +174,202 @@ public class NotificationQueryService extends QueryService<Notification> {
         LOG.debug("Checking transaction for notification: {}", transaction);
 
         Optional<User> userOpt = userRepository.findById(userId);
-        if (!userOpt.isPresent()) {
+        if (userOpt.isEmpty()) {
             LOG.warn("User not found for userId: {}", userId);
             return;
         }
+
         User user = userOpt.get();
+        List<Budget> matchingBudgets = findMatchingBudgets(transaction);
+        processBudgetsForNotification(user, transaction, matchingBudgets);
+    }
 
-        List<Budget> matchingBudgets = notificationRepository.findMatchingBudgetsWithTransactionDate(
+    /**
+     * Finds budgets that match the transaction's category, user, and date range.
+     *
+     * @param transaction The transaction to match budgets against.
+     * @return List of matching budgets.
+     */
+    private List<Budget> findMatchingBudgets(Transaction transaction) {
+        return notificationRepository.findMatchingBudgetsWithTransactionDate(
                 transaction.getCategory().getId(),
-                userId,
+                transaction.getUser().getId(),
                 transaction.getTransactionDate());
+    }
 
+    /**
+     * Processes each matching budget to create appropriate notifications.
+     *
+     * @param user            The user to associate with the notification.
+     * @param transaction     The transaction to check.
+     * @param matchingBudgets List of budgets to process.
+     */
+    private void processBudgetsForNotification(User user, Transaction transaction, List<Budget> matchingBudgets) {
         for (Budget budget : matchingBudgets) {
-            // Định dạng số tiền và ngày
-            NumberFormat numberFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                    .withZone(ZoneId.systemDefault());
-
-            // Logic cho các giao dịch
-            BigDecimal totalSpent = transactionRepository.sumAmountByCategoryIdAndUserIdAndDateRange(
-                    transaction.getCategory().getId(),
-                    userId,
-                    budget.getStartDate(),
-                    budget.getEndDate());
-
-            String categoryIcon = budget.getCategory().getCategoryIcon();
-            String categoryName = budget.getCategory().getCategoryName();
-
-            // Kiểm tra loại giao dịch
-            if (totalSpent.subtract(budget.getBudgetAmount()).compareTo(BigDecimal.ZERO) > 0
-                    && transaction.getTransactionType() == TransactionType.INCOME) {
-                // Định dạng thông điệp cho giao dịch INCOME
-                String budgetAmountFormatted = numberFormat.format(budget.getBudgetAmount());
-                String startDateFormatted = dateFormatter.format(budget.getStartDate());
-                String endDateFormatted = dateFormatter.format(budget.getEndDate());
-                String transactionDateFormatted = dateFormatter.format(transaction.getTransactionDate());
-                String message = String.format(
-                        "Bạn đã hoàn thành mục tiêu ngân sách với khối lượng %s₫ trong khoảng thời gian đã thiết lập từ %s đến %s vào ngày %s của danh mục %s %s",
-                        budgetAmountFormatted,
-                        startDateFormatted,
-                        endDateFormatted,
-                        transactionDateFormatted,
-                        categoryIcon,
-                        categoryName);
-
-                Notification notification = new Notification()
-                        .message(message)
-                        .notificationType(NotificationType.OTHER)
-                        .isRead(false)
-                        .createdAt(Instant.now())
-                        .user(user);
-
-                        
-                budget.setStatus(BudgeStatus.ENDED);
-                budgetRepository.save(budget);
-                notificationRepository.save(notification);
-                LOG.debug("Notification created for INCOME transaction: {} with budget: {}", transaction.getId(),
-                        budget.getId());
-            } else if (totalSpent.subtract(budget.getBudgetAmount()).compareTo(BigDecimal.ZERO) > 0
-                    && transaction.getTransactionType() == TransactionType.EXPENSE) {
-                LOG.info("Budget ID: {} status updated to ENDED because total spent {} exceeds budget amount {}",
-                        budget.getId(), totalSpent, budget.getBudgetAmount());
-
-                // Định dạng thông điệp cho giao dịch EXPENSE
-                String budgetAmountFormatted = numberFormat.format(budget.getBudgetAmount());
-                String exceededAmountFormatted = numberFormat.format(totalSpent.subtract(budget.getBudgetAmount()));
-                String startDateFormatted = dateFormatter.format(budget.getStartDate());
-                String endDateFormatted = dateFormatter.format(budget.getEndDate());
-                String message = String.format(
-                        "Bạn đã chi tiêu vượt quá ngân sách có khối lượng %s₫ với số tiền vượt là %s₫ trong khoảng thời gian đã thiết lập từ %s đến %s của danh mục %s %s",
-                        budgetAmountFormatted,
-                        exceededAmountFormatted,
-                        startDateFormatted,
-                        endDateFormatted,
-                        categoryIcon,
-                        categoryName);
-
-                Notification notification = new Notification()
-                        .message(message)
-                        .notificationType(NotificationType.BUDGET_EXCEEDED)
-                        .isRead(false)
-                        .createdAt(Instant.now())
-                        .user(user);
-
-                // Cập nhật trạng thái Budget thành ENDED
-                budget.setStatus(BudgeStatus.ENDED);
-                budgetRepository.save(budget);
-                notificationRepository.save(notification);
-                LOG.debug("Notification created for budget: {} because total spent {} exceeds budget amount {}",
-                        budget.getId(), totalSpent, budget.getBudgetAmount());
+            BigDecimal totalSpent = calculateTotalSpent(budget, transaction);
+            if (transaction.getTransactionType() == TransactionType.INCOME) {
+                handleIncomeTransaction(user, budget, totalSpent, transaction);
+            } else if (transaction.getTransactionType() == TransactionType.EXPENSE) {
+                handleExpenseTransaction(user, budget, totalSpent, transaction);
             } else {
-                LOG.debug("No notification created for budget: {} (total spent: {} is within budget: {})",
-                        budget.getId(), totalSpent, budget.getBudgetAmount());
+                logNoNotificationCreated(budget, totalSpent);
             }
         }
     }
 
     /**
-     * Return a {@link Page} of {@link Notification} which matches the criteria from the database.
+     * Handles notification creation for an income transaction.
      *
-     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param user        The user to associate with the notification.
+     * @param budget      The budget that triggered the notification.
+     * @param totalSpent  Total spent amount.
+     * @param transaction The transaction to check.
+     */
+    private void handleIncomeTransaction(User user, Budget budget, BigDecimal totalSpent, Transaction transaction) {
+        if (totalSpent.compareTo(budget.getBudgetAmount()) > 0) {
+            String message = formatIncomeMessage(budget, transaction);
+            createNotification(user, budget, message, NotificationType.COMPLETE);
+            updateBudgetStatus(budget, BudgeStatus.ENDED);
+            LOG.debug("Notification created for INCOME transaction: {} with budget: {}",
+                    transaction.getId(), budget.getId());
+        } else {
+            logNoNotificationCreated(budget, totalSpent);
+        }
+    }
+
+    /**
+     * Handles notification creation for an expense transaction.
+     *
+     * @param user        The user to associate with the notification.
+     * @param budget      The budget that triggered the notification.
+     * @param totalSpent  Total spent amount.
+     * @param transaction The transaction to check.
+     */
+    private void handleExpenseTransaction(User user, Budget budget, BigDecimal totalSpent, Transaction transaction) {
+        if (totalSpent.compareTo(budget.getBudgetAmount()) > 0) {
+            LOG.info("Budget ID: {} status updated to ENDED because total spent {} exceeds budget amount {}",
+                    budget.getId(), totalSpent, budget.getBudgetAmount());
+            String message = formatExpenseMessage(budget, totalSpent, transaction.getCategory());
+            createNotification(user, budget, message, NotificationType.BUDGET_EXCEEDED);
+            updateBudgetStatus(budget, BudgeStatus.ENDED);
+            LOG.debug("Notification created for budget: {} because total spent {} exceeds budget amount {}",
+                    budget.getId(), totalSpent, budget.getBudgetAmount());
+        } else {
+            logNoNotificationCreated(budget, totalSpent);
+        }
+    }
+
+    /**
+     * Formats the warning message for the notification.
+     *
+     * @param budget   The budget to format the message for.
+     * @param category The category associated with the budget.
+     * @return Formatted warning message.
+     */
+    private String formatWarningMessage(Budget budget, Category category) {
+        String budgetAmountFormatted = NUMBER_FORMAT.format(budget.getBudgetAmount());
+        String startDateFormatted = DATE_FORMATTER.format(budget.getStartDate());
+        String endDateFormatted = DATE_FORMATTER.format(budget.getEndDate());
+        return String.format(
+                "Cảnh báo! Bạn sắp vượt chi tiêu ngân sách có khối lượng %s₫ trong khoảng thời gian đã thiết lập từ %s đến %s của danh mục %s %s",
+                budgetAmountFormatted,
+                startDateFormatted,
+                endDateFormatted,
+                category.getCategoryIcon(),
+                category.getCategoryName());
+    }
+
+    /**
+     * Formats the notification message for an income transaction.
+     *
+     * @param budget      The budget to format the message for.
+     * @param transaction The transaction to include the date.
+     * @return Formatted message.
+     */
+    private String formatIncomeMessage(Budget budget, Transaction transaction) {
+        String budgetAmountFormatted = NUMBER_FORMAT.format(budget.getBudgetAmount());
+        String startDateFormatted = DATE_FORMATTER.format(budget.getStartDate());
+        String endDateFormatted = DATE_FORMATTER.format(budget.getEndDate());
+        String transactionDateFormatted = DATE_FORMATTER.format(transaction.getTransactionDate());
+        return String.format(
+                "Bạn đã hoàn thành mục tiêu ngân sách với khối lượng %s₫ trong khoảng thời gian đã thiết lập từ %s đến %s vào ngày %s của danh mục %s %s",
+                budgetAmountFormatted,
+                startDateFormatted,
+                endDateFormatted,
+                transactionDateFormatted,
+                budget.getCategory().getCategoryIcon(),
+                budget.getCategory().getCategoryName());
+    }
+
+    /**
+     * Formats the notification message for an expense transaction.
+     *
+     * @param budget     The budget to format the message for.
+     * @param totalSpent Total spent amount.
+     * @param category   The category associated with the budget.
+     * @return Formatted message.
+     */
+    private String formatExpenseMessage(Budget budget, BigDecimal totalSpent, Category category) {
+        String budgetAmountFormatted = NUMBER_FORMAT.format(budget.getBudgetAmount());
+        String exceededAmountFormatted = NUMBER_FORMAT.format(totalSpent.subtract(budget.getBudgetAmount()));
+        String startDateFormatted = DATE_FORMATTER.format(budget.getStartDate());
+        String endDateFormatted = DATE_FORMATTER.format(budget.getEndDate());
+        return String.format(
+                "Bạn đã chi tiêu vượt quá ngân sách có khối lượng %s₫ với số tiền vượt là %s₫ trong khoảng thời gian đã thiết lập từ %s đến %s của danh mục %s %s",
+                budgetAmountFormatted,
+                exceededAmountFormatted,
+                startDateFormatted,
+                endDateFormatted,
+                category.getCategoryIcon(),
+                category.getCategoryName());
+    }
+
+    /**
+     * Creates and saves a notification with the given details.
+     *
+     * @param user             The user to associate with the notification.
+     * @param budget           The budget that triggered the notification.
+     * @param message          The message content.
+     * @param notificationType The type of notification.
+     */
+    private void createNotification(User user, Budget budget, String message, NotificationType notificationType) {
+        Notification notification = new Notification()
+                .message(message)
+                .notificationType(notificationType)
+                .isRead(false)
+                .createdAt(Instant.now())
+                .user(user);
+        notificationRepository.save(notification);
+    }
+
+    /**
+     * Updates the budget status and saves the changes.
+     *
+     * @param budget The budget to update.
+     * @param status The new status to set.
+     */
+    private void updateBudgetStatus(Budget budget, BudgeStatus status) {
+        budget.setStatus(status);
+        budgetRepository.save(budget);
+    }
+
+    /**
+     * Logs when a notification is not created for a budget.
+     *
+     * @param budget     The budget that was checked.
+     * @param totalSpent Total spent amount.
+     */
+    private void logNoNotificationCreated(Budget budget, BigDecimal totalSpent) {
+        LOG.debug("No notification created for budget: {} (total spent: {} is within budget: {})",
+                budget.getId(), totalSpent, budget.getBudgetAmount());
+    }
+
+    /**
+     * Return a {@link Page} of {@link Notification} which matches the criteria from
+     * the database.
+     *
+     * @param criteria The object which holds all the filters, which the entities
+     *                 should match.
      * @param page     The page, which should be returned.
      * @return the matching entities.
      */
@@ -177,7 +383,8 @@ public class NotificationQueryService extends QueryService<Notification> {
     /**
      * Return the number of matching entities in the database.
      *
-     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param criteria The object which holds all the filters, which the entities
+     *                 should match.
      * @return the number of matching entities.
      */
     @Transactional(readOnly = true)
@@ -190,7 +397,8 @@ public class NotificationQueryService extends QueryService<Notification> {
     /**
      * Function to convert {@link NotificationCriteria} to a {@link Specification}
      *
-     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param criteria The object which holds all the filters, which the entities
+     *                 should match.
      * @return the matching {@link Specification} of the entity.
      */
     protected Specification<Notification> createSpecification(NotificationCriteria criteria) {

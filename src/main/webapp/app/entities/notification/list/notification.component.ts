@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, inject, signal, computed } from '@angular/core'; // Thêm computed
+import { Component, NgZone, OnInit, inject, signal, computed } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
@@ -25,18 +25,19 @@ import { NotificationDeleteDialogComponent } from '../delete/notification-delete
     RouterModule,
     FormsModule,
     SharedModule,
-    // SortDirective,
-    // SortByDirective,
     FormatMediumDatetimePipe,
-    // FilterComponent,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   standalone: true,
 })
 export class NotificationComponent implements OnInit {
+  private static readonly EXPENSE_REGEX = /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d,.]+)₫ với số tiền vượt là ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly INCOME_REGEX = /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly WARNING_REGEX = /Cảnh báo! Bạn sắp vượt chi tiêu ngân sách có khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+
   subscription: Subscription | null = null;
   notifications = signal<INotification[]>([]);
-  filteredNotifications = computed(() => { // Sử dụng computed thay vì signal với hàm
+  filteredNotifications = computed(() => {
     const allNotifications = this.notifications();
     return this.filterType() === 'all' ? allNotifications : allNotifications.filter(n =>
       this.filterType() === 'unread' ? !n.isRead : n.isRead
@@ -66,7 +67,6 @@ export class NotificationComponent implements OnInit {
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
         tap(() => {
-          // Nếu không có sort param trong URL, đặt sortState mặc định
           if (!this.activatedRoute.snapshot.queryParamMap.get(SORT)) {
             this.sortState.set({ predicate: 'createdAt', order: 'desc' });
           }
@@ -161,61 +161,35 @@ export class NotificationComponent implements OnInit {
 
   // Tách phần văn bản của thông điệp (không bao gồm icon và categoryName)
   formatNotificationMessageText(message: string): string {
-    const expenseRegex = /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d\.]+)₫ với số tiền vượt là ([\d\.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-    const incomeRegex = /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d\.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-  
-    const expenseMatch = message.match(expenseRegex);
-    const incomeMatch = message.match(incomeRegex);
-  
-    if (expenseMatch) {
-      const budgetAmount = expenseMatch[1]; 
-      const exceededAmount = expenseMatch[2]; 
-      let startDateIso = expenseMatch[3]; 
-      let endDateIso = expenseMatch[4]; 
-  
-      return `Bạn đã chi tiêu vượt quá ngân sách có khối lượng ${budgetAmount}₫ với số tiền vượt là ${exceededAmount}₫ trong khoảng thời gian đã thiết lập từ ${startDateIso} đến ${endDateIso} của danh mục`;
-    } else if (incomeMatch) {
-      const budgetAmount = incomeMatch[1]; 
-      let startDateIso = incomeMatch[2]; 
-      let endDateIso = incomeMatch[3]; 
-      let transactionDateIso = incomeMatch[4]; 
-  
-      return `Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ${budgetAmount}₫ trong khoảng thời gian đã thiết lập từ ${startDateIso} đến ${endDateIso} vào ngày ${transactionDateIso} của danh mục`;
+    const parsedMessage = this.parseMessage(message);
+    if (!parsedMessage) {
+      console.log('No match for message:', message);
+      return message;
     }
-    console.log('No match for message:', message);
-    return message;
+
+    const { type, budgetAmount, exceededAmount, startDate, endDate, transactionDate } = parsedMessage;
+    switch (type) {
+      case 'expense':
+        return `Bạn đã chi tiêu vượt quá ngân sách có khối lượng ${budgetAmount}₫ với số tiền vượt là ${exceededAmount}₫ trong khoảng thời gian đã thiết lập từ ${startDate} đến ${endDate} của danh mục`;
+      case 'income':
+        return `Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ${budgetAmount}₫ trong khoảng thời gian đã thiết lập từ ${startDate} đến ${endDate} vào ngày ${transactionDate} của danh mục`;
+      case 'warning':
+        return `Cảnh báo! Bạn sắp vượt chi tiêu ngân sách có khối lượng ${budgetAmount}₫ trong khoảng thời gian đã thiết lập từ ${startDate} đến ${endDate} của danh mục`;
+      default:
+        return message;
+    }
   }
 
   // Lấy categoryIcon (loại bỏ tiền tố 'fa-')
   getCategoryIcon(message: string): string {
-    const expenseRegex = /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d\.]+)₫ với số tiền vượt là ([\d\.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-    const incomeRegex = /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d\.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-  
-    const expenseMatch = message.match(expenseRegex);
-    const incomeMatch = message.match(incomeRegex);
-  
-    if (incomeMatch && incomeMatch[5]) {
-      return incomeMatch[5].replace('fa-', '');
-    } else if (expenseMatch && expenseMatch[5]) {
-      return expenseMatch[5].replace('fa-', '');
-    }
-    return 'null';
+    const parsedMessage = this.parseMessage(message);
+    return parsedMessage?.categoryIcon?.replace('fa-', '') ?? 'null';
   }
 
   // Lấy categoryName
   getCategoryName(message: string): string {
-    const expenseRegex = /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d\.]+)₫ với số tiền vượt là ([\d\.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-    const incomeRegex = /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d\.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-  
-    const expenseMatch = message.match(expenseRegex);
-    const incomeMatch = message.match(incomeRegex);
-  
-    if (incomeMatch && incomeMatch[6]) {
-      return incomeMatch[6];
-    } else if (expenseMatch && expenseMatch[6]) {
-      return expenseMatch[6];
-    }
-    return 'null';
+    const parsedMessage = this.parseMessage(message);
+    return parsedMessage?.categoryName ?? 'null';
   }
 
   // Phương thức để thay đổi filterType
@@ -230,4 +204,66 @@ export class NotificationComponent implements OnInit {
     }
     this.router.navigate(['/notification', notification.id, 'view']);
   }
+
+  /**
+   * Parses the notification message and extracts relevant fields.
+   *
+   * @param message The notification message to parse.
+   * @returns Parsed message object with type and fields, or null if no match.
+   */
+  private parseMessage(message: string): ParsedMessage | null {
+    const expenseMatch = message.match(NotificationComponent.EXPENSE_REGEX);
+    if (expenseMatch) {
+      return {
+        type: 'expense',
+        budgetAmount: expenseMatch[1],
+        exceededAmount: expenseMatch[2],
+        startDate: expenseMatch[3],
+        endDate: expenseMatch[4],
+        categoryIcon: expenseMatch[5],
+        categoryName: expenseMatch[6],
+      };
+    }
+
+    const incomeMatch = message.match(NotificationComponent.INCOME_REGEX);
+    if (incomeMatch) {
+      return {
+        type: 'income',
+        budgetAmount: incomeMatch[1],
+        startDate: incomeMatch[2],
+        endDate: incomeMatch[3],
+        transactionDate: incomeMatch[4],
+        categoryIcon: incomeMatch[5],
+        categoryName: incomeMatch[6],
+      };
+    }
+
+    const warningMatch = message.match(NotificationComponent.WARNING_REGEX);
+    if (warningMatch) {
+      return {
+        type: 'warning',
+        budgetAmount: warningMatch[1],
+        startDate: warningMatch[2],
+        endDate: warningMatch[3],
+        categoryIcon: warningMatch[4],
+        categoryName: warningMatch[5],
+      };
+    }
+
+    return null;
+  }
+}
+
+/**
+ * Interface representing a parsed notification message.
+ */
+interface ParsedMessage {
+  type: 'expense' | 'income' | 'warning';
+  budgetAmount: string;
+  exceededAmount?: string;
+  startDate: string;
+  endDate: string;
+  transactionDate?: string;
+  categoryIcon?: string;
+  categoryName?: string;
 }

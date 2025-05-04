@@ -6,5 +6,6 @@ package com.mycompany.myapp.domain.enumeration;
 public enum NotificationType {
     WARNING,
     BUDGET_EXCEEDED,
+    COMPLETE,
     OTHER,
 }
