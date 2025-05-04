@@ -8,6 +8,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { ITransaction, NewTransaction } from '../transaction.model';
+import { TranslateService } from '@ngx-translate/core';
 
 export type PartialUpdateTransaction = Partial<ITransaction> & Pick<ITransaction, 'id'>;
 
@@ -30,6 +31,8 @@ export type EntityArrayResponseType = HttpResponse<ITransaction[]>;
 export class TransactionService {
   protected readonly http = inject(HttpClient);
   protected readonly applicationConfigService = inject(ApplicationConfigService);
+
+  constructor(private translateService: TranslateService) {}
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/transactions');
 
@@ -69,6 +72,12 @@ export class TransactionService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  export(queryParams: any): Observable<Blob> {
+    const options = createRequestOption(queryParams);
+    const headers = { 'Accept-Language': this.translateService.currentLang || 'en' };
+    return this.http.get(`${this.resourceUrl}/export`, { params: options, headers, responseType: 'blob' });
   }
 
   getTransactionIdentifier(transaction: Pick<ITransaction, 'id'>): number {

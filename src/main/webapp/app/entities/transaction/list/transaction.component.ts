@@ -4,6 +4,7 @@ import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/r
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal, NgbDateStruct, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
@@ -97,6 +98,8 @@ export class TransactionComponent implements OnInit {
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
 
+  constructor(private translateService: TranslateService) {}
+
   trackId = (item: ITransaction): number => this.transactionService.getTransactionIdentifier(item);
 
   ngOnInit(): void {
@@ -163,6 +166,29 @@ export class TransactionComponent implements OnInit {
   onToDateSelect(date: NgbDateStruct): void {
     this.toDateStruct = date;
     this.toDate = new Date(Date.UTC(date.year, date.month - 1, date.day));
+  }
+
+  exportTransactions(): void {
+    const queryParams: any = {
+      category: this.category,
+      fromDate: this.fromDate ? this.fromDate.toISOString() : null,
+      toDate: this.toDate ? this.toDate.toISOString() : null,
+      type: this.type,
+    };
+
+    this.transactionService.export(queryParams).subscribe({
+      next: (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `transactions_${this.translateService.currentLang}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        console.error('Export failed');
+      },
+    });
   }
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {

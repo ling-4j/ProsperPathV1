@@ -2,9 +2,13 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.Transaction;
+import com.mycompany.myapp.domain.enumeration.TransactionType;
 import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.service.criteria.TransactionCriteria;
 import jakarta.persistence.criteria.JoinType;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,6 +17,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Service for executing complex queries for {@link Transaction} entities in the database.
@@ -102,5 +111,150 @@ public class TransactionQueryService extends QueryService<Transaction> {
             }
         }
         return specification;
+    }
+
+    /**
+     * Filter transactions based on the search parameters and return the matching entities.
+     * @param category The category ID to filter by.
+     * @param fromDate The start date to filter by.
+     * @param toDate The end date to filter by.
+     * @param type The transaction type to filter by.
+     * @return the list of matching transactions.
+     */
+    public List<Transaction> findByFilters(Long category, LocalDate fromDate, LocalDate toDate, String type) {
+        Specification<Transaction> specification = Specification.where(null);
+
+        if (category != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("category").get("id"), category)
+            );
+        }
+        if (fromDate != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThanOrEqualTo(root.get("transactionDate"), fromDate)
+            );
+        }
+        if (toDate != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.lessThanOrEqualTo(root.get("transactionDate"), toDate)
+            );
+        }
+        if (type != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("transactionType"), type)
+            );
+        }
+
+        return transactionRepository.findAll(specification);
+    }
+
+    /**
+     * Export transactions to an Excel file.
+     * @param transactions The list of transactions to export.
+     * @return the byte array representing the Excel file.
+     */
+    public byte[] exportToExcel(List<Transaction> transactions) {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Transactions");
+
+            // Set header text in Vietnamese
+            String headerText = "Thống kê giao dịch";
+            String[] headers = {"DANH MỤC", "LOẠI", "MÔ TẢ", "NGÀY", "SỐ TIỀN"};
+
+            // Create merged header row
+            Row headerRow = sheet.createRow(0);
+            Cell mergedCell = headerRow.createCell(0);
+            mergedCell.setCellValue(headerText);
+            CellStyle mergedStyle = workbook.createCellStyle();
+            Font mergedFont = workbook.createFont();
+            mergedFont.setBold(true);
+            mergedFont.setColor(IndexedColors.RED.getIndex());
+            mergedFont.setFontHeightInPoints((short) 18);
+            mergedStyle.setFont(mergedFont);
+            mergedStyle.setAlignment(HorizontalAlignment.CENTER);
+            mergedCell.setCellStyle(mergedStyle);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+
+            // Create header row
+            Row columnHeaderRow = sheet.createRow(1);
+            CellStyle headerStyle = createHeaderCellStyle(workbook);
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = columnHeaderRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
+            }
+
+            // Create data rows
+            CellStyle amountStyle = createAmountCellStyle(workbook);
+            CellStyle dateStyle = createDateCellStyle(workbook);
+            int rowIdx = 2;
+            for (Transaction transaction : transactions) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "");
+                row.createCell(1).setCellValue(translateTransactionTypeToVietnamese(transaction.getTransactionType()));
+                row.createCell(2).setCellValue(transaction.getDescription());
+                Cell dateCell = row.createCell(3);
+                dateCell.setCellValue(transaction.getTransactionDate().atZone(java.time.ZoneId.systemDefault()).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+                dateCell.setCellStyle(dateStyle);
+                Cell amountCell = row.createCell(4);
+                amountCell.setCellValue(transaction.getAmount().doubleValue());
+                amountCell.setCellStyle(amountStyle);
+            }
+
+            // Auto-size columns
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Write to byte array
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to export data to Excel", e);
+        }
+    }
+
+    private String translateTransactionTypeToVietnamese(TransactionType transactionType) {
+        switch (transactionType) {
+            case INCOME:
+                return "Thu nhập";
+            case EXPENSE:
+                return "Chi tiêu";
+            default:
+                return transactionType.toString();
+        }
+    }
+
+    private CellStyle createHeaderCellStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 14);
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        return style;
+    }
+
+
+    private CellStyle createDateCellStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        CreationHelper createHelper = workbook.getCreationHelper();
+        style.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy HH:mm:ss"));
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 14);
+        style.setFont(font);
+        return style;
+    }
+
+    private CellStyle createAmountCellStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        font.setColor(IndexedColors.BLUE.getIndex());
+        font.setFontHeightInPoints((short) 14);
+        style.setFont(font);
+        style.setDataFormat(workbook.createDataFormat().getFormat("#,## \"VND\""));
+        return style;
     }
 }

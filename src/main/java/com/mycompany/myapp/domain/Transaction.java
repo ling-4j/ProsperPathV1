@@ -45,9 +45,11 @@ public class Transaction implements Serializable {
     private Instant updatedAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

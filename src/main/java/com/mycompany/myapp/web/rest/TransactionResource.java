@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -282,5 +284,32 @@ public class TransactionResource {
         return ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
                 .build();
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportTransactions(
+        @RequestParam(required = false) Long category,
+        @RequestParam(required = false) String fromDate,
+        @RequestParam(required = false) String toDate,
+        @RequestParam(required = false) String type,
+        @RequestHeader(value = "Accept-Language", defaultValue = "en") String language
+    ) {
+        LOG.debug("REST request to export Transactions with filters: category={}, fromDate={}, toDate={}, type={}", category, fromDate, toDate, type);
+
+        // Convert date strings to LocalDate
+        LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
+        LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;
+
+        // Fetch filtered transactions
+        List<Transaction> transactions = transactionQueryService.findByFilters(category, from, to, type);
+
+        // Generate Excel file with language support
+        byte[] excelFile = transactionQueryService.exportToExcel(transactions);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=transactions.xlsx");
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        return ResponseEntity.ok().headers(headers).body(excelFile);
     }
 }

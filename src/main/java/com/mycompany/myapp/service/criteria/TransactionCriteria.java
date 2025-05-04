@@ -60,6 +60,14 @@ public class TransactionCriteria implements Serializable, Criteria {
 
     private Boolean distinct;
 
+    private LongFilter category;
+
+    private InstantFilter fromDate;
+
+    private InstantFilter toDate;
+
+    private TransactionTypeFilter type;
+
     public TransactionCriteria() {}
 
     public TransactionCriteria(TransactionCriteria other) {
@@ -73,6 +81,10 @@ public class TransactionCriteria implements Serializable, Criteria {
         this.categoryId = other.optionalCategoryId().map(LongFilter::copy).orElse(null);
         this.userId = other.optionalUserId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
+        this.category = other.optionalCategory().map(LongFilter::copy).orElse(null);
+        this.fromDate = other.optionalFromDate().map(InstantFilter::copy).orElse(null);
+        this.toDate = other.optionalToDate().map(InstantFilter::copy).orElse(null);
+        this.type = other.optionalType().map(TransactionTypeFilter::copy).orElse(null);
     }
 
     @Override
@@ -270,6 +282,82 @@ public class TransactionCriteria implements Serializable, Criteria {
         this.distinct = distinct;
     }
 
+    public LongFilter getCategory() {
+        return category;
+    }
+
+    public Optional<LongFilter> optionalCategory() {
+        return Optional.ofNullable(category);
+    }
+
+    public LongFilter category() {
+        if (category == null) {
+            setCategory(new LongFilter());
+        }
+        return category;
+    }
+
+    public void setCategory(LongFilter category) {
+        this.category = category;
+    }
+
+    public InstantFilter getFromDate() {
+        return fromDate;
+    }
+
+    public Optional<InstantFilter> optionalFromDate() {
+        return Optional.ofNullable(fromDate);
+    }
+
+    public InstantFilter fromDate() {
+        if (fromDate == null) {
+            setFromDate(new InstantFilter());
+        }
+        return fromDate;
+    }
+
+    public void setFromDate(InstantFilter fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public InstantFilter getToDate() {
+        return toDate;
+    }
+
+    public Optional<InstantFilter> optionalToDate() {
+        return Optional.ofNullable(toDate);
+    }
+
+    public InstantFilter toDate() {
+        if (toDate == null) {
+            setToDate(new InstantFilter());
+        }
+        return toDate;
+    }
+
+    public void setToDate(InstantFilter toDate) {
+        this.toDate = toDate;
+    }
+
+    public TransactionTypeFilter getType() {
+        return type;
+    }
+
+    public Optional<TransactionTypeFilter> optionalType() {
+        return Optional.ofNullable(type);
+    }
+
+    public TransactionTypeFilter type() {
+        if (type == null) {
+            setType(new TransactionTypeFilter());
+        }
+        return type;
+    }
+
+    public void setType(TransactionTypeFilter type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -289,13 +377,17 @@ public class TransactionCriteria implements Serializable, Criteria {
             Objects.equals(updatedAt, that.updatedAt) &&
             Objects.equals(categoryId, that.categoryId) &&
             Objects.equals(userId, that.userId) &&
-            Objects.equals(distinct, that.distinct)
+            Objects.equals(distinct, that.distinct) &&
+            Objects.equals(category, that.category) &&
+            Objects.equals(fromDate, that.fromDate) &&
+            Objects.equals(toDate, that.toDate) &&
+            Objects.equals(type, that.type)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, transactionType, description, transactionDate, createdAt, updatedAt, categoryId, userId, distinct);
+        return Objects.hash(id, amount, transactionType, description, transactionDate, createdAt, updatedAt, categoryId, userId, distinct, category, fromDate, toDate, type);
     }
 
     // prettier-ignore
@@ -312,6 +404,10 @@ public class TransactionCriteria implements Serializable, Criteria {
             optionalCategoryId().map(f -> "categoryId=" + f + ", ").orElse("") +
             optionalUserId().map(f -> "userId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
+            optionalCategory().map(f -> "category=" + f + ", ").orElse("") +
+            optionalFromDate().map(f -> "fromDate=" + f + ", ").orElse("") +
+            optionalToDate().map(f -> "toDate=" + f + ", ").orElse("") +
+            optionalType().map(f -> "type=" + f + ", ").orElse("") +
         "}";
     }
 }
