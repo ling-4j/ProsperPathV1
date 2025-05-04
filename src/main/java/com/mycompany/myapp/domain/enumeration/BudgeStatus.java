@@ -6,4 +6,6 @@ package com.mycompany.myapp.domain.enumeration;
 public enum BudgeStatus {
     ACTIVE,
     ENDED,
+    INACTIVE,
+    PENDING,
 }

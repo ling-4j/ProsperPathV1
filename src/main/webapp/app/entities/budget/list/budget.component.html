@@ -73,9 +73,11 @@
             }
           <td (click)="handleBudgetClick(budget)">{{ budget.startDate | formatMediumDate }}</td>
           <td (click)="handleBudgetClick(budget)">{{ budget.endDate | formatMediumDate }}</td>
-          <td (click)="handleBudgetClick(budget)"
-            [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (budget.status ?? 'null')">
-            {{ { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED' }[budget.status ?? 'null'] }}
+          <td (click)="handleBudgetClick(budget)" align="center">
+            <fa-icon *ngIf="budget.status === 'ACTIVE'" [icon]="['fas', 'circle-check']" class="text-success"></fa-icon>
+            <fa-icon *ngIf="budget.status === 'ENDED'" [icon]="['fas', 'circle-xmark']" class="text-danger"></fa-icon>
+            <fa-icon *ngIf="budget.status === 'INACTIVE'" [icon]="['fas', 'circle-exclamation']" class="text-warning"></fa-icon>
+            <fa-icon *ngIf="budget.status === 'PENDING'" [icon]="['fas', 'circle']" class="text-warning"></fa-icon>
           </td>
           <td class="text-end action-column">
             <div class="btn-group action-buttons">

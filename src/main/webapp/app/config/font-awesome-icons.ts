@@ -60,6 +60,8 @@ import {
   // Thêm các icon mới
   faTriangleExclamation, // Cảnh báo
   faCircleCheck,         // Đánh dấu hoàn thành
+  faCircleXmark,        // Đánh dấu không hoàn thành
+  faCircle,
   faFileInvoiceDollar,   // Hóa đơn tiền tệ
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
@@ -126,6 +128,8 @@ export const fontAwesomeIcons = [
   // Thêm các icon mới
   faTriangleExclamation, // Cảnh báo
   faCircleCheck,         // Đánh dấu hoàn thành
+  faCircleXmark,        // Đánh dấu không hoàn thành
+  faCircle,
   faFileInvoiceDollar,   // Hóa đơn tiền tệ
   // jhipster-needle-add-icon-import
 ];

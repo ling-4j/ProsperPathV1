@@ -22,7 +22,7 @@
       "categoryType": "Type",
       "createdAt": "Created At",
       "updatedAt": "Updated At",
-      "categoryIcon": "Category Icon",
+      "categoryIcon": "Icon",
       "category": "Category"
     }
   }

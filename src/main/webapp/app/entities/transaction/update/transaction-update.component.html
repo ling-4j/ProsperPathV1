@@ -1,159 +1,97 @@
 <div class="transaction-container d-flex justify-content-center ">
   <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
-    <h1 data-cy="transactionTitle" jhiTranslate="prosperPathApp.transaction.home.createOrEditLabel" class="transaction-title">Create or edit a Transaction</h1>
+    <h1 data-cy="transactionTitle" jhiTranslate="prosperPathApp.transaction.home.createOrEditLabel"
+      class="transaction-title">Create or edit a Transaction</h1>
     <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
         <jhi-alert-error></jhi-alert-error>
         @let amountRef = editForm.get('amount')!;
         <div class="mb-3">
           <label class="form-label" for="field_amount" jhiTranslate="prosperPathApp.transaction.amount">Amount</label>
-          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
+          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount"
+            formControlName="amount" />
           @if (amountRef.invalid && (amountRef.dirty || amountRef.touched)) {
-            <div>
-              @if (editForm.get('amount')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('amount')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-                >This field should be a number.</small
-              >
-            </div>
-          }
-        </div>
-
-        @let transactionTypeRef = editForm.get('transactionType')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_transactionType" jhiTranslate="prosperPathApp.transaction.transactionType"
-            >Transaction Type</label
-          >
-          <select
-            class="form-control"
-            name="transactionType"
-            formControlName="transactionType"
-            id="field_transactionType"
-            data-cy="transactionType"
-          >
-            <option [ngValue]="null">{{ 'prosperPathApp.TransactionType.null' | translate }}</option>
-            @for (transactionType of transactionTypeValues; track $index) {
-              <option [value]="transactionType">{{ 'prosperPathApp.TransactionType.' + transactionType | translate }}</option>
+          <div>
+            @if (editForm.get('amount')?.errors?.required) {
+            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is
+              required.</small>
             }
-          </select>
-          @if (transactionTypeRef.invalid && (transactionTypeRef.dirty || transactionTypeRef.touched)) {
-            <div>
-              @if (editForm.get('transactionType')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
+            <small class="form-text text-danger" [hidden]="!editForm.get('amount')?.errors?.number"
+              jhiTranslate="entity.validation.number">This field should be a number.</small>
+          </div>
           }
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_description" jhiTranslate="prosperPathApp.transaction.description">Description</label>
-          <input
-            type="text"
-            class="form-control"
-            name="description"
-            id="field_description"
-            data-cy="description"
-            formControlName="description"
-          />
-        </div>
-
-        @let transactionDateRef = editForm.get('transactionDate')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_transactionDate" jhiTranslate="prosperPathApp.transaction.transactionDate"
-            >Transaction Date</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_transactionDate"
-              data-cy="transactionDate"
-              type="datetime-local"
-              class="form-control"
-              name="transactionDate"
-              formControlName="transactionDate"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-          @if (transactionDateRef.invalid && (transactionDateRef.dirty || transactionDateRef.touched)) {
-            <div>
-              @if (editForm.get('transactionDate')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('transactionDate')?.errors?.datetimelocal"
-                jhiTranslate="entity.validation.datetimelocal"
-                >This field should be a date and time.</small
-              >
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_createdAt" jhiTranslate="prosperPathApp.transaction.createdAt">Created At</label>
-          <div class="d-flex">
-            <input
-              id="field_createdAt"
-              data-cy="createdAt"
-              type="datetime-local"
-              class="form-control"
-              name="createdAt"
-              formControlName="createdAt"
-              placeholder="YYYY-MM-DD HH:mm"
-              readonly="true"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_updatedAt" jhiTranslate="prosperPathApp.transaction.updatedAt">Updated At</label>
-          <div class="d-flex">
-            <input
-              id="field_updatedAt"
-              data-cy="updatedAt"
-              type="datetime-local"
-              class="form-control"
-              name="updatedAt"
-              formControlName="updatedAt"
-              placeholder="YYYY-MM-DD HH:mm"
-              readonly="true"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_category" jhiTranslate="prosperPathApp.transaction.category">Category</label>
-          <select
-            class="form-control"
-            id="field_category"
-            data-cy="category"
-            name="category"
-            formControlName="category"
-            [compareWith]="compareCategory"
-          >
+          <label class="form-label" for="field_category"
+            jhiTranslate="prosperPathApp.transaction.category">Category</label>
+          <select class="form-control" id="field_category" data-cy="category" name="category" formControlName="category"
+            [compareWith]="compareCategory">
             <option [ngValue]="null"></option>
             <ng-container *ngFor="let categoryOption of categoriesSharedCollection">
               <option [ngValue]="categoryOption">{{ categoryOption.categoryName }}</option>
             </ng-container>
           </select>
         </div>
+
+        @let transactionTypeRef = editForm.get('transactionType')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_transactionType"
+            jhiTranslate="prosperPathApp.transaction.transactionType">Transaction Type</label>
+          <select class="form-control" name="transactionType" formControlName="transactionType"
+            id="field_transactionType" data-cy="transactionType">
+            <option [ngValue]="null">{{ 'prosperPathApp.TransactionType.null' | translate }}</option>
+            @for (transactionType of transactionTypeValues; track $index) {
+            <option [value]="transactionType">{{ 'prosperPathApp.TransactionType.' + transactionType | translate }}
+            </option>
+            }
+          </select>
+          @if (transactionTypeRef.invalid && (transactionTypeRef.dirty || transactionTypeRef.touched)) {
+          <div>
+            @if (editForm.get('transactionType')?.errors?.required) {
+            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is
+              required.</small>
+            }
+          </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description"
+            jhiTranslate="prosperPathApp.transaction.description">Description</label>
+          <input type="text" class="form-control" name="description" id="field_description" data-cy="description"
+            formControlName="description" />
+        </div>
+
+        @let transactionDateRef = editForm.get('transactionDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_transactionDate"
+            jhiTranslate="prosperPathApp.transaction.transactionDate">Transaction Date</label>
+          <div class="d-flex">
+            <input id="field_transactionDate" data-cy="transactionDate" type="datetime-local" class="form-control"
+              name="transactionDate" formControlName="transactionDate" placeholder="YYYY-MM-DD HH:mm" />
+          </div>
+          @if (transactionDateRef.invalid && (transactionDateRef.dirty || transactionDateRef.touched)) {
+          <div>
+            @if (editForm.get('transactionDate')?.errors?.required) {
+            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is
+              required.</small>
+            }
+            <small class="form-text text-danger" [hidden]="!editForm.get('transactionDate')?.errors?.datetimelocal"
+              jhiTranslate="entity.validation.datetimelocal">This field should be a date and time.</small>
+          </div>
+          }
+        </div>
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel" (click)="previousState()">
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel"
+          (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary btn-save"
-        >
+        <button type="submit" id="save-entity" data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving" class="btn btn-primary btn-save">
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
       </div>

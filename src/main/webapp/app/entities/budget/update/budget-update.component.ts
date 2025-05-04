@@ -117,4 +117,9 @@ export class BudgetUpdateComponent implements OnInit {
         this.usersSharedCollection = users;
       });
   }
+  getTranslatedStatus(): string {
+    const status = this.editForm.get('status')?.value;
+    if (!status) return '';
+    return status === 'ACTIVE' ? 'Active' : status === 'INACTIVE' ? 'Inactive' : status === 'ENDED' ? 'Ended' : 'Pending';
+  }
 }

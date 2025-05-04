@@ -18,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link com.mycompany.myapp.domain.Budget}.
+ * Service Implementation for managing
+ * {@link com.mycompany.myapp.domain.Budget}.
  */
 @Service
 @Transactional
@@ -48,9 +49,17 @@ public class BudgetServiceImpl implements BudgetService {
         budget.setUpdatedAt(Instant.now());
         // Set status based on endDate
         if (budget.getEndDate() != null && budget.getEndDate().isAfter(Instant.now())) {
-            budget.setStatus(BudgeStatus.ACTIVE);
+            if (budget.getStartDate() != null && budget.getStartDate().isAfter(Instant.now())) {
+                budget.setStatus(BudgeStatus.PENDING); // Chưa bắt đầu
+            } else {
+                budget.setStatus(BudgeStatus.ACTIVE); // Đang hoạt động
+            }
         } else {
-            budget.setStatus(BudgeStatus.ENDED);
+            if (budget.getStartDate() != null && budget.getStartDate().isBefore(Instant.now())) {
+                budget.setStatus(BudgeStatus.ENDED); // Đã kết thúc
+            } else {
+                budget.setStatus(BudgeStatus.INACTIVE); // Không hoạt động (mặc định hoặc bị hủy)
+            }
         }
         return budgetRepository.save(budget);
     }
@@ -68,9 +77,17 @@ public class BudgetServiceImpl implements BudgetService {
         budget.setUpdatedAt(Instant.now());
         // Set status based on endDate
         if (budget.getEndDate() != null && budget.getEndDate().isAfter(Instant.now())) {
-            budget.setStatus(BudgeStatus.ACTIVE);
+            if (budget.getStartDate() != null && budget.getStartDate().isAfter(Instant.now())) {
+                budget.setStatus(BudgeStatus.PENDING); // Chưa bắt đầu
+            } else {
+                budget.setStatus(BudgeStatus.ACTIVE); // Đang hoạt động
+            }
         } else {
-            budget.setStatus(BudgeStatus.ENDED);
+            if (budget.getStartDate() != null && budget.getStartDate().isBefore(Instant.now())) {
+                budget.setStatus(BudgeStatus.ENDED); // Đã kết thúc
+            } else {
+                budget.setStatus(BudgeStatus.INACTIVE); // Không hoạt động (mặc định hoặc bị hủy)
+            }
         }
         return budgetRepository.save(budget);
     }
@@ -80,30 +97,30 @@ public class BudgetServiceImpl implements BudgetService {
         LOG.debug("Request to partially update Budget : {}", budget);
 
         return budgetRepository
-            .findById(budget.getId())
-            .map(existingBudget -> {
-                if (budget.getBudgetAmount() != null) {
-                    existingBudget.setBudgetAmount(budget.getBudgetAmount());
-                }
-                if (budget.getStartDate() != null) {
-                    existingBudget.setStartDate(budget.getStartDate());
-                }
-                if (budget.getEndDate() != null) {
-                    existingBudget.setEndDate(budget.getEndDate());
-                }
-                if (budget.getCreatedAt() != null) {
-                    existingBudget.setCreatedAt(budget.getCreatedAt());
-                }
-                if (budget.getUpdatedAt() != null) {
-                    existingBudget.setUpdatedAt(budget.getUpdatedAt());
-                }
-                if (budget.getStatus() != null) {
-                    existingBudget.setStatus(budget.getStatus());
-                }
+                .findById(budget.getId())
+                .map(existingBudget -> {
+                    if (budget.getBudgetAmount() != null) {
+                        existingBudget.setBudgetAmount(budget.getBudgetAmount());
+                    }
+                    if (budget.getStartDate() != null) {
+                        existingBudget.setStartDate(budget.getStartDate());
+                    }
+                    if (budget.getEndDate() != null) {
+                        existingBudget.setEndDate(budget.getEndDate());
+                    }
+                    if (budget.getCreatedAt() != null) {
+                        existingBudget.setCreatedAt(budget.getCreatedAt());
+                    }
+                    if (budget.getUpdatedAt() != null) {
+                        existingBudget.setUpdatedAt(budget.getUpdatedAt());
+                    }
+                    if (budget.getStatus() != null) {
+                        existingBudget.setStatus(budget.getStatus());
+                    }
 
-                return existingBudget;
-            })
-            .map(budgetRepository::save);
+                    return existingBudget;
+                })
+                .map(budgetRepository::save);
     }
 
     public Page<Budget> findAllWithEagerRelationships(Pageable pageable) {

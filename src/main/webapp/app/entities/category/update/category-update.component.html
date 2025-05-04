@@ -1,104 +1,86 @@
-<div class="category-container d-flex justify-content-center ">
+<div class="category-container d-flex justify-content-center">
   <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
-    <h1 data-cy="categoryTitle" jhiTranslate="prosperPathApp.category.home.createOrEditLabel" class="category-title">Create or edit a Category</h1>
+    <h1 data-cy="categoryTitle" jhiTranslate="prosperPathApp.category.home.createOrEditLabel" class="category-title">
+      Create or edit a Category
+    </h1>
     <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
         <jhi-alert-error></jhi-alert-error>
 
+        <!-- Category Icon (Dropdown với preview icon bằng ng-select) -->
         <div class="mb-3">
           <label class="form-label" for="field_categoryIcon" jhiTranslate="prosperPathApp.category.categoryIcon">Category Icon</label>
-          <input
-            type="text"
-            class="form-control"
-            name="categoryIcon"
+          <ng-select
+            class="custom-ng-select"
             id="field_categoryIcon"
-            data-cy="categoryIcon"
             formControlName="categoryIcon"
-          />
-        </div>
-
-        @let categoryNameRef = editForm.get('categoryName')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_categoryName" jhiTranslate="prosperPathApp.category.categoryName">Category Name</label>
-          <input
-            type="text"
-            class="form-control"
-            name="categoryName"
-            id="field_categoryName"
-            data-cy="categoryName"
-            formControlName="categoryName"
-          />
-          @if (categoryNameRef.invalid && (categoryNameRef.dirty || categoryNameRef.touched)) {
-            <div>
-              @if (editForm.get('categoryName')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
+            [items]="availableIcons"
+            bindValue="value"
+            bindLabel="value"
+            placeholder="Select an icon"
+            [clearable]="true"
+            [searchable]="true"
+            (change)="onIconChange($event)"
+            required
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <fa-icon [icon]="['fas', item.value.replace('fa-', '')]"></fa-icon> {{ item.name }}
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              <fa-icon [icon]="['fas', item.value.replace('fa-', '')]"></fa-icon> {{ item.name }}
+            </ng-template>
+          </ng-select>
+          @let categoryIconRef = editForm.get('categoryIcon')!;
+          @if (categoryIconRef.invalid && (categoryIconRef.dirty || categoryIconRef.touched)) {
+          <div>
+            @if (editForm.get('categoryIcon')?.errors?.required) {
+            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
           }
         </div>
 
+        <!-- Category Name -->
+        @let categoryNameRef = editForm.get('categoryName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_categoryName" jhiTranslate="prosperPathApp.category.categoryName">Category Name</label>
+          <input type="text" class="form-control" name="categoryName" id="field_categoryName" data-cy="categoryName" formControlName="categoryName" />
+          @if (categoryNameRef.invalid && (categoryNameRef.dirty || categoryNameRef.touched)) {
+          <div>
+            @if (editForm.get('categoryName')?.errors?.required) {
+            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Category Type -->
         @let categoryTypeRef = editForm.get('categoryType')!;
         <div class="mb-3">
           <label class="form-label" for="field_categoryType" jhiTranslate="prosperPathApp.category.categoryType">Category Type</label>
           <select class="form-control" name="categoryType" formControlName="categoryType" id="field_categoryType" data-cy="categoryType">
             <option [ngValue]="null">{{ 'prosperPathApp.CategoryType.null' | translate }}</option>
             @for (categoryType of categoryTypeValues; track $index) {
-              <option [value]="categoryType">{{ 'prosperPathApp.CategoryType.' + categoryType | translate }}</option>
+            <option [value]="categoryType">{{ 'prosperPathApp.CategoryType.' + categoryType | translate }}</option>
             }
           </select>
           @if (categoryTypeRef.invalid && (categoryTypeRef.dirty || categoryTypeRef.touched)) {
-            <div>
-              @if (editForm.get('categoryType')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-              }
-            </div>
+          <div>
+            @if (editForm.get('categoryType')?.errors?.required) {
+            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
           }
         </div>
-
-        <!-- <div class="mb-3">
-          <label class="form-label" for="field_createdAt" jhiTranslate="prosperPathApp.category.createdAt">Created At</label>
-          <div class="d-flex">
-            <input
-              id="field_createdAt"
-              data-cy="createdAt"
-              type="datetime-local"
-              class="form-control"
-              name="createdAt"
-              formControlName="createdAt"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_updatedAt" jhiTranslate="prosperPathApp.category.updatedAt">Updated At</label>
-          <div class="d-flex">
-            <input
-              id="field_updatedAt"
-              data-cy="updatedAt"
-              type="datetime-local"
-              class="form-control"
-              name="updatedAt"
-              formControlName="updatedAt"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div> -->
       </div>
 
       <div>
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          <fa-icon icon="ban"></fa-icon> <span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary btn-save"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving" class="btn btn-primary btn-save">
+          <fa-icon icon="save"></fa-icon> <span jhiTranslate="entity.action.save">Save</span>
         </button>
       </div>
     </form>

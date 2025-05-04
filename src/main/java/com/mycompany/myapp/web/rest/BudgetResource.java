@@ -1,7 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Budget;
-import com.mycompany.myapp.domain.Transaction;
+// import com.mycompany.myapp.domain.Transaction;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.BudgetRepository;
 import com.mycompany.myapp.service.BudgetQueryService;
