@@ -12,8 +12,7 @@
 
       <dl class="row jh-entity-details">
         <dt class="block-title text-center">
-          <span [jhiTranslate]="'prosperPathApp.NotificationType.' + (notificationRef.notificationType ?? 'null')">
-            {{ { null: '', BUDGET_EXCEEDED: 'BUDGET_EXCEEDED', OTHER: 'OTHER' }[notificationRef.notificationType ?? 'null'] }}
+          <span [jhiTranslate]="'prosperPathApp.NotificationType.' + (notificationRef.notificationType ?? 'null')">type
           </span>
         </dt>
 

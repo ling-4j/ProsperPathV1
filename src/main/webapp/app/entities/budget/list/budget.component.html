@@ -16,9 +16,7 @@
     </div>
   </h2>
 
-  <jhi-filter [filters]="filters"></jhi-filter>
-
-  @if (budgets().length === 0) {
+  @if (budgets.length === 0) {
   <div class="alert alert-warning" id="no-result">
     <span jhiTranslate="prosperPathApp.budget.home.notFound">No Budgets found</span>
   </div>
@@ -53,7 +51,7 @@
           </th>
           <th scope="col" jhiSortBy="status">
             <div class="d-flex">
-              <span jhiTranslate="prosperPathApp.budget.status">End Date</span>
+              <span jhiTranslate="prosperPathApp.budget.status">Status</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -61,16 +59,17 @@
         </tr>
       </thead>
       <tbody class="budget-tbody">
-        @for (budget of budgets(); track trackId(budget)) {
+        @for (budget of budgets; track trackId(budget)) {
         <tr data-cy="entityTable" class="budget-row">
           <td class="fw-bold" (click)="handleBudgetClick(budget)">{{ budget.budgetAmount | currency: 'VND' }}</td>
           <td (click)="handleBudgetClick(budget)">
             @if(budget.category?.id!=null){
-            <fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
+            <fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{
             budget.category?.categoryName }}
             }@else{
-            &nbsp;{{ budget.category?.categoryName }}
+             {{ budget.category?.categoryName }}
             }
+          </td>
           <td (click)="handleBudgetClick(budget)">{{ budget.startDate | formatMediumDate }}</td>
           <td (click)="handleBudgetClick(budget)">{{ budget.endDate | formatMediumDate }}</td>
           <td (click)="handleBudgetClick(budget)" align="center">
@@ -98,14 +97,10 @@
   </div>
   }
 
-  @if (budgets().length > 0) {
+  @if (budgets.length > 0) {
   <div class="pagination-container mt-3">
     <div class="row align-items-center">
       <div class="col-12 col-md-6 mb-2 mb-md-0">
-        <!-- <jhi-item-count
-            [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"
-            class="item-count"
-          ></jhi-item-count> -->
       </div>
       <div class="col-12 col-md-6 d-flex justify-content-md-end">
         <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5"

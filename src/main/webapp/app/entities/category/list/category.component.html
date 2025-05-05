@@ -5,12 +5,6 @@
         <div class="header-items">
           <span class="title" jhiTranslate="prosperPathApp.category.home.title">Categories</span>
         </div>
-        <!-- <div class="header-items">
-          <button class="btn btn-info refresh-btn" (click)="load()" [disabled]="isLoading">
-            <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-            <span jhiTranslate="prosperPathApp.category.home.refreshListLabel">Refresh list</span>
-          </button>
-        </div> -->
         <div class="header-items create-btn-container">
           <button id="jh-create-entity" data-cy="entityCreateButton"
             class="btn btn-primary jh-create-entity create-category" [routerLink]="['/category/new']">
@@ -22,9 +16,7 @@
     </div>
   </h2>
 
-  <jhi-filter [filters]="filters"></jhi-filter>
-
-  @if (categories().length === 0) {
+  @if (categories.length === 0) {
   <div class="alert alert-warning" id="no-result">
     <span jhiTranslate="prosperPathApp.category.home.notFound">No Categories found</span>
   </div>
@@ -35,7 +27,7 @@
         <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)" class="budget-row">
           <th scope="col" jhiSortBy="categoryName">
             <div class="d-flex">
-              <span jhiTranslate="prosperPathApp.category.category">Category </span>
+              <span jhiTranslate="prosperPathApp.category.category">Category</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -49,9 +41,11 @@
         </tr>
       </thead>
       <tbody>
-        @for (category of categories(); track trackId(category)) {
+        @for (category of categories; track trackId(category); let i = $index) {
         <tr data-cy="entityTable" class="budget-row">
-          <td><fa-icon [icon]="['fas', (category.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{ category.categoryName }}</td>
+          <td>
+            <fa-icon [icon]="['fas', (category.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{ category.categoryName }}
+          </td>
           <td [jhiTranslate]="'prosperPathApp.CategoryType.' + (category.categoryType ?? 'null')">
             {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[category.categoryType ?? 'null'] }}
           </td>
@@ -74,14 +68,10 @@
   </div>
   }
 
-  @if (categories().length > 0) {
+  @if (categories.length > 0) {
   <div class="pagination-container mt-3">
     <div class="row align-items-center">
       <div class="col-12 col-md-6 mb-2 mb-md-0">
-        <!-- <jhi-item-count
-            [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"
-            class="item-count"
-          ></jhi-item-count> -->
       </div>
       <div class="col-12 col-md-6 d-flex justify-content-md-end">
         <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5"

@@ -4,6 +4,7 @@
       "null": "",
       "BUDGET_EXCEEDED": "VƯỢT NGÂN SÁCH",
       "WARNING":  "CẢNH BÁO",
+      "COMPLETE": "HOÀN THÀNH",
       "OTHER": "KHÁC"
     }
   }

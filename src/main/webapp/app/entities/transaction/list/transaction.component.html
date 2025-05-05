@@ -7,7 +7,7 @@
             <span jhiTranslate="prosperPathApp.transaction.home.title">Transactions</span>
           </div>
           <div class="col-md-6 col-12 d-flex justify-content-end gap-2">
-            <button class="btn btn-info refresh-btn" (click)="load()" [disabled]="isLoading">
+            <button class="btn btn-info refresh-btn" (click)="refresh()" [disabled]="isLoading">
               <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
               <span jhiTranslate="prosperPathApp.transaction.home.refreshListLabel" class="ms-1">Refresh list</span>
             </button>
@@ -15,8 +15,7 @@
             <button id="jh-create-entity" data-cy="entityCreateButton"
               class="btn btn-primary jh-create-entity create-transaction" [routerLink]="['/transaction/new']">
               <fa-icon icon="plus"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.home.createLabel" class="ms-1">Create a new
-                Transaction</span>
+              <span jhiTranslate="prosperPathApp.transaction.home.createLabel" class="ms-1">Create a new Transaction</span>
             </button>
           </div>
         </div>
@@ -82,9 +81,9 @@
         <table class="table table-striped" aria-describedby="page-heading">
           <thead>
             <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-              <th scope="col" jhiSortBy="category.id">
-                <div class="d-flex justify-content-center">STT
-                </div>
+              <th scope="col">
+                <div class="d-flex justify-content-center">STT</div>
+              </th>
               <th scope="col" jhiSortBy="category.id">
                 <div class="d-flex align-items-center">
                   <span jhiTranslate="prosperPathApp.transaction.category">Category</span>
@@ -121,21 +120,21 @@
           <tbody>
             @for (transaction of transactions(); track trackId(transaction); let i = $index) {
             <tr data-cy="entityTable" class="budget-row">
-              <td class="text-center" (click)="handleBudgetClick(transaction)">{{ i + 1 }}</td>
+              <td class="text-center" (click)="handleBudgetClick(transaction)">{{ i + 1 + (page - 1) * itemsPerPage }}</td>
               <td class="text-break" (click)="handleBudgetClick(transaction)">
                 @if(transaction.category?.id!=null){
                 <fa-icon
-                  [icon]="['fas', (transaction.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
+                  [icon]="['fas', (transaction.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{
                 transaction.category?.categoryName }}
                 }@else{
-                &nbsp;{{ transaction.category?.categoryName }}
+                 {{ transaction.category?.categoryName }}
                 }
               </td>
               <td [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')"
                 (click)="handleBudgetClick(transaction)">
                 {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
               </td>
-              <td class="text-break" (click)="handleBudgetClick(transaction)">{{ transaction.description }}</td>
+              <td class="text-break" (click)="handleBudgetClick(transaction)">{{ transaction.description ? (transaction.description | truncate: 5) : ''  }}</td>
               <td (click)="handleBudgetClick(transaction)">{{ transaction.transactionDate | formatMediumDatetime }}</td>
               <td (click)="handleBudgetClick(transaction)" class="text-end fw-bold" [ngClass]="{
                 'text-danger': transaction.transactionType === 'EXPENSE',
@@ -167,11 +166,11 @@
       <div class="pagination-container mt-3">
         <div class="row align-items-center">
           <div class="col-12 col-md-6 mb-2 mb-md-0">
-            <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"
+            <jhi-item-count [params]="{ page: page, totalItems: transactionTotalItems(), itemsPerPage: itemsPerPage }"
               class="item-count"></jhi-item-count>
           </div>
           <div class="col-12 col-md-6 d-flex justify-content-md-end">
-            <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+            <ngb-pagination [collectionSize]="transactionTotalItems()" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5"
               [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)"
               class="custom-pagination"></ngb-pagination>
           </div>
@@ -180,6 +179,23 @@
       }
     </div>
   </div>
-  <div class="div2"><jhi-category></jhi-category></div>
-  <div class="div3"><jhi-budget></jhi-budget></div>
+  <div class="div2">
+    <jhi-category
+      [categories]="categories()"
+      [totalItems]="categoryTotalItems()"
+      (sortChange)="onCategorySort($event)"
+      (pageChange)="onCategoryPageChange($event)"
+      (deleteCategory)="onCategoryDelete($event)"
+    ></jhi-category>
+  </div>
+
+  <div class="div3">
+    <jhi-budget
+      [budgets]="budgets()"
+      [totalItems]="budgetTotalItems()"
+      (sortChange)="onBudgetSort($event)"
+      (pageChange)="onBudgetPageChange($event)"
+      (deleteBudget)="onBudgetDelete($event)"
+    ></jhi-budget>
+  </div>
 </div>
