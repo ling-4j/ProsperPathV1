@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core'; // Thêm OnDestroy
+import { Component, OnInit, OnDestroy, inject, signal, effect } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -21,10 +21,10 @@ import NavbarItem from './navbar-item.model';
 @Component({
   selector: 'jhi-navbar',
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss',
+  styleUrls: ['./navbar.component.scss'],
   imports: [RouterModule, SharedModule, ActiveMenuDirective, FormatMediumDatetimePipe, TruncatePipe],
 })
-export default class NavbarComponent implements OnInit, OnDestroy { // Thêm OnDestroy
+export default class NavbarComponent implements OnInit, OnDestroy {
   inProduction?: boolean;
   isNavbarCollapsed = signal(true);
   languages = LANGUAGES;
@@ -49,21 +49,43 @@ export default class NavbarComponent implements OnInit, OnDestroy { // Thêm OnD
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
     }
+
+    // Sử dụng effect để theo dõi trạng thái account và kích hoạt polling khi đã đăng nhập
+    effect(() => {
+      const currentAccount = this.account();
+      if (currentAccount) {
+        this.startPolling(); // Bắt đầu polling khi đã đăng nhập
+        this.loadNotifications(); // Tải thông báo ngay lập tức
+      } else {
+        this.stopPolling(); // Dừng polling khi đăng xuất
+        this.notifications.set([]); // Xóa danh sách thông báo
+        this.unreadNotifications.set([]); // Xóa danh sách thông báo chưa đọc
+      }
+    });
   }
 
   ngOnInit(): void {
     this.entitiesNavbarItems = EntityNavbarItems;
-    this.loadNotifications();
-    // Bắt đầu polling: gọi loadNotifications mỗi 30 giây
-    this.pollingInterval = setInterval(() => {
-      this.loadNotifications();
-    }, 30000); // 30s
+    // Không gọi loadNotifications trực tiếp trong ngOnInit, để effect xử lý
   }
 
   ngOnDestroy(): void {
     // Dọn dẹp interval khi component bị hủy
+    this.stopPolling();
+  }
+
+  private startPolling(): void {
+    if (!this.pollingInterval) {
+      this.pollingInterval = setInterval(() => {
+        this.loadNotifications();
+      }, 30000); // 30s
+    }
+  }
+
+  private stopPolling(): void {
     if (this.pollingInterval) {
       clearInterval(this.pollingInterval);
+      this.pollingInterval = null;
     }
   }
 

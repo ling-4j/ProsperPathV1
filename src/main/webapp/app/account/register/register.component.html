@@ -1,35 +1,35 @@
 <div class="register-container d-flex justify-content-center ">
   <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
-    <div class="col-md-8">
-      @if (success()) {
-      <div class="alert alert-success" jhiTranslate="register.messages.success">
-        <strong>Registration saved!</strong> Please check your email for confirmation.
-      </div>
-      }
-
-      @if (error()) {
-      <div class="alert alert-danger" jhiTranslate="register.messages.error.fail">
-        <strong>Registration failed!</strong> Please try again later.
-      </div>
-      }
-
-      @if (errorUserExists()) {
-      <div class="alert alert-danger" jhiTranslate="register.messages.error.userexists">
-        <strong>Login name already registered!</strong> Please choose another one.
-      </div>
-      }
-
-      @if (errorEmailExists()) {
-      <div class="alert alert-danger" jhiTranslate="register.messages.error.emailexists">
-        <strong>Email is already in use!</strong> Please choose another one.
-      </div>
-      }
-
-      @if (doNotMatch()) {
-      <div class="alert alert-danger" jhiTranslate="global.messages.error.dontmatch">The password and its confirmation
-        do not match!</div>
-      }
+    @if (success()) {
+    <div class="alert alert-success" jhiTranslate="register.messages.success">
+      <strong>Registration saved!</strong> Please login!
     </div>
+    <meta http-equiv="refresh" content="2;url=/login" />
+    }
+
+
+    @if (error()) {
+    <div class="alert alert-danger" jhiTranslate="register.messages.error.fail">
+      <strong>Registration failed!</strong> Please try again later.
+    </div>
+    }
+
+    @if (errorUserExists()) {
+    <div class="alert alert-danger" jhiTranslate="register.messages.error.userexists">
+      <strong>Login name already registered!</strong> Please choose another one.
+    </div>
+    }
+
+    @if (errorEmailExists()) {
+    <div class="alert alert-danger" jhiTranslate="register.messages.error.emailexists">
+      <strong>Email is already in use!</strong> Please choose another one.
+    </div>
+    }
+
+    @if (doNotMatch()) {
+    <div class="alert alert-danger" jhiTranslate="global.messages.error.dontmatch">The password and its confirmation
+      do not match!</div>
+    }
     @if (!success()) {
     <h1 data-cy="registerTitle" jhiTranslate="register.title" class="register-title">Sign up</h1>
     <form class="form" (ngSubmit)="register()" [formGroup]="registerForm">
@@ -154,11 +154,10 @@
       </div>
 
       <div class="d-flex justify-content-center gap-3"><b>
-        <button type="submit" class="btn btn-sign-up bg-primary" data-cy="submit"
-          jhiTranslate="register.form.button">Sign up</button></b>
-        <b><a class="btn btn-sign-in bg-warning" routerLink="/login"
-          jhiTranslate="login.form.button">Sign in</a></b>
-    </div>
+          <button type="submit" class="btn btn-sign-up bg-primary" data-cy="submit"
+            jhiTranslate="register.form.button">Sign up</button></b>
+        <b><a class="btn btn-sign-in bg-warning" routerLink="/login" jhiTranslate="login.form.button">Sign in</a></b>
+      </div>
     </form>
     }
   </div>

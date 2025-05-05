@@ -420,6 +420,44 @@ $font-family-base: 'Roboto', sans-serif;
       }
     }
 
+    .preview-header {
+      padding: 20px 0;
+      background-color: #f5f5f5;
+      border-radius: 10px 10px 0 0;
+    }
+    
+    .logo h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    
+    .preview-text h4 {
+      margin: 5px 0;
+      color: #333;
+    }
+    
+    .alerts-container {
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .alert {
+      text-align: left;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+    
+    .alert-link {
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
+    }
+    
+    .alert-link:hover {
+      color: #0056b3;
+    }
+
     // Alert khi chưa đăng nhập
     .alert {
       border-radius: 10px;

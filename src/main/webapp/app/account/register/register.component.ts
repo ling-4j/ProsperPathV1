@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -23,6 +23,18 @@ export default class RegisterComponent implements AfterViewInit {
   errorEmailExists = signal(false);
   errorUserExists = signal(false);
   success = signal(false);
+
+  constructor() {
+    // Sử dụng effect để phản ứng với sự thay đổi của success
+    effect(() => {
+      if (this.success()) {
+        // Hiển thị thông báo thành công (có thể thêm thông báo trong template)
+        setTimeout(() => {
+          this.router.navigate(['/login']); // Chuyển hướng sau 2 giây
+        }, 5000);
+      }
+    });
+  }
 
   registerForm = new FormGroup({
     login: new FormControl('', {
@@ -50,6 +62,7 @@ export default class RegisterComponent implements AfterViewInit {
 
   private readonly translateService = inject(TranslateService);
   private readonly registerService = inject(RegisterService);
+  private readonly router = inject(Router);
 
   ngAfterViewInit(): void {
     this.login().nativeElement.focus();

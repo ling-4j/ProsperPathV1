@@ -22,12 +22,6 @@
             <span jhiTranslate="global.menu.home">Home</span>
           </a>
         </li>
-
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/budget" (click)="collapseNavbar()">
-            <span jhiTranslate="global.menu.entities.budget">Budget</span>
-          </a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/transaction" (click)="collapseNavbar()">
             <span jhiTranslate="global.menu.entities.transaction">Transaction</span>
@@ -118,7 +112,6 @@
             @if (!accountRef?.imageUrl) {
             <span>
               <fa-icon icon="user"></fa-icon>
-              <span class="ms-1" jhiTranslate="global.menu.account.main">Account</span>
             </span>
             } @else {
             <span class="d-flex align-items-center">
