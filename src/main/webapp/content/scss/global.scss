@@ -2,6 +2,42 @@
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
 
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('../fonts/PlayfairDisplay-Regular.ttf') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+// @font-face {
+//   font-family: 'Playfair Display';
+//   src: url('../fonts/PlayfairDisplay-Bold.ttf') format('woff2');
+//   font-weight: 700;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Playfair Display';
+//   src: url('../fonts/PlayfairDisplay-Regular.ttf') format('woff2');
+//   font-weight: 400;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Playfair Display';
+//   src: url('../fonts/Roboto-Regular.ttf') format('woff2');
+//   font-weight: 700;
+//   font-style: normal;
+// }
+
+// @font-face {
+//   font-family: 'Playfair Display';
+//   src: url('../fonts/Roboto_SemiCondensed-Bold.ttf') format('woff2');
+//   font-weight: 400;
+//   font-style: normal;
+// }
+
+
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
@@ -67,7 +103,7 @@ Generic styles
 
 .jh-card {
   padding: 1.5%;
-  margin-top: 20px;
+  // margin-top: 20px;
   border: none;
 }
 

@@ -2,7 +2,7 @@
   "prosperPathApp": {
     "category": {
       "home": {
-        "title": "Categories",
+        "title": "Danh mục",
         "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
         "createOrEditLabel": "Thêm mới hoặc cập nhật Category",

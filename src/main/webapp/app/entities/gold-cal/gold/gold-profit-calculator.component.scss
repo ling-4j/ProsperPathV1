@@ -1,15 +1,15 @@
-
-
 $font-family-base: 'Roboto', sans-serif;
+
 /* Container mặc định cho trang chủ (full màn hình) */
 .calculator-box,
 .price-table {
     max-width: 100%;
-    margin: 1rem auto;
+    margin: auto;
 }
+
 /* Phần 1: Công cụ tính toán */
 .calculator-box {
-    background: #ffffff;
+    background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
     padding: 1.5rem;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -20,7 +20,7 @@ $font-family-base: 'Roboto', sans-serif;
     }
 
     .header {
-        display: flex;
+        // display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 1rem;
@@ -28,6 +28,7 @@ $font-family-base: 'Roboto', sans-serif;
         gap: 0.5rem;
 
         h2 {
+            text-shadow: 0 0 8px rgba(225, 255, 144, 0.5);
             color: #28a745;
             font-size: clamp(1.2rem, 3vw, 1.5rem);
             font-weight: 700;
@@ -48,16 +49,17 @@ $font-family-base: 'Roboto', sans-serif;
     }
 
     .form-group {
-        display: block; /* Sử dụng Bootstrap grid thay vì Flexbox trên .form-group */
+        display: block;
+        /* Sử dụng Bootstrap grid thay vì Flexbox trên .form-group */
         margin-bottom: 1rem;
-    
+
         .row {
             display: flex;
             flex-wrap: wrap;
             margin-right: -15px;
             margin-left: -15px;
             align-items: center;
-    
+
             .quantity-box,
             .input-box {
                 padding-right: 15px;
@@ -65,34 +67,35 @@ $font-family-base: 'Roboto', sans-serif;
                 display: flex;
                 flex-direction: column;
                 gap: 0.5rem;
-    
+
                 label {
                     font-size: clamp(0.8rem, 2vw, 0.9rem);
                     color: #333;
                     font-weight: 500;
                 }
             }
-    
+
             .quantity-box {
                 .quantity-field {
-                    width: 100%; /* Đảm bảo ô input chiếm toàn bộ chiều rộng của container */
+                    width: 100%;
+                    /* Đảm bảo ô input chiếm toàn bộ chiều rộng của container */
                     padding: 0.5rem;
                     border: 1px solid #ced4da;
                     border-radius: 8px;
                     font-size: clamp(0.9rem, 2.5vw, 1rem);
                     background: #f1f3f5;
                     transition: border-color 0.3s ease;
-    
+
                     &::-webkit-outer-spin-button,
                     &::-webkit-inner-spin-button {
                         -webkit-appearance: none;
                         margin: 0;
                     }
-    
-                    &[type=number] {
-                        -moz-appearance: textfield;
-                    }
-    
+
+                    // &[type=number] {
+                    //     -moz-appearance: textfield;
+                    // }
+
                     &:focus {
                         outline: none;
                         border-color: #28a745;
@@ -100,61 +103,66 @@ $font-family-base: 'Roboto', sans-serif;
                     }
                 }
             }
-    
+
             .input-box {
+
                 .select-gold,
                 .input-gold {
-                    width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+                    width: 100%;
+                    /* Đảm bảo chiều rộng đầy đủ */
                     padding: 0.5rem;
                     border: 1px solid #ced4da;
                     border-radius: 8px;
                     font-size: clamp(0.9rem, 2.5vw, 1rem);
                     background: #f1f3f5;
                     transition: border-color 0.3s ease;
-    
+
                     &:focus {
                         outline: none;
                         border-color: #28a745;
                         box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
                     }
                 }
-    
+
                 .input-gold {
+
                     &::-webkit-outer-spin-button,
                     &::-webkit-inner-spin-button {
                         -webkit-appearance: none;
                         margin: 0;
                     }
-    
-                    &[type=number] {
-                        -moz-appearance: textfield;
-                    }
+
+                    // &[type=number] {
+                    //     -moz-appearance: textfield;
+                    // }
                 }
             }
         }
     }
-    
+
     /* Media Queries cho Responsive */
     @media (max-width: 767px) {
         .form-group {
             .row {
                 flex-direction: column;
                 align-items: stretch;
-    
+
                 .quantity-box,
                 .input-box {
                     width: 100%;
                     max-width: 100%;
                 }
-    
+
                 .quantity-box {
                     .quantity-field {
-                        width: 100%; /* Đảm bảo đầy đủ chiều rộng trên mobile */
+                        width: 100%;
+                        /* Đảm bảo đầy đủ chiều rộng trên mobile */
                     }
                 }
             }
         }
     }
+
     .result-btn {
         display: block;
         width: 100%;
@@ -201,31 +209,36 @@ $font-family-base: 'Roboto', sans-serif;
 
 /* Phần 2: Giá vàng mới nhất */
 .price-table {
-    background: #ffffff;
+    background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
     padding: 1.5rem;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    // width: 60%;
+    margin-top: 1.5rem;
 
     &:hover {
         transform: translateY(-5px);
     }
 
     h3 {
-        color: #ffca28;
         text-align: center;
         margin-bottom: 1.5rem;
         font-size: clamp(1.2rem, 3vw, 1.5rem);
-        font-weight: 700;
+        font-weight: bold;
         text-transform: uppercase;
         letter-spacing: 1px;
+        text-shadow: 0 0 8px rgba(238, 255, 0, 0.5);
+        color: #c25700;
     }
 
     table {
-        width: 100%;
+        margin: 0 auto;
+        width: 60%;
         border-collapse: collapse;
         border-radius: 8px;
         overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
         th,
         td {
@@ -245,6 +258,7 @@ $font-family-base: 'Roboto', sans-serif;
             background: #f8f9fa;
             color: #212529;
             border-bottom: 1px solid #dee2e6;
+            font-weight: bold;
 
             &:last-child {
                 border-bottom: none;
@@ -252,7 +266,7 @@ $font-family-base: 'Roboto', sans-serif;
         }
 
         .buy {
-            color: #00bcd4;
+            color: #118302;
             font-weight: 600;
         }
 
@@ -276,5 +290,7 @@ $font-family-base: 'Roboto', sans-serif;
         font-size: clamp(0.75rem, 2vw, 0.9rem);
         color: #6c757d;
         font-style: italic;
+        margin: 1rem auto;
+        width: 60%;
     }
 }

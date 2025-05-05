@@ -31,7 +31,10 @@ $font-family-base: 'Roboto', sans-serif;
 .container-fluid {
   // padding: 20px;
   background-color: $white;
-  // min-height: 87.5vh;
+  // background: linear-gradient(135deg, #1c1c1e, #2b2e4a, #3a3f5c);
+
+  background: linear-gradient(145deg, #c5a8c4, #efe9f0, #f0f0f0);
+  min-height: 85vh;
 
   .row {
     margin: 0;
@@ -42,19 +45,19 @@ $font-family-base: 'Roboto', sans-serif;
       gap: 5%;
       flex-wrap: wrap;
       row-gap: 20px;
-      margin: 20px;
+      // margin: 20px;
 
       // Cột trái: Thẻ tín dụng
       .dashboard-left {
         flex: 1;
         min-width: 300px;
         padding: 20px;
-        background-color: #FFF;
+        background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
         border-radius: 15px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
         .credit {
-          background: #ffffff;
+          background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
           padding: 1.5rem;
           border-radius: 16px;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -63,7 +66,8 @@ $font-family-base: 'Roboto', sans-serif;
           &:hover {
             transform: translateY(-5px);
           }
-          .title{
+
+          .title {
             color: #28a745;
             font-size: clamp(1.2rem, 3vw, 1.5rem);
             font-weight: 700;
@@ -72,7 +76,10 @@ $font-family-base: 'Roboto', sans-serif;
           }
 
           .credit-card {
-            background: linear-gradient(135deg, $blue, #40c4ff);
+            // background: linear-gradient(135deg, $blue, #40c4ff);
+            background: linear-gradient(145deg, #0c63d4, #1bc6e4, #250b6d);
+            // background: linear-gradient(145deg, #000000, #475702, #1b0220);
+
             color: $white;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -110,7 +117,14 @@ $font-family-base: 'Roboto', sans-serif;
 
             .btn {
               border-radius: 15px;
-              background-color: $warning;
+              background: linear-gradient(145deg, #14558a, #3296bd, #3588b8);
+              font-family: 'Playfair Display', serif;
+
+              transition: background 0.3s ease;
+
+              &:hover {
+                background: linear-gradient(145deg, #021f36, #1029b3, #3588b8);
+              }
             }
           }
         }
@@ -121,7 +135,7 @@ $font-family-base: 'Roboto', sans-serif;
         flex: 1;
         min-width: 300px;
         padding: 20px;
-        background-color: #FFF;
+        background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
         border-radius: 15px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
@@ -190,22 +204,30 @@ $font-family-base: 'Roboto', sans-serif;
             }
 
             &.bg-primary {
-              background-color: $blue;
+              // background-color: $blue;
+              // background: linear-gradient(145deg, #146de0, #0f434d, #250b6d);
+              background: linear-gradient(to bottom, #292dff, #35c4dd);
               color: $white;
             }
 
             &.bg-success {
-              background-color: $success;
+              // background-color: $success;
+              // background: linear-gradient(0.1turn, #3f87a6, #dadd24, #f69d3c);
+              background: linear-gradient(to bottom, #006935, #00ff37);
               color: $white;
             }
 
             &.bg-teal {
-              background-color: $teal;
+              // background-color: $teal;
+              // background: linear-gradient(0.6turn, #3f87a6, #dadd24, #f69d3c);
+              background: linear-gradient(to bottom, #f5c906, #dbd80e);
               color: $white;
             }
 
             &.bg-danger {
-              background-color: $danger;
+              // background-color: $danger;
+              // background: linear-gradient(0.4turn, #5f0404, #3f0808, #e90d0d);
+              background: linear-gradient(to bottom, #6b0000, #ff0000);
               color: $white;
             }
           }
@@ -218,7 +240,7 @@ $font-family-base: 'Roboto', sans-serif;
 
         .chart-card {
           border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
           background-color: #ffffff;
           transition: all 0.3s ease;
 
@@ -336,16 +358,10 @@ $font-family-base: 'Roboto', sans-serif;
       .dashboard-right {
         flex: 1;
         min-width: 300px;
-        background-color: #FFF;
-        .gold-card {
-          border-radius: 15px;
-          // background-color: $white;
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-
-          .card-body {
-            display: block;
-          }
-        }
+        padding: 20px;
+        background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       }
     }
 
@@ -483,16 +499,6 @@ $font-family-base: 'Roboto', sans-serif;
       // Cột phải: gold
       .dashboard-right {
         padding: 15px;
-
-        .gold-card {
-          height: 300px;
-
-          .card-body {
-            padding: 15px;
-            display: block;
-
-          }
-        }
       }
     }
 
@@ -698,12 +704,7 @@ $font-family-base: 'Roboto', sans-serif;
       }
 
       .dashboard-right {
-        .gold-card {
-          .card-body {
-            padding: 8px;
-            display: block;
-          }
-        }
+        padding: 15px;
       }
     }
 

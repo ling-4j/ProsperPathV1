@@ -37,6 +37,8 @@ import {
   faUsers,
   faUsersCog,
   faWrench,
+  faMoneyBillTransfer,
+  faCalculator,
   // Các icon cho Financier App (đã thêm trước đó)
   faCartShopping,  // Mua sắm
   faMoneyBill,     // Hóa đơn
@@ -107,6 +109,8 @@ export const fontAwesomeIcons = [
   faUsers,
   faUsersCog,
   faWrench,
+  faMoneyBillTransfer,
+  faCalculator,
   // Các icon cho Financier App (đã thêm trước đó)
   faCartShopping,  // Mua sắm
   faMoneyBill,     // Hóa đơn

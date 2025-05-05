@@ -1,64 +1,76 @@
 <div id="prosperPathCarousel" class="carousel slide" data-bs-ride="carousel">
-    <!-- Indicators -->
+    <!-- Chỉ số điều hướng -->
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#prosperPathCarousel" data-bs-slide-to="0" class="active"
-            aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#prosperPathCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#prosperPathCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            aria-current="true" aria-label="Trang 1"></button>
+        <button type="button" data-bs-target="#prosperPathCarousel" data-bs-slide-to="1" aria-label="Trang 2"></button>
+        <button type="button" data-bs-target="#prosperPathCarousel" data-bs-slide-to="2" aria-label="Trang 3"></button>
     </div>
 
-    <!-- Slides -->
+    <!-- Các slide -->
     <div class="carousel-inner">
         <!-- Slide 1 -->
         <div class="carousel-item active">
-            <div class="carousel-bg"
-                style="background-image: url('../../content/images/cloud.jpg');"></div>
+            <div class="carousel-bg" style="background-image: url('../../content/images/cloud.jpg');"></div>
             <div class="carousel-overlay"></div>
             <div class="carousel-caption">
-                <h1 class="animate__animated animate__fadeInDown">Welcome to Prosper Path</h1>
-                <p class="animate__animated animate__fadeInUp">Your journey to financial success starts here. Explore
-                    our tools to manage your wealth.</p>
-                <a routerLink="/account/register" class="btn btn-primary animate__animated animate__fadeInUp">Get Started</a>
+                <h1 class="animate__animated animate__fadeInDown" jhiTranslate="carousel.slides.slide1.title">
+                    Chào mừng đến với Prosper Path
+                </h1>
+                <p class="animate__animated animate__fadeInUp" jhiTranslate="carousel.slides.slide1.description">
+                    Hành trình đến thành công tài chính bắt đầu từ đây. Khám phá công cụ quản lý tài sản của bạn.
+                </p>
+                <a routerLink="/account/register" class="btn btn-primary animate__animated animate__fadeInUp"
+                   jhiTranslate="carousel.slides.slide1.button">
+                    Bắt đầu ngay
+                </a>
             </div>
         </div>
 
         <!-- Slide 2 -->
         <div class="carousel-item">
-            <div class="carousel-bg"
-                style="background-image: url('../../content/images/cloud2.jpg');">
-            </div>
+            <div class="carousel-bg" style="background-image: url('../../content/images/cloud2.jpg');"></div>
             <div class="carousel-overlay"></div>
             <div class="carousel-caption">
-                <h1 class="animate__animated animate__fadeInDown">Track Your Finances</h1>
-                <p class="animate__animated animate__fadeInUp">Stay on top of your budget with our intuitive tracking
-                    features.</p>
-                <a routerLink="/login" class="btn btn-primary animate__animated animate__fadeInUp">Sign In</a>
+                <h1 class="animate__animated animate__fadeInDown" jhiTranslate="carousel.slides.slide2.title">
+                    Theo dõi tài chính của bạn
+                </h1>
+                <p class="animate__animated animate__fadeInUp" jhiTranslate="carousel.slides.slide2.description">
+                    Luôn kiểm soát ngân sách với các tính năng theo dõi thông minh của chúng tôi.
+                </p>
+                <a routerLink="/login" class="btn btn-primary animate__animated animate__fadeInUp"
+                   jhiTranslate="carousel.slides.slide2.button">
+                    Đăng nhập
+                </a>
             </div>
         </div>
 
         <!-- Slide 3 -->
         <div class="carousel-item">
-            <div class="carousel-bg"
-                style="background-image: url('../../content/images/cloud3.jpg');">
-            </div>
+            <div class="carousel-bg" style="background-image: url('../../content/images/cloud3.jpg');"></div>
             <div class="carousel-overlay"></div>
             <div class="carousel-caption">
-                <h1 class="animate__animated animate__fadeInDown">Plan for the Future</h1>
-                <p class="animate__animated animate__fadeInUp">Set goals and achieve them with Prosper Path's planning
-                    tools.</p>
-                <a routerLink="/account/register" class="btn btn-primary animate__animated animate__fadeInUp">Join
-                    Now</a>
+                <h1 class="animate__animated animate__fadeInDown" jhiTranslate="carousel.slides.slide3.title">
+                    Lên kế hoạch cho tương lai
+                </h1>
+                <p class="animate__animated animate__fadeInUp" jhiTranslate="carousel.slides.slide3.description">
+                    Đặt mục tiêu và đạt được chúng với công cụ lập kế hoạch của Prosper Path.
+                </p>
+                <a routerLink="/account/register" class="btn btn-primary animate__animated animate__fadeInUp"
+                   jhiTranslate="carousel.slides.slide3.button">
+                    Tham gia ngay
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Controls -->
+    <!-- Nút điều hướng -->
     <button class="carousel-control-prev" type="button" data-bs-target="#prosperPathCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
+        <span class="visually-hidden" jhiTranslate="carousel.controls.previous">Trước</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#prosperPathCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
+        <span class="visually-hidden" jhiTranslate="carousel.controls.next">Tiếp</span>
     </button>
 </div>

@@ -1,0 +1,29 @@
+{
+  "gold": {
+    "title": "CÔNG CỤ TÍNH TOÁN LỢI NHUẬN TỪ VÀNG",
+    "note": "Vui lòng nhập đầy đủ các thông tin để tính toán chính xác!",
+    "labels": {
+      "quantity": "Số lượng ({{unit}})",
+      "goldType": "Loại vàng:",
+      "purchasePrice": "Giá mua (đ/chỉ):",
+      "selectGoldType": "Chọn loại vàng",
+      "purchasePricePlaceholder": "Giá 1 chỉ lúc mua"
+    },
+    "buttons": {
+      "viewResult": "XEM KẾT QUẢ"
+    },
+    "result": {
+      "estimatedProfit": "Lợi nhuận ước tính:"
+    },
+    "cookieNote": "!!!Kết quả chỉ mang tính chất minh họa do giá vàng liên tục thay đổi.",
+    "priceTable": {
+      "title": "GIÁ VÀNG MỚI NHẤT",
+      "columns": {
+        "goldType": "LOẠI VÀNG",
+        "buy": "MUA VÀO",
+        "sell": "BÁN RA"
+      },
+      "updated": "Cập nhật:"
+    }
+  }
+}

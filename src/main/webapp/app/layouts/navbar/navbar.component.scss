@@ -9,14 +9,15 @@ $gray: #6c757d; // Xám
 $light-gray: #e8ecef; // Xám nhạt
 $white: #ffffff; // Trắng
 $red: #ff4d4f; // Đỏ (cho badge thông báo)
+$primary: #1a73e8; // Xanh đậm cho điểm nhấn
 
 // Định nghĩa font
 $font-family-base: 'Roboto', sans-serif;
 
 // Navbar
 .navbar {
-  background-color: $light-gray;
-  padding: 10px 20px;
+  background: linear-gradient(145deg, #1e3a8a, #3b82f6, #1e3a8a); // Gradient xanh đậm sang trọng
+  padding: 15px 20px; // Tăng padding cho thoáng
   border-bottom: 1px solid #d1d5db;
   border-radius: 15px 15px 0 0;
 
@@ -26,31 +27,34 @@ $font-family-base: 'Roboto', sans-serif;
 
     // Logo
     .navbar-brand {
-      font-size: 20px;
+      font-size: 28px; // Tăng kích thước logo
       font-weight: 700;
-      color: $dark;
+      color: $white; // Đổi màu logo thành trắng để nổi bật trên nền xanh
       text-transform: uppercase;
-
-      .navbar-version {
-        font-size: 0.65em;
-        color: $gray;
-        margin-left: 5px;
-      }
     }
 
     // Navbar toggler
     .navbar-toggler {
       border: none;
-      color: $gray;
+      color: $white; // Đổi màu icon toggler
 
       fa-icon {
-        font-size: 20px;
+        font-size: 24px; // Tăng kích thước icon toggler
       }
     }
 
     // Menu và icons
     .navbar-collapse {
+      background: linear-gradient(145deg, #0e49a7, #3582ff, #04398f); // Đồng bộ màu nền với navbar trên mobile
+      border-radius: 15px; // Bo góc cho collapse trên mobile
+
       .navbar-nav {
+        // Căn giữa các mục menu chính
+        &:not(.ms-auto) {
+          flex-grow: 1;
+          justify-content: center; // Căn giữa
+        }
+
         &.ms-auto {
           display: flex;
           align-items: center;
@@ -64,24 +68,27 @@ $font-family-base: 'Roboto', sans-serif;
                 background-color: $red;
                 color: $white;
                 font-size: 10px;
-                padding: 2px 5px;
+                padding: 3px 6px;
                 border-radius: 50%;
               }
             }
 
             .nav-link {
-              color: $gray;
-              font-size: 14px;
-              font-weight: 400;
-              padding: 5px 15px;
-              transition: color 0.3s ease;
+              color: $white; // Màu trắng cho dễ đọc
+              font-size: 16px; // Tăng kích thước chữ
+              font-weight: 500; // Đậm hơn một chút
+              padding: 8px 20px; // Tăng padding
+              transition: color 0.3s ease, background-color 0.3s ease;
 
               &:hover {
-                color: $dark;
+                color: $white;
+                background-color: rgba(255, 255, 255, 0.1); // Hiệu ứng hover nhẹ
+                border-radius: 5px;
               }
 
               fa-icon {
-                font-size: 16px;
+                font-size: 18px; // Tăng kích thước icon
+                margin-right: 8px; // Khoảng cách giữa icon và text
               }
 
               &.dropdown-toggle {
@@ -89,14 +96,14 @@ $font-family-base: 'Roboto', sans-serif;
                 align-items: center;
 
                 .profile-image {
-                  height: 30px;
-                  width: 30px;
-                  margin-right: 5px;
+                  height: 35px; // Tăng kích thước ảnh profile
+                  width: 35px;
+                  margin-right: 8px;
                 }
 
                 &::after {
                   margin-left: 5px;
-                  border-top-color: $gray;
+                  border-top-color: $white; // Đồng bộ màu mũi tên dropdown
                 }
               }
             }
@@ -106,6 +113,7 @@ $font-family-base: 'Roboto', sans-serif;
               box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
               border: none;
               margin-top: 5px;
+              background-color: $white;
 
               .dropdown-item {
                 font-size: 14px;
@@ -127,14 +135,21 @@ $font-family-base: 'Roboto', sans-serif;
 
         .nav-item {
           .nav-link {
-            color: $gray;
-            font-size: 14px;
-            font-weight: 400;
-            padding: 5px 15px;
-            transition: color 0.3s ease;
+            color: $white; // Màu trắng cho menu chính
+            font-size: 16px; // Tăng kích thước chữ
+            font-weight: 500;
+            padding: 8px 20px;
+            transition: color 0.3s ease, background-color 0.3s ease;
 
             &:hover {
-              color: $dark;
+              color: $white;
+              background-color: rgba(255, 255, 255, 0.1); // Hiệu ứng hover nhẹ
+              border-radius: 5px;
+            }
+
+            fa-icon {
+              font-size: 18px; // Tăng kích thước icon
+              margin-right: 8px;
             }
           }
         }
@@ -148,14 +163,18 @@ $font-family-base: 'Roboto', sans-serif;
   .navbar {
     .container-fluid {
       .navbar-collapse {
-        background-color: $white;
-        border-radius: 10px;
+        background: linear-gradient(145deg, #005df1, #3b82f6, #043b92); // Đồng bộ màu nền
+        border-radius: 15px;
         margin-top: 10px;
-        padding: 10px;
+        padding: 15px;
 
         .navbar-nav {
+          &:not(.ms-auto) {
+            justify-content: flex-start; // Trên mobile, căn trái cho menu chính
+          }
+
           &.ms-auto {
-            margin-top: 10px;
+            margin-top: 15px;
             flex-direction: row;
             justify-content: space-between;
           }

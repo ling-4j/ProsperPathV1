@@ -23,7 +23,7 @@ $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 
 .parent {
-    max-height: 81vh;
+    max-height: 85vh;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
@@ -47,6 +47,7 @@ $breakpoint-xl: 1200px;
     font-family: $font-family-base;
     background-color: $white;
     overflow-y: auto; // Thêm cuộn nếu nội dung quá dài
+    background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
 
     .title {
         color: $teal;
@@ -71,6 +72,7 @@ $breakpoint-xl: 1200px;
     font-family: $font-family-base;
     background-color: $white;
     overflow-y: auto; // Thêm cuộn nếu nội dung quá dài
+    background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
 
     @media (max-width: $breakpoint-md) {
         grid-column: 1 / -1;
@@ -90,6 +92,7 @@ $breakpoint-xl: 1200px;
     font-family: $font-family-base;
     background-color: $white;
     overflow-y: auto;
+    background: linear-gradient(145deg, #f6f1f8, #fffbff, #f7efef);
 
     @media (max-width: $breakpoint-md) {
         grid-column: 1 / -1;

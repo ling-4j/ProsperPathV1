@@ -12,7 +12,8 @@
         "category": "Category",
         "notification": "Notification",
         "transaction": "Transaction",
-        "summary": "Summary"
+        "summary": "Summary",
+        "gold-cal": "Gold Calculate"
       },
       "account": {
         "main": "Account",
