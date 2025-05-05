@@ -3,6 +3,7 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.enumeration.TransactionType;
 import com.mycompany.myapp.repository.TransactionRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.criteria.TransactionCriteria;
 import jakarta.persistence.criteria.JoinType;
 import org.apache.poi.ss.usermodel.*;
@@ -16,11 +17,18 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.InstantFilter;
+import tech.jhipster.service.filter.LongFilter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -129,37 +137,65 @@ public class TransactionQueryService extends QueryService<Transaction> {
         }
         return specification;
     }
-
-    /**
-     * Filter transactions based on the search parameters and return the matching
-     * entities.
-     * 
+/**
+     * Find transactions by filters for a specific user.
+     *
+     * @param userId   The ID of the user whose transactions are being queried (required).
      * @param category The category ID to filter by.
      * @param fromDate The start date to filter by.
      * @param toDate   The end date to filter by.
      * @param type     The transaction type to filter by.
      * @return the list of matching transactions.
      */
-    public List<Transaction> findByFilters(Long category, LocalDate fromDate, LocalDate toDate, String type) {
-        Specification<Transaction> specification = Specification.where(null);
+    public List<Transaction> findByFilters(Long userId, Long category, LocalDate fromDate, LocalDate toDate, String type) {
+        LOG.debug("Finding transactions for userId: {}, category: {}, fromDate: {}, toDate: {}, type: {}", 
+                  userId, category, fromDate, toDate, type);
 
+        // Validate userId
+        if (userId == null) {
+            throw new IllegalArgumentException("userId cannot be null");
+        }
+
+        // Create TransactionCriteria instance
+        TransactionCriteria criteria = new TransactionCriteria();
+
+        // Set mandatory userId filter
+        criteria.setUserId(new LongFilter());
+        criteria.getUserId().setEquals(userId);
+
+        // Set category filter if provided
         if (category != null) {
-            specification = specification.and(
-                    (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category").get("id"), category));
-        }
-        if (fromDate != null) {
-            specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder
-                    .greaterThanOrEqualTo(root.get("transactionDate"), fromDate));
-        }
-        if (toDate != null) {
-            specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder
-                    .lessThanOrEqualTo(root.get("transactionDate"), toDate));
-        }
-        if (type != null) {
-            specification = specification
-                    .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("transactionType"), type));
+            criteria.setCategoryId(new LongFilter());
+            criteria.getCategoryId().setEquals(category);
         }
 
+        // Set fromDate filter if provided
+        if (fromDate != null) {
+            Instant fromInstant = fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+            criteria.setTransactionDate(new InstantFilter());
+            criteria.getTransactionDate().setGreaterThanOrEqual(fromInstant);
+        }
+
+        // Set toDate filter if provided
+        if (toDate != null) {
+            Instant toInstant = toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant();
+            criteria.setTransactionDate(new InstantFilter());
+            criteria.getTransactionDate().setLessThanOrEqual(toInstant);
+        }
+
+        if (type != null) {
+            try {
+                TransactionType transactionType = TransactionType.valueOf(type.toUpperCase()); // Chuyển String thành TransactionType
+                criteria.setTransactionType(new TransactionCriteria.TransactionTypeFilter());
+                criteria.getTransactionType().setEquals(transactionType);
+            } catch (IllegalArgumentException e) {
+                LOG.warn("Invalid transaction type: {}. Ignoring type filter.", type);
+                // Bỏ qua bộ lọc type nếu không hợp lệ, hoặc ném ngoại lệ tùy ý
+            }
+        }
+
+        // Build specification and fetch data
+        Specification<Transaction> specification = createSpecification(criteria);
         return transactionRepository.findAll(specification);
     }
 
@@ -169,10 +205,16 @@ public class TransactionQueryService extends QueryService<Transaction> {
      * @param transactions The list of transactions to export.
      * @return the byte array representing the Excel file.
      */
-    public byte[] exportToExcel(List<Transaction> transactions) {
+    public byte[] exportToExcel(Long userId, List<Transaction> transactions, String sort) {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Transactions");
 
+            List<Transaction> sortedTransactions = transactions.stream()
+                    .sorted((t1, t2) -> {
+                        int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
+                        return "transactionDate,asc".equalsIgnoreCase(sort) ? -compare : compare;
+                    })
+                    .collect(Collectors.toList());
             // Set header text in Vietnamese
             String headerText = "Thống kê giao dịch";
             String[] headers = { "DANH MỤC", "LOẠI", "MÔ TẢ", "NGÀY", "SỐ TIỀN" };
@@ -204,7 +246,7 @@ public class TransactionQueryService extends QueryService<Transaction> {
             CellStyle amountStyle = createAmountCellStyle(workbook);
             CellStyle dateStyle = createDateCellStyle(workbook);
             int rowIdx = 2;
-            for (Transaction transaction : transactions) {
+            for (Transaction transaction : sortedTransactions) {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(
                         transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "");
@@ -236,10 +278,14 @@ public class TransactionQueryService extends QueryService<Transaction> {
     /**
      * Export transactions to a PDF file.
      * 
+     * @param userId       The ID of the user whose transactions are being exported.
      * @param transactions The list of transactions to export.
+     * @param sort         The sort parameter (e.g., "transactionDate,asc" or
+     *                     "transactionDate,desc").
      * @return the byte array representing the PDF file.
      */
-    public byte[] exportToPDF(List<Transaction> transactions) {
+    public byte[] exportToPDF(Long userId, List<Transaction> transactions, String sort) {
+
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Document document = new Document();
             PdfWriter.getInstance(document, outputStream);
@@ -252,6 +298,14 @@ public class TransactionQueryService extends QueryService<Transaction> {
             document.add(title);
 
             document.add(Chunk.NEWLINE);
+
+            // Sort transactions based on sort parameter
+            List<Transaction> sortedTransactions = transactions.stream()
+                    .sorted((t1, t2) -> {
+                        int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
+                        return "transactionDate,desc".equalsIgnoreCase(sort) ? -compare : compare;
+                    })
+                    .collect(Collectors.toList());
 
             // Create table
             PdfPTable table = new PdfPTable(5);
@@ -270,32 +324,37 @@ public class TransactionQueryService extends QueryService<Transaction> {
 
             // Add table data
             com.itextpdf.text.Font dataFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10);
-            for (Transaction transaction : transactions) {
+            for (Transaction transaction : sortedTransactions) {
                 // Cột DANH MỤC (mặc định là căn trái)
-                table.addCell(new Phrase(transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "", dataFont));
-                
+                table.addCell(new Phrase(
+                        transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "",
+                        dataFont));
+
                 // Cột LOẠI (căn giữa)
-                PdfPCell typeCell = new PdfPCell(new Phrase(translateTransactionTypeToVietnamese(transaction.getTransactionType()), dataFont));
+                PdfPCell typeCell = new PdfPCell(
+                        new Phrase(translateTransactionTypeToVietnamese(transaction.getTransactionType()), dataFont));
                 typeCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(typeCell);
-            
+
                 // Cột MÔ TẢ (mặc định là căn trái)
-                table.addCell(new Phrase(transaction.getDescription(), dataFont));
-            
+                table.addCell(
+                        new Phrase(transaction.getDescription() != null ? transaction.getDescription() : "", dataFont));
+
                 // Cột NGÀY (căn giữa)
                 String dateString = transaction.getTransactionDate()
-                                               .atZone(java.time.ZoneId.systemDefault())
-                                               .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                        .atZone(java.time.ZoneId.systemDefault())
+                        .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
                 PdfPCell dateCell = new PdfPCell(new Phrase(dateString, dataFont));
                 dateCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(dateCell);
-            
+
                 // Cột SỐ TIỀN (căn phải)
-                PdfPCell amountCell = new PdfPCell(new Phrase(String.format("%,.0f VND", transaction.getAmount()), dataFont));
+                PdfPCell amountCell = new PdfPCell(
+                        new Phrase(String.format("%,.0f VND",
+                                transaction.getAmount() != null ? transaction.getAmount() : 0), dataFont));
                 amountCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 table.addCell(amountCell);
             }
-            
 
             document.add(table);
             document.close();

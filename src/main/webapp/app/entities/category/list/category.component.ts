@@ -28,7 +28,7 @@ import { CategoryDeleteDialogComponent } from '../delete/category-delete-dialog.
     SortDirective,
     SortByDirective,
     // FilterComponent,
-    ItemCountComponent,
+    // ItemCountComponent,
   ],
 })
 export class CategoryComponent {

@@ -28,7 +28,7 @@ import { BudgetDeleteDialogComponent } from '../delete/budget-delete-dialog.comp
     SortByDirective,
     FormatMediumDatePipe,
     // FilterComponent,
-    ItemCountComponent,
+    // ItemCountComponent,
   ],
 })
 export class BudgetComponent {

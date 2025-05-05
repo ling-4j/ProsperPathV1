@@ -20,6 +20,9 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
 // Import ApexCharts
 import { NgApexchartsModule } from 'ng-apexcharts';
+
+import CarouselComponent from '../home/carousel.component';
+
 import {
   ApexChart,
   ApexAxisChartSeries,
@@ -60,7 +63,8 @@ export type ChartOptions = {
     CommonModule,
     FormsModule,
     FullCalendarModule,
-    NgApexchartsModule, // Thêm NgApexchartsModule
+    NgApexchartsModule, // Thêm 
+    CarouselComponent
   ],
   standalone: true,
 })

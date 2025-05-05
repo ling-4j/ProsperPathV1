@@ -61,7 +61,7 @@ public class TransactionResource {
             TransactionRepository transactionRepository,
             TransactionQueryService transactionQueryService,
             SummaryQueryService summaryQueryService,
-            UserService userService, 
+            UserService userService,
             NotificationQueryService notificationQueryService) {
         this.notificationQueryService = notificationQueryService;
         this.transactionService = transactionService;
@@ -93,14 +93,16 @@ public class TransactionResource {
         summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), null, savedTransaction);
 
         // Call NotificationService to check and create notifications
-        if(savedTransaction.getCategory() != null) {
+        if (savedTransaction.getCategory() != null) {
             notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), savedTransaction);
-            notificationQueryService.createWarningNotificationForTransaction(currentUser.get().getId(), savedTransaction);
+            notificationQueryService.createWarningNotificationForTransaction(currentUser.get().getId(),
+                    savedTransaction);
         }
 
         return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, savedTransaction.getId().toString()))
-            .body(savedTransaction);
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
+                        savedTransaction.getId().toString()))
+                .body(savedTransaction);
     }
 
     @PutMapping("/{id}")
@@ -142,7 +144,6 @@ public class TransactionResource {
         summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), oldTransaction, updatedTransaction);
 
         notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), updatedTransaction);
-
 
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
@@ -289,23 +290,32 @@ public class TransactionResource {
 
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportTransactions(
-        @RequestParam(required = false) Long category,
-        @RequestParam(required = false) String fromDate,
-        @RequestParam(required = false) String toDate,
-        @RequestParam(required = false) String type,
-        @RequestHeader(value = "Accept-Language", defaultValue = "en") String language
-    ) {
-        LOG.debug("REST request to export Transactions with filters: category={}, fromDate={}, toDate={}, type={}", category, fromDate, toDate, type);
+            @RequestParam(required = false) Long category,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String sort) {
 
-        // Convert date strings to LocalDate
+        LOG.debug(
+                "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
+                category, fromDate, toDate, type, sort);
+
+        // Lấy userId của người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        Long userId = currentUser.get().getId();
+
         LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
         LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;
 
-        // Fetch filtered transactions
-        List<Transaction> transactions = transactionQueryService.findByFilters(category, from, to, type);
+        List<Transaction> transactions = transactionQueryService.findByFilters(userId, category, from, to, type);
 
-        // Generate Excel file with language support
-        byte[] excelFile = transactionQueryService.exportToExcel(transactions);
+        byte[] excelFile;
+        try {
+            excelFile = transactionQueryService.exportToExcel(userId, transactions, sort);
+        } catch (Exception e) {
+            LOG.error("Failed to generate PDF: {}", e.getMessage(), e);
+            return ResponseEntity.status(500).build();
+        }
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=transactions.xlsx");
@@ -316,22 +326,32 @@ public class TransactionResource {
 
     @GetMapping("/export-pdf")
     public ResponseEntity<byte[]> exportTransactionsToPDF(
-        @RequestParam(required = false) Long category,
-        @RequestParam(required = false) String fromDate,
-        @RequestParam(required = false) String toDate,
-        @RequestParam(required = false) String type
-    ) {
-        LOG.debug("REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}", category, fromDate, toDate, type);
+            @RequestParam(required = false) Long category,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate,
+            @RequestParam(required = false) String type,
+            @RequestParam(defaultValue = "transactionDate,desc") String sort) {
 
-        // Convert date strings to LocalDate
+        LOG.debug(
+                "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
+                category, fromDate, toDate, type, sort);
+
+        // Lấy userId của người dùng hiện tại
+        Optional<User> currentUser = userService.getUserWithAuthorities();
+        Long userId = currentUser.get().getId();
+
         LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
         LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;
 
-        // Fetch filtered transactions
-        List<Transaction> transactions = transactionQueryService.findByFilters(category, from, to, type);
+        List<Transaction> transactions = transactionQueryService.findByFilters(userId, category, from, to, type);
 
-        // Generate PDF file
-        byte[] pdfFile = transactionQueryService.exportToPDF(transactions);
+        byte[] pdfFile;
+        try {
+            pdfFile = transactionQueryService.exportToPDF(userId, transactions, sort);
+        } catch (Exception e) {
+            LOG.error("Failed to generate PDF: {}", e.getMessage(), e);
+            return ResponseEntity.status(500).build();
+        }
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=transactions.pdf");
