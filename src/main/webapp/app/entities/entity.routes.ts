@@ -30,6 +30,11 @@ const routes: Routes = [
     path: 'summary',
     data: { pageTitle: 'prosperPathApp.summary.home.title' },
     loadChildren: () => import('./summary/summary.routes'),
+  }, 
+  {
+    path: 'gold-cal',
+    data: { pageTitle: 'Gold Calculator' },
+    loadChildren: () => import('./gold-cal/gold-cal.routes').then(m => m.goldCalRoutes),
   },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];

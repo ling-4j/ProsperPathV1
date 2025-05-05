@@ -21,7 +21,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 // Import ApexCharts
 import { NgApexchartsModule } from 'ng-apexcharts';
 
-import CarouselComponent from '../home/carousel.component';
+import CarouselComponent from './caroucel/carousel.component';
+import GoldProfitCalculatorComponent from '../entities/gold-cal/gold/gold-profit-calculator.component';
 
 import {
   ApexChart,
@@ -64,7 +65,8 @@ export type ChartOptions = {
     FormsModule,
     FullCalendarModule,
     NgApexchartsModule, // Thêm 
-    CarouselComponent
+    CarouselComponent,
+    GoldProfitCalculatorComponent
   ],
   standalone: true,
 })

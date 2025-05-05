@@ -12,7 +12,8 @@
         "category": "Danh mục",
         "notification": "Thông báo",
         "transaction": "Giao dịch",
-        "summary": "Thống kê"
+        "summary": "Thống kê",
+        "gold-cal": "Tính toán Vàng"
       },
       "account": {
         "main": "Tài khoản",

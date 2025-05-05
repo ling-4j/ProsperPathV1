@@ -49,50 +49,69 @@ $font-family-base: 'Roboto', sans-serif;
         flex: 1;
         min-width: 300px;
         padding: 20px;
-        background-color: #f5f7fa;
+        background-color: #FFF;
         border-radius: 15px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
-        .credit-card {
-          background: linear-gradient(135deg, $blue, #40c4ff);
-          color: $white;
-          border-radius: 15px;
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-          padding: 20px;
+        .credit {
+          background: #ffffff;
+          padding: 1.5rem;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
 
-          .credit-card-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 20px;
+          &:hover {
+            transform: translateY(-5px);
+          }
+          .title{
+            color: #28a745;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
           }
 
-          .credit-card-number {
-            display: flex;
-            justify-content: space-between;
-            font-size: 18px;
-            margin-bottom: 20px;
-          }
+          .credit-card {
+            background: linear-gradient(135deg, $blue, #40c4ff);
+            color: $white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
 
-          .credit-card-footer {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
+            .credit-card-header {
+              display: flex;
+              justify-content: space-between;
+              font-size: 14px;
+              margin-bottom: 20px;
+            }
 
-            small {
-              display: block;
-              opacity: 0.7;
+            .credit-card-number {
+              display: flex;
+              justify-content: space-between;
+              font-size: 18px;
+              margin-bottom: 20px;
+            }
+
+            .credit-card-footer {
+              display: flex;
+              justify-content: space-between;
+              font-size: 12px;
+
+              small {
+                display: block;
+                opacity: 0.7;
+              }
             }
           }
-        }
 
-        .card-btn {
-          margin-top: 40px;
-          text-align: end;
+          .card-btn {
+            margin-top: 40px;
+            text-align: end;
 
-          .btn {
-            border-radius: 15px;
-            background-color: $warning;
+            .btn {
+              border-radius: 15px;
+              background-color: $warning;
+            }
           }
         }
       }
@@ -102,7 +121,7 @@ $font-family-base: 'Roboto', sans-serif;
         flex: 1;
         min-width: 300px;
         padding: 20px;
-        background-color: #f5f7fa;
+        background-color: #FFF;
         border-radius: 15px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
@@ -194,13 +213,8 @@ $font-family-base: 'Roboto', sans-serif;
       }
 
       .dashboard-bot {
-        // flex: 100%;
         width: 100%;
         margin-top: 24px;
-
-        // .row {
-        //   margin: 0;
-        // }
 
         .chart-card {
           border-radius: 12px;
@@ -318,103 +332,18 @@ $font-family-base: 'Roboto', sans-serif;
         }
       }
 
-      // Cột phải: Lịch
+      // Cột phải: gold
       .dashboard-right {
         flex: 1;
         min-width: 300px;
-
-        .calendar-card {
+        background-color: #FFF;
+        .gold-card {
           border-radius: 15px;
-          background-color: $white;
+          // background-color: $white;
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
           .card-body {
-            padding: 15px;
-
-            h5 {
-              font-size: 14px;
-              font-weight: 500;
-              margin-bottom: 10px;
-              color: $dark;
-              text-transform: uppercase;
-              text-align: center;
-            }
-
-            /* Định dạng FullCalendar */
-            .fc {
-              font-family: $font-family-base;
-
-              .fc-toolbar {
-                margin-bottom: 10px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-
-                .fc-toolbar-title {
-                  display: none; // Hide the title since we're using h5
-                }
-
-                .fc-button {
-                  background-color: transparent;
-                  border: none;
-                  color: $dark;
-                  padding: 5px;
-                  font-size: 14px;
-
-                  &:hover {
-                    background-color: $light;
-                  }
-
-                  &.fc-prev-button,
-                  &.fc-next-button {
-                    font-size: 18px;
-                  }
-                }
-              }
-
-              .fc-daygrid-day {
-                .fc-daygrid-day-number {
-                  font-size: 12px;
-                  color: $dark;
-                  padding: 5px;
-                  border-radius: 50%;
-                  display: inline-block;
-                  width: 24px;
-                  height: 24px;
-                  line-height: 24px;
-                  text-align: center;
-                }
-
-                &.fc-day-today {
-                  .fc-daygrid-day-number {
-                    background-color: $primary;
-                    color: $white;
-                  }
-                }
-              }
-
-              .fc-daygrid-day-frame {
-                min-height: 40px !important; // Ensure consistent height for each day cell
-              }
-
-              .fc-col-header-cell {
-                padding: 5px;
-                font-size: 10px;
-                font-weight: 500;
-                color: $dark;
-                text-transform: uppercase;
-              }
-
-              .fc-event {
-                background-color: $primary;
-                border: none;
-                border-radius: 3px;
-                font-size: 10px;
-                padding: 2px 5px;
-                color: $white;
-                margin-top: 2px;
-              }
-            }
+            display: block;
           }
         }
       }
@@ -425,35 +354,35 @@ $font-family-base: 'Roboto', sans-serif;
       background-color: #f5f5f5;
       border-radius: 10px 10px 0 0;
     }
-    
+
     .logo h1 {
       margin: 0;
       font-size: 2.5rem;
     }
-    
+
     .preview-text h4 {
       margin: 5px 0;
       color: #333;
     }
-    
+
     .alerts-container {
       padding: 20px;
       max-width: 600px;
       margin: 0 auto;
     }
-    
+
     .alert {
       text-align: left;
       margin-bottom: 15px;
       border-radius: 8px;
     }
-    
+
     .alert-link {
       cursor: pointer;
       color: #007bff;
       text-decoration: underline;
     }
-    
+
     .alert-link:hover {
       color: #0056b3;
     }
@@ -551,23 +480,17 @@ $font-family-base: 'Roboto', sans-serif;
         }
       }
 
-      // Cột phải: Lịch
+      // Cột phải: gold
       .dashboard-right {
         padding: 15px;
 
-        .calendar-card {
+        .gold-card {
+          height: 300px;
+
           .card-body {
             padding: 15px;
+            display: block;
 
-            h5 {
-              font-size: 14px;
-              margin-bottom: 10px;
-            }
-
-            .calendar-placeholder {
-              height: 180px;
-              font-size: 12px;
-            }
           }
         }
       }
@@ -610,6 +533,7 @@ $font-family-base: 'Roboto', sans-serif;
       .dashboard-center,
       .dashboard-right {
         padding: 10px;
+        display: block;
       }
 
       .dashboard-center {
@@ -774,19 +698,10 @@ $font-family-base: 'Roboto', sans-serif;
       }
 
       .dashboard-right {
-        .calendar-card {
+        .gold-card {
           .card-body {
             padding: 8px;
-
-            h5 {
-              font-size: 10px;
-              margin-bottom: 5px;
-            }
-
-            .calendar-placeholder {
-              height: 150px;
-              font-size: 10px;
-            }
+            display: block;
           }
         }
       }
