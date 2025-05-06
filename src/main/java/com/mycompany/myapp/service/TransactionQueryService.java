@@ -1,11 +1,23 @@
 package com.mycompany.myapp.service;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.enumeration.TransactionType;
 import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.criteria.TransactionCriteria;
 import jakarta.persistence.criteria.JoinType;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,20 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
 import tech.jhipster.service.filter.InstantFilter;
 import tech.jhipster.service.filter.LongFilter;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * Service for executing complex queries for {@link Transaction} entities in the
@@ -57,7 +55,7 @@ public class TransactionQueryService extends QueryService<Transaction> {
     /**
      * Return a {@link Page} of {@link Transaction} which matches the criteria from
      * the database.
-     * 
+     *
      * @param criteria The object which holds all the filters, which the entities
      *                 should match.
      * @param page     The page, which should be returned.
@@ -72,7 +70,7 @@ public class TransactionQueryService extends QueryService<Transaction> {
 
     /**
      * Return the number of matching entities in the database.
-     * 
+     *
      * @param criteria The object which holds all the filters, which the entities
      *                 should match.
      * @return the number of matching entities.
@@ -86,7 +84,7 @@ public class TransactionQueryService extends QueryService<Transaction> {
 
     /**
      * Function to convert {@link TransactionCriteria} to a {@link Specification}
-     * 
+     *
      * @param criteria The object which holds all the filters, which the entities
      *                 should match.
      * @return the matching {@link Specification} of the entity.
@@ -105,39 +103,35 @@ public class TransactionQueryService extends QueryService<Transaction> {
                 specification = specification.and(buildRangeSpecification(criteria.getAmount(), Transaction_.amount));
             }
             if (criteria.getTransactionType() != null) {
-                specification = specification
-                        .and(buildSpecification(criteria.getTransactionType(), Transaction_.transactionType));
+                specification = specification.and(buildSpecification(criteria.getTransactionType(), Transaction_.transactionType));
             }
             if (criteria.getDescription() != null) {
-                specification = specification
-                        .and(buildStringSpecification(criteria.getDescription(), Transaction_.description));
+                specification = specification.and(buildStringSpecification(criteria.getDescription(), Transaction_.description));
             }
             if (criteria.getTransactionDate() != null) {
-                specification = specification
-                        .and(buildRangeSpecification(criteria.getTransactionDate(), Transaction_.transactionDate));
+                specification = specification.and(buildRangeSpecification(criteria.getTransactionDate(), Transaction_.transactionDate));
             }
             if (criteria.getCreatedAt() != null) {
-                specification = specification
-                        .and(buildRangeSpecification(criteria.getCreatedAt(), Transaction_.createdAt));
+                specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), Transaction_.createdAt));
             }
             if (criteria.getUpdatedAt() != null) {
-                specification = specification
-                        .and(buildRangeSpecification(criteria.getUpdatedAt(), Transaction_.updatedAt));
+                specification = specification.and(buildRangeSpecification(criteria.getUpdatedAt(), Transaction_.updatedAt));
             }
             if (criteria.getCategoryId() != null) {
                 specification = specification.and(
-                        buildSpecification(criteria.getCategoryId(),
-                                root -> root.join(Transaction_.category, JoinType.LEFT).get(Category_.id)));
+                    buildSpecification(criteria.getCategoryId(), root -> root.join(Transaction_.category, JoinType.LEFT).get(Category_.id))
+                );
             }
             if (criteria.getUserId() != null) {
                 specification = specification.and(
-                        buildSpecification(criteria.getUserId(),
-                                root -> root.join(Transaction_.user, JoinType.LEFT).get(User_.id)));
+                    buildSpecification(criteria.getUserId(), root -> root.join(Transaction_.user, JoinType.LEFT).get(User_.id))
+                );
             }
         }
         return specification;
     }
-/**
+
+    /**
      * Find transactions by filters for a specific user.
      *
      * @param userId   The ID of the user whose transactions are being queried (required).
@@ -148,8 +142,14 @@ public class TransactionQueryService extends QueryService<Transaction> {
      * @return the list of matching transactions.
      */
     public List<Transaction> findByFilters(Long userId, Long category, LocalDate fromDate, LocalDate toDate, String type) {
-        LOG.debug("Finding transactions for userId: {}, category: {}, fromDate: {}, toDate: {}, type: {}", 
-                  userId, category, fromDate, toDate, type);
+        LOG.debug(
+            "Finding transactions for userId: {}, category: {}, fromDate: {}, toDate: {}, type: {}",
+            userId,
+            category,
+            fromDate,
+            toDate,
+            type
+        );
 
         // Validate userId
         if (userId == null) {
@@ -201,7 +201,7 @@ public class TransactionQueryService extends QueryService<Transaction> {
 
     /**
      * Export transactions to an Excel file.
-     * 
+     *
      * @param transactions The list of transactions to export.
      * @return the byte array representing the Excel file.
      */
@@ -209,12 +209,13 @@ public class TransactionQueryService extends QueryService<Transaction> {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Transactions");
 
-            List<Transaction> sortedTransactions = transactions.stream()
-                    .sorted((t1, t2) -> {
-                        int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
-                        return "transactionDate,asc".equalsIgnoreCase(sort) ? -compare : compare;
-                    })
-                    .collect(Collectors.toList());
+            List<Transaction> sortedTransactions = transactions
+                .stream()
+                .sorted((t1, t2) -> {
+                    int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
+                    return "transactionDate,asc".equalsIgnoreCase(sort) ? -compare : compare;
+                })
+                .collect(Collectors.toList());
             // Set header text in Vietnamese
             String headerText = "Thống kê giao dịch";
             String[] headers = { "DANH MỤC", "LOẠI", "MÔ TẢ", "NGÀY", "SỐ TIỀN" };
@@ -248,13 +249,16 @@ public class TransactionQueryService extends QueryService<Transaction> {
             int rowIdx = 2;
             for (Transaction transaction : sortedTransactions) {
                 Row row = sheet.createRow(rowIdx++);
-                row.createCell(0).setCellValue(
-                        transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "");
+                row.createCell(0).setCellValue(transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "");
                 row.createCell(1).setCellValue(translateTransactionTypeToVietnamese(transaction.getTransactionType()));
                 row.createCell(2).setCellValue(transaction.getDescription());
                 Cell dateCell = row.createCell(3);
-                dateCell.setCellValue(transaction.getTransactionDate().atZone(java.time.ZoneId.systemDefault())
-                        .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+                dateCell.setCellValue(
+                    transaction
+                        .getTransactionDate()
+                        .atZone(java.time.ZoneId.systemDefault())
+                        .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+                );
                 dateCell.setCellStyle(dateStyle);
                 Cell amountCell = row.createCell(4);
                 amountCell.setCellValue(transaction.getAmount().doubleValue());
@@ -277,7 +281,7 @@ public class TransactionQueryService extends QueryService<Transaction> {
 
     /**
      * Export transactions to a PDF file.
-     * 
+     *
      * @param userId       The ID of the user whose transactions are being exported.
      * @param transactions The list of transactions to export.
      * @param sort         The sort parameter (e.g., "transactionDate,asc" or
@@ -285,7 +289,6 @@ public class TransactionQueryService extends QueryService<Transaction> {
      * @return the byte array representing the PDF file.
      */
     public byte[] exportToPDF(Long userId, List<Transaction> transactions, String sort) {
-
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Document document = new Document();
             PdfWriter.getInstance(document, outputStream);
@@ -300,12 +303,13 @@ public class TransactionQueryService extends QueryService<Transaction> {
             document.add(Chunk.NEWLINE);
 
             // Sort transactions based on sort parameter
-            List<Transaction> sortedTransactions = transactions.stream()
-                    .sorted((t1, t2) -> {
-                        int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
-                        return "transactionDate,desc".equalsIgnoreCase(sort) ? -compare : compare;
-                    })
-                    .collect(Collectors.toList());
+            List<Transaction> sortedTransactions = transactions
+                .stream()
+                .sorted((t1, t2) -> {
+                    int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
+                    return "transactionDate,desc".equalsIgnoreCase(sort) ? -compare : compare;
+                })
+                .collect(Collectors.toList());
 
             // Create table
             PdfPTable table = new PdfPTable(5);
@@ -326,32 +330,31 @@ public class TransactionQueryService extends QueryService<Transaction> {
             com.itextpdf.text.Font dataFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10);
             for (Transaction transaction : sortedTransactions) {
                 // Cột DANH MỤC (mặc định là căn trái)
-                table.addCell(new Phrase(
-                        transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "",
-                        dataFont));
+                table.addCell(new Phrase(transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "", dataFont));
 
                 // Cột LOẠI (căn giữa)
                 PdfPCell typeCell = new PdfPCell(
-                        new Phrase(translateTransactionTypeToVietnamese(transaction.getTransactionType()), dataFont));
+                    new Phrase(translateTransactionTypeToVietnamese(transaction.getTransactionType()), dataFont)
+                );
                 typeCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(typeCell);
 
                 // Cột MÔ TẢ (mặc định là căn trái)
-                table.addCell(
-                        new Phrase(transaction.getDescription() != null ? transaction.getDescription() : "", dataFont));
+                table.addCell(new Phrase(transaction.getDescription() != null ? transaction.getDescription() : "", dataFont));
 
                 // Cột NGÀY (căn giữa)
-                String dateString = transaction.getTransactionDate()
-                        .atZone(java.time.ZoneId.systemDefault())
-                        .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                String dateString = transaction
+                    .getTransactionDate()
+                    .atZone(java.time.ZoneId.systemDefault())
+                    .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
                 PdfPCell dateCell = new PdfPCell(new Phrase(dateString, dataFont));
                 dateCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(dateCell);
 
                 // Cột SỐ TIỀN (căn phải)
                 PdfPCell amountCell = new PdfPCell(
-                        new Phrase(String.format("%,.0f VND",
-                                transaction.getAmount() != null ? transaction.getAmount() : 0), dataFont));
+                    new Phrase(String.format("%,.0f VND", transaction.getAmount() != null ? transaction.getAmount() : 0), dataFont)
+                );
                 amountCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 table.addCell(amountCell);
             }

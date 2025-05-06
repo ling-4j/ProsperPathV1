@@ -13,7 +13,11 @@ $dark-text: #212529; // Màu chữ đậm để tương phản với nền trắ
 $danger: #dc3545;
 
 // Định nghĩa font
-$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 
 // Responsive breakpoints
 $breakpoint-sm: 576px;
@@ -23,261 +27,265 @@ $breakpoint-xl: 1200px;
 
 // Tùy chỉnh hàng tiêu đề
 .header-row {
-    .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 1rem; // Khoảng cách đều nhau giữa các phần tử
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem; // Khoảng cách đều nhau giữa các phần tử
 
-        @media (max-width: $breakpoint-sm) {
-            flex-direction: column; // Xếp dọc trên màn hình nhỏ
-            align-items: stretch; // Các phần tử chiếm toàn bộ chiều rộng
-        }
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column; // Xếp dọc trên màn hình nhỏ
+      align-items: stretch; // Các phần tử chiếm toàn bộ chiều rộng
+    }
+  }
+
+  .header-items {
+    flex: 0 0 auto;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 100%; // Chiếm toàn bộ chiều rộng trên màn hình nhỏ
+      text-align: center; // Căn giữa trên màn hình nhỏ
     }
 
-    .header-items {
-        flex: 0 0 auto;
+    &.create-btn-container {
+      margin-left: auto; // Đẩy nút Create về phía bên phải
 
-        @media (max-width: $breakpoint-sm) {
-            width: 100%; // Chiếm toàn bộ chiều rộng trên màn hình nhỏ
-            text-align: center; // Căn giữa trên màn hình nhỏ
-        }
-
-        &.create-btn-container {
-            margin-left: auto; // Đẩy nút Create về phía bên phải
-
-            @media (max-width: $breakpoint-sm) {
-                margin-left: 0; // Bỏ margin-left trên màn hình nhỏ
-            }
-        }
-
-        .title {
-            color: $teal;
-            font-weight: 600;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
+      @media (max-width: $breakpoint-sm) {
+        margin-left: 0; // Bỏ margin-left trên màn hình nhỏ
+      }
     }
+
+    .title {
+      color: $teal;
+      font-weight: 600;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+  }
 }
 
 // Tùy chỉnh các nút
 .btn {
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%x;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%x;
 
-    &.btn-primary {
-        background-color: $primary;
-        border-color: $primary;
+  &.btn-primary {
+    background-color: $primary;
+    border-color: $primary;
 
-        &:hover {
-            background-color: color.adjust($primary, $lightness: -10%);
-            border-color: color.adjust($primary, $lightness: -10%);
-            transform: scale(1.05); // Phóng to nhẹ khi hover
-            box-shadow: 0 2px 8px rgba($primary, 0.3); // Thêm bóng
-        }
+    &:hover {
+      background-color: color.adjust($primary, $lightness: -10%);
+      border-color: color.adjust($primary, $lightness: -10%);
+      transform: scale(1.05); // Phóng to nhẹ khi hover
+      box-shadow: 0 2px 8px rgba($primary, 0.3); // Thêm bóng
     }
+  }
 
-    &.btn-info {
-        background-color: $warning;
-        border-color: $warning;
-        color: $white;
+  &.btn-info {
+    background-color: $warning;
+    border-color: $warning;
+    color: $white;
 
-        &:hover {
-            background-color: color.adjust($warning, $lightness: -10%);
-            border-color: color.adjust($warning, $lightness: -10%);
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba($warning, 0.3);
-        }
+    &:hover {
+      background-color: color.adjust($warning, $lightness: -10%);
+      border-color: color.adjust($warning, $lightness: -10%);
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba($warning, 0.3);
     }
+  }
 
-    &.btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
+  &.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
 
-        &:hover {
-            background-color: color.adjust(#dc3545, $lightness: -10%);
-            border-color: color.adjust(#dc3545, $lightness: -10%);
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(#dc3545, 0.3);
-        }
+    &:hover {
+      background-color: color.adjust(#dc3545, $lightness: -10%);
+      border-color: color.adjust(#dc3545, $lightness: -10%);
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(#dc3545, 0.3);
     }
+  }
 
-    &.refresh-btn,
-    &.jh-create-entity
-    {
-        height: 40px;
-        padding: 0 1.25rem;
-        font-size: 0.95rem;
+  &.refresh-btn,
+  &.jh-create-entity {
+    height: 40px;
+    padding: 0 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  &.edit-btn {
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.25rem;
+    width: auto;
+
+    &:hover {
+      background-color: color.adjust($primary, $lightness: -15%);
+      transform: scale(1.1);
     }
+  }
 
-    &.edit-btn {
-        padding: 0.25rem 0.5rem;
-        margin-right: 0.25rem;
-        width: auto;
+  &.delete-btn {
+    padding: 0.25rem 0.5rem;
+    width: auto;
 
-        &:hover {
-            background-color: color.adjust($primary, $lightness: -15%);
-            transform: scale(1.1);
-        }
+    &:hover {
+      background-color: color.adjust($danger, $lightness: -15%);
+      transform: scale(1.1);
     }
-
-    &.delete-btn {
-        padding: 0.25rem 0.5rem;
-        width: auto;
-
-        &:hover {
-            background-color: color.adjust($danger, $lightness: -15%);
-            transform: scale(1.1);
-        }
-    }
+  }
 }
 
 // Tùy chỉnh bảng
 // Tùy chỉnh bảng
 .table {
-    font-size: 0.95rem;
-    font-family: "Roboto", sans-serif;
-    border-collapse: separate;
-    border-spacing: 0;
+  font-size: 0.95rem;
+  font-family: 'Roboto', sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
 
-    thead {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        text-transform: uppercase;
-        background-color: $white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    text-transform: uppercase;
+    background-color: $white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
 
-    th, td {
-        padding: 0.75rem;
-        vertical-align: middle;
-        text-align: left;
-    }
+  th,
+  td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    text-align: left;
+  }
 
-    th {
-        color: $dark-text;
-        font-weight: 600;
-        border-bottom: 2px solid $border-color;
-    }
+  th {
+    color: $dark-text;
+    font-weight: 600;
+    border-bottom: 2px solid $border-color;
+  }
 
+  td {
+    border-bottom: 1px solid $border-color;
+  }
+
+  .action-column {
+    width: 100px;
+    min-width: 100px;
+    position: relative;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    font-size: 0.85rem;
+
+    th,
     td {
-        border-bottom: 1px solid $border-color;
+      padding: 0.5rem;
     }
 
     .action-column {
-        width: 100px;
-        min-width: 100px;
-        position: relative;
+      width: 80px;
+      min-width: 80px;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 0.8rem;
+
+    th,
+    td {
+      padding: 0.4rem;
     }
 
-    @media (max-width: $breakpoint-md) {
-        font-size: 0.85rem;
+    .action-column {
+      width: 60px;
+      min-width: 60px;
+    }
+  }
 
-        th, td {
-            padding: 0.5rem;
-        }
+  .budget-row {
+    transition:
+      background-color 0.3s ease,
+      transform 0.3s ease;
 
-        .action-column {
-            width: 80px;
-            min-width: 80px;
-        }
+    .action-buttons {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
-    @media (max-width: $breakpoint-sm) {
-        font-size: 0.8rem;
+    &:hover {
+      background-color: $hover-bg;
+      transform: translateY(-2px);
 
-        th, td {
-            padding: 0.4rem;
-        }
-
-        .action-column {
-            width: 60px;
-            min-width: 60px;
-        }
+      .action-buttons {
+        display: flex;
+        opacity: 1;
+      }
     }
-
-    .budget-row {
-        transition: background-color 0.3s ease, transform 0.3s ease;
-
-        .action-buttons {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        &:hover {
-            background-color: $hover-bg;
-            transform: translateY(-2px);
-
-            .action-buttons {
-                display: flex;
-                opacity: 1;
-            }
-        }
-    }
+  }
 }
 
 // Tùy chỉnh phân trang
 .pagination-container {
-    .item-count {
+  .item-count {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+
+  .custom-pagination {
+    ::ng-deep .page-item {
+      .page-link {
+        border: none;
+        color: $primary;
+        background-color: transparent;
+        padding: 0.5rem 0.75rem;
         font-size: 0.9rem;
-        color: #6c757d;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: $light;
+          color: color.adjust($primary, $lightness: -10%);
+        }
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+
+      &.active .page-link {
+        background-color: $primary;
+        color: $white;
+        border-radius: 50%;
+      }
+
+      &.disabled .page-link {
+        color: #adb5bd;
+        cursor: not-allowed;
+      }
     }
 
-    .custom-pagination {
-        ::ng-deep .page-item {
-            .page-link {
-                border: none;
-                color: $primary;
-                background-color: transparent;
-                padding: 0.5rem 0.75rem;
-                font-size: 0.9rem;
-                transition: all 0.2s ease;
-
-                &:hover {
-                    background-color: $light;
-                    color: color.adjust($primary, $lightness: -10%);
-                }
-
-                &:focus {
-                    box-shadow: none;
-                }
-            }
-
-            &.active .page-link {
-                background-color: $primary;
-                color: $white;
-                border-radius: 50%;
-            }
-
-            &.disabled .page-link {
-                color: #adb5bd;
-                cursor: not-allowed;
-            }
-        }
-
-        ::ng-deep .pagination {
-            gap: 5px;
-        }
-
-        @media (max-width: $breakpoint-sm) {
-            ::ng-deep .page-item {
-                .page-link {
-                    padding: 0.4rem 0.6rem;
-                    font-size: 0.8rem;
-                }
-            }
-        }
+    ::ng-deep .pagination {
+      gap: 5px;
     }
+
+    @media (max-width: $breakpoint-sm) {
+      ::ng-deep .page-item {
+        .page-link {
+          padding: 0.4rem 0.6rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
 }

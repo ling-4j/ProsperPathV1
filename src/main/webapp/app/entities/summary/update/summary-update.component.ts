@@ -31,7 +31,6 @@ export class SummaryUpdateComponent implements OnInit {
   protected userService = inject(UserService);
   protected activatedRoute = inject(ActivatedRoute);
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: SummaryFormGroup = this.summaryFormService.createSummaryFormGroup();
 
   compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);

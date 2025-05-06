@@ -3,13 +3,15 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.domain.Transaction;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.TransactionRepository;
-import com.mycompany.myapp.service.SummaryQueryService;
 import com.mycompany.myapp.service.NotificationQueryService;
+import com.mycompany.myapp.service.SummaryQueryService;
 import com.mycompany.myapp.service.TransactionQueryService;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.TransactionCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -28,10 +30,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
-import tech.jhipster.service.filter.LongFilter;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Transaction}.
@@ -78,25 +80,19 @@ public class TransactionResource {
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-        // Gán người dùng hiện tại cho giao dịch
-        Optional<User> currentUser = userService.getUserWithAuthorities();
-        if (!currentUser.isPresent()) {
-            LOG.warn("Current user not found");
-            return ResponseEntity.status(401).build(); // Unauthorized
-        }
-
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         // Lưu giao dịch
         Transaction savedTransaction = transactionService.save(transaction);
 
         // Cập nhật Summary
-        summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), null, savedTransaction);
+        summaryQueryService.updateSummaryForTransaction(currentUser.getId(), null, savedTransaction);
 
         // Call NotificationService to check and create notifications
         if (savedTransaction.getCategory() != null) {
-            notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), savedTransaction);
-            notificationQueryService.createWarningNotificationForTransaction(currentUser.get().getId(),
-                    savedTransaction);
+            notificationQueryService.createNotificationForTransaction(currentUser.getId(), savedTransaction);
+            notificationQueryService.createWarningNotificationForTransaction(currentUser.getId(), savedTransaction);
         }
 
         return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))
@@ -121,16 +117,14 @@ public class TransactionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        // Kiểm tra quyền truy cập
-        Optional<User> currentUser = userService.getUserWithAuthorities();
-        if (!currentUser.isPresent()) {
-            LOG.warn("Current user not found");
-            return ResponseEntity.status(401).build(); // Unauthorized
-        }
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+
         Transaction existingTransaction = transactionRepository.findById(id).orElseThrow();
-        if (!existingTransaction.getUser().getId().equals(currentUser.get().getId())) {
+        if (!existingTransaction.getUser().getId().equals(currentUser.getId())) {
             LOG.warn("User {} attempted to update transaction {} that does not belong to them",
-                    currentUser.get().getId(), id);
+                    currentUser.getId(), id);
             return ResponseEntity.status(403).build(); // Forbidden
         }
 
@@ -141,12 +135,12 @@ public class TransactionResource {
         Transaction updatedTransaction = transactionService.update(transaction);
 
         // Cập nhật Summary: trừ giá trị cũ và cộng giá trị mới trong một lần gọi
-        summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), oldTransaction, updatedTransaction);
+        summaryQueryService.updateSummaryForTransaction(currentUser.getId(), oldTransaction, updatedTransaction);
 
         if (updatedTransaction.getCategory() != null) {
-            notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), updatedTransaction);
-            notificationQueryService.createWarningNotificationForTransaction(currentUser.get().getId(),
-            updatedTransaction);
+            notificationQueryService.createNotificationForTransaction(currentUser.getId(), updatedTransaction);
+            notificationQueryService.createWarningNotificationForTransaction(currentUser.getId(),
+                    updatedTransaction);
         }
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
@@ -207,16 +201,12 @@ public class TransactionResource {
             @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get Transactions by criteria: {}", criteria);
 
-        // Lấy người dùng hiện tại
-        Optional<User> currentUser = userService.getUserWithAuthorities();
-        if (!currentUser.isPresent()) {
-            LOG.warn("Current user not found");
-            return ResponseEntity.status(401).build(); // Unauthorized
-        }
-
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         // Gán userId của người dùng hiện tại vào criteria
         LongFilter userIdFilter = new LongFilter();
-        userIdFilter.setEquals(currentUser.get().getId());
+        userIdFilter.setEquals(currentUser.getId());
         criteria.setUserId(userIdFilter);
 
         // Tìm kiếm giao dịch dựa trên criteria và phân trang
@@ -263,25 +253,16 @@ public class TransactionResource {
     public ResponseEntity<Void> deleteTransaction(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Transaction : {}", id);
 
-        // Lấy người dùng hiện tại
-        Optional<User> currentUser = userService.getUserWithAuthorities();
-        if (!currentUser.isPresent()) {
-            LOG.warn("Current user not found");
-            return ResponseEntity.status(401).build(); // Unauthorized
-        }
-
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         // Kiểm tra quyền truy cập
         Transaction transaction = transactionRepository
                 .findById(id)
                 .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-        if (!transaction.getUser().getId().equals(currentUser.get().getId())) {
-            LOG.warn("User {} attempted to delete transaction {} that does not belong to them",
-                    currentUser.get().getId(), id);
-            return ResponseEntity.status(403).build(); // Forbidden
-        }
 
         // Cập nhật Summary trước khi xóa (trường hợp xóa: newTransaction = null)
-        summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), transaction, null);
+        summaryQueryService.updateSummaryForTransaction(currentUser.getId(), transaction, null);
 
         // Xóa giao dịch
         transactionService.delete(id);
@@ -298,14 +279,18 @@ public class TransactionResource {
             @RequestParam(required = false) String toDate,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String sort) {
-
         LOG.debug(
                 "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
-                category, fromDate, toDate, type, sort);
+                category,
+                fromDate,
+                toDate,
+                type,
+                sort);
 
-        // Lấy userId của người dùng hiện tại
-        Optional<User> currentUser = userService.getUserWithAuthorities();
-        Long userId = currentUser.get().getId();
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        Long userId = currentUser.getId();
 
         LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
         LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;
@@ -334,14 +319,18 @@ public class TransactionResource {
             @RequestParam(required = false) String toDate,
             @RequestParam(required = false) String type,
             @RequestParam(defaultValue = "transactionDate,desc") String sort) {
-
         LOG.debug(
                 "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
-                category, fromDate, toDate, type, sort);
+                category,
+                fromDate,
+                toDate,
+                type,
+                sort);
 
-        // Lấy userId của người dùng hiện tại
-        Optional<User> currentUser = userService.getUserWithAuthorities();
-        Long userId = currentUser.get().getId();
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        Long userId = currentUser.getId();
 
         LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
         LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;

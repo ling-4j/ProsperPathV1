@@ -1,10 +1,9 @@
 {
-    "prosperPathApp": {
-      "Budget": {
-        "null": "",
-        "ACTIVE": "ACTIVE",
-        "ENDED": "ENDED"
-      }
+  "prosperPathApp": {
+    "Budget": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "ENDED": "ENDED"
     }
   }
-  
+}

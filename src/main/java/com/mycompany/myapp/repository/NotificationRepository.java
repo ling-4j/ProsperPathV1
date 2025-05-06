@@ -1,8 +1,7 @@
 package com.mycompany.myapp.repository;
 
-import com.mycompany.myapp.domain.Notification;
 import com.mycompany.myapp.domain.Budget;
-
+import com.mycompany.myapp.domain.Notification;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +15,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data JPA repository for the Notification entity.
  */
 @Repository
-public interface NotificationRepository
-        extends JpaRepository<Notification, Long>, JpaSpecificationExecutor<Notification> {
+public interface NotificationRepository extends JpaRepository<Notification, Long>, JpaSpecificationExecutor<Notification> {
     @Query("select notification from Notification notification where notification.user.login = ?#{authentication.name}")
     List<Notification> findByUserIsCurrentUser();
 
@@ -33,7 +31,10 @@ public interface NotificationRepository
         return this.findAllWithToOneRelationships(pageable);
     }
 
-    @Query(value = "select notification from Notification notification left join fetch notification.user", countQuery = "select count(notification) from Notification notification")
+    @Query(
+        value = "select notification from Notification notification left join fetch notification.user",
+        countQuery = "select count(notification) from Notification notification"
+    )
     Page<Notification> findAllWithToOneRelationships(Pageable pageable);
 
     @Query("select notification from Notification notification left join fetch notification.user")
@@ -42,17 +43,19 @@ public interface NotificationRepository
     @Query("select notification from Notification notification left join fetch notification.user where notification.id =:id")
     Optional<Notification> findOneWithToOneRelationships(@Param("id") Long id);
 
-    @Query("""
-                SELECT b
-                FROM Budget b
-                WHERE b.category.id = :categoryId
-                  AND b.user.id = :userId
-                  AND b.status = 'ACTIVE'
-                  AND :transactionDate BETWEEN b.startDate AND b.endDate
-            """)
+    @Query(
+        """
+            SELECT b
+            FROM Budget b
+            WHERE b.category.id = :categoryId
+              AND b.user.id = :userId
+              AND b.status = 'ACTIVE'
+              AND :transactionDate BETWEEN b.startDate AND b.endDate
+        """
+    )
     List<Budget> findMatchingBudgetsWithTransactionDate(
-            @Param("categoryId") Long categoryId,
-            @Param("userId") Long userId,
-            @Param("transactionDate") Instant transactionDate);
-
+        @Param("categoryId") Long categoryId,
+        @Param("userId") Long userId,
+        @Param("transactionDate") Instant transactionDate
+    );
 }

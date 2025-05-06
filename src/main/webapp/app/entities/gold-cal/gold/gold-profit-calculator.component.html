@@ -1,84 +1,80 @@
 <!-- Phần 1: Công cụ tính toán -->
 <section class="calculator-box">
-    <div class="header">
-        <h2 jhiTranslate="gold.title">CÔNG CỤ TÍNH TOÁN LỢI NHUẬN TỪ VÀNG</h2>
+  <div class="header">
+    <h2 jhiTranslate="gold.title">CÔNG CỤ TÍNH TOÁN LỢI NHUẬN TỪ VÀNG</h2>
+  </div>
+
+  <!-- Ghi chú chỉ hiển thị khi isNoteVisible là true -->
+  <p class="note text-center" *ngIf="isNoteVisible" jhiTranslate="gold.note">Vui lòng nhập đầy đủ các thông tin để tính toán chính xác!</p>
+
+  <div class="form-group">
+    <div class="row d-flex align-items-center">
+      <!-- Nhóm nhập số lượng vàng -->
+      <div class="quantity-box col-md-4 col-sm-12">
+        <label> Số lượng ({{ unit }}) </label>
+        <input type="number" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()" min="1" class="quantity-field" />
+      </div>
+
+      <!-- Loại vàng -->
+      <div class="input-box col-md-4 col-sm-12">
+        <label jhiTranslate="gold.labels.goldType">Loại vàng:</label>
+        <select class="select-gold" [(ngModel)]="selectedType">
+          <option value="" disabled selected jhiTranslate="gold.labels.selectGoldType">Chọn loại vàng</option>
+          <option *ngFor="let g of goldTypes" [value]="g.tensp">{{ g.tensp }}</option>
+        </select>
+      </div>
+
+      <!-- Giá mua -->
+      <div class="input-box col-md-4 col-sm-12">
+        <label jhiTranslate="gold.labels.purchasePrice">Giá mua (đ/chỉ):</label>
+        <input
+          class="input-gold"
+          type="number"
+          [(ngModel)]="purchasePrice"
+          [placeholder]="'gold.labels.purchasePricePlaceholder' | translate"
+          min="0"
+        />
+      </div>
     </div>
+  </div>
 
-    <!-- Ghi chú chỉ hiển thị khi isNoteVisible là true -->
-    <p class="note text-center" *ngIf="isNoteVisible" jhiTranslate="gold.note">
-        Vui lòng nhập đầy đủ các thông tin để tính toán chính xác!
-    </p>
+  <button class="result-btn" (click)="calculate()">
+    <span class="icon">📊</span>
+    <span jhiTranslate="gold.buttons.viewResult">XEM KẾT QUẢ</span>
+  </button>
 
-    <div class="form-group">
-        <div class="row d-flex align-items-center">
-            <!-- Nhóm nhập số lượng vàng -->
-            <div class="quantity-box col-md-4 col-sm-12">
-                <label>
-                    Số lượng ({{ unit }})
-                </label>
-                <input type="number" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()" min="1"
-                    class="quantity-field" />
-            </div>
+  <div *ngIf="result !== null" class="result-box">
+    ✅ <span jhiTranslate="gold.result.estimatedProfit">Lợi nhuận ước tính:</span>
+    <strong>{{ result | number: '1.0-0' }} đ</strong>
+  </div>
 
-            <!-- Loại vàng -->
-            <div class="input-box col-md-4 col-sm-12">
-                <label jhiTranslate="gold.labels.goldType">Loại vàng:</label>
-                <select class="select-gold" [(ngModel)]="selectedType">
-                    <option value="" disabled selected jhiTranslate="gold.labels.selectGoldType">
-                        Chọn loại vàng
-                    </option>
-                    <option *ngFor="let g of goldTypes" [value]="g.tensp">{{ g.tensp }}</option>
-                </select>
-            </div>
-
-            <!-- Giá mua -->
-            <div class="input-box col-md-4 col-sm-12">
-                <label jhiTranslate="gold.labels.purchasePrice">Giá mua (đ/chỉ):</label>
-                <input class="input-gold" type="number" [(ngModel)]="purchasePrice"
-                    [placeholder]="'gold.labels.purchasePricePlaceholder' | translate" min="0" />
-            </div>
-        </div>
-    </div>
-
-    <button class="result-btn" (click)="calculate()">
-        <span class="icon">📊</span>
-        <span jhiTranslate="gold.buttons.viewResult">XEM KẾT QUẢ</span>
-    </button>
-
-    <div *ngIf="result !== null" class="result-box">
-        ✅ <span jhiTranslate="gold.result.estimatedProfit">Lợi nhuận ước tính:</span>
-        <strong>{{ result | number:'1.0-0' }} đ</strong>
-    </div>
-
-    <span class="cookie-note text-center">
-        <i class="fas fa-triangle-exclamation"></i>
-        <span jhiTranslate="gold.cookieNote">
-            !!!Kết quả chỉ mang tính chất minh họa do giá vàng liên tục thay đổi.
-        </span>
-    </span>
+  <span class="cookie-note text-center">
+    <i class="fas fa-triangle-exclamation"></i>
+    <span jhiTranslate="gold.cookieNote"> !!!Kết quả chỉ mang tính chất minh họa do giá vàng liên tục thay đổi. </span>
+  </span>
 </section>
 
 <!-- Phần 2: Giá vàng mới nhất (chỉ hiển thị khi isGoldCalRoute là true) -->
 <section class="price-table" *ngIf="isGoldCalRoute">
-    <h3 jhiTranslate="gold.priceTable.title">GIÁ VÀNG MỚI NHẤT</h3>
-    <table>
-        <thead>
-            <tr>
-                <th jhiTranslate="gold.priceTable.columns.goldType">LOẠI VÀNG</th>
-                <th jhiTranslate="gold.priceTable.columns.buy">MUA VÀO</th>
-                <th jhiTranslate="gold.priceTable.columns.sell">BÁN RA</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let g of goldTypes">
-                <td class="gold-price">{{ g.tensp }}</td>
-                <td class="buy">{{ (g.giamua * 1000) | number:'1.0-0' }} đ</td>
-                <td class="sell">{{ (g.giaban * 1000) | number:'1.0-0' }} đ</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="updated">
-        🕒 <span jhiTranslate="gold.priceTable.updated">Cập nhật:</span>
-        {{ currentDate | date:'HH:mm, dd/MM/yyyy' }}
-    </div>
+  <h3 jhiTranslate="gold.priceTable.title">GIÁ VÀNG MỚI NHẤT</h3>
+  <table>
+    <thead>
+      <tr>
+        <th jhiTranslate="gold.priceTable.columns.goldType">LOẠI VÀNG</th>
+        <th jhiTranslate="gold.priceTable.columns.buy">MUA VÀO</th>
+        <th jhiTranslate="gold.priceTable.columns.sell">BÁN RA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let g of goldTypes">
+        <td class="gold-price">{{ g.tensp }}</td>
+        <td class="buy">{{ g.giamua * 1000 | number: '1.0-0' }} đ</td>
+        <td class="sell">{{ g.giaban * 1000 | number: '1.0-0' }} đ</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="updated">
+    🕒 <span jhiTranslate="gold.priceTable.updated">Cập nhật:</span>
+    {{ currentDate | date: 'HH:mm, dd/MM/yyyy' }}
+  </div>
 </section>

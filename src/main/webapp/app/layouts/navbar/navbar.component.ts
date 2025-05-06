@@ -93,12 +93,12 @@ export default class NavbarComponent implements OnInit, OnDestroy {
     const sort = this.sortState();
     const sortParam = `${sort.predicate},${sort.order}`;
     this.notificationService.query({ sort: sortParam }).subscribe({
-      next: (data) => {
+      next: data => {
         const allNotifications = data.body ?? [];
         this.notifications.set(allNotifications);
         this.unreadNotifications.set(allNotifications.filter(notification => !notification.isRead));
       },
-      error: (err) => {
+      error(err) {
         console.error('Lỗi khi lấy thông báo:', err);
       },
     });
@@ -116,7 +116,7 @@ export default class NavbarComponent implements OnInit, OnDestroy {
           // Cập nhật danh sách sau khi đánh dấu đã đọc
           this.loadNotifications();
         },
-        error: (err) => {
+        error(err) {
           console.error('Error marking notification as read:', err);
           notification.isRead = false; // Khôi phục trạng thái nếu lỗi
         },
@@ -146,6 +146,6 @@ export default class NavbarComponent implements OnInit, OnDestroy {
   }
 
   toggleNavbar(): void {
-    this.isNavbarCollapsed.update((isNavbarCollapsed) => !isNavbarCollapsed);
+    this.isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed);
   }
 }

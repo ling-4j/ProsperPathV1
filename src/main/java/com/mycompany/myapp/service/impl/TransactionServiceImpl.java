@@ -2,11 +2,9 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Transaction;
 import com.mycompany.myapp.domain.User;
-
 import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -65,30 +63,30 @@ public class TransactionServiceImpl implements TransactionService {
         LOG.debug("Request to partially update Transaction : {}", transaction);
 
         return transactionRepository
-                .findById(transaction.getId())
-                .map(existingTransaction -> {
-                    if (transaction.getAmount() != null) {
-                        existingTransaction.setAmount(transaction.getAmount());
-                    }
-                    if (transaction.getTransactionType() != null) {
-                        existingTransaction.setTransactionType(transaction.getTransactionType());
-                    }
-                    if (transaction.getDescription() != null) {
-                        existingTransaction.setDescription(transaction.getDescription());
-                    }
-                    if (transaction.getTransactionDate() != null) {
-                        existingTransaction.setTransactionDate(transaction.getTransactionDate());
-                    }
-                    if (transaction.getCreatedAt() != null) {
-                        existingTransaction.setCreatedAt(transaction.getCreatedAt());
-                    }
-                    if (transaction.getUpdatedAt() != null) {
-                        existingTransaction.setUpdatedAt(transaction.getUpdatedAt());
-                    }
+            .findById(transaction.getId())
+            .map(existingTransaction -> {
+                if (transaction.getAmount() != null) {
+                    existingTransaction.setAmount(transaction.getAmount());
+                }
+                if (transaction.getTransactionType() != null) {
+                    existingTransaction.setTransactionType(transaction.getTransactionType());
+                }
+                if (transaction.getDescription() != null) {
+                    existingTransaction.setDescription(transaction.getDescription());
+                }
+                if (transaction.getTransactionDate() != null) {
+                    existingTransaction.setTransactionDate(transaction.getTransactionDate());
+                }
+                if (transaction.getCreatedAt() != null) {
+                    existingTransaction.setCreatedAt(transaction.getCreatedAt());
+                }
+                if (transaction.getUpdatedAt() != null) {
+                    existingTransaction.setUpdatedAt(transaction.getUpdatedAt());
+                }
 
-                    return existingTransaction;
-                })
-                .map(transactionRepository::save);
+                return existingTransaction;
+            })
+            .map(transactionRepository::save);
     }
 
     public Page<Transaction> findAllWithEagerRelationships(Pageable pageable) {

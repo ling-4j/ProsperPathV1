@@ -66,7 +66,7 @@ export class NotificationService {
   }
 
   query2(req?: { sort?: string }): Observable<EntityArrayResponseType> {
-    const params = req || {};
+    const params = req ?? {};
     return this.http.get<INotification[]>(this.resourceUrl, { params, observe: 'response' });
   }
 

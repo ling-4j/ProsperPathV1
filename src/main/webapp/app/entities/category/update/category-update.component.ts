@@ -38,7 +38,7 @@ export class CategoryUpdateComponent implements OnInit {
     { name: 'Heartbeat', value: 'fa-heartbeat' },
     { name: 'Plane', value: 'fa-plane' },
     { name: 'Credit Card', value: 'fa-credit-card' },
-    { name: 'Gift', value: 'fa-gift' }
+    { name: 'Gift', value: 'fa-gift' },
   ];
 
   protected categoryService = inject(CategoryService);

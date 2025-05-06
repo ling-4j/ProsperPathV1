@@ -6,466 +6,577 @@ $light: #f8f9fa;
 $white: #fff;
 $border-color: #dee2e6;
 $teal: #20c997;
-$hover-bg: rgba(0,123,255,.05);
+$hover-bg: rgba(0, 123, 255, 0.05);
 $dark-text: #212529;
 $success: #28a745;
 $danger: #dc3545;
 
-$font-family-base: 'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 
 $sm: 576px;
 $md: 768px;
 
 .parent {
-    max-height: 85vh;
-    height: 85vh;
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    grid-template-rows: auto auto;
-    gap: 20px;
-    overflow: hidden;
+  max-height: 85vh;
+  height: 85vh;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  overflow: hidden;
 
-    @media (max-width: $md) {
-        grid-template: auto auto auto/1fr;
-        gap: 15px;
-        max-height: none;
-        height: auto;
-        padding: 10px;
-    }
+  @media (max-width: $md) {
+    grid-template: auto auto auto/1fr;
+    gap: 15px;
+    max-height: none;
+    height: auto;
+    padding: 10px;
+  }
 }
 
 .div1 {
-    grid-column: 1/2;
-    grid-row: 1/3;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
-    background: $white;
-    overflow-y: auto;
-    font-family: $font-family-base;
+  grid-column: 1/2;
+  grid-row: 1/3;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: $white;
+  overflow-y: auto;
+  font-family: $font-family-base;
 
-    .title {
-        color: $teal;
-        font-weight: 600;
-        font-size: 2rem;
-        margin-bottom: 1rem;
-    }
+  .title {
+    color: $teal;
+    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .div2 {
-    grid-column: 2/3;
-    grid-row: 1/2;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
-    background: $white;
-    overflow-y: auto;
-    font-family: $font-family-base;
+  grid-column: 2/3;
+  grid-row: 1/2;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: $white;
+  overflow-y: auto;
+  font-family: $font-family-base;
 }
 
 .div3 {
-    grid-column: 2/3;
-    grid-row: 2/3;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
-    background: $white;
-    overflow-y: auto;
-    font-family: $font-family-base;
+  grid-column: 2/3;
+  grid-row: 2/3;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: $white;
+  overflow-y: auto;
+  font-family: $font-family-base;
 }
 
 @media (max-width: $md) {
-    .div1,.div2,.div3 {
-        grid-column: 1/-1;
-        padding: 15px;
+  .div1,
+  .div2,
+  .div3 {
+    grid-column: 1/-1;
+    padding: 15px;
+  }
+  .div1 {
+    grid-row: 1/2;
+    .title {
+      font-size: 1.5rem;
     }
-    .div1 {grid-row: 1/2;.title {font-size: 1.5rem;}}
-    .div2 {grid-row: 2/3;}
-    .div3 {grid-row: 3/4;}
+  }
+  .div2 {
+    grid-row: 2/3;
+  }
+  .div3 {
+    grid-row: 3/4;
+  }
 }
 
 @media (max-width: $sm) {
-    .div1,.div2,.div3 {padding: 10px;}
-    .div1 .title {font-size: 1.25rem;}
+  .div1,
+  .div2,
+  .div3 {
+    padding: 10px;
+  }
+  .div1 .title {
+    font-size: 1.25rem;
+  }
 }
 
 .table {
-    font: .95rem "Roboto",sans-serif;
-    border-collapse: separate;
-    border-spacing: 0;
+  font:
+    0.95rem 'Roboto',
+    sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
 
-    thead {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        text-transform: uppercase;
-        background: $white;
-        box-shadow: 0 2px 4px rgba(0,0,0,.05);
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    text-transform: uppercase;
+    background: $white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  th,
+  td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  th {
+    color: $dark-text;
+    font-weight: 600;
+    border-bottom: 2px solid $border-color;
+  }
+
+  td {
+    border-bottom: 1px solid $border-color;
+  }
+
+  .action-column {
+    width: 100px;
+    position: relative;
+  }
+
+  .budget-row {
+    transition: all 0.3s ease;
+
+    .action-buttons {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
-    th,td {
-        padding: .75rem;
-        vertical-align: middle;
-        text-align: left;
+    &:hover {
+      background: $hover-bg;
+      transform: translateY(-2px);
+
+      .action-buttons {
+        display: flex;
+        opacity: 1;
+      }
     }
-
-    th {
-        color: $dark-text;
-        font-weight: 600;
-        border-bottom: 2px solid $border-color;
-    }
-
-    td {border-bottom: 1px solid $border-color;}
-
-    .action-column {
-        width: 100px;
-        position: relative;
-    }
-
-    .budget-row {
-        transition: all .3s ease;
-
-        .action-buttons {
-            display: none;
-            opacity: 0;
-            transition: opacity .3s ease;
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        &:hover {
-            background: $hover-bg;
-            transform: translateY(-2px);
-
-            .action-buttons {
-                display: flex;
-                opacity: 1;
-            }
-        }
-    }
+  }
 }
 
 @media (max-width: $md) {
-    .table {font-size: .85rem;}
-    .table th,.table td {padding: .5rem;}
-    .table .action-column {width: 80px;}
+  .table {
+    font-size: 0.85rem;
+  }
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+  .table .action-column {
+    width: 80px;
+  }
 }
 
 @media (max-width: $sm) {
-    .table {font-size: .8rem;}
-    .table th,.table td {padding: .4rem;}
-    .table .action-column {width: 60px;}
+  .table {
+    font-size: 0.8rem;
+  }
+  .table th,
+  .table td {
+    padding: 0.4rem;
+  }
+  .table .action-column {
+    width: 60px;
+  }
 }
 
 .btn {
-    transition: all .3s ease;
-    font-size: .9rem;
-    padding: .5rem 1rem;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+
+  &.btn-primary {
+    background: $primary;
+    border-color: $primary;
+    color: $white;
+
+    &:hover {
+      background: color.adjust($primary, $lightness: -10%);
+      border-color: color.adjust($primary, $lightness: -10%);
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-info {
+    background: $warning;
+    border-color: $warning;
+    color: $dark-text;
+
+    &:hover {
+      background: color.adjust($warning, $lightness: -10%);
+      border-color: color.adjust($warning, $lightness: -10%);
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-success {
+    background: $success;
+    border-color: $success;
+    color: $white;
+
+    &:hover {
+      background: color.adjust($success, $lightness: -10%);
+      border-color: color.adjust($success, $lightness: -10%);
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-danger {
+    background: $danger;
+    border-color: $danger;
+    color: $white;
+
+    &:hover {
+      background: color.adjust($danger, $lightness: -10%);
+      border-color: color.adjust($danger, $lightness: -10%);
+      transform: scale(1.05);
+    }
+  }
+
+  &.refresh-btn,
+  &.jh-create-entity,
+  &.search-btn,
+  &.export-btn {
+    height: 40px;
+    padding: 0 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  &.edit-btn,
+  &.delete-btn {
+    padding: 0.25rem 0.5rem;
     width: auto;
+  }
 
-    &.btn-primary {
-        background: $primary;
-        border-color: $primary;
-        color: $white;
+  &.edit-btn:hover {
+    background: color.adjust($primary, $lightness: -15%);
+    transform: scale(1.1);
+  }
 
-        &:hover {
-            background: color.adjust($primary,$lightness: -10%);
-            border-color: color.adjust($primary,$lightness: -10%);
-            transform: scale(1.05);
-        }
-    }
-
-    &.btn-info {
-        background: $warning;
-        border-color: $warning;
-        color: $dark-text;
-
-        &:hover {
-            background: color.adjust($warning,$lightness: -10%);
-            border-color: color.adjust($warning,$lightness: -10%);
-            transform: scale(1.05);
-        }
-    }
-
-    &.btn-success {
-        background: $success;
-        border-color: $success;
-        color: $white;
-
-        &:hover {
-            background: color.adjust($success,$lightness: -10%);
-            border-color: color.adjust($success,$lightness: -10%);
-            transform: scale(1.05);
-        }
-    }
-
-    &.btn-danger {
-        background: $danger;
-        border-color: $danger;
-        color: $white;
-
-        &:hover {
-            background: color.adjust($danger,$lightness: -10%);
-            border-color: color.adjust($danger,$lightness: -10%);
-            transform: scale(1.05);
-        }
-    }
-
-    &.refresh-btn,&.jh-create-entity,&.search-btn,&.export-btn {
-        height: 40px;
-        padding: 0 1.25rem;
-        font-size: .95rem;
-    }
-
-    &.edit-btn,&.delete-btn {
-        padding: .25rem .5rem;
-        width: auto;
-    }
-
-    &.edit-btn:hover {
-        background: color.adjust($primary,$lightness: -15%);
-        transform: scale(1.1);
-    }
-
-    &.delete-btn:hover {
-        background: color.adjust($danger,$lightness: -15%);
-        transform: scale(1.1);
-    }
+  &.delete-btn:hover {
+    background: color.adjust($danger, $lightness: -15%);
+    transform: scale(1.1);
+  }
 }
 
 @media (max-width: $sm) {
-    .btn {font-size: .85rem;padding: .4rem .8rem;width: 100%;}
-    .btn.refresh-btn,.btn.jh-create-entity,.btn.search-btn,.btn.export-btn {height: 36px;padding: 0 1rem;}
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    width: 100%;
+  }
+  .btn.refresh-btn,
+  .btn.jh-create-entity,
+  .btn.search-btn,
+  .btn.export-btn {
+    height: 36px;
+    padding: 0 1rem;
+  }
 }
 
-.custom-input,.custom-select {
-    height: 40px;
-    font-size: .95rem;
-    border-radius: 8px;
-    border: 1px solid $border-color;
-    background: $white;
-    padding: 0 1rem;
-    transition: all .2s ease;
+.custom-input,
+.custom-select {
+  height: 40px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+  background: $white;
+  padding: 0 1rem;
+  transition: all 0.2s ease;
 
-    &:focus {
-        border-color: $primary;
-        box-shadow: 0 0 5px rgba($primary,.3);
-        outline: none;
-    }
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 5px rgba($primary, 0.3);
+    outline: none;
+  }
 
-    &::placeholder {
-        color: #adb5bd;
-        font-style: italic;
-    }
+  &::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+  }
 
-    &:invalid {color: #adb5bd;}
+  &:invalid {
+    color: #adb5bd;
+  }
 }
 
 .custom-ng-select {
-    ::ng-deep .ng-select-container {
-        height: 40px;
-        font-size: 0.95rem;
-        border-radius: 8px;
-        border: 1px solid $border-color;
-        background-color: $white;
-        padding: 0 0 0 1rem;
-        transition: all 0.2s ease;
+  ::ng-deep .ng-select-container {
+    height: 40px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: 1px solid $border-color;
+    background-color: $white;
+    padding: 0 0 0 1rem;
+    transition: all 0.2s ease;
 
-        .ng-clear-wrapper {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-size: 16px;
-            color: $danger;
-        }
-
-        .ng-value-container {
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .ng-arrow-wrapper {
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        &:focus {
-            border-color: $primary;
-            box-shadow: 0 0 5px rgba($primary, 0.3);
-        }
+    .ng-clear-wrapper {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      color: $danger;
     }
 
-    ::ng-deep .ng-placeholder {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        color: #adb5bd;
-        font-style: italic;
+    .ng-value-container {
+      height: 100%;
+      display: flex;
+      align-items: center;
     }
 
-    ::ng-deep .ng-dropdown-panel {
-        background-color: $white;
-        border: 1px solid $border-color;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    .ng-arrow-wrapper {
+      height: 100%;
+      display: flex;
+      align-items: center;
     }
 
-    ::ng-deep .ng-option {
-        padding: 8px 12px;
-        color: $dark-text;
-        background-color: $white;
-
-        &.ng-option-selected,
-        &.ng-option-marked {
-            background-color: $light;
-            color: $dark-text;
-        }
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 5px rgba($primary, 0.3);
     }
+  }
+
+  ::ng-deep .ng-placeholder {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: #adb5bd;
+    font-style: italic;
+  }
+
+  ::ng-deep .ng-dropdown-panel {
+    background-color: $white;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  ::ng-deep .ng-option {
+    padding: 8px 12px;
+    color: $dark-text;
+    background-color: $white;
+
+    &.ng-option-selected,
+    &.ng-option-marked {
+      background-color: $light;
+      color: $dark-text;
+    }
+  }
 }
 
 @media (max-width: $sm) {
-    .custom-input,.custom-select {height: 36px;font-size: .9rem;padding: 0 .75rem;}
-    .custom-ng-select ::ng-deep .ng-select-container {height: 36px;font-size: .9rem;padding: 0 0 0 .75rem;}
+  .custom-input,
+  .custom-select {
+    height: 36px;
+    font-size: 0.9rem;
+    padding: 0 0.75rem;
+  }
+  .custom-ng-select ::ng-deep .ng-select-container {
+    height: 36px;
+    font-size: 0.9rem;
+    padding: 0 0 0 0.75rem;
+  }
 }
 
 .button-alignment-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 #page-heading .row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .title {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .col-md-6.d-flex {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
     gap: 1rem;
+    flex: 0 0 auto;
 
-    .title {flex: 1;min-width: 200px;}
-
-    .col-md-6.d-flex {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex: 0 0 auto;
-
-        @media (max-width: $md) {
-            flex: 1;
-            justify-content: flex-end;
-        }
+    @media (max-width: $md) {
+      flex: 1;
+      justify-content: flex-end;
     }
+  }
 }
 
 .filter-row .filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+
+  .filter-items {
+    flex: 1;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 1rem;
+  }
 
-    .filter-items {
-        flex: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
+  .button-group {
+    display: grid;
+    grid-template-columns: repeat(3, 140px);
+    gap: 1rem;
+    justify-content: flex-end;
+
+    .search-btn-container,
+    .export-btn-container {
+      display: flex;
+      justify-content: center;
     }
+  }
 
-    .button-group {
-        display: grid;
-        grid-template-columns: repeat(3,140px);
-        gap: 1rem;
-        justify-content: flex-end;
-
-        .search-btn-container,.export-btn-container {
-            display: flex;
-            justify-content: center;
-        }
-    }
-
-    .filter-item {
-        flex: 1;
-        min-width: 70px;
-        max-width: 200px;
-    }
+  .filter-item {
+    flex: 1;
+    min-width: 70px;
+    max-width: 200px;
+  }
 }
 
 @media (min-width: $md) {
-    .filter-row .filter-container .button-group {margin-left: auto;align-items: center;}
+  .filter-row .filter-container .button-group {
+    margin-left: auto;
+    align-items: center;
+  }
 }
 
 @media (max-width: $md) {
-    .filter-row .filter-container {flex-direction: row;flex-wrap: wrap;justify-content: space-between;}
-    .filter-row .filter-container .button-group {grid-template-columns: repeat(3,1fr);width: 100%;}
-    .filter-row .filter-container .filter-item {min-width: 140px;max-width: 180px;}
-    #page-heading .row .col-md-6.d-flex {flex-direction: column;align-items: stretch;width: 100%;}
-    #page-heading .row .col-md-6.d-flex .btn {width: 100%;}
+  .filter-row .filter-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .filter-row .filter-container .button-group {
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+  }
+  .filter-row .filter-container .filter-item {
+    min-width: 140px;
+    max-width: 180px;
+  }
+  #page-heading .row .col-md-6.d-flex {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  #page-heading .row .col-md-6.d-flex .btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: $sm) {
-    .filter-row .filter-container {flex-direction: column;align-items: stretch;gap: .75rem;}
-    .filter-row .filter-container .button-group {grid-template-columns: 1fr;width: 100%;}
-    .filter-row .filter-container .button-group .search-btn-container,
-    .filter-row .filter-container .button-group .export-btn-container {width: 100%;}
-    .filter-row .filter-container .filter-item {min-width: 100%;max-width: 100%;}
+  .filter-row .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .filter-row .filter-container .button-group {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .filter-row .filter-container .button-group .search-btn-container,
+  .filter-row .filter-container .button-group .export-btn-container {
+    width: 100%;
+  }
+  .filter-row .filter-container .filter-item {
+    min-width: 100%;
+    max-width: 100%;
+  }
 }
 
 .pagination-container {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 
-    .item-count {font-size: .9rem;color: #6c757d;}
+  .item-count {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
 
-    .custom-pagination {
-        ::ng-deep .page-item .page-link {
-            border: none;
-            color: $primary;
-            background: transparent;
-            padding: .5rem .75rem;
-            font-size: .95rem;
-            transition: all .3s ease;
+  .custom-pagination {
+    ::ng-deep .page-item .page-link {
+      border: none;
+      color: $primary;
+      background: transparent;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
 
-            &:hover {
-                background: $light;
-                color: color.adjust($primary,$lightness: -10%);
-            }
+      &:hover {
+        background: $light;
+        color: color.adjust($primary, $lightness: -10%);
+      }
 
-            &:focus {box-shadow: none;}
-        }
-
-        ::ng-deep .page-item.active .page-link {
-            background: $primary;
-            color: $white;
-            border-radius: 50%;
-        }
-
-        ::ng-deep .page-item.disabled .page-link {
-            color: #adb5bd;
-            cursor: not-allowed;
-        }
-
-        ::ng-deep .pagination {gap: 5px;}
+      &:focus {
+        box-shadow: none;
+      }
     }
+
+    ::ng-deep .page-item.active .page-link {
+      background: $primary;
+      color: $white;
+      border-radius: 50%;
+    }
+
+    ::ng-deep .page-item.disabled .page-link {
+      color: #adb5bd;
+      cursor: not-allowed;
+    }
+
+    ::ng-deep .pagination {
+      gap: 5px;
+    }
+  }
 }
 
 @media (max-width: $sm) {
-    .pagination-container .custom-pagination ::ng-deep .page-item .page-link {padding: .4rem .6rem;font-size: .85rem;}
+  .pagination-container .custom-pagination ::ng-deep .page-item .page-link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
 }
 
 .alert-warning {
-    border-radius: 8px;
-    padding: 1rem;
-    font-size: .95rem;
-    background: color.adjust($warning,$lightness: 35%);
-    border: 1px solid $warning;
-    color: $dark-text;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.95rem;
+  background: color.adjust($warning, $lightness: 35%);
+  border: 1px solid $warning;
+  color: $dark-text;
 
-    @media (max-width: $sm) {
-        font-size: .9rem;
-        padding: .75rem;
-    }
+  @media (max-width: $sm) {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
 }

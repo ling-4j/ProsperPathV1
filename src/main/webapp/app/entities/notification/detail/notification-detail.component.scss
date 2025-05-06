@@ -10,7 +10,11 @@ $border-color: #e1e8ed;
 $hover-bg: #f5f8fa; // Nền xám nhạt khi hover
 $warning-red: #dc3545; // Màu đỏ cho icon cảnh báo
 
-$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 
 // Breakpoints cho responsive (dựa trên Bootstrap)
 $breakpoint-sm: 576px;

@@ -33,7 +33,7 @@ import { BudgetDeleteDialogComponent } from '../delete/budget-delete-dialog.comp
 })
 export class BudgetComponent {
   @Input() budgets: IBudget[] = [];
-  @Input() totalItems: number = 0;
+  @Input() totalItems = 0;
   @Output() sortChange = new EventEmitter<SortState>();
   @Output() pageChange = new EventEmitter<number>();
   @Output() deleteBudget = new EventEmitter<IBudget>();

@@ -32,11 +32,11 @@
           </ng-select>
           @let categoryIconRef = editForm.get('categoryIcon')!;
           @if (categoryIconRef.invalid && (categoryIconRef.dirty || categoryIconRef.touched)) {
-          <div>
-            @if (editForm.get('categoryIcon')?.errors?.required) {
-            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-            }
-          </div>
+            <div>
+              @if (editForm.get('categoryIcon')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
           }
         </div>
 
@@ -44,13 +44,20 @@
         @let categoryNameRef = editForm.get('categoryName')!;
         <div class="mb-3">
           <label class="form-label" for="field_categoryName" jhiTranslate="prosperPathApp.category.categoryName">Category Name</label>
-          <input type="text" class="form-control" name="categoryName" id="field_categoryName" data-cy="categoryName" formControlName="categoryName" />
+          <input
+            type="text"
+            class="form-control"
+            name="categoryName"
+            id="field_categoryName"
+            data-cy="categoryName"
+            formControlName="categoryName"
+          />
           @if (categoryNameRef.invalid && (categoryNameRef.dirty || categoryNameRef.touched)) {
-          <div>
-            @if (editForm.get('categoryName')?.errors?.required) {
-            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-            }
-          </div>
+            <div>
+              @if (editForm.get('categoryName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
           }
         </div>
 
@@ -61,25 +68,37 @@
           <select class="form-control" name="categoryType" formControlName="categoryType" id="field_categoryType" data-cy="categoryType">
             <option [ngValue]="null">{{ 'prosperPathApp.CategoryType.null' | translate }}</option>
             @for (categoryType of categoryTypeValues; track $index) {
-            <option [value]="categoryType">{{ 'prosperPathApp.CategoryType.' + categoryType | translate }}</option>
+              <option [value]="categoryType">{{ 'prosperPathApp.CategoryType.' + categoryType | translate }}</option>
             }
           </select>
           @if (categoryTypeRef.invalid && (categoryTypeRef.dirty || categoryTypeRef.touched)) {
-          <div>
-            @if (editForm.get('categoryType')?.errors?.required) {
-            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
-            }
-          </div>
+            <div>
+              @if (editForm.get('categoryType')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
           }
         </div>
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel" (click)="previousState()">
+        <button
+          type="button"
+          id="cancel-save"
+          data-cy="entityCreateCancelButton"
+          class="btn btn-secondary btn-cancel"
+          (click)="previousState()"
+        >
           <fa-icon icon="ban"></fa-icon> <span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
-        <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving" class="btn btn-primary btn-save">
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary btn-save"
+        >
           <fa-icon icon="save"></fa-icon> <span jhiTranslate="entity.action.save">Save</span>
         </button>
       </div>

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import GoldProfitCalculatorComponent from '../gold-cal/gold/gold-profit-calculator.component'
+import GoldProfitCalculatorComponent from '../gold-cal/gold/gold-profit-calculator.component';
 
 export const goldCalRoutes: Routes = [
   {
@@ -10,4 +10,3 @@ export const goldCalRoutes: Routes = [
     },
   },
 ];
-

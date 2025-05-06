@@ -54,16 +54,16 @@ export class SummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
-    .pipe(
-      tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      tap(() => {
-        // Nếu không có sort param trong URL, đặt sortState mặc định
-        if (!this.activatedRoute.snapshot.queryParamMap.get(SORT)) {
-          this.sortState.set({ predicate: 'createdAt', order: 'desc' });
-        }
-        this.load();
-      }),
-    )
+      .pipe(
+        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+        tap(() => {
+          // Nếu không có sort param trong URL, đặt sortState mặc định
+          if (!this.activatedRoute.snapshot.queryParamMap.get(SORT)) {
+            this.sortState.set({ predicate: 'createdAt', order: 'desc' });
+          }
+          this.load();
+        }),
+      )
       .subscribe();
 
     this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));

@@ -43,6 +43,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
     }
+
     public Optional<User> activateRegistration(String key) {
         LOG.debug("Activating user for activation key {}", key);
         return userRepository
@@ -112,9 +113,7 @@ public class UserService {
         // new user is not active
         // newUser.setActivated(false);
 
-        
         newUser.setActivated(true);
-
 
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());

@@ -1,4 +1,3 @@
-
 import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -13,9 +12,12 @@ import { INotification } from '../notification.model';
   imports: [SharedModule, RouterModule, FormatMediumDatetimePipe],
 })
 export class NotificationDetailComponent {
-  private static readonly EXPENSE_REGEX = /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d,.]+)₫ với số tiền vượt là ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-  private static readonly INCOME_REGEX = /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-  private static readonly WARNING_REGEX = /Cảnh báo! Bạn sắp vượt chi tiêu ngân sách có khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly EXPENSE_REGEX =
+    /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d,.]+)₫ với số tiền vượt là ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly INCOME_REGEX =
+    /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly WARNING_REGEX =
+    /Cảnh báo! Bạn sắp vượt chi tiêu ngân sách có khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
 
   notification = input<INotification | null>(null);
 
@@ -26,7 +28,6 @@ export class NotificationDetailComponent {
   formatNotificationMessageText(message: string): string {
     const parsedMessage = this.parseMessage(message);
     if (!parsedMessage) {
-      console.log('No match for message:', message);
       return message;
     }
 

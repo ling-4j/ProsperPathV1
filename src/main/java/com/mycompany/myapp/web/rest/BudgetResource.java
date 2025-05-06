@@ -9,6 +9,8 @@ import com.mycompany.myapp.service.BudgetService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.BudgetCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -25,7 +27,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -53,8 +54,11 @@ public class BudgetResource {
 
     private final UserService userService;
 
-    public BudgetResource(BudgetService budgetService, BudgetRepository budgetRepository,
-            BudgetQueryService budgetQueryService, UserService userService) {
+    public BudgetResource(
+            BudgetService budgetService,
+            BudgetRepository budgetRepository,
+            BudgetQueryService budgetQueryService,
+            UserService userService) {
         this.userService = userService;
         this.budgetService = budgetService;
         this.budgetRepository = budgetRepository;
@@ -169,16 +173,13 @@ public class BudgetResource {
             @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get Budgets by criteria: {}", criteria);
 
-        // Lấy người dùng hiện tại
-        Optional<User> currentUser = userService.getUserWithAuthorities();
-        if (!currentUser.isPresent()) {
-            LOG.warn("Current user not found");
-            return ResponseEntity.status(401).build(); // Unauthorized
-        }
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
 
         // Gán userId của người dùng hiện tại vào criteria
         LongFilter userIdFilter = new LongFilter();
-        userIdFilter.setEquals(currentUser.get().getId());
+        userIdFilter.setEquals(currentUser.getId());
         criteria.setUserId(userIdFilter);
 
         Page<Budget> page = budgetQueryService.findByCriteria(criteria, pageable);

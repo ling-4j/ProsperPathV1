@@ -387,7 +387,22 @@ public class TransactionCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, transactionType, description, transactionDate, createdAt, updatedAt, categoryId, userId, distinct, category, fromDate, toDate, type);
+        return Objects.hash(
+            id,
+            amount,
+            transactionType,
+            description,
+            transactionDate,
+            createdAt,
+            updatedAt,
+            categoryId,
+            userId,
+            distinct,
+            category,
+            fromDate,
+            toDate,
+            type
+        );
     }
 
     // prettier-ignore

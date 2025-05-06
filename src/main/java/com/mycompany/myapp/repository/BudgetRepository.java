@@ -1,9 +1,9 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Budget;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.time.Instant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;

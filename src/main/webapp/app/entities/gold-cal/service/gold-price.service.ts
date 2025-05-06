@@ -13,8 +13,6 @@ export class GoldPriceService {
   constructor(private http: HttpClient) {}
 
   getGoldPrices(): Observable<GoldPrice[]> {
-    return this.http.get<GoldPriceResponse>(this.apiUrl).pipe(
-      map(response => response.data)
-    );
+    return this.http.get<GoldPriceResponse>(this.apiUrl).pipe(map(response => response.data));
   }
 }

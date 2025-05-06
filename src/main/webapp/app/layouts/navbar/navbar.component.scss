@@ -77,7 +77,9 @@ $font-family-base: 'Roboto', sans-serif;
               font-size: 16px; // Tăng kích thước chữ
               font-weight: 500; // Đậm hơn một chút
               padding: 8px 20px; // Tăng padding
-              transition: color 0.3s ease, background-color 0.3s ease;
+              transition:
+                color 0.3s ease,
+                background-color 0.3s ease;
 
               &:hover {
                 color: $white;
@@ -138,7 +140,9 @@ $font-family-base: 'Roboto', sans-serif;
             font-size: 16px; // Tăng kích thước chữ
             font-weight: 500;
             padding: 8px 20px;
-            transition: color 0.3s ease, background-color 0.3s ease;
+            transition:
+              color 0.3s ease,
+              background-color 0.3s ease;
 
             &:hover {
               color: $white;

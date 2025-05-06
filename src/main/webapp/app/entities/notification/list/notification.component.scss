@@ -9,7 +9,11 @@ $border-color: #e1e8ed;
 $hover-bg: #f5f8fa; // Nền xám nhạt khi hover
 $unread-border: #ffe6a2; // Viền nhẹ cho thông báo chưa đọc
 
-$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 
 // Breakpoints cho responsive (dựa trên Bootstrap)
 $breakpoint-sm: 576px;

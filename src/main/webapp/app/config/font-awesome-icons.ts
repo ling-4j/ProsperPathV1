@@ -40,33 +40,33 @@ import {
   faMoneyBillTransfer,
   faCalculator,
   // Các icon cho Financier App (đã thêm trước đó)
-  faCartShopping,  // Mua sắm
-  faMoneyBill,     // Hóa đơn
-  faWallet,        // Lương
-  faEllipsisH,     // Khác
-  faUtensils,      // Ăn uống
-  faCar,           // Di chuyển
-  faFilm,          // Giải trí
-  faPiggyBank,     // Tiết kiệm
-  faChartLine,     // Đầu tư
-  faHeartbeat,     // Sức khỏe
-  faPlane,         // Du lịch
-  faCreditCard,    // Nợ (Thẻ tín dụng)
-  faGift,          // Quà tặng
+  faCartShopping, // Mua sắm
+  faMoneyBill, // Hóa đơn
+  faWallet, // Lương
+  faEllipsisH, // Khác
+  faUtensils, // Ăn uống
+  faCar, // Di chuyển
+  faFilm, // Giải trí
+  faPiggyBank, // Tiết kiệm
+  faChartLine, // Đầu tư
+  faHeartbeat, // Sức khỏe
+  faPlane, // Du lịch
+  faCreditCard, // Nợ (Thẻ tín dụng)
+  faGift, // Quà tặng
   // Các icon cho Budgets, Categories, Transactions
   faMoneyCheckAlt, // Ngân sách
-  faTags,          // Danh mục
-  faExchangeAlt,   // Giao dịch
+  faTags, // Danh mục
+  faExchangeAlt, // Giao dịch
   // Thêm icon cho Export
-  faFileExport,    // Xuất dữ liệu
-  faFileExcel,    // Xuất dữ liệu Excel
-  faFilePdf,    // Xuất dữ liệu PDF
+  faFileExport, // Xuất dữ liệu
+  faFileExcel, // Xuất dữ liệu Excel
+  faFilePdf, // Xuất dữ liệu PDF
   // Thêm các icon mới
   faTriangleExclamation, // Cảnh báo
-  faCircleCheck,         // Đánh dấu hoàn thành
-  faCircleXmark,        // Đánh dấu không hoàn thành
+  faCircleCheck, // Đánh dấu hoàn thành
+  faCircleXmark, // Đánh dấu không hoàn thành
   faCircle,
-  faFileInvoiceDollar,   // Hóa đơn tiền tệ
+  faFileInvoiceDollar, // Hóa đơn tiền tệ
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -112,32 +112,32 @@ export const fontAwesomeIcons = [
   faMoneyBillTransfer,
   faCalculator,
   // Các icon cho Financier App (đã thêm trước đó)
-  faCartShopping,  // Mua sắm
-  faMoneyBill,     // Hóa đơn
-  faWallet,        // Lương
-  faEllipsisH,     // Khác
-  faUtensils,      // Ăn uống
-  faCar,           // Di chuyển
-  faFilm,          // Giải trí
-  faPiggyBank,     // Tiết kiệm
-  faChartLine,     // Đầu tư
-  faHeartbeat,     // Sức khỏe
-  faPlane,         // Du lịch
-  faCreditCard,    // Nợ (Thẻ tín dụng)
-  faGift,          // Quà tặng
+  faCartShopping, // Mua sắm
+  faMoneyBill, // Hóa đơn
+  faWallet, // Lương
+  faEllipsisH, // Khác
+  faUtensils, // Ăn uống
+  faCar, // Di chuyển
+  faFilm, // Giải trí
+  faPiggyBank, // Tiết kiệm
+  faChartLine, // Đầu tư
+  faHeartbeat, // Sức khỏe
+  faPlane, // Du lịch
+  faCreditCard, // Nợ (Thẻ tín dụng)
+  faGift, // Quà tặng
   // Các icon cho Budgets, Categories, Transactions
   faMoneyCheckAlt, // Ngân sách
-  faTags,          // Danh mục
-  faExchangeAlt,   // Giao dịch
+  faTags, // Danh mục
+  faExchangeAlt, // Giao dịch
   // Thêm icon cho Export
-  faFileExport,    // Xuất dữ liệu
-  faFileExcel,    // Xuất dữ liệu Excel
-  faFilePdf,    // Xuất dữ liệu PDF
+  faFileExport, // Xuất dữ liệu
+  faFileExcel, // Xuất dữ liệu Excel
+  faFilePdf, // Xuất dữ liệu PDF
   // Thêm các icon mới
   faTriangleExclamation, // Cảnh báo
-  faCircleCheck,         // Đánh dấu hoàn thành
-  faCircleXmark,        // Đánh dấu không hoàn thành
+  faCircleCheck, // Đánh dấu hoàn thành
+  faCircleXmark, // Đánh dấu không hoàn thành
   faCircle,
-  faFileInvoiceDollar,   // Hóa đơn tiền tệ
+  faFileInvoiceDollar, // Hóa đơn tiền tệ
   // jhipster-needle-add-icon-import
 ];

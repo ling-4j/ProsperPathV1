@@ -1,46 +1,63 @@
-<div class="budget-container d-flex justify-content-center ">
+<div class="budget-container d-flex justify-content-center">
   <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
-    <h1 data-cy="budgetTitle" jhiTranslate="prosperPathApp.budget.home.createOrEditLabel" class="budget-title">Create or
-      edit a Budget</h1>
+    <h1 data-cy="budgetTitle" jhiTranslate="prosperPathApp.budget.home.createOrEditLabel" class="budget-title">Create or edit a Budget</h1>
     <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
         <jhi-alert-error></jhi-alert-error>
 
         @let budgetAmountRef = editForm.get('budgetAmount')!;
         <div class="mb-3">
-          <label class="form-label" for="field_budgetAmount" jhiTranslate="prosperPathApp.budget.budgetAmount">Budget
-            Amount</label>
-          <input type="text" class="form-control" name="budgetAmount" id="field_budgetAmount" data-cy="budgetAmount"
-            formControlName="budgetAmount" appNumberFormat />
+          <label class="form-label" for="field_budgetAmount" jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</label>
+          <input
+            type="text"
+            class="form-control"
+            name="budgetAmount"
+            id="field_budgetAmount"
+            data-cy="budgetAmount"
+            formControlName="budgetAmount"
+            jhiNumberFormat
+          />
           @if (budgetAmountRef.invalid && (budgetAmountRef.dirty || budgetAmountRef.touched)) {
-          <div>
-            @if (editForm.get('budgetAmount')?.errors?.required) {
-            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is
-              required.</small>
-            }
-            <small class="form-text text-danger" [hidden]="!editForm.get('budgetAmount')?.errors?.number"
-              jhiTranslate="entity.validation.number">This field should be a number.</small>
-          </div>
+            <div>
+              @if (editForm.get('budgetAmount')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('budgetAmount')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
           }
         </div>
 
         @let startDateRef = editForm.get('startDate')!;
         <div class="mb-3">
-          <label class="form-label" for="field_startDate" jhiTranslate="prosperPathApp.budget.startDate">Start
-            Date</label>
+          <label class="form-label" for="field_startDate" jhiTranslate="prosperPathApp.budget.startDate">Start Date</label>
           <div class="d-flex">
-            <input id="field_startDate" data-cy="startDate" type="datetime-local" class="form-control" name="startDate"
-              formControlName="startDate" placeholder="YYYY-MM-DD HH:mm" />
+            <input
+              id="field_startDate"
+              data-cy="startDate"
+              type="datetime-local"
+              class="form-control"
+              name="startDate"
+              formControlName="startDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
           </div>
           @if (startDateRef.invalid && (startDateRef.dirty || startDateRef.touched)) {
-          <div>
-            @if (editForm.get('startDate')?.errors?.required) {
-            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is
-              required.</small>
-            }
-            <small class="form-text text-danger" [hidden]="!editForm.get('startDate')?.errors?.datetimelocal"
-              jhiTranslate="entity.validation.datetimelocal">This field should be a date and time.</small>
-          </div>
+            <div>
+              @if (editForm.get('startDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('startDate')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
           }
         </div>
 
@@ -48,25 +65,41 @@
         <div class="mb-3">
           <label class="form-label" for="field_endDate" jhiTranslate="prosperPathApp.budget.endDate">End Date</label>
           <div class="d-flex">
-            <input id="field_endDate" data-cy="endDate" type="datetime-local" class="form-control" name="endDate"
-              formControlName="endDate" placeholder="YYYY-MM-DD HH:mm" />
+            <input
+              id="field_endDate"
+              data-cy="endDate"
+              type="datetime-local"
+              class="form-control"
+              name="endDate"
+              formControlName="endDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
           </div>
           @if (endDateRef.invalid && (endDateRef.dirty || endDateRef.touched)) {
-          <div>
-            @if (editForm.get('endDate')?.errors?.required) {
-            <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is
-              required.</small>
-            }
-            <small class="form-text text-danger" [hidden]="!editForm.get('endDate')?.errors?.datetimelocal"
-              jhiTranslate="entity.validation.datetimelocal">This field should be a date and time.</small>
-          </div>
+            <div>
+              @if (editForm.get('endDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('endDate')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
           }
         </div>
 
         <div class="mb-3">
           <label class="form-label" for="field_category" jhiTranslate="prosperPathApp.budget.category">Category</label>
-          <select class="form-control" id="field_category" data-cy="category" name="category" formControlName="category"
-            [compareWith]="compareCategory">
+          <select
+            class="form-control"
+            id="field_category"
+            data-cy="category"
+            name="category"
+            formControlName="category"
+            [compareWith]="compareCategory"
+          >
             <option [ngValue]="null"></option>
             <ng-container *ngFor="let categoryOption of categoriesSharedCollection">
               <option [ngValue]="categoryOption">{{ categoryOption.categoryName }}</option>
@@ -77,31 +110,43 @@
         <div class="mb-3">
           <label class="form-label" for="field_status" jhiTranslate="prosperPathApp.budget.status">Status</label>
           <div class="d-flex">
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'ACTIVE'" [icon]="['fas', 'circle-check']"
-              class="text-success"></fa-icon>
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'ENDED'" [icon]="['fas', 'circle-xmark']"
-              class="text-danger"></fa-icon>
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'INACTIVE'" [icon]="['fas', 'circle-exclamation']"
-              class="text-warning"></fa-icon>
-            <fa-icon *ngIf="editForm.get('status')?.value  === 'PENDING'" [icon]="['fas', 'circle']"
-              class="text-warning"></fa-icon>
+            <fa-icon *ngIf="editForm.get('status')?.value === 'ACTIVE'" [icon]="['fas', 'circle-check']" class="text-success"></fa-icon>
+            <fa-icon *ngIf="editForm.get('status')?.value === 'ENDED'" [icon]="['fas', 'circle-xmark']" class="text-danger"></fa-icon>
+            <fa-icon
+              *ngIf="editForm.get('status')?.value === 'INACTIVE'"
+              [icon]="['fas', 'circle-exclamation']"
+              class="text-warning"
+            ></fa-icon>
+            <fa-icon *ngIf="editForm.get('status')?.value === 'PENDING'" [icon]="['fas', 'circle']" class="text-warning"></fa-icon>
 
-            &nbsp;<span [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (editForm.get('status')?.value ?? 'null')"
-              class="fw-bold">
-              {{ { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED', INACTIVE: 'INACTIVE', PENDING: 'PENDING'
-              }[editForm.get('status')?.value ?? 'null'] }}
+            &nbsp;<span [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (editForm.get('status')?.value ?? 'null')" class="fw-bold">
+              {{
+                { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED', INACTIVE: 'INACTIVE', PENDING: 'PENDING' }[
+                  editForm.get('status')?.value ?? 'null'
+                ]
+              }}
             </span>
           </div>
         </div>
       </div>
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary btn-cancel"
-          (click)="previousState()">
+        <button
+          type="button"
+          id="cancel-save"
+          data-cy="entityCreateCancelButton"
+          class="btn btn-secondary btn-cancel"
+          (click)="previousState()"
+        >
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
-        <button type="submit" id="save-entity" data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving" class="btn btn-primary btn-save">
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary btn-save"
+        >
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
       </div>

@@ -1,8 +1,6 @@
 <div class="notification-container d-flex justify-content-center">
   <div class="col-lg-6 bg-light p-5 shadow-sm rounded-4">
-    <h1 class="notification-title mb-4" data-cy="notificationTitle" jhiTranslate="prosperPathApp.notification.home.title">
-      Notifications
-    </h1>
+    <h1 class="notification-title mb-4" data-cy="notificationTitle" jhiTranslate="prosperPathApp.notification.home.title">Notifications</h1>
     <div class="block">
       <div class="notification-tabs mb-4">
         <button class="btn" [class.btn-primary]="filterType() === 'all'" (click)="setFilterType('all')" data-cy="tabAll">
@@ -16,27 +14,35 @@
         </button>
       </div>
       @if (filteredNotifications().length === 0) {
-      <div class="alert alert-warning" id="no-result">
-        <span jhiTranslate="prosperPathApp.notification.home.notFound">No Notifications found</span>
-      </div>
-      } @else {
-      <div class="notification-list">
-        @for (notification of filteredNotifications(); track trackId(notification)) {
-        <div class="notification-item" [class.unread]="!notification.isRead" data-cy="entityTable" (click)="handleNotificationClick(notification)">
-          <div class="notification-content">
-            <!-- Thông điệp chính (căn đều hai bên) -->
-            <span>{{ formatNotificationMessageText(notification.message ?? '') }}</span>
-            <!-- Icon danh mục -->
-            <fa-icon *ngIf="getCategoryIcon(notification.message ?? '')" [icon]="['fas', getCategoryIcon(notification.message ?? '')]"></fa-icon>
-            <!-- Tên danh mục -->
-            <span class="fw-bold">{{ getCategoryName(notification.message ?? '') }}</span>
-          </div>
-          <div class="notification-timestamp">
-            {{ notification.createdAt | formatMediumDatetime }}
-          </div>
+        <div class="alert alert-warning" id="no-result">
+          <span jhiTranslate="prosperPathApp.notification.home.notFound">No Notifications found</span>
         </div>
-        }
-      </div>
+      } @else {
+        <div class="notification-list">
+          @for (notification of filteredNotifications(); track trackId(notification)) {
+            <div
+              class="notification-item"
+              [class.unread]="!notification.isRead"
+              data-cy="entityTable"
+              (click)="handleNotificationClick(notification)"
+            >
+              <div class="notification-content">
+                <!-- Thông điệp chính (căn đều hai bên) -->
+                <span>{{ formatNotificationMessageText(notification.message ?? '') }}</span>
+                <!-- Icon danh mục -->
+                <fa-icon
+                  *ngIf="getCategoryIcon(notification.message ?? '')"
+                  [icon]="['fas', getCategoryIcon(notification.message ?? '')]"
+                ></fa-icon>
+                <!-- Tên danh mục -->
+                <span class="fw-bold">{{ getCategoryName(notification.message ?? '') }}</span>
+              </div>
+              <div class="notification-timestamp">
+                {{ notification.createdAt | formatMediumDatetime }}
+              </div>
+            </div>
+          }
+        </div>
       }
     </div>
   </div>

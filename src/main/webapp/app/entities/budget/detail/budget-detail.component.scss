@@ -15,7 +15,11 @@ $border-color: #e1e8ed;
 $teal: #20c997; // Màu teal dưới dạng hex
 
 // Định nghĩa font
-$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 
 // Breakpoints cho responsive
 $breakpoint-sm: 576px;

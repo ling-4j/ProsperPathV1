@@ -34,7 +34,6 @@ export class BudgetUpdateComponent implements OnInit {
   protected userService = inject(UserService);
   protected activatedRoute = inject(ActivatedRoute);
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: BudgetFormGroup = this.budgetFormService.createBudgetFormGroup();
 
   compareCategory = (o1: ICategory | null, o2: ICategory | null): boolean => this.categoryService.compareCategory(o1, o2);
@@ -91,7 +90,7 @@ export class BudgetUpdateComponent implements OnInit {
 
     this.categoriesSharedCollection = this.categoryService.addCategoryToCollectionIfMissing<ICategory>(
       this.categoriesSharedCollection,
-      budget.category
+      budget.category,
     );
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, budget.user);
   }
@@ -102,8 +101,8 @@ export class BudgetUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ICategory[]>) => res.body ?? []))
       .pipe(
         map((categories: ICategory[]) =>
-          this.categoryService.addCategoryToCollectionIfMissing<ICategory>(categories, this.budget?.category)
-        )
+          this.categoryService.addCategoryToCollectionIfMissing<ICategory>(categories, this.budget?.category),
+        ),
       )
       .subscribe((categories: ICategory[]) => {
         this.categoriesSharedCollection = categories;

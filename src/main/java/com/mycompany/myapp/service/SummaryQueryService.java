@@ -8,6 +8,7 @@ import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.criteria.SummaryCriteria;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.JoinType;
 import java.math.BigDecimal;
@@ -17,12 +18,11 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -53,18 +53,23 @@ public class SummaryQueryService extends QueryService<Summary> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public SummaryQueryService(SummaryRepository summaryRepository, UserRepository userRepository,       TransactionRepository transactionRepository) {
+    public SummaryQueryService(
+            SummaryRepository summaryRepository,
+            UserRepository userRepository,
+            TransactionRepository transactionRepository) {
         this.summaryRepository = summaryRepository;
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository; // Khởi tạo TransactionRepository
     }
 
     /**
-     * Lấy dữ liệu chi tiết tài chính (thu nhập, chi phí, lợi nhuận) theo kỳ cho biểu đồ.
+     * Lấy dữ liệu chi tiết tài chính (thu nhập, chi phí, lợi nhuận) theo kỳ cho
+     * biểu đồ.
      *
      * @param userId ID của người dùng
      * @param period Loại kỳ (WEEK, MONTH, YEAR)
-     * @return Map chứa nhãn (labels) và dữ liệu (incomeData, expenseData, progressRateData)
+     * @return Map chứa nhãn (labels) và dữ liệu (incomeData, expenseData,
+     *         progressRateData)
      */
     public Map<String, Object> getDetailedFinancialData(Long userId, String period) {
         // Xác định khoảng thời gian dựa trên period, sử dụng múi giờ UTC
@@ -93,12 +98,23 @@ public class SummaryQueryService extends QueryService<Summary> {
         Instant endInstant = endDate.atTime(23, 59, 59).atZone(ZoneId.of("UTC")).toInstant();
 
         // Lấy danh sách giao dịch
-        List<Transaction> transactions = transactionRepository.findByUserIdAndTransactionDateBetween(userId, startInstant, endInstant);
-        LOG.info("Transactions found for userId: {}, period: {}, from: {}, to: {}, count: {}", userId, period, startInstant, endInstant, transactions.size());
+        List<Transaction> transactions = transactionRepository.findByUserIdAndTransactionDateBetween(userId,
+                startInstant, endInstant);
+        LOG.info(
+                "Transactions found for userId: {}, period: {}, from: {}, to: {}, count: {}",
+                userId,
+                period,
+                startInstant,
+                endInstant,
+                transactions.size());
         for (Transaction transaction : transactions) {
-            LOG.debug("Transaction: id={}, userId={}, date={}, type={}, amount={}",
-                    transaction.getId(), transaction.getUser().getId(), transaction.getTransactionDate(),
-                    transaction.getTransactionType(), transaction.getAmount());
+            LOG.debug(
+                    "Transaction: id={}, userId={}, date={}, type={}, amount={}",
+                    transaction.getId(),
+                    transaction.getUser().getId(),
+                    transaction.getTransactionDate(),
+                    transaction.getTransactionType(),
+                    transaction.getAmount());
         }
 
         // Tạo dữ liệu cho biểu đồ
@@ -129,12 +145,14 @@ public class SummaryQueryService extends QueryService<Summary> {
                 progressRateData.add(income.subtract(expense));
             }
         } else if (period.equalsIgnoreCase("MONTH")) {
-            // Dùng ngày đầu tiên và cuối cùng của tháng dựa trên giao dịch hoặc thời gian hiện tại
+            // Dùng ngày đầu tiên và cuối cùng của tháng dựa trên giao dịch hoặc thời gian
+            // hiện tại
             LocalDate monthStart = startDate;
             LocalDate monthEnd = endDate;
             if (!transactions.isEmpty()) {
                 // Lấy tháng từ giao dịch đầu tiên để đảm bảo đúng tháng
-                LocalDate firstTransactionDate = transactions.get(0).getTransactionDate().atZone(ZoneId.of("UTC")).toLocalDate();
+                LocalDate firstTransactionDate = transactions.get(0).getTransactionDate().atZone(ZoneId.of("UTC"))
+                        .toLocalDate();
                 monthStart = firstTransactionDate.withDayOfMonth(1);
                 monthEnd = firstTransactionDate.withDayOfMonth(firstTransactionDate.lengthOfMonth());
             }
@@ -143,13 +161,16 @@ public class SummaryQueryService extends QueryService<Summary> {
             for (int i = 1; i <= daysInMonth; i += 5) {
                 LocalDate startRange = monthStart.withDayOfMonth(i);
                 LocalDate endRange = monthStart.withDayOfMonth(Math.min(i + 4, daysInMonth));
-                labels.add(startRange.format(DateTimeFormatter.ofPattern("dd/MM")) + "-" + endRange.format(DateTimeFormatter.ofPattern("dd/MM")));
+                labels.add(
+                        startRange.format(DateTimeFormatter.ofPattern("dd/MM")) + "-"
+                                + endRange.format(DateTimeFormatter.ofPattern("dd/MM")));
 
                 BigDecimal income = BigDecimal.ZERO;
                 BigDecimal expense = BigDecimal.ZERO;
                 for (Transaction transaction : transactions) {
                     LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC")).toLocalDate();
-                    LOG.debug("Transaction date: {}, startRange: {}, endRange: {}", transactionDate, startRange, endRange);
+                    LOG.debug("Transaction date: {}, startRange: {}, endRange: {}", transactionDate, startRange,
+                            endRange);
                     if (!transactionDate.isBefore(startRange) && !transactionDate.isAfter(endRange)) {
                         if (transaction.getTransactionType() == TransactionType.INCOME) {
                             income = income.add(transaction.getAmount());
@@ -171,8 +192,10 @@ public class SummaryQueryService extends QueryService<Summary> {
                 BigDecimal expense = BigDecimal.ZERO;
                 for (Transaction transaction : transactions) {
                     LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC")).toLocalDate();
-                    LOG.debug("Transaction date: {}, current month: {}-{}", transactionDate, current.getYear(), current.getMonthValue());
-                    if (transactionDate.getYear() == current.getYear() && transactionDate.getMonthValue() == current.getMonthValue()) {
+                    LOG.debug("Transaction date: {}, current month: {}-{}", transactionDate, current.getYear(),
+                            current.getMonthValue());
+                    if (transactionDate.getYear() == current.getYear()
+                            && transactionDate.getMonthValue() == current.getMonthValue()) {
                         if (transaction.getTransactionType() == TransactionType.INCOME) {
                             income = income.add(transaction.getAmount());
                         } else if (transaction.getTransactionType() == TransactionType.EXPENSE) {
@@ -188,8 +211,14 @@ public class SummaryQueryService extends QueryService<Summary> {
         }
 
         // Log dữ liệu trước khi trả về
-        LOG.debug("Chart data for userId: {}, period: {}: labels={}, incomeData={}, expenseData={}, progressRateData={}",
-                userId, period, labels, incomeData, expenseData, progressRateData);
+        LOG.debug(
+                "Chart data for userId: {}, period: {}: labels={}, incomeData={}, expenseData={}, progressRateData={}",
+                userId,
+                period,
+                labels,
+                incomeData,
+                expenseData,
+                progressRateData);
 
         Map<String, Object> result = new HashMap<>();
         result.put("labels", labels);
@@ -209,16 +238,13 @@ public class SummaryQueryService extends QueryService<Summary> {
      */
     public Summary getSummaryForPeriod(Long userId, String periodType, String periodValue) {
         LOG.debug("Getting summary for userId: {}, periodType: {}, periodValue: {}", userId, periodType, periodValue);
-        Optional<User> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
-            LOG.warn("User not found for userId: {}", userId);
-            return null;
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
         Optional<Summary> summary = summaryRepository.findByUserAndPeriodTypeAndPeriodValue(
-            user.get(),
-            PeriodType.valueOf(periodType.toUpperCase()),
-            periodValue
-        );
+                user,
+                PeriodType.valueOf(periodType.toUpperCase()),
+                periodValue);
         return summary.orElse(null);
     }
 
@@ -232,17 +258,15 @@ public class SummaryQueryService extends QueryService<Summary> {
      */
     @Transactional(readOnly = false)
     public void updateSummaryForTransaction(Long userId, Transaction oldTransaction, Transaction newTransaction) {
-        LOG.debug("Updating summary for userId: {}, oldTransaction: {}, newTransaction: {}", userId, oldTransaction, newTransaction);
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (!userOpt.isPresent()) {
-            LOG.warn("User not found for userId: {}", userId);
-            return;
-        }
-        User user = userOpt.get();
+        LOG.debug("Updating summary for userId: {}, oldTransaction: {}, newTransaction: {}", userId, oldTransaction,
+                newTransaction);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
         // Xử lý các kỳ cũ (dựa trên oldTransaction) để trừ giá trị
         if (oldTransaction != null) {
-            LocalDate oldTransactionDate = oldTransaction.getTransactionDate().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate oldTransactionDate = oldTransaction.getTransactionDate().atZone(ZoneId.systemDefault())
+                    .toLocalDate();
             String oldWeekPeriodValue = getPeriodValue(oldTransactionDate, "WEEK");
             String oldMonthPeriodValue = getPeriodValue(oldTransactionDate, "MONTH");
             String oldYearPeriodValue = getPeriodValue(oldTransactionDate, "YEAR");
@@ -255,7 +279,8 @@ public class SummaryQueryService extends QueryService<Summary> {
 
         // Xử lý các kỳ mới (dựa trên newTransaction) để cộng giá trị
         if (newTransaction != null) {
-            LocalDate newTransactionDate = newTransaction.getTransactionDate().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate newTransactionDate = newTransaction.getTransactionDate().atZone(ZoneId.systemDefault())
+                    .toLocalDate();
             String newWeekPeriodValue = getPeriodValue(newTransactionDate, "WEEK");
             String newMonthPeriodValue = getPeriodValue(newTransactionDate, "MONTH");
             String newYearPeriodValue = getPeriodValue(newTransactionDate, "YEAR");
@@ -269,17 +294,17 @@ public class SummaryQueryService extends QueryService<Summary> {
 
     @SuppressWarnings("deprecation")
     private void updateSummaryForPeriod(
-        User user,
-        String periodType,
-        String periodValue,
-        Transaction oldTransaction,
-        Transaction newTransaction
-    ) {
-        LOG.debug("Updating summary for user: {}, periodType: {}, periodValue: {}", user.getId(), periodType, periodValue);
+            User user,
+            String periodType,
+            String periodValue,
+            Transaction oldTransaction,
+            Transaction newTransaction) {
+        LOG.debug("Updating summary for user: {}, periodType: {}, periodValue: {}", user.getId(), periodType,
+                periodValue);
 
         Summary summary = summaryRepository
-            .findByUserAndPeriodTypeAndPeriodValue(user, PeriodType.valueOf(periodType), periodValue)
-            .orElse(null);
+                .findByUserAndPeriodTypeAndPeriodValue(user, PeriodType.valueOf(periodType), periodValue)
+                .orElse(null);
         if (summary == null) {
             LOG.debug("Creating new summary for periodType: {}, periodValue: {}", periodType, periodValue);
             summary = new Summary();
@@ -326,15 +351,17 @@ public class SummaryQueryService extends QueryService<Summary> {
         // Cập nhật totalProfit và profitPercentage
         summary.setTotalProfit(summary.getTotalIncome().subtract(summary.getTotalExpense()));
         summary.setProfitPercentage(
-            summary.getTotalIncome().compareTo(BigDecimal.ZERO) != 0
-                ? summary.getTotalProfit().divide(summary.getTotalIncome(), 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))
-                : BigDecimal.ZERO
-        );
+                summary.getTotalIncome().compareTo(BigDecimal.ZERO) != 0
+                        ? summary.getTotalProfit().divide(summary.getTotalIncome(), 2, BigDecimal.ROUND_HALF_UP)
+                                .multiply(BigDecimal.valueOf(100))
+                        : BigDecimal.ZERO);
 
         // Xóa bản ghi Summary nếu không còn giao dịch (tùy chọn)
-        if (summary.getTotalIncome().compareTo(BigDecimal.ZERO) == 0 && summary.getTotalExpense().compareTo(BigDecimal.ZERO) == 0) {
+        if (summary.getTotalIncome().compareTo(BigDecimal.ZERO) == 0
+                && summary.getTotalExpense().compareTo(BigDecimal.ZERO) == 0) {
             summaryRepository.delete(summary);
-            LOG.debug("Deleted summary for periodType: {}, periodValue: {} as it has no transactions", periodType, periodValue);
+            LOG.debug("Deleted summary for periodType: {}, periodValue: {} as it has no transactions", periodType,
+                    periodValue);
             return;
         }
 
@@ -343,7 +370,8 @@ public class SummaryQueryService extends QueryService<Summary> {
             summaryRepository.save(summary);
             LOG.debug("Successfully saved summary for periodType: {}, periodValue: {}", periodType, periodValue);
         } catch (Exception e) {
-            LOG.error("Failed to save summary for periodType: {}, periodValue: {}. Error: {}", periodType, periodValue, e.getMessage(), e);
+            LOG.error("Failed to save summary for periodType: {}, periodValue: {}. Error: {}", periodType, periodValue,
+                    e.getMessage(), e);
             throw new RuntimeException("Failed to save summary for periodType: " + periodType, e);
         }
     }
@@ -359,11 +387,10 @@ public class SummaryQueryService extends QueryService<Summary> {
         private final double profitChangePercentage;
 
         public FinancialChange(
-            double assetsChangePercentage,
-            double incomeChangePercentage,
-            double expenseChangePercentage,
-            double profitChangePercentage
-        ) {
+                double assetsChangePercentage,
+                double incomeChangePercentage,
+                double expenseChangePercentage,
+                double profitChangePercentage) {
             this.assetsChangePercentage = assetsChangePercentage;
             this.incomeChangePercentage = incomeChangePercentage;
             this.expenseChangePercentage = expenseChangePercentage;
@@ -431,10 +458,14 @@ public class SummaryQueryService extends QueryService<Summary> {
         }
 
         // Tính phần trăm thay đổi
-        double assetsChange = calculateChangePercentage(previousSummary.getTotalAssets(), currentSummary.getTotalAssets());
-        double incomeChange = calculateChangePercentage(previousSummary.getTotalIncome(), currentSummary.getTotalIncome());
-        double expenseChange = calculateChangePercentage(previousSummary.getTotalExpense(), currentSummary.getTotalExpense());
-        double profitChange = calculateChangePercentage(previousSummary.getProfitPercentage(), currentSummary.getProfitPercentage());
+        double assetsChange = calculateChangePercentage(previousSummary.getTotalAssets(),
+                currentSummary.getTotalAssets());
+        double incomeChange = calculateChangePercentage(previousSummary.getTotalIncome(),
+                currentSummary.getTotalIncome());
+        double expenseChange = calculateChangePercentage(previousSummary.getTotalExpense(),
+                currentSummary.getTotalExpense());
+        double profitChange = calculateChangePercentage(previousSummary.getProfitPercentage(),
+                currentSummary.getProfitPercentage());
 
         return new FinancialChange(assetsChange, incomeChange, expenseChange, profitChange);
     }
@@ -447,7 +478,8 @@ public class SummaryQueryService extends QueryService<Summary> {
         if (previous == null || previous.compareTo(BigDecimal.ZERO) == 0) {
             return 0;
         }
-        return current.subtract(previous).divide(previous, 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100)).doubleValue();
+        return current.subtract(previous).divide(previous, 2, BigDecimal.ROUND_HALF_UP)
+                .multiply(BigDecimal.valueOf(100)).doubleValue();
     }
 
     /**
@@ -518,22 +550,28 @@ public class SummaryQueryService extends QueryService<Summary> {
                 specification = specification.and(buildSpecification(criteria.getPeriodType(), Summary_.periodType));
             }
             if (criteria.getPeriodValue() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPeriodValue(), Summary_.periodValue));
+                specification = specification
+                        .and(buildStringSpecification(criteria.getPeriodValue(), Summary_.periodValue));
             }
             if (criteria.getTotalAssets() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTotalAssets(), Summary_.totalAssets));
+                specification = specification
+                        .and(buildRangeSpecification(criteria.getTotalAssets(), Summary_.totalAssets));
             }
             if (criteria.getTotalIncome() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTotalIncome(), Summary_.totalIncome));
+                specification = specification
+                        .and(buildRangeSpecification(criteria.getTotalIncome(), Summary_.totalIncome));
             }
             if (criteria.getTotalExpense() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTotalExpense(), Summary_.totalExpense));
+                specification = specification
+                        .and(buildRangeSpecification(criteria.getTotalExpense(), Summary_.totalExpense));
             }
             if (criteria.getTotalProfit() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTotalProfit(), Summary_.totalProfit));
+                specification = specification
+                        .and(buildRangeSpecification(criteria.getTotalProfit(), Summary_.totalProfit));
             }
             if (criteria.getProfitPercentage() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getProfitPercentage(), Summary_.profitPercentage));
+                specification = specification
+                        .and(buildRangeSpecification(criteria.getProfitPercentage(), Summary_.profitPercentage));
             }
             if (criteria.getCreatedAt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), Summary_.createdAt));
@@ -543,8 +581,8 @@ public class SummaryQueryService extends QueryService<Summary> {
             }
             if (criteria.getUserId() != null) {
                 specification = specification.and(
-                    buildSpecification(criteria.getUserId(), root -> root.join(Summary_.user, JoinType.LEFT).get(User_.id))
-                );
+                        buildSpecification(criteria.getUserId(),
+                                root -> root.join(Summary_.user, JoinType.LEFT).get(User_.id)));
             }
         }
         return specification;

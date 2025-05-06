@@ -1,10 +1,9 @@
 {
-    "prosperPathApp": {
-      "BudgetStatus": {
-        "null": "",
-        "ACTIVE": "HOẠT ĐỘNG",
-        "ENDED": "KẾT THÚC"
-      }
+  "prosperPathApp": {
+    "BudgetStatus": {
+      "null": "",
+      "ACTIVE": "HOẠT ĐỘNG",
+      "ENDED": "KẾT THÚC"
     }
   }
-  
+}

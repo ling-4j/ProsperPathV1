@@ -9,7 +9,17 @@ import com.mycompany.myapp.repository.NotificationRepository;
 import com.mycompany.myapp.repository.TransactionRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.criteria.NotificationCriteria;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.JoinType;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
+// import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,15 +28,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.text.NumberFormat;
 
 /**
  * Service for executing complex queries for {@link Notification} entities in
@@ -44,8 +45,7 @@ public class NotificationQueryService extends QueryService<Notification> {
     private static final Logger LOG = LoggerFactory.getLogger(NotificationQueryService.class);
     private static final BigDecimal WARNING_THRESHOLD = new BigDecimal("0.85");
     private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
-            .ofPattern("dd/MM/yyyy")
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             .withZone(ZoneId.systemDefault());
 
     private final NotificationRepository notificationRepository;
@@ -53,8 +53,11 @@ public class NotificationQueryService extends QueryService<Notification> {
     private final TransactionRepository transactionRepository;
     private final BudgetRepository budgetRepository; // Thêm BudgetRepository
 
-    public NotificationQueryService(NotificationRepository notificationRepository, UserRepository userRepository,
-            TransactionRepository transactionRepository, BudgetRepository budgetRepository) {
+    public NotificationQueryService(
+            NotificationRepository notificationRepository,
+            UserRepository userRepository,
+            TransactionRepository transactionRepository,
+            BudgetRepository budgetRepository) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
@@ -73,14 +76,12 @@ public class NotificationQueryService extends QueryService<Notification> {
     public void createWarningNotificationForTransaction(Long userId, Transaction transaction) {
         LOG.debug("Checking transaction for notification: {}", transaction);
 
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isEmpty()) {
-            LOG.warn("User not found for userId: {}", userId);
-            return;
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found for userId: " + userId));
 
         List<Budget> matchingBudgets = findMatchingBudgets(transaction);
-        createNotificationsForBudgets(userOpt.get(), transaction, matchingBudgets);
+        createNotificationsForBudgets(user, transaction, matchingBudgets);
+
     }
 
     /**
@@ -128,9 +129,9 @@ public class NotificationQueryService extends QueryService<Notification> {
      */
     private boolean shouldCreateWarning(BigDecimal totalSpent, Budget budget, Transaction transaction) {
         BigDecimal budgetThreshold = budget.getBudgetAmount().multiply(WARNING_THRESHOLD);
-        return totalSpent.compareTo(budgetThreshold) >= 0
-                && totalSpent.compareTo(budget.getBudgetAmount()) < 0
-                && transaction.getTransactionType() == TransactionType.EXPENSE;
+        return (totalSpent.compareTo(budgetThreshold) >= 0 &&
+                totalSpent.compareTo(budget.getBudgetAmount()) < 0 &&
+                transaction.getTransactionType() == TransactionType.EXPENSE);
     }
 
     /**
@@ -145,7 +146,9 @@ public class NotificationQueryService extends QueryService<Notification> {
             Transaction transaction) {
         LOG.info(
                 "Budget ID: {} triggered a warning because total spent {} reaches or exceeds 85% of budget amount {}",
-                budget.getId(), totalSpent, budget.getBudgetAmount());
+                budget.getId(),
+                totalSpent,
+                budget.getBudgetAmount());
 
         String message = formatWarningMessage(budget, transaction.getCategory());
         Notification notification = new Notification()
@@ -158,7 +161,9 @@ public class NotificationQueryService extends QueryService<Notification> {
         notificationRepository.save(notification);
         LOG.debug(
                 "Notification created for budget: {} because total spent {} reaches or exceeds 85% of budget amount {}",
-                budget.getId(), totalSpent, budget.getBudgetAmount());
+                budget.getId(),
+                totalSpent,
+                budget.getBudgetAmount());
     }
 
     /**
@@ -173,13 +178,8 @@ public class NotificationQueryService extends QueryService<Notification> {
     public void createNotificationForTransaction(Long userId, Transaction transaction) {
         LOG.debug("Checking transaction for notification: {}", transaction);
 
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isEmpty()) {
-            LOG.warn("User not found for userId: {}", userId);
-            return;
-        }
-
-        User user = userOpt.get();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found for userId: " + userId));
         List<Budget> matchingBudgets = findMatchingBudgets(transaction);
         processBudgetsForNotification(user, transaction, matchingBudgets);
     }
@@ -230,8 +230,8 @@ public class NotificationQueryService extends QueryService<Notification> {
             String message = formatIncomeMessage(budget, transaction);
             createNotification(user, budget, message, NotificationType.COMPLETE);
             updateBudgetStatus(budget, BudgeStatus.ENDED);
-            LOG.debug("Notification created for INCOME transaction: {} with budget: {}",
-                    transaction.getId(), budget.getId());
+            LOG.debug("Notification created for INCOME transaction: {} with budget: {}", transaction.getId(),
+                    budget.getId());
         } else {
             logNoNotificationCreated(budget, totalSpent);
         }
@@ -247,13 +247,19 @@ public class NotificationQueryService extends QueryService<Notification> {
      */
     private void handleExpenseTransaction(User user, Budget budget, BigDecimal totalSpent, Transaction transaction) {
         if (totalSpent.compareTo(budget.getBudgetAmount()) > 0) {
-            LOG.info("Budget ID: {} status updated to ENDED because total spent {} exceeds budget amount {}",
-                    budget.getId(), totalSpent, budget.getBudgetAmount());
+            LOG.info(
+                    "Budget ID: {} status updated to ENDED because total spent {} exceeds budget amount {}",
+                    budget.getId(),
+                    totalSpent,
+                    budget.getBudgetAmount());
             String message = formatExpenseMessage(budget, totalSpent, transaction.getCategory());
             createNotification(user, budget, message, NotificationType.BUDGET_EXCEEDED);
             updateBudgetStatus(budget, BudgeStatus.ENDED);
-            LOG.debug("Notification created for budget: {} because total spent {} exceeds budget amount {}",
-                    budget.getId(), totalSpent, budget.getBudgetAmount());
+            LOG.debug(
+                    "Notification created for budget: {} because total spent {} exceeds budget amount {}",
+                    budget.getId(),
+                    totalSpent,
+                    budget.getBudgetAmount());
         } else {
             logNoNotificationCreated(budget, totalSpent);
         }
@@ -360,8 +366,11 @@ public class NotificationQueryService extends QueryService<Notification> {
      * @param totalSpent Total spent amount.
      */
     private void logNoNotificationCreated(Budget budget, BigDecimal totalSpent) {
-        LOG.debug("No notification created for budget: {} (total spent: {} is within budget: {})",
-                budget.getId(), totalSpent, budget.getBudgetAmount());
+        LOG.debug(
+                "No notification created for budget: {} (total spent: {} is within budget: {})",
+                budget.getId(),
+                totalSpent,
+                budget.getBudgetAmount());
     }
 
     /**

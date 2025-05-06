@@ -2,10 +2,10 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Budget;
 import com.mycompany.myapp.domain.User;
-import com.mycompany.myapp.repository.BudgetRepository;
-import com.mycompany.myapp.service.UserService;
-import com.mycompany.myapp.service.BudgetService;
 import com.mycompany.myapp.domain.enumeration.BudgeStatus;
+import com.mycompany.myapp.repository.BudgetRepository;
+import com.mycompany.myapp.service.BudgetService;
+import com.mycompany.myapp.service.UserService;
 import java.time.Instant;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -97,30 +97,30 @@ public class BudgetServiceImpl implements BudgetService {
         LOG.debug("Request to partially update Budget : {}", budget);
 
         return budgetRepository
-                .findById(budget.getId())
-                .map(existingBudget -> {
-                    if (budget.getBudgetAmount() != null) {
-                        existingBudget.setBudgetAmount(budget.getBudgetAmount());
-                    }
-                    if (budget.getStartDate() != null) {
-                        existingBudget.setStartDate(budget.getStartDate());
-                    }
-                    if (budget.getEndDate() != null) {
-                        existingBudget.setEndDate(budget.getEndDate());
-                    }
-                    if (budget.getCreatedAt() != null) {
-                        existingBudget.setCreatedAt(budget.getCreatedAt());
-                    }
-                    if (budget.getUpdatedAt() != null) {
-                        existingBudget.setUpdatedAt(budget.getUpdatedAt());
-                    }
-                    if (budget.getStatus() != null) {
-                        existingBudget.setStatus(budget.getStatus());
-                    }
+            .findById(budget.getId())
+            .map(existingBudget -> {
+                if (budget.getBudgetAmount() != null) {
+                    existingBudget.setBudgetAmount(budget.getBudgetAmount());
+                }
+                if (budget.getStartDate() != null) {
+                    existingBudget.setStartDate(budget.getStartDate());
+                }
+                if (budget.getEndDate() != null) {
+                    existingBudget.setEndDate(budget.getEndDate());
+                }
+                if (budget.getCreatedAt() != null) {
+                    existingBudget.setCreatedAt(budget.getCreatedAt());
+                }
+                if (budget.getUpdatedAt() != null) {
+                    existingBudget.setUpdatedAt(budget.getUpdatedAt());
+                }
+                if (budget.getStatus() != null) {
+                    existingBudget.setStatus(budget.getStatus());
+                }
 
-                    return existingBudget;
-                })
-                .map(budgetRepository::save);
+                return existingBudget;
+            })
+            .map(budgetRepository::save);
     }
 
     public Page<Budget> findAllWithEagerRelationships(Pageable pageable) {

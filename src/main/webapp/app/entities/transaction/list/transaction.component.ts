@@ -155,7 +155,10 @@ export class TransactionComponent implements OnInit {
     const modalRef = this.modalService.open(TransactionDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.transaction = transaction;
     modalRef.closed
-      .pipe(filter(reason => reason === ITEM_DELETED_EVENT), tap(() => this.loadTransactions()))
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        tap(() => this.loadTransactions()),
+      )
       .subscribe();
   }
 
@@ -294,15 +297,15 @@ export class TransactionComponent implements OnInit {
   exportTransactions(): void {
     const queryParams: QueryObject = {
       category: this.category,
-      fromDate: this.fromDate?.toISOString() || null,
-      toDate: this.toDate?.toISOString() || null,
+      fromDate: this.fromDate?.toISOString() ?? null,
+      toDate: this.toDate?.toISOString() ?? null,
       type: this.type,
       page: 0,
       size: 0,
       sort: 'transactionDate',
     };
     this.transactionService.export(queryParams).subscribe({
-      next: (response: Blob) => {
+      next(response: Blob) {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
         a.href = url;
@@ -317,15 +320,15 @@ export class TransactionComponent implements OnInit {
   exportToPDF(): void {
     const queryParams: QueryObject = {
       category: this.category,
-      fromDate: this.fromDate?.toISOString() || null,
-      toDate: this.toDate?.toISOString() || null,
+      fromDate: this.fromDate?.toISOString() ?? null,
+      toDate: this.toDate?.toISOString() ?? null,
       type: this.type,
       page: 0,
       size: 0,
       sort: 'transactionDate',
     };
     this.transactionService.exportToPDF(queryParams).subscribe({
-      next: (response: Blob) => {
+      next(response: Blob) {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
         a.href = url;
@@ -367,13 +370,7 @@ export class TransactionComponent implements OnInit {
       page: page - 1,
       size: this.itemsPerPage,
       eagerload: true,
-      sort: this.validateSortParam(this.sortState(), [
-        'transactionDate',
-        'categoryId',
-        'transactionType',
-        'description',
-        'amount',
-      ]),
+      sort: this.validateSortParam(this.sortState(), ['transactionDate', 'categoryId', 'transactionType', 'description', 'amount']),
     };
     filters.filterOptions.forEach(filterOption => (queryObject[filterOption.name] = filterOption.values));
     return this.transactionService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
@@ -398,8 +395,6 @@ export class TransactionComponent implements OnInit {
     if (this.searchState.toDate) queryObject['transactionDate.lessThanOrEqual'] = this.searchState.toDate.toISOString();
     if (this.searchState.type) queryObject['transactionType.equals'] = this.searchState.type;
     if (this.searchState.category) queryObject['categoryId.equals'] = this.searchState.category.toString();
-
-    console.log('Search query object:', queryObject);
 
     return this.transactionService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
@@ -434,6 +429,6 @@ export class TransactionComponent implements OnInit {
   }
 
   private isSearchActive(): boolean {
-    return !!(this.searchState.category || this.searchState.fromDate || this.searchState.toDate || this.searchState.type);
+    return !!(this.searchState.category ?? this.searchState.fromDate ?? this.searchState.toDate ?? this.searchState.type);
   }
 }

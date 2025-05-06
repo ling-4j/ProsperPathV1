@@ -33,7 +33,7 @@ import { CategoryDeleteDialogComponent } from '../delete/category-delete-dialog.
 })
 export class CategoryComponent {
   @Input() categories: ICategory[] = [];
-  @Input() totalItems: number = 0;
+  @Input() totalItems = 0;
   @Output() sortChange = new EventEmitter<SortState>();
   @Output() pageChange = new EventEmitter<number>();
   @Output() deleteCategory = new EventEmitter<ICategory>();

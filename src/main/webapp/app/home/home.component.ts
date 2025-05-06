@@ -64,9 +64,9 @@ export type ChartOptions = {
     CommonModule,
     FormsModule,
     FullCalendarModule,
-    NgApexchartsModule, // Thêm 
+    NgApexchartsModule, // Thêm
     CarouselComponent,
-    GoldProfitCalculatorComponent
+    GoldProfitCalculatorComponent,
   ],
   standalone: true,
 })
@@ -92,7 +92,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   errorMessage = signal<string | null>(null);
 
   // FullCalendar configuration
-  currentMonthYear: string = '';
+  currentMonthYear = '';
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
@@ -190,7 +190,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
             total: {
               show: true,
               label: 'Tổng',
-              formatter: (w: any) => {
+              formatter(w: any) {
                 const total = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
                 return `${total.toLocaleString('vi-VN')} VND`; // Định dạng số tiền
               },
@@ -319,10 +319,10 @@ export default class HomeComponent implements OnInit, OnDestroy {
         this.profitPercentage.set(summary.profitPercentage ?? 0);
 
         // Cập nhật phần trăm thay đổi
-        this.assetsChangePercentage.set(financialChange.assetsChangePercentage ?? 0);
-        this.incomeChangePercentage.set(financialChange.incomeChangePercentage ?? 0);
-        this.expenseChangePercentage.set(financialChange.expenseChangePercentage ?? 0);
-        this.profitChangePercentage.set(financialChange.profitChangePercentage ?? 0);
+        this.assetsChangePercentage.set(financialChange.assetsChangePercentage);
+        this.incomeChangePercentage.set(financialChange.incomeChangePercentage);
+        this.expenseChangePercentage.set(financialChange.expenseChangePercentage);
+        this.profitChangePercentage.set(financialChange.profitChangePercentage);
 
         // Cập nhật dữ liệu biểu đồ
         this.updateChartData(detailedData);
@@ -348,11 +348,11 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.progressRateChartOptions.series = [
       {
         name: 'Lợi nhuận',
-        data: detailedData.progressRateData || [],
+        data: detailedData.progressRateData,
       },
     ];
     this.progressRateChartOptions.xaxis = {
-      categories: detailedData.labels || [],
+      categories: detailedData.labels,
       labels: {
         style: {
           colors: '#6b7280',
@@ -368,15 +368,15 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.incomeVsExpenseLineChartOptions.series = [
       {
         name: 'Thu nhập',
-        data: detailedData.incomeData || [],
+        data: detailedData.incomeData,
       },
       {
         name: 'Chi phí',
-        data: detailedData.expenseData || [],
+        data: detailedData.expenseData,
       },
     ];
     this.incomeVsExpenseLineChartOptions.xaxis = {
-      categories: detailedData.labels || [],
+      categories: detailedData.labels,
       labels: {
         style: {
           colors: '#6b7280',

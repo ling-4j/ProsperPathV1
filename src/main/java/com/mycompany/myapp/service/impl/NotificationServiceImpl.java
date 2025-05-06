@@ -57,24 +57,24 @@ public class NotificationServiceImpl implements NotificationService {
         LOG.debug("Request to partially update Notification : {}", notification);
 
         return notificationRepository
-                .findById(notification.getId())
-                .map(existingNotification -> {
-                    if (notification.getMessage() != null) {
-                        existingNotification.setMessage(notification.getMessage());
-                    }
-                    if (notification.getNotificationType() != null) {
-                        existingNotification.setNotificationType(notification.getNotificationType());
-                    }
-                    if (notification.getIsRead() != null) {
-                        existingNotification.setIsRead(notification.getIsRead());
-                    }
-                    if (notification.getCreatedAt() != null) {
-                        existingNotification.setCreatedAt(notification.getCreatedAt());
-                    }
+            .findById(notification.getId())
+            .map(existingNotification -> {
+                if (notification.getMessage() != null) {
+                    existingNotification.setMessage(notification.getMessage());
+                }
+                if (notification.getNotificationType() != null) {
+                    existingNotification.setNotificationType(notification.getNotificationType());
+                }
+                if (notification.getIsRead() != null) {
+                    existingNotification.setIsRead(notification.getIsRead());
+                }
+                if (notification.getCreatedAt() != null) {
+                    existingNotification.setCreatedAt(notification.getCreatedAt());
+                }
 
-                    return existingNotification;
-                })
-                .map(notificationRepository::save);
+                return existingNotification;
+            })
+            .map(notificationRepository::save);
     }
 
     public Page<Notification> findAllWithEagerRelationships(Pageable pageable) {

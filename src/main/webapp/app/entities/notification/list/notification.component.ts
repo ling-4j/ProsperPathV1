@@ -21,27 +21,24 @@ import { NotificationDeleteDialogComponent } from '../delete/notification-delete
   selector: 'jhi-notification',
   styleUrls: ['./notification.component.scss'],
   templateUrl: './notification.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    FormatMediumDatetimePipe,
-    FontAwesomeModule,
-  ],
+  imports: [RouterModule, FormsModule, SharedModule, FormatMediumDatetimePipe, FontAwesomeModule],
   standalone: true,
 })
 export class NotificationComponent implements OnInit {
-  private static readonly EXPENSE_REGEX = /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d,.]+)₫ với số tiền vượt là ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-  private static readonly INCOME_REGEX = /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
-  private static readonly WARNING_REGEX = /Cảnh báo! Bạn sắp vượt chi tiêu ngân sách có khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly EXPENSE_REGEX =
+    /Bạn đã chi tiêu vượt quá ngân sách có khối lượng ([\d,.]+)₫ với số tiền vượt là ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly INCOME_REGEX =
+    /Bạn đã hoàn thành mục tiêu ngân sách với khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) vào ngày ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
+  private static readonly WARNING_REGEX =
+    /Cảnh báo! Bạn sắp vượt chi tiêu ngân sách có khối lượng ([\d,.]+)₫ trong khoảng thời gian đã thiết lập từ ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) đến ([\d-]{10}T[\d:]{8}Z|\d{2}\/\d{2}\/\d{4}) của danh mục (?:(\S+) )?(.+)/;
 
   subscription: Subscription | null = null;
   notifications = signal<INotification[]>([]);
   filteredNotifications = computed(() => {
     const allNotifications = this.notifications();
-    return this.filterType() === 'all' ? allNotifications : allNotifications.filter(n =>
-      this.filterType() === 'unread' ? !n.isRead : n.isRead
-    );
+    return this.filterType() === 'all'
+      ? allNotifications
+      : allNotifications.filter(n => (this.filterType() === 'unread' ? !n.isRead : n.isRead));
   });
   isLoading = false;
 
@@ -163,7 +160,6 @@ export class NotificationComponent implements OnInit {
   formatNotificationMessageText(message: string): string {
     const parsedMessage = this.parseMessage(message);
     if (!parsedMessage) {
-      console.log('No match for message:', message);
       return message;
     }
 

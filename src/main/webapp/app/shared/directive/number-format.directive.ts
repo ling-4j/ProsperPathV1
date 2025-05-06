@@ -2,17 +2,20 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '[appNumberFormat]',
+  selector: '[jhiNumberFormat]',
 })
 export class NumberFormatDirective {
-  @Input() separator: string = ','; // Dấu phân cách, mặc định là ',' (có thể đổi thành '.')
+  @Input() separator = ','; // Dấu phân cách, mặc định là ',' (có thể đổi thành '.')
 
-  constructor(private el: ElementRef, private control: NgControl) {}
+  constructor(
+    private el: ElementRef,
+    private control: NgControl,
+  ) {}
 
   @HostListener('input', ['$event'])
   onInput(event: Event): void {
     const input = this.el.nativeElement as HTMLInputElement;
-    let value = input.value.replace(/[^0-9]/g, ''); // Chỉ giữ lại số
+    const value = input.value.replace(/[^0-9]/g, ''); // Chỉ giữ lại số
 
     if (value) {
       // Định dạng số với dấu phân cách

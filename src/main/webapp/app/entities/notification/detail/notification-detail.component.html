@@ -1,43 +1,49 @@
 <div class="notification-container d-flex justify-content-center">
   <div class="col-lg-6 bg-light p-5 shadow-sm rounded-4">
     @if (notification(); as notificationRef) {
-    <h1 data-cy="notificationTitle" jhiTranslate="prosperPathApp.notification.detail.title" class="notification-title mb-4">
-      Notification
-    </h1>
+      <h1 data-cy="notificationTitle" jhiTranslate="prosperPathApp.notification.detail.title" class="notification-title mb-4">
+        Notification
+      </h1>
 
-    <div class="block">
-      <div class="icon-container text-center mb-4">
-        <fa-icon [icon]="['fas', getIconName(notificationRef.notificationType ?? null)]" [ngStyle]="{'color': getIconColor(notificationRef.notificationType ?? null)}" class="warning-icon"></fa-icon>
+      <div class="block">
+        <div class="icon-container text-center mb-4">
+          <fa-icon
+            [icon]="['fas', getIconName(notificationRef.notificationType ?? null)]"
+            [ngStyle]="{ color: getIconColor(notificationRef.notificationType ?? null) }"
+            class="warning-icon"
+          ></fa-icon>
+        </div>
+
+        <dl class="row jh-entity-details">
+          <dt class="block-title text-center">
+            <span [jhiTranslate]="'prosperPathApp.NotificationType.' + (notificationRef.notificationType ?? 'null')">type </span>
+          </dt>
+
+          <dt><span jhiTranslate="prosperPathApp.notification.message">Message</span></dt>
+          <dd class="notification-message">
+            <!-- Thông điệp chính (căn đều hai bên) -->
+            <span>{{ formatNotificationMessageText(notificationRef.message ?? '') }}</span>
+            <!-- Icon danh mục -->
+            <fa-icon
+              *ngIf="getCategoryIcon(notificationRef.message ?? '')"
+              [icon]="['fas', getCategoryIcon(notificationRef.message ?? '')]"
+            ></fa-icon>
+            <!-- Tên danh mục -->
+            <span class="fw-bold">{{ getCategoryName(notificationRef.message ?? '') }}</span>
+          </dd>
+
+          <dt><span jhiTranslate="prosperPathApp.notification.createdAt">Created At</span></dt>
+          <dd class="notification-timestamp">
+            <span>{{ notificationRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <div class="action-buttons text-center mt-4">
+          <button type="submit" (click)="previousState()" class="btn btn-info me-2" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon> <span jhiTranslate="entity.action.back">Back</span>
+          </button>
+        </div>
       </div>
-
-      <dl class="row jh-entity-details">
-        <dt class="block-title text-center">
-          <span [jhiTranslate]="'prosperPathApp.NotificationType.' + (notificationRef.notificationType ?? 'null')">type
-          </span>
-        </dt>
-
-        <dt><span jhiTranslate="prosperPathApp.notification.message">Message</span></dt>
-        <dd class="notification-message">
-          <!-- Thông điệp chính (căn đều hai bên) -->
-          <span>{{ formatNotificationMessageText(notificationRef.message ?? '') }}</span>
-          <!-- Icon danh mục -->
-          <fa-icon *ngIf="getCategoryIcon(notificationRef.message ?? '')" [icon]="['fas', getCategoryIcon(notificationRef.message ?? '')]"></fa-icon>
-          <!-- Tên danh mục -->
-          <span class="fw-bold">{{ getCategoryName(notificationRef.message ?? '') }}</span>
-        </dd>
-
-        <dt><span jhiTranslate="prosperPathApp.notification.createdAt">Created At</span></dt>
-        <dd class="notification-timestamp">
-          <span>{{ notificationRef.createdAt | formatMediumDatetime }}</span>
-        </dd>
-      </dl>
-
-      <div class="action-buttons text-center mt-4">
-        <button type="submit" (click)="previousState()" class="btn btn-info me-2" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon> <span jhiTranslate="entity.action.back">Back</span>
-        </button>
-      </div>
-    </div>
     }
   </div>
 </div>

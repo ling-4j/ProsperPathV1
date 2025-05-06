@@ -1,60 +1,58 @@
 <div class="budget-container d-flex justify-content-center">
   <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
     @if (budget(); as budgetRef) {
-    <h1 data-cy="budgetTitle" jhiTranslate="prosperPathApp.budget.detail.title" class="budget-title mb-4">
-      budget
-    </h1>
+      <h1 data-cy="budgetTitle" jhiTranslate="prosperPathApp.budget.detail.title" class="budget-title mb-4">budget</h1>
 
-    <div class="block">
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</span></dt>
-        <dd>
-          <span class="fw-bold">{{ budgetRef.budgetAmount |currency: "VND" }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.budget.startDate">Start Date</span></dt>
-        <dd>
-          <span>{{ budgetRef.startDate | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.budget.endDate">End Date</span></dt>
-        <dd>
-          <span>{{ budgetRef.endDate | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.budget.createdAt">Created At</span></dt>
-        <dd>
-          <span>{{ budgetRef.createdAt | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.budget.updatedAt">Updated At</span></dt>
-        <dd>
-          <span>{{ budgetRef.updatedAt | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.budget.status">Status</span></dt>
-        <dd>
-          <span [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (budgetRef.status ?? 'null')">{{
-            { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED', PENDING: 'PENDING', INACTIVE:'INACTIVE"',
-            }[budgetRef.status ?? 'null']
+      <div class="block">
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</span></dt>
+          <dd>
+            <span class="fw-bold">{{ budgetRef.budgetAmount | currency: 'VND' }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.startDate">Start Date</span></dt>
+          <dd>
+            <span>{{ budgetRef.startDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.endDate">End Date</span></dt>
+          <dd>
+            <span>{{ budgetRef.endDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ budgetRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ budgetRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.status">Status</span></dt>
+          <dd>
+            <span [jhiTranslate]="'prosperPathApp.BudgetStatus.' + (budgetRef.status ?? 'null')">{{
+              { null: '', ACTIVE: 'ACTIVE', ENDED: 'ENDED', PENDING: 'PENDING', INACTIVE: 'INACTIVE"' }[budgetRef.status ?? 'null']
             }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.budget.category">Category</span></dt>
-        <dd>
-          @if(budget()!.category){
-          <fa-icon [icon]="['fas', (budgetRef.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
-          budgetRef.category?.categoryName }}
-          }@else{
-          &nbsp;{{ budgetRef.category?.categoryName }}
-          }
-        </dd>
-      </dl>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.budget.category">Category</span></dt>
+          <dd>
+            @if (budget()!.category) {
+              <fa-icon [icon]="['fas', (budgetRef.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>&nbsp;{{
+                budgetRef.category?.categoryName
+              }}
+            } @else {
+              &nbsp;{{ budgetRef.category?.categoryName }}
+            }
+          </dd>
+        </dl>
 
-      <div class="action-buttons text-center mt-4">
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>
-        </button>
+        <div class="action-buttons text-center mt-4">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>
+          </button>
 
-        <button type="button" [routerLink]="['/transaction', budgetRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>
-        </button>
+          <button type="button" [routerLink]="['/transaction', budgetRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+        </div>
       </div>
-    </div>
     }
   </div>
 </div>

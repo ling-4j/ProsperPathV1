@@ -37,7 +37,6 @@ export class TransactionUpdateComponent implements OnInit {
   protected userService = inject(UserService);
   protected activatedRoute = inject(ActivatedRoute);
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: TransactionFormGroup = this.transactionFormService.createTransactionFormGroup();
 
   compareCategory = (o1: ICategory | null, o2: ICategory | null): boolean => this.categoryService.compareCategory(o1, o2);
@@ -55,7 +54,7 @@ export class TransactionUpdateComponent implements OnInit {
 
       // Tự động fill transactionType theo category.categoryType
       this.editForm.get('category')?.valueChanges.subscribe((category: ICategory | null | undefined) => {
-        if (category && category.categoryType) {
+        if (category?.categoryType) {
           this.editForm.get('transactionType')?.setValue(category.categoryType, { emitEvent: false });
         } else {
           this.editForm.get('transactionType')?.setValue(null, { emitEvent: false });
@@ -63,7 +62,6 @@ export class TransactionUpdateComponent implements OnInit {
       });
     });
   }
-
 
   previousState(): void {
     window.history.back();
