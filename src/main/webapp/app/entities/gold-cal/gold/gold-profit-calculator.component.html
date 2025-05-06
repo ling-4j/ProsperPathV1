@@ -17,7 +17,7 @@
                     Số lượng ({{ unit }})
                 </label>
                 <input type="number" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()" min="1"
-                    class="quantity-field" />
+                    class="quantity-field" appNumberFormat/>
             </div>
 
             <!-- Loại vàng -->
@@ -35,7 +35,7 @@
             <div class="input-box col-md-4 col-sm-12">
                 <label jhiTranslate="gold.labels.purchasePrice">Giá mua (đ/chỉ):</label>
                 <input class="input-gold" type="number" [(ngModel)]="purchasePrice"
-                    [placeholder]="'gold.labels.purchasePricePlaceholder' | translate" min="0" />
+                    [placeholder]="'gold.labels.purchasePricePlaceholder' | translate" min="0" appNumberFormat/>
             </div>
         </div>
     </div>

@@ -1,0 +1,13 @@
+<div>
+    <h2>💬 Hỏi GPT về tài chính</h2>
+    <textarea [(ngModel)]="userInput" rows="5" placeholder="Nhập câu hỏi..."></textarea>
+    <br />
+    <button (click)="askGPT()">Gửi</button>
+  
+    <div *ngIf="loading">⏳ Đang gửi tới GPT...</div>
+    <div *ngIf="response">
+      <h3>Phản hồi:</h3>
+      <pre>{{ response }}</pre>
+    </div>
+  </div>
+  
