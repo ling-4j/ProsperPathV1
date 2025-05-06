@@ -1,6 +1,4 @@
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
+@use 'sass:color';
 
 // Định nghĩa màu sắc và font
 $primary: #1da1f2; // Màu xanh đặc trưng của X
@@ -24,12 +22,13 @@ $breakpoint-xl: 1200px;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-//   padding: 2rem; // Dùng rem để co giãn linh hoạt
+  //   padding: 2rem; // Dùng rem để co giãn linh hoạt
 
   // Responsive cho container
   @media (max-width: $breakpoint-md) {
     padding: 1rem;
   }
+
   @media (max-width: $breakpoint-sm) {
     padding: 0.5rem;
   }
@@ -43,6 +42,7 @@ $breakpoint-xl: 1200px;
     @media (max-width: $breakpoint-md) {
       font-size: 1.5rem;
     }
+
     @media (max-width: $breakpoint-sm) {
       font-size: 1.25rem;
     }
@@ -62,6 +62,7 @@ $breakpoint-xl: 1200px;
       padding: 1.5rem;
       max-width: 90%;
     }
+
     @media (max-width: $breakpoint-sm) {
       padding: 1rem;
       max-width: 100%;
@@ -97,6 +98,7 @@ $breakpoint-xl: 1200px;
           padding: 0.4rem 0.8rem;
           font-size: 0.85rem;
         }
+
         @media (max-width: $breakpoint-sm) {
           padding: 0.3rem 0.6rem;
           font-size: 0.8rem;
@@ -131,7 +133,7 @@ $breakpoint-xl: 1200px;
           color: $dark-text;
           line-height: 1.5;
           text-align: justify; // Căn đều hai bên
-        //   display: flex;
+          //   display: flex;
           align-items: center;
           gap: 0.75rem;
           flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
@@ -154,6 +156,7 @@ $breakpoint-xl: 1200px;
             @media (max-width: $breakpoint-md) {
               font-size: 1rem;
             }
+
             @media (max-width: $breakpoint-sm) {
               font-size: 0.9rem;
             }
@@ -173,6 +176,7 @@ $breakpoint-xl: 1200px;
           @media (max-width: $breakpoint-md) {
             font-size: 0.75rem;
           }
+
           @media (max-width: $breakpoint-sm) {
             font-size: 0.7rem;
             margin-top: 0.3rem;

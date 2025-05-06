@@ -1,7 +1,6 @@
 // Import Bootstrap variables and mixins
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
+
+@use 'sass:color';
 
 // Định nghĩa màu sắc
 $dark: #212529; // Đen đậm

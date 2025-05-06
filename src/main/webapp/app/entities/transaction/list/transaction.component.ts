@@ -212,7 +212,7 @@ export class TransactionComponent implements OnInit {
       page: this.budgetPage - 1,
       size: this.itemsPerPage,
       eagerload: true,
-      sort: this.validateSortParam(this.budgetSortState(), ['createdAt', 'budgetAmount', 'category.id', 'startDate', 'endDate', 'status']),
+      sort: this.validateSortParam(this.budgetSortState(), ['createdAt', 'budgetAmount', 'categoryId', 'startDate', 'endDate', 'status']),
     };
     this.budgetService.query(queryObject).subscribe({
       next: (res: EntityArrayResponseType) => {
@@ -369,7 +369,7 @@ export class TransactionComponent implements OnInit {
       eagerload: true,
       sort: this.validateSortParam(this.sortState(), [
         'transactionDate',
-        'category.id',
+        'categoryId',
         'transactionType',
         'description',
         'amount',
@@ -387,7 +387,7 @@ export class TransactionComponent implements OnInit {
       eagerload: true,
       sort: this.validateSortParam(this.searchState.sortState, [
         'transactionDate',
-        'category.id',
+        'categoryId',
         'transactionType',
         'description',
         'amount',
@@ -397,7 +397,7 @@ export class TransactionComponent implements OnInit {
     if (this.searchState.fromDate) queryObject['transactionDate.greaterThanOrEqual'] = this.searchState.fromDate.toISOString();
     if (this.searchState.toDate) queryObject['transactionDate.lessThanOrEqual'] = this.searchState.toDate.toISOString();
     if (this.searchState.type) queryObject['transactionType.equals'] = this.searchState.type;
-    if (this.searchState.category) queryObject['category.id.equals'] = this.searchState.category.toString();
+    if (this.searchState.category) queryObject['categoryId.equals'] = this.searchState.category.toString();
 
     console.log('Search query object:', queryObject);
 

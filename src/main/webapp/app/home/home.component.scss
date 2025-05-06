@@ -2,9 +2,7 @@
 Main page styles
 ========================================================================== */
 
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
+@use 'sass:color';
 
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
@@ -417,7 +415,7 @@ $font-family-base: 'Roboto', sans-serif;
         transition: color 0.3s ease;
 
         &:hover {
-          color: darken($primary, 10%);
+          color: color.adjust($primary, $lightness: -10%);
         }
       }
     }

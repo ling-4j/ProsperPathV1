@@ -1,7 +1,4 @@
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-
+@use 'sass:color';
 // Định nghĩa màu sắc chủ đạo
 $primary: #007bff; // Xanh dương
 $warning: #ffc107; // Vàng
@@ -12,7 +9,7 @@ $border-color: #dee2e6; // Màu viền
 $teal: #20c997; // Màu teal cho tiêu đề
 $hover-bg: rgba(0, 123, 255, 0.05); // Màu nền khi hover vào dòng
 $dark-text: #212529; // Màu chữ đậm để tương phản với nền trắng
-
+$danger: #dc3545;
 // Định nghĩa font
 $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -77,8 +74,8 @@ $breakpoint-xl: 1200px;
         border-color: $primary;
 
         &:hover {
-            background-color: darken($primary, 10%);
-            border-color: darken($primary, 10%);
+            background-color: color.adjust($primary, $lightness: -10%);
+            border-color: color.adjust($primary, $lightness: -10%);
             transform: scale(1.05); // Phóng to nhẹ khi hover
             box-shadow: 0 2px 8px rgba($primary, 0.3); // Thêm bóng
         }
@@ -90,8 +87,8 @@ $breakpoint-xl: 1200px;
         color: $white;
 
         &:hover {
-            background-color: darken($warning, 10%);
-            border-color: darken($warning, 10%);
+            background-color: color.adjust($warning, $lightness: -10%);
+            border-color: color.adjust($warning, $lightness: -10%);
             transform: scale(1.05);
             box-shadow: 0 2px 8px rgba($warning, 0.3);
         }
@@ -102,8 +99,9 @@ $breakpoint-xl: 1200px;
         border-color: #dc3545;
 
         &:hover {
-            background-color: darken(#dc3545, 10%);
-            border-color: darken(#dc3545, 10%);
+
+            background-color: color.adjust(#dc3545, $lightness: -10%);
+            border-color: color.adjust(#dc3545, $lightness: -10%);
             transform: scale(1.05);
             box-shadow: 0 2px 8px rgba(#dc3545, 0.3);
         }
@@ -123,7 +121,7 @@ $breakpoint-xl: 1200px;
         width: auto;
 
         &:hover {
-            background-color: darken($primary, 15%);
+            background-color: color.adjust($primary, $lightness: -15%);
             transform: scale(1.1);
         }
     }
@@ -133,7 +131,7 @@ $breakpoint-xl: 1200px;
         width: auto;
 
         &:hover {
-            background-color: darken($danger, 15%);
+            background-color: color.adjust($danger, $lightness: -15%);
             transform: scale(1.1);
         }
     }
@@ -248,7 +246,7 @@ $breakpoint-xl: 1200px;
 
                 &:hover {
                     background-color: $light;
-                    color: darken($primary, 10%);
+                    color: color.adjust($primary, $lightness: -10%);
                 }
 
                 &:focus {

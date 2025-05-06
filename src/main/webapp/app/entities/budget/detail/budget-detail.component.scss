@@ -1,10 +1,7 @@
 /* ==========================================================================
 budget Detail page styles
 ========================================================================== */
-
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
+@use 'sass:color';
 
 // Định nghĩa màu sắc chủ đạo
 $primary: #007bff; // Xanh dương
@@ -159,8 +156,8 @@ $breakpoint-xl: 1200px;
           color: $white;
 
           &:hover {
-            background-color: darken(#6c757d, 10%);
-            border-color: darken(#6c757d, 10%);
+            background-color: color.adjust(#6c757d, $lightness: -10%);
+            border-color: color.adjust(#6c757d, $lightness: -10%);
           }
         }
 
@@ -170,8 +167,8 @@ $breakpoint-xl: 1200px;
           color: $white;
 
           &:hover {
-            background-color: darken($primary, 10%);
-            border-color: darken($primary, 10%);
+            background-color: color.adjust($primary, $lightness: -10%);
+            border-color: color.adjust($primary, $lightness: -10%);
           }
         }
       }

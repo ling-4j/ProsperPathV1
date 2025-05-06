@@ -1,6 +1,4 @@
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
+@use 'sass:color';
 
 // Định nghĩa màu sắc và font
 $primary: #1da1f2; // Màu xanh đặc trưng của X
@@ -214,8 +212,8 @@ $breakpoint-xl: 1200px;
           color: #fff;
 
           &:hover {
-            background-color: darken(#6c757d, 10%);
-            border-color: darken(#6c757d, 10%);
+            background-color: color.adjust(#6c757d, $lightness: -10%);
+            border-color: color.adjust(#6c757d, $lightness: -10%);
           }
         }
       }

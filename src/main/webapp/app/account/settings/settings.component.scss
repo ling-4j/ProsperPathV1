@@ -2,9 +2,7 @@
 Settings page styles
 ========================================================================== */
 
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
+@use 'sass:color';
 
 // Định nghĩa màu sắc chủ đạo
 $primary: #007bff; // Xanh dương
@@ -88,7 +86,7 @@ $font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: darken($primary, 10%);
+        background-color: color.adjust($primary, $lightness: -10%);
       }
     }
   }
