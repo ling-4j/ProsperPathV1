@@ -143,8 +143,11 @@ public class TransactionResource {
         // Cập nhật Summary: trừ giá trị cũ và cộng giá trị mới trong một lần gọi
         summaryQueryService.updateSummaryForTransaction(currentUser.get().getId(), oldTransaction, updatedTransaction);
 
-        notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), updatedTransaction);
-
+        if (updatedTransaction.getCategory() != null) {
+            notificationQueryService.createNotificationForTransaction(currentUser.get().getId(), updatedTransaction);
+            notificationQueryService.createWarningNotificationForTransaction(currentUser.get().getId(),
+            updatedTransaction);
+        }
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
                         transaction.getId().toString()))
