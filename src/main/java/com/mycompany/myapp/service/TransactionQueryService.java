@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -294,8 +295,13 @@ public class TransactionQueryService extends QueryService<Transaction> {
             PdfWriter.getInstance(document, outputStream);
             document.open();
 
+            // Load Roboto font or fallback to a font supporting Vietnamese
+            BaseFont baseFont = BaseFont.createFont("fonts/Roboto-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 18, com.itextpdf.text.Font.BOLD, BaseColor.RED);
+            com.itextpdf.text.Font headerFont = new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.NORMAL);
+            com.itextpdf.text.Font dataFont = new com.itextpdf.text.Font(baseFont, 10, com.itextpdf.text.Font.NORMAL);
+
             // Add title
-            com.itextpdf.text.Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.RED);
             Paragraph title = new Paragraph("Thống kê giao dịch", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
@@ -317,7 +323,6 @@ public class TransactionQueryService extends QueryService<Transaction> {
             table.setWidths(new int[] { 2, 2, 4, 3, 3 });
 
             // Add table headers
-            com.itextpdf.text.Font headerFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12);
             String[] headers = { "DANH MỤC", "LOẠI", "MÔ TẢ", "NGÀY", "SỐ TIỀN" };
             for (String header : headers) {
                 PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
@@ -327,7 +332,6 @@ public class TransactionQueryService extends QueryService<Transaction> {
             }
 
             // Add table data
-            com.itextpdf.text.Font dataFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10);
             for (Transaction transaction : sortedTransactions) {
                 // Cột DANH MỤC (mặc định là căn trái)
                 table.addCell(new Phrase(transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "", dataFont));

@@ -232,7 +232,8 @@ $font-family-base: 'Roboto', sans-serif;
 
   table {
     margin: 0 auto;
-    width: 60%;
+    min-width: 70%;
+    max-width: 100%;
     border-collapse: collapse;
     border-radius: 8px;
     overflow: hidden;

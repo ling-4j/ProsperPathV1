@@ -3,9 +3,9 @@
     "title": "GOLD PROFIT CALCULATOR TOOL",
     "note": "Please fill in all the information to calculate accurately!",
     "labels": {
-      "quantity": "Quantity ({{unit}})",
-      "goldType": "Gold Type:",
-      "purchasePrice": "Purchase Price (VND/tael):",
+      "quantity": "Quantity (tael):",
+      "goldType": "Select gold Type:",
+      "purchasePrice": "Purchase Price:",
       "selectGoldType": "Select gold type",
       "purchasePricePlaceholder": "Price per tael at purchase"
     },

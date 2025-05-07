@@ -15,27 +15,43 @@ $font-family-base: 'Roboto', sans-serif;
 
 // Navbar
 .navbar {
-  background: linear-gradient(145deg, #1e3a8a, #3b82f6, #1e3a8a); // Gradient xanh đậm sang trọng
+  background: linear-gradient(145deg, #1e3a8a, #2872e9, #1e3a8a); // Gradient xanh đậm sang trọng
   padding: 15px 20px; // Tăng padding cho thoáng
   border-bottom: 1px solid #d1d5db;
   border-radius: 15px 15px 0 0;
+  position: relative; // Đảm bảo logo căn chỉnh tốt
 
   .container-fluid {
     display: flex;
     align-items: center;
+    justify-content: space-between; // Căn đều logo và toggler
 
     // Logo
     .navbar-brand {
-      font-size: 28px; // Tăng kích thước logo
+      display: flex;
+      align-items: center;
+      font-size: 20px; // Giảm kích thước font văn bản để logo hình ảnh nổi bật
       font-weight: 700;
-      color: $white; // Đổi màu logo thành trắng để nổi bật trên nền xanh
+      color: #ffffff; // Màu trắng nổi bật trên nền xanh
       text-transform: uppercase;
+      padding: 5px 15px; // Thêm padding cho logo
+
+      .logo-image {
+        height: 50px; // Kích thước logo vừa phải, phù hợp với navbar
+        width: auto; // Giữ tỷ lệ ảnh
+        margin-right: 10px; // Khoảng cách giữa logo và văn bản
+      }
+
+      .navbar-title {
+        margin: 0; // Xóa margin mặc định
+      }
     }
 
     // Navbar toggler
     .navbar-toggler {
       border: none;
-      color: $white; // Đổi màu icon toggler
+      color: #ffffff; // Đổi màu icon toggler
+      padding: 5px 10px; // Thêm padding cho toggler
 
       fa-icon {
         font-size: 24px; // Tăng kích thước icon toggler
@@ -44,105 +60,49 @@ $font-family-base: 'Roboto', sans-serif;
 
     // Menu và icons
     .navbar-collapse {
-      background: linear-gradient(145deg, #0e49a7, #3582ff, #04398f); // Đồng bộ màu nền với navbar trên mobile
       border-radius: 15px; // Bo góc cho collapse trên mobile
+      padding: 10px 0; // Thêm padding cho collapse
 
       .navbar-nav {
+
         // Căn giữa các mục menu chính
         &:not(.ms-auto) {
           flex-grow: 1;
           justify-content: center; // Căn giữa
+          flex-wrap: wrap; // Cho phép wrap trên màn hình nhỏ
         }
 
         &.ms-auto {
           display: flex;
           align-items: center;
-
-          .nav-item {
-            &.position-relative {
-              .badge-notification {
-                position: absolute;
-                top: 0;
-                right: 0;
-                background-color: $red;
-                color: $white;
-                font-size: 10px;
-                padding: 3px 6px;
-                border-radius: 50%;
-              }
-            }
-
-            .nav-link {
-              color: $white; // Màu trắng cho dễ đọc
-              font-size: 16px; // Tăng kích thước chữ
-              font-weight: 500; // Đậm hơn một chút
-              padding: 8px 20px; // Tăng padding
-              transition:
-                color 0.3s ease,
-                background-color 0.3s ease;
-
-              &:hover {
-                color: $white;
-                background-color: rgba(255, 255, 255, 0.1); // Hiệu ứng hover nhẹ
-                border-radius: 5px;
-              }
-
-              fa-icon {
-                font-size: 18px; // Tăng kích thước icon
-                margin-right: 8px; // Khoảng cách giữa icon và text
-              }
-
-              &.dropdown-toggle {
-                display: flex;
-                align-items: center;
-
-                .profile-image {
-                  height: 35px; // Tăng kích thước ảnh profile
-                  width: 35px;
-                  margin-right: 8px;
-                }
-
-                &::after {
-                  margin-left: 5px;
-                  border-top-color: $white; // Đồng bộ màu mũi tên dropdown
-                }
-              }
-            }
-
-            .dropdown-menu {
-              border-radius: 10px;
-              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-              border: none;
-              margin-top: 5px;
-              background-color: $white;
-
-              .dropdown-item {
-                font-size: 14px;
-                padding: 8px 15px;
-                color: $dark;
-                transition: background-color 0.3s ease;
-
-                &:hover {
-                  background-color: $light-gray;
-                }
-
-                fa-icon {
-                  margin-right: 10px;
-                }
-              }
-            }
-          }
+          flex-wrap: nowrap; // Giữ menu phụ trên cùng 1 hàng
         }
 
         .nav-item {
+          &.position-relative {
+            .badge-notification {
+              position: absolute;
+              top: 0;
+              right: 0;
+              background-color: $red;
+              color: $white;
+              font-size: 10px;
+              padding: 3px 6px;
+              border-radius: 50%;
+            }
+          }
+
           .nav-link {
-            color: $white; // Màu trắng cho menu chính
-            font-size: 16px; // Tăng kích thước chữ
-            font-weight: 500;
-            padding: 8px 20px;
+            color: $white; // Màu trắng cho dễ đọc
+            font-size: 16px; // Kích thước chữ mặc định
+            font-weight: 500; // Đậm hơn một chút
+            padding: 8px 20px; // Padding mặc định
             transition:
               color 0.3s ease,
               background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            min-height: 44px; // Đảm bảo vùng nhấn tối thiểu cho cảm ứng
 
             &:hover {
               color: $white;
@@ -151,13 +111,129 @@ $font-family-base: 'Roboto', sans-serif;
             }
 
             fa-icon {
-              font-size: 18px; // Tăng kích thước icon
-              margin-right: 8px;
+              font-size: 18px; // Kích thước icon mặc định
+              margin-right: 8px; // Khoảng cách giữa icon và text
+            }
+
+            &.dropdown-toggle {
+              display: flex;
+              align-items: center;
+
+              .profile-image {
+                height: 35px; // Kích thước ảnh profile mặc định
+                width: 35px;
+                margin-right: 8px;
+                border-radius: 50%; // Đảm bảo ảnh tròn
+              }
+
+              &::after {
+                margin-left: 5px;
+                border-top-color: $white; // Đồng bộ màu mũi tên dropdown
+              }
+            }
+          }
+
+          .dropdown-menu {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+            margin-top: 5px;
+            background-color: $white;
+            width: max-content; // Đảm bảo dropdown không quá hẹp
+            max-width: 250px; // Giới hạn chiều rộng trên iPad
+
+            .dropdown-item {
+              font-size: 14px;
+              padding: 8px 15px;
+              color: $dark;
+              transition: background-color 0.3s ease;
+              min-height: 44px; // Đảm bảo vùng nhấn trên cảm ứng
+              display: flex;
+              align-items: center;
+
+              &:hover {
+                background-color: $light-gray;
+              }
+
+              fa-icon {
+                margin-right: 10px;
+              }
             }
           }
         }
       }
     }
+
+    // Media Queries cho các màn hình
+    // iPad Air và tablet (768px - 1024px)
+    @media (max-width: 1024px) {
+      .navbar-collapse {
+        .navbar-nav {
+          &:not(.ms-auto) {
+            justify-content: center; // Căn trái trên tablet để tránh tràn
+            padding: 0 10px;
+          }
+
+          &.ms-auto {
+            padding: 0 10px;
+          }
+
+          .nav-item {
+            .nav-link {
+              font-size: 14px; // Giảm kích thước chữ
+              padding: 6px 15px; // Giảm padding
+              min-height: 40px; // Vẫn đảm bảo vùng nhấn
+
+              fa-icon {
+                font-size: 18px; // Giảm kích thước icon
+                margin-right: 6px;
+              }
+
+              &.dropdown-toggle {
+                .profile-image {
+                  height: 30px; // Giảm kích thước ảnh profile
+                  width: 30px;
+                  margin-right: 6px;
+                }
+              }
+            }
+
+            .dropdown-menu {
+              max-width: 220px; // Giảm chiều rộng dropdown trên tablet
+              font-size: 13px;
+
+              .dropdown-item {
+                padding: 6px 12px;
+                min-height: 40px; // Vẫn đảm bảo vùng nhấn
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.alert-auto-dismiss {
+  animation: slideIn 0.5s forwards, autoDismiss 3s 2s forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes autoDismiss {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
   }
 }
 

@@ -11,13 +11,13 @@
     <div class="row d-flex align-items-center">
       <!-- Nhóm nhập số lượng vàng -->
       <div class="quantity-box col-md-4 col-sm-12">
-        <label> Số lượng ({{ unit }}) </label>
-        <input type="number" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()" min="1" class="quantity-field" />
+        <label jhiTranslate="gold.labels.quantity"> Số lượng vàng </label>
+        <input type="text" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()" min="1" class="quantity-field" jhiNumberFormat/>
       </div>
 
       <!-- Loại vàng -->
       <div class="input-box col-md-4 col-sm-12">
-        <label jhiTranslate="gold.labels.goldType">Loại vàng:</label>
+        <label jhiTranslate="gold.labels.goldType">Chọn loại vàng:</label>
         <select class="select-gold" [(ngModel)]="selectedType">
           <option value="" disabled selected jhiTranslate="gold.labels.selectGoldType">Chọn loại vàng</option>
           <option *ngFor="let g of goldTypes" [value]="g.tensp">{{ g.tensp }}</option>
@@ -26,13 +26,13 @@
 
       <!-- Giá mua -->
       <div class="input-box col-md-4 col-sm-12">
-        <label jhiTranslate="gold.labels.purchasePrice">Giá mua (đ/chỉ):</label>
+        <label jhiTranslate="gold.labels.purchasePrice" >Giá mua (đ/chỉ):</label>
         <input
           class="input-gold"
-          type="number"
+          type="text"
           [(ngModel)]="purchasePrice"
-          [placeholder]="'gold.labels.purchasePricePlaceholder' | translate"
-          min="0"
+          [placeholder]="'gold.labels.purchasePricePlaceholder'|translate"
+          min="0" jhiNumberFormat
         />
       </div>
     </div>

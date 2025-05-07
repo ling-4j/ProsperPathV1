@@ -23,7 +23,7 @@
       "expirationDate": "Ngày hết hạn",
       "securityCode": "Mã bảo mật",
       "billingAddress": "Địa chỉ thanh toán",
-      "create": "Thêm tín dụng",
+      "create": "Thêm thẻ tín dụng",
       "update": "Cập nhật thẻ tín dụng"
     }
   }

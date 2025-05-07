@@ -73,6 +73,7 @@ export type ChartOptions = {
 export default class HomeComponent implements OnInit, OnDestroy {
   account = signal<Account | null>(null);
   isLoading = signal<boolean>(false);
+  showWarning: boolean = false;
 
   // Signals for current period data
   selectedPeriod = signal<'week' | 'month' | 'year'>('month');

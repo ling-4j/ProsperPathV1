@@ -164,7 +164,7 @@
                     {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
                   </td>
                   <td class="text-break" (click)="handleBudgetClick(transaction)">
-                    {{ transaction.description ? (transaction.description | truncate: 5) : '' }}
+                    {{ transaction.description ? (transaction.description | truncate: 3) : '' }}
                   </td>
                   <td (click)="handleBudgetClick(transaction)">{{ transaction.transactionDate | formatMediumDatetime }}</td>
                   <td

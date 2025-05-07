@@ -2,94 +2,94 @@
   <!-- Nội dung chính: Dashboard hoặc thông tin đăng nhập -->
   <div class="row">
     @if (account() !== null) {
-      <!-- Dashboard khi đã đăng nhập -->
-      <div class="col-md-12">
-        <!-- Add reusable card template with cardClass -->
-        <ng-template
-          #cardTemplate
-          let-title="title"
-          let-icon="icon"
-          let-value="value"
-          let-percentage="percentage"
-          let-period="period"
-          let-headerClass="headerClass"
-          let-cardClass="cardClass"
-        >
-          <div class="card mb-3" [ngClass]="cardClass" style="border-radius: 15px">
-            <div class="card-body">
-              <h5 class="card-title">{{ title }}</h5>
-              <h3 class="card-value fw-bold">{{ value | currency: 'VND' }}</h3>
-              <span
-                class="badge"
-                [ngStyle]="
+    <!-- Dashboard khi đã đăng nhập -->
+    <div class="col-md-12">
+      <!-- Add reusable card template with cardClass -->
+      <ng-template #cardTemplate let-title="title" let-icon="icon" let-value="value" let-percentage="percentage"
+        let-period="period" let-headerClass="headerClass" let-cardClass="cardClass">
+        <div class="card mb-3" [ngClass]="cardClass" style="border-radius: 15px">
+          <div class="card-body">
+            <h5 class="card-title">{{ title }}</h5>
+            <h3 class="card-value fw-bold">{{ value | currency: 'VND' }}</h3>
+            <span class="badge" [ngStyle]="
                   percentage < 0
                     ? { color: '#dc3545', 'background-color': 'rgba(220,53,69,0.1)', 'border-radius': '12px' }
                     : { color: '#28a745', 'background-color': 'rgba(40,167,69,0.1)', 'border-radius': '12px' }
-                "
-              >
-                {{ percentage }}%
-              </span>
-            </div>
+                ">
+              {{ percentage }}%
+            </span>
           </div>
-        </ng-template>
+        </div>
+      </ng-template>
 
-        <!-- Dashboard layout -->
-        <div class="dashboard-content">
-          <!-- Cột trái: Thẻ tín dụng -->
-          <div class="dashboard-left">
-            <div class="credit">
-              <div class="title">
-                <h2 class="fw-bold">CARD</h2>
-              </div>
-              <div class="card credit-card">
-                <div class="card-body">
-                  <div class="credit-card-header">
-                    <span>VISA CARD</span>
-                    <span>Platinum</span>
+      <!-- Dashboard layout -->
+      <div class="dashboard-content">
+        <!-- Cột trái: Thẻ tín dụng -->
+        <div class="dashboard-left">
+          <div class="credit">
+            <div class="title">
+              <h2 class="fw-bold">CARD</h2>
+            </div>
+            <div class="card credit-card">
+              <div class="card-body">
+                <div class="credit-card-header">
+                  <span>VISA CARD</span>
+                  <span>Platinum</span>
+                </div>
+                <div class="credit-card-number">
+                  <span>XXXX</span>
+                  <span>XXXX</span>
+                  <span>XXXX</span>
+                  <span>XXXX</span>
+                </div>
+                <div class="credit-card-footer">
+                  <div>
+                    <small>Cardholder</small>
+                    <p>Card name</p>
                   </div>
-                  <div class="credit-card-number">
-                    <span>XXXX</span>
-                    <span>XXXX</span>
-                    <span>XXXX</span>
-                    <span>XXXX</span>
-                  </div>
-                  <div class="credit-card-footer">
-                    <div>
-                      <small>Cardholder</small>
-                      <p>Card name</p>
-                    </div>
-                    <div>
-                      <small>Expiry date</small>
-                      <p>XX/XX</p>
-                    </div>
+                  <div>
+                    <small>Expiry date</small>
+                    <p>XX/XX</p>
                   </div>
                 </div>
               </div>
-              <div class="card-btn">
-                <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity" [routerLink]="['/']">
-                  <fa-icon icon="plus"></fa-icon>
-                  <span jhiTranslate="home.card.create">CReate card</span>
-                </button>
+            </div>
+            <div class="card-btn">
+              <!-- Input ẩn để lưu trạng thái, dùng ngModel -->
+              <input type="checkbox" [(ngModel)]="showWarning" style="display: none;" id="createCardWarningToggle">
+              <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity"
+                [routerLink]="['/']" (click)="showWarning = !showWarning">
+                <fa-icon icon="plus"></fa-icon>
+                <span jhiTranslate="home.card.create">CReate card</span>
+              </button>
+              <!-- Div cảnh báo -->
+              <div *ngIf="showWarning" class="alert alert-warning alert-dismissible fade show alert-auto-dismiss"
+                role="alert" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;">
+                <strong jhiTranslate="prosperPathApp.notification.calendar.warningTitle">Cảnh báo</strong>
+                <p jhiTranslate="prosperPathApp.notification.calendar.warning">Oops, tính năng này đang trong quá trình
+                  phát
+                  <button type="button" class="btn-close" (click)="showWarning = false" aria-label="Close"></button>
               </div>
             </div>
           </div>
-          <!-- Cột giữa: 4 card-->
-          <div class="dashboard-center">
-            <div class="dashboard-header">
-              <!-- Bộ lọc khoảng thời gian -->
-              <div class="mb-3 d-flex justify-content-left">
-                <select id="periodSelect" class="form-control w-auto" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
-                  <option value="week" jhiTranslate="prosperPathApp.summary.timePeriod.WEEKLY">This Week</option>
-                  <option value="month" jhiTranslate="prosperPathApp.summary.timePeriod.MONTHLY">This Month</option>
-                  <option value="year" jhiTranslate="prosperPathApp.summary.timePeriod.YEARLY">This Year</option>
-                </select>
-              </div>
+        </div>
+        <!-- Cột giữa: 4 card-->
+        <div class="dashboard-center">
+          <div class="dashboard-header">
+            <!-- Bộ lọc khoảng thời gian -->
+            <div class="mb-3 d-flex justify-content-left">
+              <select id="periodSelect" class="form-control w-auto" [(ngModel)]="selectedPeriod"
+                (change)="onPeriodChange()">
+                <option value="week" jhiTranslate="prosperPathApp.summary.timePeriod.WEEKLY">This Week</option>
+                <option value="month" jhiTranslate="prosperPathApp.summary.timePeriod.MONTHLY">This Month</option>
+                <option value="year" jhiTranslate="prosperPathApp.summary.timePeriod.YEARLY">This Year</option>
+              </select>
             </div>
-            <!-- 4 card 2x2 grid -->
-            <div class="cards-wrapper">
-              <!-- Total Assets Card -->
-              <ng-container
-                *ngTemplateOutlet="
+          </div>
+          <!-- 4 card 2x2 grid -->
+          <div class="cards-wrapper">
+            <!-- Total Assets Card -->
+            <ng-container *ngTemplateOutlet="
                   cardTemplate;
                   context: {
                     title: 'Total Assets',
@@ -98,12 +98,10 @@
                     period: selectedPeriod(),
                     cardClass: 'bg-primary text-white',
                   }
-                "
-              ></ng-container>
+                "></ng-container>
 
-              <!-- Profit/Loss Card -->
-              <ng-container
-                *ngTemplateOutlet="
+            <!-- Profit/Loss Card -->
+            <ng-container *ngTemplateOutlet="
                   cardTemplate;
                   context: {
                     title: 'Profit/Loss',
@@ -112,12 +110,10 @@
                     period: selectedPeriod(),
                     cardClass: 'bg-success text-white',
                   }
-                "
-              ></ng-container>
+                "></ng-container>
 
-              <!-- Total Income Card -->
-              <ng-container
-                *ngTemplateOutlet="
+            <!-- Total Income Card -->
+            <ng-container *ngTemplateOutlet="
                   cardTemplate;
                   context: {
                     title: 'Total Income',
@@ -126,12 +122,10 @@
                     period: selectedPeriod(),
                     cardClass: 'bg-teal text-white',
                   }
-                "
-              ></ng-container>
+                "></ng-container>
 
-              <!-- Total Expense Card -->
-              <ng-container
-                *ngTemplateOutlet="
+            <!-- Total Expense Card -->
+            <ng-container *ngTemplateOutlet="
                   cardTemplate;
                   context: {
                     title: 'Total Expense',
@@ -140,79 +134,67 @@
                     period: selectedPeriod(),
                     cardClass: 'bg-danger text-white',
                   }
-                "
-              ></ng-container>
-            </div>
+                "></ng-container>
           </div>
+        </div>
 
-          <!-- Cột phải: gold calculated -->
-          <div class="dashboard-right">
-            <div class="gold-card">
-              <div><jhi-gold-profit-calculator></jhi-gold-profit-calculator></div>
-            </div>
+        <!-- Cột phải: gold calculated -->
+        <div class="dashboard-right">
+          <div class="gold-card">
+            <div><jhi-gold-profit-calculator></jhi-gold-profit-calculator></div>
           </div>
+        </div>
 
-          <!-- Phần biểu đồ -->
-          <div class="dashboard-bot">
-            <div class="row">
-              <!-- Progress Rate Line Chart -->
-              <div class="col-12 col-md-6 col-lg-5">
-                <div class="chart-card progress-rate">
-                  <div class="card-body">
-                    <h5 jhiTranslate="prosperPathApp.summary.chart.Line.title">Overall Progress</h5>
-                    <div>
-                      <apx-chart
-                        [series]="progressRateChartOptions.series!"
-                        [chart]="progressRateChartOptions.chart!"
-                        [xaxis]="progressRateChartOptions.xaxis!"
-                        [dataLabels]="progressRateChartOptions.dataLabels!"
-                        [stroke]="progressRateChartOptions.stroke!"
-                        [colors]="progressRateChartOptions.colors!"
-                        [tooltip]="progressRateChartOptions.tooltip!"
-                      ></apx-chart>
-                    </div>
+        <!-- Phần biểu đồ -->
+        <div class="dashboard-bot">
+          <div class="row">
+            <!-- Progress Rate Line Chart -->
+            <div class="col-12 col-md-6 col-lg-5">
+              <div class="chart-card progress-rate">
+                <div class="card-body">
+                  <h5 jhiTranslate="prosperPathApp.summary.chart.Line.title">Overall Progress</h5>
+                  <div>
+                    <apx-chart [series]="progressRateChartOptions.series!" [chart]="progressRateChartOptions.chart!"
+                      [xaxis]="progressRateChartOptions.xaxis!" [dataLabels]="progressRateChartOptions.dataLabels!"
+                      [stroke]="progressRateChartOptions.stroke!" [colors]="progressRateChartOptions.colors!"
+                      [tooltip]="progressRateChartOptions.tooltip!"></apx-chart>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Income vs Expense Donut Chart -->
-              <div class="col-12 col-md-6 col-lg-3">
-                <div class="chart-card income-vs-expense-donut">
-                  <div class="card-body">
-                    <h5 jhiTranslate="prosperPathApp.summary.chart.Donut.title">Income vs Expense</h5>
-                    <div>
-                      <apx-chart
-                        [series]="incomeVsExpenseDonutChartOptions.series!"
-                        [chart]="incomeVsExpenseDonutChartOptions.chart!"
-                        [labels]="incomeVsExpenseDonutChartOptions.labels!"
-                        [colors]="incomeVsExpenseDonutChartOptions.colors!"
-                        [legend]="incomeVsExpenseDonutChartOptions.legend!"
-                        [dataLabels]="incomeVsExpenseDonutChartOptions.dataLabels!"
-                        [plotOptions]="incomeVsExpenseDonutChartOptions.plotOptions!"
-                        [responsive]="incomeVsExpenseDonutChartOptions.responsive!"
-                      ></apx-chart>
-                    </div>
+            <!-- Income vs Expense Donut Chart -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="chart-card income-vs-expense-donut">
+                <div class="card-body">
+                  <h5 jhiTranslate="prosperPathApp.summary.chart.Donut.title">Income vs Expense</h5>
+                  <div>
+                    <apx-chart [series]="incomeVsExpenseDonutChartOptions.series!"
+                      [chart]="incomeVsExpenseDonutChartOptions.chart!"
+                      [labels]="incomeVsExpenseDonutChartOptions.labels!"
+                      [colors]="incomeVsExpenseDonutChartOptions.colors!"
+                      [legend]="incomeVsExpenseDonutChartOptions.legend!"
+                      [dataLabels]="incomeVsExpenseDonutChartOptions.dataLabels!"
+                      [plotOptions]="incomeVsExpenseDonutChartOptions.plotOptions!"
+                      [responsive]="incomeVsExpenseDonutChartOptions.responsive!"></apx-chart>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Income vs Expense Line Chart -->
-              <div class="col-12 col-md-6 col-lg-4">
-                <div class="chart-card income-vs-expense-line">
-                  <div class="card-body">
-                    <h5 jhiTranslate="prosperPathApp.summary.chart.Bar.title">Income vs Expense</h5>
-                    <div>
-                      <apx-chart
-                        [series]="incomeVsExpenseLineChartOptions.series!"
-                        [chart]="incomeVsExpenseLineChartOptions.chart!"
-                        [xaxis]="incomeVsExpenseLineChartOptions.xaxis!"
-                        [dataLabels]="incomeVsExpenseLineChartOptions.dataLabels!"
-                        [stroke]="incomeVsExpenseLineChartOptions.stroke!"
-                        [colors]="incomeVsExpenseLineChartOptions.colors!"
-                        [legend]="incomeVsExpenseLineChartOptions.legend!"
-                        [tooltip]="incomeVsExpenseLineChartOptions.tooltip!"
-                      ></apx-chart>
-                    </div>
+            <!-- Income vs Expense Line Chart -->
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="chart-card income-vs-expense-line">
+                <div class="card-body">
+                  <h5 jhiTranslate="prosperPathApp.summary.chart.Bar.title">Income vs Expense</h5>
+                  <div>
+                    <apx-chart [series]="incomeVsExpenseLineChartOptions.series!"
+                      [chart]="incomeVsExpenseLineChartOptions.chart!" [xaxis]="incomeVsExpenseLineChartOptions.xaxis!"
+                      [dataLabels]="incomeVsExpenseLineChartOptions.dataLabels!"
+                      [stroke]="incomeVsExpenseLineChartOptions.stroke!"
+                      [colors]="incomeVsExpenseLineChartOptions.colors!"
+                      [legend]="incomeVsExpenseLineChartOptions.legend!"
+                      [tooltip]="incomeVsExpenseLineChartOptions.tooltip!"></apx-chart>
                   </div>
                 </div>
               </div>
@@ -220,15 +202,16 @@
           </div>
         </div>
       </div>
+    </div>
     } @else {
-      <div class="col-md-12">
-        <div class="carousel-wrapper">
-          <jhi-carousel></jhi-carousel>
-        </div>
-        <div class="gold-profit-wrapper">
-          <!-- <jhi-gold-profit-calculator></jhi-gold-profit-calculator> -->
-        </div>
+    <div class="col-md-12">
+      <div class="carousel-wrapper">
+        <jhi-carousel></jhi-carousel>
       </div>
+      <div class="gold-profit-wrapper">
+        <!-- <jhi-gold-profit-calculator></jhi-gold-profit-calculator> -->
+      </div>
+    </div>
     }
   </div>
 </div>

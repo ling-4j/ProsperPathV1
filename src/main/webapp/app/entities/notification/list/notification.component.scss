@@ -26,7 +26,7 @@ $breakpoint-xl: 1200px;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  //   padding: 2rem; // Dùng rem để co giãn linh hoạt
+  min-height: 84vh; 
 
   // Responsive cho container
   @media (max-width: $breakpoint-md) {

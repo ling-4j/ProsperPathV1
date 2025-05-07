@@ -2,20 +2,14 @@
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
+      <img src="content/images/logo-1.png" alt="Logo" class="logo-image" />
       <span class="navbar-title" jhiTranslate="global.title">ProsperPath</span>
     </a>
 
     <!-- Toggler cho mobile -->
-    <a
-      class="navbar-toggler d-lg-none"
-      href="javascript:void(0);"
-      data-toggle="collapse"
-      data-target="#navbarResponsive"
-      aria-controls="navbarResponsive"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      (click)="toggleNavbar()"
-    >
+    <a class="navbar-toggler d-lg-none" href="javascript:void(0);" data-toggle="collapse"
+      data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+      aria-label="Toggle navigation" (click)="toggleNavbar()">
       <fa-icon icon="bars"></fa-icon>
     </a>
 
@@ -23,86 +17,67 @@
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
       <!-- Menu chính -->
       @if (account() !== null) {
-        <ul class="navbar-nav">
-          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
-              <fa-icon icon="house" [fixedWidth]="true" class="me-1"></fa-icon>
-              <span jhiTranslate="global.menu.home">Home</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/transaction" (click)="collapseNavbar()">
-              <fa-icon icon="money-bill-transfer" [fixedWidth]="true" class="me-1"></fa-icon>
-              <span jhiTranslate="global.menu.entities.transaction">Transaction</span>
-            </a>
-          </li>
-          <!-- <li class="nav-item">
-          <a class="nav-link" routerLink="/summary" (click)="collapseNavbar()">
-            <fa-icon icon="chart-line" [fixedWidth]="true" class="me-1"></fa-icon>
-            <span jhiTranslate="global.menu.entities.summary">Report</span>
+      <ul class="navbar-nav">
+        <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
+            <fa-icon icon="house" [fixedWidth]="true" class="me-1"></fa-icon>
+            <span jhiTranslate="global.menu.home">Home</span>
           </a>
-        </li> -->
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/gold-cal" (click)="collapseNavbar()">
-              <fa-icon icon="calculator" [fixedWidth]="true" class="me-1"></fa-icon>
-              <span jhiTranslate="global.menu.entities.gold-cal">Gold Calculate</span>
-            </a>
-          </li>
-        </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/transaction" (click)="collapseNavbar()">
+            <fa-icon icon="money-bill-transfer" [fixedWidth]="true" class="me-1"></fa-icon>
+            <span jhiTranslate="global.menu.entities.transaction">Transaction</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/gold-cal" (click)="collapseNavbar()">
+            <fa-icon icon="calculator" [fixedWidth]="true" class="me-1"></fa-icon>
+            <span jhiTranslate="global.menu.entities.gold-cal">Gold Calculate</span>
+          </a>
+        </li>
+      </ul>
       }
       <!-- Icons và Profile bên phải -->
       <ul class="navbar-nav ms-auto align-items-center">
         <!-- Biểu tượng ngôn ngữ -->
         @if (languages && languages.length > 1) {
-          <li ngbDropdown class="nav-item dropdown pointer" display="dynamic">
-            <a class="nav-link" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
-              <fa-icon icon="flag"></fa-icon>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
-              @for (language of languages; track $index) {
-                <li>
-                  <a
-                    class="dropdown-item"
-                    [jhiActiveMenu]="language"
-                    href="javascript:void(0);"
-                    (click)="changeLanguage(language); collapseNavbar()"
-                  >
-                    {{ language | findLanguageFromKey }}
-                  </a>
-                </li>
-              }
-            </ul>
-          </li>
-        }
-        <!-- Biểu tượng lịch -->
-        <li class="nav-item">
-          <a class="nav-link" href="javascript:void(0);">
-            <fa-icon icon="calendar-alt"></fa-icon>
+        <li ngbDropdown class="nav-item dropdown pointer" display="dynamic">
+          <a class="nav-link" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
+            <fa-icon icon="flag"></fa-icon>
           </a>
+          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
+            @for (language of languages; track $index) {
+            <li>
+              <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);"
+                (click)="changeLanguage(language); collapseNavbar()">
+                {{ language | findLanguageFromKey }}
+              </a>
+            </li>
+            }
+          </ul>
         </li>
+        }
 
         <!-- Biểu tượng thông báo -->
         <li ngbDropdown class="nav-item dropdown pointer position-relative" display="dynamic">
           <a class="nav-link" href="javascript:void(0);" id="notificationMenu" ngbDropdownToggle aria-expanded="false">
             <fa-icon icon="bell"></fa-icon>
             @if (unreadNotifications().length > 0) {
-              <span class="badge badge-notification">{{ unreadNotifications().length }}</span>
+            <span class="badge badge-notification">{{ unreadNotifications().length }}</span>
             } @else {
-              <span class="badge badge-notification"></span>
+            <span class="badge badge-notification"></span>
             }
             <!-- Hiển thị số thông báo chưa đọc -->
           </a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-notification" ngbDropdownMenu aria-labelledby="notificationMenu">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-notification" ngbDropdownMenu
+            aria-labelledby="notificationMenu">
             <ng-container *ngIf="unreadNotifications().length > 0; else noNotifications">
-              <li
-                *ngFor="let notification of unreadNotifications().slice(0, 3); let i = index"
-                class="dropdown-item d-flex align-items-start gap-2 pointer"
-              >
-                <fa-icon
-                  icon="circle"
+              <li *ngFor="let notification of unreadNotifications().slice(0, 3); let i = index"
+                class="dropdown-item d-flex align-items-start gap-2 pointer">
+                <fa-icon icon="circle"
                   [ngClass]="{ 'text-success': !notification.isRead, 'text-muted': notification.isRead }"
-                  size="xs"
-                ></fa-icon>
+                  size="xs"></fa-icon>
                 <div class="flex-grow-1" (click)="handleNotificationClick(notification)">
                   <div class="small text-muted">{{ notification.createdAt | formatMediumDatetime }}</div>
                   <div>{{ notification.message ? (notification.message | truncate: 10) : '' }}</div>
@@ -112,96 +87,80 @@
                 <hr class="dropdown-divider" />
               </li>
               <li>
-                <a class="dropdown-item text-center" routerLink="/notification" (click)="collapseNavbar()"> Xem tất cả thông báo </a>
+                <a class="dropdown-item text-center" routerLink="/notification" (click)="collapseNavbar()"
+                  jhiTranslate="prosperPathApp.notification.dropdown.viewAll">
+                  View all
+                </a>
               </li>
             </ng-container>
             <ng-template #noNotifications>
-              <li class="dropdown-item text-muted text-center">Không có thông báo chưa đọc.</li>
+              <li class="dropdown-item text-muted text-center"
+                jhiTranslate="prosperPathApp.notification.dropdown.noUnread">
+                No unread
+              </li>
               <li>
-                <a class="dropdown-item text-center" routerLink="/notification" (click)="collapseNavbar()"> Xem tất cả thông báo </a>
+                <a class="dropdown-item text-center" routerLink="/notification" (click)="collapseNavbar()"
+                  jhiTranslate="prosperPathApp.notification.dropdown.viewAll">
+                  View all
+                </a>
               </li>
             </ng-template>
           </ul>
         </li>
 
         <!-- Profile -->
-        <li
-          ngbDropdown
-          class="nav-item dropdown pointer"
-          display="dynamic"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+        <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
           @let accountRef = account();
-          <a
-            class="nav-link dropdown-toggle d-flex align-items-center"
-            ngbDropdownToggle
-            href="javascript:void(0);"
-            id="account-menu"
-            data-cy="accountMenu"
-          >
+          <a class="nav-link dropdown-toggle d-flex align-items-center" ngbDropdownToggle href="javascript:void(0);"
+            id="account-menu" data-cy="accountMenu">
             @if (!accountRef?.imageUrl) {
-              <span>
-                <fa-icon icon="user"></fa-icon>
-              </span>
+            <span>
+              <fa-icon icon="user"></fa-icon>
+            </span>
             } @else {
-              <span class="d-flex align-items-center">
-                <img [src]="accountRef!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
-                <span class="ms-1">M. Inam</span>
-              </span>
+            <span class="d-flex align-items-center">
+              <img [src]="accountRef!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
+              <span class="ms-1">M. Inam</span>
+            </span>
             }
           </a>
           <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="account-menu">
             @if (accountRef !== null) {
-              <li>
-                <a
-                  class="dropdown-item"
-                  routerLink="/account/settings"
-                  routerLinkActive="active"
-                  (click)="collapseNavbar()"
-                  data-cy="settings"
-                >
-                  <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.settings">Settings</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  routerLink="/account/password"
-                  routerLinkActive="active"
-                  (click)="collapseNavbar()"
-                  data-cy="passwordItem"
-                >
-                  <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.password">Password</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
-                  <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.logout">Sign out</span>
-                </a>
-              </li>
+            <li>
+              <a class="dropdown-item" routerLink="/account/settings" routerLinkActive="active"
+                (click)="collapseNavbar()" data-cy="settings">
+                <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.account.settings">Settings</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/account/password" routerLinkActive="active"
+                (click)="collapseNavbar()" data-cy="passwordItem">
+                <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.account.password">Password</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
+                <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.account.logout">Sign out</span>
+              </a>
+            </li>
             } @else {
-              <li>
-                <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
-                  <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.login">Sign in</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  routerLink="/account/register"
-                  routerLinkActive="active"
-                  (click)="collapseNavbar()"
-                  data-cy="register"
-                >
-                  <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.register">Register</span>
-                </a>
-              </li>
+            <li>
+              <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
+                <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.account.login">Sign in</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/account/register" routerLinkActive="active"
+                (click)="collapseNavbar()" data-cy="register">
+                <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.account.register">Register</span>
+              </a>
+            </li>
             }
           </ul>
         </li>

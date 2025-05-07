@@ -27,6 +27,19 @@
         "all": "Tất cả",
         "unread": "Chưa đọc",
         "read": "Đã đọc"
+      },
+      "dropdown": {
+        "viewAll": "Xem tất cả thông báo",
+        "noUnread": "Không có thông báo chưa đọc"
+      },
+      "messages": {
+        "exampleKey": "Thông báo mẫu"
+      },
+      "calendar": {
+        "title": "Lịch",
+        "description": "Đây là một thành phần lịch.",
+        "warningTitle": "<b>Cảnh báo</b>",
+        "warning": "<i>Ôi, tính năng này đang trong quá trình phát triển!!!</i>"
       }
     }
   }

@@ -3,19 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import TranslateDirective from '../../../shared/language/translate.directive';
 import { GoldPriceService } from '../../gold-cal/service/gold-price.service';
 import { GoldPrice } from '../../gold-cal/gold-price.model';
+import { NumberFormatDirective } from 'app/shared/directive/number-format.directive';
 
 @Component({
   selector: 'jhi-gold-profit-calculator',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateDirective, TranslateModule, NumberFormatDirective],
   templateUrl: './gold-profit-calculator.component.html',
   styleUrls: ['./gold-profit-calculator.component.scss'],
 })
 export default class GoldProfitCalculatorComponent implements OnInit {
   quantity = 1;
-  unit = 'chỉ';
   selectedType = '';
   purchasePrice: number | null = null;
   goldTypes: GoldPrice[] = [];

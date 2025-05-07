@@ -3,8 +3,8 @@
     "title": "CÔNG CỤ TÍNH TOÁN LỢI NHUẬN TỪ VÀNG",
     "note": "Vui lòng nhập đầy đủ các thông tin để tính toán chính xác!",
     "labels": {
-      "quantity": "Số lượng ({{unit}})",
-      "goldType": "Loại vàng:",
+      "quantity": "Số lượng vàng:",
+      "goldType": "Chọn loại vàng:",
       "purchasePrice": "Giá mua (đ/chỉ):",
       "selectGoldType": "Chọn loại vàng",
       "purchasePricePlaceholder": "Giá 1 chỉ lúc mua"

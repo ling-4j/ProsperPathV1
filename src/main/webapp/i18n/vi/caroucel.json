@@ -1,0 +1,26 @@
+{
+    "carousel": {
+      "slides": {
+        "slide1": {
+          "title": "Chào mừng đến với Prosper Path",
+          "description": "Hành trình đến thành công tài chính bắt đầu từ đây. Khám phá công cụ quản lý tài sản của bạn.",
+          "button": "Bắt đầu ngay"
+        },
+        "slide2": {
+          "title": "Theo dõi tài chính của bạn",
+          "description": "Luôn kiểm soát ngân sách với các tính năng theo dõi thông minh của chúng tôi.",
+          "button": "Đăng nhập"
+        },
+        "slide3": {
+          "title": "Lên kế hoạch cho tương lai",
+          "description": "Đặt mục tiêu và đạt được chúng với công cụ lập kế hoạch của Prosper Path.",
+          "button": "Tham gia ngay"
+        }
+      },
+      "controls": {
+        "previous": "Trước",
+        "next": "Tiếp"
+      }
+    }
+  }
+  

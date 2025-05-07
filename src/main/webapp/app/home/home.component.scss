@@ -401,23 +401,17 @@ $font-family-base: 'Roboto', sans-serif;
       color: #0056b3;
     }
 
-    // Alert khi chưa đăng nhập
-    .alert {
-      border-radius: 10px;
-      padding: 15px;
-      background: linear-gradient(135deg, #fff3cd, #ffeeba);
-      border: none;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
-      .alert-link {
-        color: $primary;
-        font-weight: 500;
-        transition: color 0.3s ease;
-
-        &:hover {
-          color: color.adjust($primary, $lightness: -10%);
-        }
-      }
+    .alert-auto-dismiss {
+      animation: slideIn 0.5s forwards, autoDismiss 3s 2s forwards;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes autoDismiss {
+      to { opacity: 0; transform: translateX(100%); }
     }
   }
 }

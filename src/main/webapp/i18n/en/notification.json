@@ -27,6 +27,19 @@
         "all": "All",
         "unread": "Unread",
         "read": "Read"
+      },
+      "dropdown": {
+        "viewAll": "View all notifications",
+        "noUnread": "No unread notifications"
+      },
+      "messages": {
+        "exampleKey": "Sample notification"
+      },
+      "calendar": {
+        "title": "Calendar",
+        "description": "This is a calendar component.",
+        "warningTitle": "<b>Warning</b>",
+        "warning": "<i>Oops, this feature is under development!!!</i>"
       }
     }
   }
