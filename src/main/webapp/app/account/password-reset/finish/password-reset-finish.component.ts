@@ -44,7 +44,10 @@ export default class PasswordResetFinishComponent implements OnInit, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    this.newPassword().nativeElement.focus();
+    // eslint-disable-next-line
+    if (this.newPassword()) {
+      this.newPassword().nativeElement.focus();
+    }
   }
 
   finishReset(): void {

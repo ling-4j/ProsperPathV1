@@ -25,7 +25,10 @@ export default class PasswordResetInitComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.email().nativeElement.focus();
+    // eslint-disable-next-line
+    if (this.email()) {
+      this.email().nativeElement.focus();
+    }
   }
 
   requestReset(): void {

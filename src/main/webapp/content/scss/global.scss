@@ -4,42 +4,11 @@
 
 @font-face {
   font-family: 'Playfair Display';
-  src: url('../fonts/PlayfairDisplay-Regular.ttf') format('woff2');
+  src: url('/content/fonts/PlayfairDisplay-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 
-// @font-face {
-//   font-family: 'Playfair Display';
-//   src: url('../fonts/PlayfairDisplay-Bold.ttf') format('woff2');
-//   font-weight: 700;
-//   font-style: normal;
-// }
-
-// @font-face {
-//   font-family: 'Playfair Display';
-//   src: url('../fonts/PlayfairDisplay-Regular.ttf') format('woff2');
-//   font-weight: 400;
-//   font-style: normal;
-// }
-
-// @font-face {
-//   font-family: 'Playfair Display';
-//   src: url('../fonts/Roboto-Regular.ttf') format('woff2');
-//   font-weight: 700;
-//   font-style: normal;
-// }
-
-// @font-face {
-//   font-family: 'Playfair Display';
-//   src: url('../fonts/Roboto_SemiCondensed-Bold.ttf') format('woff2');
-//   font-weight: 400;
-//   font-style: normal;
-// }
-
-/* ==============================================================
-Bootstrap tweaks
-===============================================================*/
 body,
 h1,
 h2,
@@ -153,6 +122,7 @@ Custom alerts for notification
 .alerts {
   .alert {
     text-overflow: ellipsis;
+
     pre {
       background: none;
       border: none;
@@ -161,22 +131,28 @@ Custom alerts for notification
       padding: 0;
       margin: 0;
     }
+
     .popover pre {
       font-size: 10px;
     }
   }
+
   .jhi-toast {
     position: fixed;
     width: 100%;
+
     &.left {
       left: 5px;
     }
+
     &.right {
       right: 5px;
     }
+
     &.top {
       top: 55px;
     }
+
     &.bottom {
       bottom: 55px;
     }
@@ -193,7 +169,7 @@ Custom alerts for notification
 entity list page css
 ========================================================================== */
 
-.table-entities thead th .d-flex > * {
+.table-entities thead th .d-flex>* {
   margin: auto 0;
 }
 
@@ -208,7 +184,7 @@ entity detail page css
 }
 
 @media screen and (min-width: 768px) {
-  .row-md.jh-entity-details > {
+  .row-md.jh-entity-details> {
     dt {
       float: left;
       overflow: hidden;
@@ -218,6 +194,7 @@ entity detail page css
       white-space: nowrap;
       padding: 0.5em 0;
     }
+
     dd {
       border-bottom: 1px solid #eee;
       padding: 0.5em 0;
@@ -255,4 +232,5 @@ ui bootstrap tweaks
     }
   }
 }
+
 /* jhipster-needle-scss-add-main JHipster will add new css style */

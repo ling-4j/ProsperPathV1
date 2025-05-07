@@ -37,7 +37,10 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.username().nativeElement.focus();
+    // eslint-disable-next-line
+    if (this.username()) {
+      this.username().nativeElement.focus();
+    }
   }
 
   login(): void {

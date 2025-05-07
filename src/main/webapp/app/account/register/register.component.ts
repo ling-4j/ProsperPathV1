@@ -65,7 +65,10 @@ export default class RegisterComponent implements AfterViewInit {
   private readonly router = inject(Router);
 
   ngAfterViewInit(): void {
-    this.login().nativeElement.focus();
+    // eslint-disable-next-line
+    if (this.login()) {
+      this.login().nativeElement.focus();
+    }
   }
 
   register(): void {

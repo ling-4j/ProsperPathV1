@@ -23,7 +23,6 @@ module.exports = async (config, options, targetOptions) => {
     config.plugins.push(
       new WebpackNotifierPlugin({
         title: 'Prosper Path',
-        contentImage: path.join(__dirname, 'logo-jhipster.png'),
       }),
     );
   }
@@ -100,6 +99,7 @@ module.exports = async (config, options, targetOptions) => {
       to: 'swagger-ui/',
     },
     { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui/' },
+    { from: './src/main/webapp/content/fonts', to: 'content/fonts' },
     // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
   ];
 
