@@ -34,7 +34,7 @@ spring:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true  
+        useServerPrepStmts: true
   liquibase:
     contexts: prod
   mail:

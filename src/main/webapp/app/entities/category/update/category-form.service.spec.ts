@@ -25,6 +25,7 @@ describe('Category Form Service', () => {
             createdAt: expect.any(Object),
             updatedAt: expect.any(Object),
             categoryIcon: expect.any(Object),
+            user: expect.any(Object),
           }),
         );
       });
@@ -40,6 +41,7 @@ describe('Category Form Service', () => {
             createdAt: expect.any(Object),
             updatedAt: expect.any(Object),
             categoryIcon: expect.any(Object),
+            user: expect.any(Object),
           }),
         );
       });

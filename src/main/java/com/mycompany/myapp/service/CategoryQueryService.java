@@ -4,6 +4,7 @@ import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.service.criteria.CategoryCriteria;
+import jakarta.persistence.criteria.JoinType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -85,6 +86,11 @@ public class CategoryQueryService extends QueryService<Category> {
             }
             if (criteria.getCategoryIcon() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getCategoryIcon(), Category_.categoryIcon));
+            }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(
+                    buildSpecification(criteria.getUserId(), root -> root.join(Category_.user, JoinType.LEFT).get(User_.id))
+                );
             }
         }
         return specification;

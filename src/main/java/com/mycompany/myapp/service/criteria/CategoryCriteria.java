@@ -52,6 +52,8 @@ public class CategoryCriteria implements Serializable, Criteria {
 
     private StringFilter categoryIcon;
 
+    private LongFilter userId;
+
     private Boolean distinct;
 
     public CategoryCriteria() {}
@@ -63,6 +65,7 @@ public class CategoryCriteria implements Serializable, Criteria {
         this.createdAt = other.optionalCreatedAt().map(InstantFilter::copy).orElse(null);
         this.updatedAt = other.optionalUpdatedAt().map(InstantFilter::copy).orElse(null);
         this.categoryIcon = other.optionalCategoryIcon().map(StringFilter::copy).orElse(null);
+        this.userId = other.optionalUserId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
 
@@ -185,6 +188,25 @@ public class CategoryCriteria implements Serializable, Criteria {
         this.categoryIcon = categoryIcon;
     }
 
+    public LongFilter getUserId() {
+        return userId;
+    }
+
+    public Optional<LongFilter> optionalUserId() {
+        return Optional.ofNullable(userId);
+    }
+
+    public LongFilter userId() {
+        if (userId == null) {
+            setUserId(new LongFilter());
+        }
+        return userId;
+    }
+
+    public void setUserId(LongFilter userId) {
+        this.userId = userId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -220,13 +242,14 @@ public class CategoryCriteria implements Serializable, Criteria {
             Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(updatedAt, that.updatedAt) &&
             Objects.equals(categoryIcon, that.categoryIcon) &&
+            Objects.equals(userId, that.userId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, categoryName, categoryType, createdAt, updatedAt, categoryIcon, distinct);
+        return Objects.hash(id, categoryName, categoryType, createdAt, updatedAt, categoryIcon, userId, distinct);
     }
 
     // prettier-ignore
@@ -239,6 +262,7 @@ public class CategoryCriteria implements Serializable, Criteria {
             optionalCreatedAt().map(f -> "createdAt=" + f + ", ").orElse("") +
             optionalUpdatedAt().map(f -> "updatedAt=" + f + ", ").orElse("") +
             optionalCategoryIcon().map(f -> "categoryIcon=" + f + ", ").orElse("") +
+            optionalUserId().map(f -> "userId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

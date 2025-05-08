@@ -3,10 +3,11 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.service.CategoryService;
-import java.time.Instant;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +29,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category save(Category category) {
         LOG.debug("Request to save Category : {}", category);
-        category.setCreatedAt(Instant.now());
-        category.setUpdatedAt(Instant.now());
         return categoryRepository.save(category);
     }
 
     @Override
     public Category update(Category category) {
         LOG.debug("Request to update Category : {}", category);
-        category.setUpdatedAt(Instant.now());
         return categoryRepository.save(category);
     }
 
@@ -68,11 +66,15 @@ public class CategoryServiceImpl implements CategoryService {
             .map(categoryRepository::save);
     }
 
+    public Page<Category> findAllWithEagerRelationships(Pageable pageable) {
+        return categoryRepository.findAllWithEagerRelationships(pageable);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Category> findOne(Long id) {
         LOG.debug("Request to get Category : {}", id);
-        return categoryRepository.findById(id);
+        return categoryRepository.findOneWithEagerRelationships(id);
     }
 
     @Override

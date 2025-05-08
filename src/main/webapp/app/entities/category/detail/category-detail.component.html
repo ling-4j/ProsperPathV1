@@ -11,6 +11,10 @@
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ categoryRef.id }}</span>
+          </dd>
           <dt><span jhiTranslate="prosperPathApp.category.categoryName">Category Name</span></dt>
           <dd>
             <span>{{ categoryRef.categoryName }}</span>
@@ -32,6 +36,10 @@
           <dt><span jhiTranslate="prosperPathApp.category.categoryIcon">Category Icon</span></dt>
           <dd>
             <span>{{ categoryRef.categoryIcon }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.category.user">User</span></dt>
+          <dd>
+            <span>{{ categoryRef.user?.login }}</span>
           </dd>
         </dl>
 

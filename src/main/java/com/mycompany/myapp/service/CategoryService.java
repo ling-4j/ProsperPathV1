@@ -2,6 +2,8 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Category;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.Category}.
@@ -30,6 +32,14 @@ public interface CategoryService {
      * @return the persisted entity.
      */
     Optional<Category> partialUpdate(Category category);
+
+    /**
+     * Get all the categories with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<Category> findAllWithEagerRelationships(Pageable pageable);
 
     /**
      * Get the "id" category.
