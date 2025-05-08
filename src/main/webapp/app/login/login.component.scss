@@ -158,14 +158,20 @@ $font-family-base:
   // Responsive adjustments
   @media (max-width: 576px) {
     .form {
-      padding: 10px;
+      padding: 1rem; /* 16px tương đương 1rem */
       max-width: 100%;
+      .form-check {
+        margin-top: 0.5rem; /* 8px */
+      }
+      .forget-password {
+        margin: 0 0.5rem; /* 8px */
+      }
     }
-
+  
     .btn-sign-in,
     .btn-sign-up {
-      padding: 5px 12px;
-      font-size: 12px;
+      padding: 0.5rem 1rem; /* 8px 16px */
+      font-size: 0.875rem; /* 14px tương đương 0.875rem */
     }
   }
 }
