@@ -8,7 +8,6 @@ import com.mycompany.myapp.service.SummaryService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.SummaryCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -58,10 +57,11 @@ public class SummaryResource {
     private final UserService userService;
 
     public SummaryResource(
-            SummaryService summaryService,
-            SummaryRepository summaryRepository,
-            SummaryQueryService summaryQueryService,
-            UserService userService) {
+        SummaryService summaryService,
+        SummaryRepository summaryRepository,
+        SummaryQueryService summaryQueryService,
+        UserService userService
+    ) {
         this.summaryService = summaryService;
         this.summaryRepository = summaryRepository;
         this.summaryQueryService = summaryQueryService;
@@ -85,9 +85,8 @@ public class SummaryResource {
         }
         summary = summaryService.save(summary);
         return ResponseEntity.created(new URI("/api/summaries/" + summary.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
-                        summary.getId().toString()))
-                .body(summary);
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, summary.getId().toString()))
+            .body(summary);
     }
 
     /**
@@ -104,8 +103,9 @@ public class SummaryResource {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Summary> updateSummary(
-            @PathVariable(value = "id", required = false) final Long id,
-            @Valid @RequestBody Summary summary) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Summary summary
+    ) throws URISyntaxException {
         LOG.debug("REST request to update Summary : {}, {}", id, summary);
         if (summary.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -120,9 +120,8 @@ public class SummaryResource {
 
         summary = summaryService.update(summary);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                        summary.getId().toString()))
-                .body(summary);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, summary.getId().toString()))
+            .body(summary);
     }
 
     /**
@@ -141,8 +140,9 @@ public class SummaryResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Summary> partialUpdateSummary(
-            @PathVariable(value = "id", required = false) final Long id,
-            @NotNull @RequestBody Summary summary) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Summary summary
+    ) throws URISyntaxException {
         LOG.debug("REST request to partial update Summary partially : {}, {}", id, summary);
         if (summary.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -158,8 +158,9 @@ public class SummaryResource {
         Optional<Summary> result = summaryService.partialUpdate(summary);
 
         return ResponseUtil.wrapOrNotFound(
-                result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, summary.getId().toString()));
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, summary.getId().toString())
+        );
     }
 
     /**
@@ -172,13 +173,13 @@ public class SummaryResource {
      */
     @GetMapping("")
     public ResponseEntity<List<Summary>> getAllSummaries(
-            SummaryCriteria criteria,
-            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        SummaryCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
         LOG.debug("REST request to get Summaries by criteria: {}", criteria);
 
         Page<Summary> page = summaryQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil
-                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -220,8 +221,8 @@ public class SummaryResource {
         LOG.debug("REST request to delete Summary : {}", id);
         summaryService.delete(id);
         return ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                .build();
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 
     /**
@@ -238,8 +239,7 @@ public class SummaryResource {
         LOG.debug("REST request to get Summary for period: {}", period);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         // Xác định periodValue dựa trên period
@@ -249,11 +249,16 @@ public class SummaryResource {
         // Lấy Summary cho kỳ hiện tại
         Summary summary = summaryQueryService.getSummaryForPeriod(userId, period.toUpperCase(), periodValue);
         if (summary == null) {
-            LOG.debug("No summary found for userId: {}, period: {}, periodValue: {}", userId, period, periodValue);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(summary);
+        // Tạo header tùy chỉnh
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Income", summary.getTotalIncome().toString());
+        headers.add("X-Total-Expense", summary.getTotalExpense().toString());
+        headers.add("X-Total-Profit", summary.getTotalProfit().toString());
+
+        return ResponseEntity.ok().headers(headers).body(summary);
     }
 
     /**
@@ -266,17 +271,23 @@ public class SummaryResource {
      *         the financial change percentages.
      */
     @GetMapping("/financial-change")
-    public ResponseEntity<SummaryQueryService.FinancialChange> getFinancialChange(
-            @RequestParam("period") String period) {
+    public ResponseEntity<SummaryQueryService.FinancialChange> getFinancialChange(@RequestParam("period") String period) {
         LOG.debug("REST request to get FinancialChange for period: {}", period);
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         // Lấy phần trăm thay đổi
         SummaryQueryService.FinancialChange change = summaryQueryService.getFinancialChangeForPeriod(userId, period);
-        return ResponseEntity.ok(change);
+
+        // Tạo header tùy chỉnh
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Assets-Change", String.valueOf(change.getAssetsChangePercentage()));
+        headers.add("X-Income-Change", String.valueOf(change.getIncomeChangePercentage()));
+        headers.add("X-Expense-Change", String.valueOf(change.getExpenseChangePercentage()));
+        headers.add("X-Profit-Change", String.valueOf(change.getProfitChangePercentage()));
+
+        return ResponseEntity.ok().headers(headers).body(change);
     }
 
     /**
@@ -288,21 +299,27 @@ public class SummaryResource {
      */
     @GetMapping("/detailed")
     public ResponseEntity<Map<String, Object>> getDetailedFinancialData(
-            @RequestParam(value = "period", defaultValue = "MONTH") String period,
-            @RequestHeader("Authorization") String authorization) {
+        @RequestParam(value = "period", defaultValue = "MONTH") String period,
+        @RequestHeader("Authorization") String authorization
+    ) {
         LOG.debug("REST request to get detailed financial data for period: {}", period);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         try {
-            Map<String, Object> detailedData = summaryQueryService.getDetailedFinancialData(userId,
-                    period.toUpperCase());
+            Map<String, Object> detailedData = summaryQueryService.getDetailedFinancialData(userId, period.toUpperCase());
 
             LOG.debug("Detailed data for userId: {}, period: {}: {}", userId, period, detailedData);
-            return ResponseEntity.ok(detailedData);
+
+            // Tạo header tùy chỉnh
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("X-Labels-Count", String.valueOf(((List<?>) detailedData.get("labels")).size()));
+            headers.add("X-Income-Data-Count", String.valueOf(((List<?>) detailedData.get("incomeData")).size()));
+            headers.add("X-Expense-Data-Count", String.valueOf(((List<?>) detailedData.get("expenseData")).size()));
+
+            return ResponseEntity.ok().headers(headers).body(detailedData);
         } catch (Exception e) {
             LOG.error("Error fetching detailed financial data for userId: {}, period: {}", userId, period, e);
             throw new BadRequestAlertException("Error fetching detailed data", ENTITY_NAME, "fetcherror");

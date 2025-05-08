@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,7 +16,7 @@ import { RegisterService } from './register.service';
   templateUrl: './register.component.html',
 })
 export default class RegisterComponent implements AfterViewInit {
-  login = viewChild.required<ElementRef>('login');
+  @ViewChild('login', { static: false }) login!: ElementRef;
 
   doNotMatch = signal(false);
   error = signal(false);
@@ -66,8 +66,8 @@ export default class RegisterComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // eslint-disable-next-line
-    if (this.login()) {
-      this.login().nativeElement.focus();
+    if (this.login) {
+      this.login.nativeElement.focus();
     }
   }
 

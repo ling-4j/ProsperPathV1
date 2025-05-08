@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
@@ -13,7 +13,7 @@ import { AccountService } from 'app/core/auth/account.service';
   templateUrl: './login.component.html',
 })
 export default class LoginComponent implements OnInit, AfterViewInit {
-  username = viewChild.required<ElementRef>('username');
+  @ViewChild('username', { static: false }) username!: ElementRef;
 
   authenticationError = signal(false);
 
@@ -38,8 +38,8 @@ export default class LoginComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // eslint-disable-next-line
-    if (this.username()) {
-      this.username().nativeElement.focus();
+    if (this.username) {
+      this.username.nativeElement.focus();
     }
   }
 

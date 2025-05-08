@@ -10,7 +10,6 @@ import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.TransactionCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -59,12 +58,13 @@ public class TransactionResource {
     private final UserService userService;
 
     public TransactionResource(
-            TransactionService transactionService,
-            TransactionRepository transactionRepository,
-            TransactionQueryService transactionQueryService,
-            SummaryQueryService summaryQueryService,
-            UserService userService,
-            NotificationQueryService notificationQueryService) {
+        TransactionService transactionService,
+        TransactionRepository transactionRepository,
+        TransactionQueryService transactionQueryService,
+        SummaryQueryService summaryQueryService,
+        UserService userService,
+        NotificationQueryService notificationQueryService
+    ) {
         this.notificationQueryService = notificationQueryService;
         this.transactionService = transactionService;
         this.transactionRepository = transactionRepository;
@@ -74,15 +74,13 @@ public class TransactionResource {
     }
 
     @PostMapping("")
-    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction)
-            throws URISyntaxException {
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) throws URISyntaxException {
         LOG.debug("REST request to save Transaction : {}", transaction);
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         // Lưu giao dịch
         Transaction savedTransaction = transactionService.save(transaction);
 
@@ -96,15 +94,15 @@ public class TransactionResource {
         }
 
         return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
-                        savedTransaction.getId().toString()))
-                .body(savedTransaction);
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, savedTransaction.getId().toString()))
+            .body(savedTransaction);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Transaction> updateTransaction(
-            @PathVariable(value = "id", required = false) final Long id,
-            @Valid @RequestBody Transaction transaction) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Transaction transaction
+    ) throws URISyntaxException {
         LOG.debug("REST request to update Transaction : {}, {}", id, transaction);
         if (transaction.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -118,13 +116,11 @@ public class TransactionResource {
         }
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
 
         Transaction existingTransaction = transactionRepository.findById(id).orElseThrow();
         if (!existingTransaction.getUser().getId().equals(currentUser.getId())) {
-            LOG.warn("User {} attempted to update transaction {} that does not belong to them",
-                    currentUser.getId(), id);
+            LOG.warn("User {} attempted to update transaction {} that does not belong to them", currentUser.getId(), id);
             return ResponseEntity.status(403).build(); // Forbidden
         }
 
@@ -139,13 +135,11 @@ public class TransactionResource {
 
         if (updatedTransaction.getCategory() != null) {
             notificationQueryService.createNotificationForTransaction(currentUser.getId(), updatedTransaction);
-            notificationQueryService.createWarningNotificationForTransaction(currentUser.getId(),
-                    updatedTransaction);
+            notificationQueryService.createWarningNotificationForTransaction(currentUser.getId(), updatedTransaction);
         }
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                        transaction.getId().toString()))
-                .body(updatedTransaction);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))
+            .body(updatedTransaction);
     }
 
     /**
@@ -166,8 +160,9 @@ public class TransactionResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Transaction> partialUpdateTransaction(
-            @PathVariable(value = "id", required = false) final Long id,
-            @NotNull @RequestBody Transaction transaction) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Transaction transaction
+    ) throws URISyntaxException {
         LOG.debug("REST request to partial update Transaction partially : {}, {}", id, transaction);
         if (transaction.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -183,8 +178,9 @@ public class TransactionResource {
         Optional<Transaction> result = transactionService.partialUpdate(transaction);
 
         return ResponseUtil.wrapOrNotFound(
-                result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()));
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString())
+        );
     }
 
     /**
@@ -197,13 +193,13 @@ public class TransactionResource {
      */
     @GetMapping("")
     public ResponseEntity<List<Transaction>> getAllTransactions(
-            TransactionCriteria criteria,
-            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        TransactionCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
         LOG.debug("REST request to get Transactions by criteria: {}", criteria);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         // Gán userId của người dùng hiện tại vào criteria
         LongFilter userIdFilter = new LongFilter();
         userIdFilter.setEquals(currentUser.getId());
@@ -211,8 +207,7 @@ public class TransactionResource {
 
         // Tìm kiếm giao dịch dựa trên criteria và phân trang
         Page<Transaction> page = transactionQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil
-                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -254,12 +249,11 @@ public class TransactionResource {
         LOG.debug("REST request to delete Transaction : {}", id);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         // Kiểm tra quyền truy cập
         Transaction transaction = transactionRepository
-                .findById(id)
-                .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+            .findById(id)
+            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
 
         // Cập nhật Summary trước khi xóa (trường hợp xóa: newTransaction = null)
         summaryQueryService.updateSummaryForTransaction(currentUser.getId(), transaction, null);
@@ -268,28 +262,29 @@ public class TransactionResource {
         transactionService.delete(id);
 
         return ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                .build();
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportTransactions(
-            @RequestParam(required = false) Long category,
-            @RequestParam(required = false) String fromDate,
-            @RequestParam(required = false) String toDate,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) String sort) {
+        @RequestParam(required = false) Long category,
+        @RequestParam(required = false) String fromDate,
+        @RequestParam(required = false) String toDate,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) String sort
+    ) {
         LOG.debug(
-                "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
-                category,
-                fromDate,
-                toDate,
-                type,
-                sort);
+            "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
+            category,
+            fromDate,
+            toDate,
+            type,
+            sort
+        );
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
@@ -314,22 +309,23 @@ public class TransactionResource {
 
     @GetMapping("/export-pdf")
     public ResponseEntity<byte[]> exportTransactionsToPDF(
-            @RequestParam(required = false) Long category,
-            @RequestParam(required = false) String fromDate,
-            @RequestParam(required = false) String toDate,
-            @RequestParam(required = false) String type,
-            @RequestParam(defaultValue = "transactionDate,desc") String sort) {
+        @RequestParam(required = false) Long category,
+        @RequestParam(required = false) String fromDate,
+        @RequestParam(required = false) String toDate,
+        @RequestParam(required = false) String type,
+        @RequestParam(defaultValue = "transactionDate,desc") String sort
+    ) {
         LOG.debug(
-                "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
-                category,
-                fromDate,
-                toDate,
-                type,
-                sort);
+            "REST request to export Transactions to PDF with filters: category={}, fromDate={}, toDate={}, type={}, sort={}",
+            category,
+            fromDate,
+            toDate,
+            type,
+            sort
+        );
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;

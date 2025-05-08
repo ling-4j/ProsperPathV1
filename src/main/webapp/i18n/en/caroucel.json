@@ -1,25 +1,25 @@
 {
-    "carousel": {
-        "slides": {
-            "slide1": {
-                "title": "Welcome to Prosper Path",
-                "description": "Your journey to financial success begins here. Explore our wealth management tools.",
-                "button": "Get Started"
-            },
-            "slide2": {
-                "title": "Track Your Finances",
-                "description": "Stay in control of your budget with our smart tracking features.",
-                "button": "Log In"
-            },
-            "slide3": {
-                "title": "Plan for the Future",
-                "description": "Set goals and achieve them with Prosper Path’s planning tools.",
-                "button": "Join Now"
-            }
-        },
-        "controls": {
-            "previous": "Previous",
-            "next": "Next"
-        }
+  "carousel": {
+    "slides": {
+      "slide1": {
+        "title": "Welcome to Prosper Path",
+        "description": "Your journey to financial success begins here. Explore our wealth management tools.",
+        "button": "Get Started"
+      },
+      "slide2": {
+        "title": "Track Your Finances",
+        "description": "Stay in control of your budget with our smart tracking features.",
+        "button": "Log In"
+      },
+      "slide3": {
+        "title": "Plan for the Future",
+        "description": "Set goals and achieve them with Prosper Path’s planning tools.",
+        "button": "Join Now"
+      }
+    },
+    "controls": {
+      "previous": "Previous",
+      "next": "Next"
     }
+  }
 }

@@ -64,7 +64,6 @@ $font-family-base: 'Roboto', sans-serif;
       padding: 10px 0; // Thêm padding cho collapse
 
       .navbar-nav {
-
         // Căn giữa các mục menu chính
         &:not(.ms-auto) {
           flex-grow: 1;
@@ -215,7 +214,9 @@ $font-family-base: 'Roboto', sans-serif;
 }
 
 .alert-auto-dismiss {
-  animation: slideIn 0.5s forwards, autoDismiss 3s 2s forwards;
+  animation:
+    slideIn 0.5s forwards,
+    autoDismiss 3s 2s forwards;
 }
 
 @keyframes slideIn {

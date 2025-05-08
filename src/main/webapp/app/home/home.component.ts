@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Subject } from 'rxjs';
+
+import { Subject, forkJoin } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
 
 import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
@@ -10,15 +10,7 @@ import { Account } from 'app/core/auth/account.model';
 import { SummaryService, DetailedFinancialData } from 'app/entities/summary/service/summary.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-// Import FullCalendar
-import { CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
 import { FullCalendarModule } from '@fullcalendar/angular';
-
-// Import ApexCharts
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 import CarouselComponent from './caroucel/carousel.component';
@@ -38,7 +30,6 @@ import {
   ApexXAxis,
 } from 'ng-apexcharts';
 
-// Định nghĩa type cho biểu đồ ApexCharts
 export type ChartOptions = {
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   chart: ApexChart;
@@ -59,12 +50,12 @@ export type ChartOptions = {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   imports: [
-    SharedModule,
     RouterModule,
+    SharedModule,
     CommonModule,
     FormsModule,
     FullCalendarModule,
-    NgApexchartsModule, // Thêm
+    NgApexchartsModule,
     CarouselComponent,
     GoldProfitCalculatorComponent,
   ],
@@ -72,116 +63,53 @@ export type ChartOptions = {
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account = signal<Account | null>(null);
-  isLoading = signal<boolean>(false);
+  isLoading = signal(false);
   showWarning = false;
 
-  // Signals for current period data
   selectedPeriod = signal<'week' | 'month' | 'year'>('month');
-  totalAssets = signal<number>(0);
-  totalIncome = signal<number>(0);
-  totalExpense = signal<number>(0);
-  totalProfit = signal<number>(0);
-  profitPercentage = signal<number>(0);
+  totalAssets = signal(0);
+  totalIncome = signal(0);
+  totalExpense = signal(0);
+  totalProfit = signal(0);
+  profitPercentage = signal(0);
 
-  // Signals for percentage change compared to previous period
-  assetsChangePercentage = signal<number>(0);
-  incomeChangePercentage = signal<number>(0);
-  expenseChangePercentage = signal<number>(0);
-  profitChangePercentage = signal<number>(0);
+  assetsChangePercentage = signal(0);
+  incomeChangePercentage = signal(0);
+  expenseChangePercentage = signal(0);
+  profitChangePercentage = signal(0);
 
-  // Signal for error message
   errorMessage = signal<string | null>(null);
 
-  // FullCalendar configuration
-  currentMonthYear = '';
-  calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
-    initialView: 'dayGridMonth',
-    headerToolbar: {
-      left: 'prev',
-      center: 'title',
-      right: 'next today',
-    },
-    events: [],
-    editable: true,
-    selectable: true,
-    eventClick: this.handleEventClick.bind(this),
-    select: this.handleDateClick.bind(this),
-  };
-  // ApexCharts configurations
-  public progressRateChartOptions: Partial<ChartOptions> = {
-    series: [
-      {
-        name: 'Lợi nhuận',
-        data: [],
-      },
-    ],
+  progressRateChartOptions: Partial<ChartOptions> = {
+    series: [{ name: 'Lợi nhuận', data: [] }],
     chart: {
       type: 'line',
       height: 280,
-      animations: {
-        enabled: true,
-        speed: 800,
-      },
-      toolbar: {
-        show: true,
-        tools: {
-          download: true,
-          selection: false,
-          zoom: false,
-          zoomin: false,
-          zoomout: false,
-          pan: false,
-          reset: false,
-        },
-      },
+      animations: { enabled: true, speed: 800 },
+      toolbar: { show: true, tools: { download: true } },
     },
-    stroke: {
-      curve: 'smooth',
-      width: 2,
-    },
-    xaxis: {
-      categories: [],
-      labels: {
-        style: {
-          colors: '#6b7280',
-          fontSize: '12px',
-        },
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
+    stroke: { curve: 'smooth', width: 2 },
+    xaxis: { categories: [], labels: { style: { colors: '#6b7280', fontSize: '12px' } } },
+    dataLabels: { enabled: false },
     colors: ['#1e90ff'],
-    tooltip: {
-      y: {
-        formatter: (val: number) => `${val.toLocaleString('vi-VN')} VND`, // Định dạng số tiền
-      },
-    },
+    tooltip: { y: { formatter: val => `${val.toLocaleString('vi-VN')} VND` } },
   };
 
-  public incomeVsExpenseDonutChartOptions: Partial<ChartOptions> = {
+  incomeVsExpenseDonutChartOptions: Partial<ChartOptions> = {
     series: [0, 0],
-    chart: {
-      type: 'donut',
-      height: 240,
-    },
+    chart: { type: 'donut', height: 240 },
     labels: ['Thu nhập', 'Chi phí'],
     colors: ['#00c4b4', '#ff6f61'],
-    legend: {
-      position: 'top',
-      fontSize: '12px',
-      labels: {
-        colors: '#6b7280',
-      },
-    },
+    legend: { position: 'top', fontSize: '12px', labels: { colors: '#6b7280' } },
     dataLabels: {
       enabled: true,
-      formatter: (val: number) => `${val.toFixed(1)}%`,
-      style: {
-        fontSize: '12px',
-        colors: ['#fff'],
+      formatter(val: unknown): string {
+        if (typeof val === 'number') {
+          return `${val.toFixed(1)}%`;
+        }
+        return typeof val === 'string' ? `${val}%` : '';
       },
+      style: { fontSize: '12px', colors: ['#fff'] },
     },
     plotOptions: {
       pie: {
@@ -191,87 +119,33 @@ export default class HomeComponent implements OnInit, OnDestroy {
             total: {
               show: true,
               label: 'Tổng',
-              formatter(w: any) {
-                const total = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
-                return `${total.toLocaleString('vi-VN')} VND`; // Định dạng số tiền
-              },
+              formatter: (w: { globals: { seriesTotals: number[] } }): string =>
+                `${w.globals.seriesTotals.reduce((a, b) => a + b, 0).toLocaleString('vi-VN')} VND`,
             },
           },
         },
       },
     },
-    responsive: [
-      {
-        breakpoint: 767,
-        options: {
-          chart: {
-            height: 200,
-          },
-        },
-      },
-    ],
+    responsive: [{ breakpoint: 767, options: { chart: { height: 200 } } }],
   };
 
-  public incomeVsExpenseLineChartOptions: Partial<ChartOptions> = {
+  incomeVsExpenseLineChartOptions: Partial<ChartOptions> = {
     series: [
-      {
-        name: 'Thu nhập',
-        data: [],
-      },
-      {
-        name: 'Chi phí',
-        data: [],
-      },
+      { name: 'Thu nhập', data: [] },
+      { name: 'Chi phí', data: [] },
     ],
     chart: {
       type: 'line',
       height: 280,
-      animations: {
-        enabled: true,
-        speed: 800,
-      },
-      toolbar: {
-        show: true,
-        tools: {
-          download: true,
-          selection: false,
-          zoom: false,
-          zoomin: false,
-          zoomout: false,
-          pan: false,
-          reset: false,
-        },
-      },
+      animations: { enabled: true, speed: 800 },
+      toolbar: { show: true, tools: { download: true } },
     },
-    stroke: {
-      curve: 'smooth',
-      width: 2,
-    },
-    xaxis: {
-      categories: [],
-      labels: {
-        style: {
-          colors: '#6b7280',
-          fontSize: '12px',
-        },
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
+    stroke: { curve: 'smooth', width: 2 },
+    xaxis: { categories: [], labels: { style: { colors: '#6b7280', fontSize: '12px' } } },
+    dataLabels: { enabled: false },
     colors: ['#00c4b4', '#ff6f61'],
-    legend: {
-      position: 'top',
-      fontSize: '12px',
-      labels: {
-        colors: '#6b7280',
-      },
-    },
-    tooltip: {
-      y: {
-        formatter: (val: number) => `${val.toLocaleString('vi-VN')} VND`, // Định dạng số tiền
-      },
-    },
+    legend: { position: 'top', fontSize: '12px', labels: { colors: '#6b7280' } },
+    tooltip: { y: { formatter: val => `${val.toLocaleString('vi-VN')} VND` } },
   };
 
   private readonly destroy$ = new Subject<void>();
@@ -285,20 +159,12 @@ export default class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => {
         this.account.set(account);
-        if (account) {
-          this.loadAllData();
-          this.loadCalendarEvents();
-        }
+        if (account) this.loadAllData();
       });
-
-    const currentDate = new Date();
-    this.currentMonthYear = currentDate.toLocaleString('vi-VN', { month: 'long', year: 'numeric' });
   }
 
   onPeriodChange(): void {
-    if (this.account()) {
-      this.loadAllData();
-    }
+    if (this.account()) this.loadAllData();
   }
 
   private loadAllData(): void {
@@ -311,80 +177,58 @@ export default class HomeComponent implements OnInit, OnDestroy {
     }).subscribe({
       next: ({ summary, financialChange, detailedData }) => {
         this.errorMessage.set(null);
-
-        // Cập nhật dữ liệu tổng quan
-        this.totalAssets.set(summary.totalAssets ?? 0);
-        this.totalIncome.set(summary.totalIncome ?? 0);
-        this.totalExpense.set(summary.totalExpense ?? 0);
-        this.totalProfit.set(summary.totalProfit ?? 0);
-        this.profitPercentage.set(summary.profitPercentage ?? 0);
-
-        // Cập nhật phần trăm thay đổi
-        this.assetsChangePercentage.set(financialChange.assetsChangePercentage);
-        this.incomeChangePercentage.set(financialChange.incomeChangePercentage);
-        this.expenseChangePercentage.set(financialChange.expenseChangePercentage);
-        this.profitChangePercentage.set(financialChange.profitChangePercentage);
-
-        // Cập nhật dữ liệu biểu đồ
+        this.updateSummaryData(summary);
+        this.updateChangePercentages(financialChange);
         this.updateChartData(detailedData);
         this.isLoading.set(false);
       },
-      error: error => {
-        this.resetData();
-        this.isLoading.set(false);
-        if (error.message === 'Summary not found' || error.message === 'Detailed data not found') {
-          this.errorMessage.set(`Không có dữ liệu cho kỳ: ${period}`);
-        } else if (error.message === 'Unauthorized') {
-          this.errorMessage.set('Bạn không có quyền truy cập dữ liệu này. Vui lòng đăng nhập lại.');
-          this.router.navigate(['/login']);
-        } else {
-          this.errorMessage.set('Đã xảy ra lỗi khi tải dữ liệu.');
-        }
-      },
+      error: error => this.handleError(error, period),
     });
   }
 
-  private updateChartData(detailedData: DetailedFinancialData): void {
-    // Cập nhật biểu đồ Progress Rate (Lợi nhuận)
-    this.progressRateChartOptions.series = [
-      {
-        name: 'Lợi nhuận',
-        data: detailedData.progressRateData,
-      },
-    ];
-    this.progressRateChartOptions.xaxis = {
-      categories: detailedData.labels,
-      labels: {
-        style: {
-          colors: '#6b7280',
-          fontSize: '12px',
-        },
-      },
-    };
+  private updateSummaryData(summary: any): void {
+    if (!summary) {
+      this.resetData();
+      return;
+    }
+    this.totalAssets.set(summary.totalAssets ?? 0);
+    this.totalIncome.set(summary.totalIncome ?? 0);
+    this.totalExpense.set(summary.totalExpense ?? 0);
+    this.totalProfit.set(summary.totalProfit ?? 0);
+    this.profitPercentage.set(summary.profitPercentage ?? 0);
+  }
 
-    // Cập nhật biểu đồ Donut (Thu nhập vs Chi phí)
+  private updateChangePercentages(financialChange: any): void {
+    this.assetsChangePercentage.set(financialChange.assetsChangePercentage);
+    this.incomeChangePercentage.set(financialChange.incomeChangePercentage);
+    this.expenseChangePercentage.set(financialChange.expenseChangePercentage);
+    this.profitChangePercentage.set(financialChange.profitChangePercentage);
+  }
+
+  private updateChartData(detailedData: DetailedFinancialData): void {
+    this.progressRateChartOptions.series = [{ name: 'Lợi nhuận', data: detailedData.progressRateData }];
+    this.progressRateChartOptions.xaxis = { categories: detailedData.labels };
+
     this.incomeVsExpenseDonutChartOptions.series = [this.totalIncome() || 0, this.totalExpense() || 0];
 
-    // Cập nhật biểu đồ Line (Thu nhập vs Chi phí theo thời gian)
     this.incomeVsExpenseLineChartOptions.series = [
-      {
-        name: 'Thu nhập',
-        data: detailedData.incomeData,
-      },
-      {
-        name: 'Chi phí',
-        data: detailedData.expenseData,
-      },
+      { name: 'Thu nhập', data: detailedData.incomeData },
+      { name: 'Chi phí', data: detailedData.expenseData },
     ];
-    this.incomeVsExpenseLineChartOptions.xaxis = {
-      categories: detailedData.labels,
-      labels: {
-        style: {
-          colors: '#6b7280',
-          fontSize: '12px',
-        },
-      },
-    };
+    this.incomeVsExpenseLineChartOptions.xaxis = { categories: detailedData.labels };
+  }
+
+  private handleError(error: any, period: string): void {
+    this.resetData();
+    this.isLoading.set(false);
+    if (['Summary not found', 'Detailed data not found'].includes(error.message)) {
+      this.errorMessage.set(`Không có dữ liệu cho kỳ: ${period}`);
+    } else if (error.message === 'Unauthorized') {
+      this.errorMessage.set('Bạn không có quyền truy cập dữ liệu này. Vui lòng đăng nhập lại.');
+      this.router.navigate(['/login']);
+    } else {
+      this.errorMessage.set('Đã xảy ra lỗi khi tải dữ liệu.');
+    }
   }
 
   private resetData(): void {
@@ -398,7 +242,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.expenseChangePercentage.set(0);
     this.profitChangePercentage.set(0);
 
-    // Reset biểu đồ
     this.progressRateChartOptions.series = [{ name: 'Lợi nhuận', data: [] }];
     this.progressRateChartOptions.xaxis = { categories: [] };
     this.incomeVsExpenseDonutChartOptions.series = [0, 0];
@@ -407,29 +250,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
       { name: 'Chi phí', data: [] },
     ];
     this.incomeVsExpenseLineChartOptions.xaxis = { categories: [] };
-  }
-
-  private loadCalendarEvents(): void {
-    this.calendarOptions.events = [
-      { title: 'Thanh toán hóa đơn', date: '2025-04-26' },
-      { title: 'Xem xét ngân sách', date: '2025-04-28' },
-    ];
-  }
-
-  handleEventClick(info: EventClickArg): void {
-    alert(`Sự kiện: ${info.event.title}\nNgày: ${info.event.start?.toISOString().split('T')[0]}`);
-  }
-
-  handleDateClick(info: DateSelectArg): void {
-    const title = prompt('Nhập tiêu đề sự kiện:');
-    if (title) {
-      const calendarApi = info.view.calendar;
-      calendarApi.addEvent({
-        title,
-        start: info.startStr,
-        allDay: info.allDay,
-      });
-    }
   }
 
   login(): void {

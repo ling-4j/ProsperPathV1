@@ -39,37 +39,18 @@ export default class GoldProfitCalculatorComponent implements OnInit {
     });
 
     // Fetch dữ liệu từ API
-    this.goldPriceService.getGoldPrices().subscribe({
-      next: data => {
-        this.goldTypes = data;
-        if (this.goldTypes.length > 0) {
-          this.selectedType = this.goldTypes[0].tensp; // Chọn loại vàng đầu tiên mặc định
+    this.goldPriceService.getGoldPrice('11').subscribe({
+      next: (response: any) => {
+        if (response?.data?.length > 0) {
+          this.goldTypes = response.data;
+          this.selectedType = this.goldTypes[0]?.tensp || ''; // Chọn loại vàng đầu tiên mặc định
+        } else {
+          this.goldTypes = [];
         }
       },
-      error: error => {
+      error: (error: any) => {
         console.error('Error fetching gold prices:', error);
-        // Dữ liệu fallback nếu API lỗi
-        this.goldTypes = [
-          {
-            stt: 1,
-            masp: 'SJC',
-            tensp: 'Vàng miếng SJC',
-            giaban: 12000,
-            giamua: 11750,
-            createDate: '05/05/2025',
-            createTime: 1746433920000,
-          },
-          {
-            stt: 2,
-            masp: 'N24K',
-            tensp: 'Nhẫn Trơn PNJ 999.9',
-            giaban: 11540,
-            giamua: 11250,
-            createDate: '05/05/2025',
-            createTime: 1746433920000,
-          },
-        ];
-        this.selectedType = this.goldTypes[0].tensp;
+        this.goldTypes = [];
       },
     });
   }

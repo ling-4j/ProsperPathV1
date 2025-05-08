@@ -1,61 +1,58 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>prosperPath</title>
+    <meta name="description" content="Description for prosperPath" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#000000" />
+    <base href="/" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webapp" />
+    <link rel="stylesheet" href="content/css/loading.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" /> -->
+    <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>prosperPath</title>
-  <meta name="description" content="Description for prosperPath" />
-  <meta name="google" content="notranslate" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="theme-color" content="#000000" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">  
-  <base href="/" />
-  <link rel="icon" href="favicon.ico" />
-  <link rel="manifest" href="manifest.webapp" />
-  <link rel="stylesheet" href="content/css/loading.css" />
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" /> -->
-  <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
-</head>
-
-<body>
-  <!--[if lt IE 9]>
+  <body>
+    <!--[if lt IE 9]>
       <p class="browserupgrade">
         You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve
         your experience.
       </p>
     <![endif]-->
-  <jhi-app>
-    <div class="app-loading">
-      <div class="lds-pacman">
-        <div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <div>
-          <div></div>
-          <div></div>
-          <div></div>
+    <jhi-app>
+      <div class="app-loading">
+        <div class="lds-pacman">
+          <div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       </div>
-    </div>
-  </jhi-app>
-  <noscript>
-    <h1>You must enable JavaScript to view this page.</h1>
-  </noscript>
-  <script type="text/javascript">
-    // show an error message if the app loading takes more than 4 sec
-    window.onload = function () {
-      setTimeout(showError, 4000);
-    };
-    function showError() {
-      const errorElm = document.getElementById('jhipster-error');
-      if (errorElm?.style) {
-        errorElm.style.display = 'block';
+    </jhi-app>
+    <noscript>
+      <h1>You must enable JavaScript to view this page.</h1>
+    </noscript>
+    <script type="text/javascript">
+      // show an error message if the app loading takes more than 4 sec
+      window.onload = function () {
+        setTimeout(showError, 4000);
+      };
+      function showError() {
+        const errorElm = document.getElementById('jhipster-error');
+        if (errorElm?.style) {
+          errorElm.style.display = 'block';
+        }
       }
-    }
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

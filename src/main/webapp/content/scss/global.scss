@@ -169,7 +169,7 @@ Custom alerts for notification
 entity list page css
 ========================================================================== */
 
-.table-entities thead th .d-flex>* {
+.table-entities thead th .d-flex > * {
   margin: auto 0;
 }
 
@@ -184,7 +184,7 @@ entity detail page css
 }
 
 @media screen and (min-width: 768px) {
-  .row-md.jh-entity-details> {
+  .row-md.jh-entity-details > {
     dt {
       float: left;
       overflow: hidden;

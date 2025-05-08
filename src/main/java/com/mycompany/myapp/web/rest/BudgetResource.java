@@ -9,7 +9,6 @@ import com.mycompany.myapp.service.BudgetService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.BudgetCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -55,10 +54,11 @@ public class BudgetResource {
     private final UserService userService;
 
     public BudgetResource(
-            BudgetService budgetService,
-            BudgetRepository budgetRepository,
-            BudgetQueryService budgetQueryService,
-            UserService userService) {
+        BudgetService budgetService,
+        BudgetRepository budgetRepository,
+        BudgetQueryService budgetQueryService,
+        UserService userService
+    ) {
         this.userService = userService;
         this.budgetService = budgetService;
         this.budgetRepository = budgetRepository;
@@ -82,9 +82,8 @@ public class BudgetResource {
         }
         budget = budgetService.save(budget);
         return ResponseEntity.created(new URI("/api/budgets/" + budget.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
-                        budget.getId().toString()))
-                .body(budget);
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, budget.getId().toString()))
+            .body(budget);
     }
 
     /**
@@ -101,8 +100,9 @@ public class BudgetResource {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Budget> updateBudget(
-            @PathVariable(value = "id", required = false) final Long id,
-            @Valid @RequestBody Budget budget) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Budget budget
+    ) throws URISyntaxException {
         LOG.debug("REST request to update Budget : {}, {}", id, budget);
         if (budget.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -117,9 +117,8 @@ public class BudgetResource {
 
         budget = budgetService.update(budget);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                        budget.getId().toString()))
-                .body(budget);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, budget.getId().toString()))
+            .body(budget);
     }
 
     /**
@@ -138,8 +137,9 @@ public class BudgetResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Budget> partialUpdateBudget(
-            @PathVariable(value = "id", required = false) final Long id,
-            @NotNull @RequestBody Budget budget) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Budget budget
+    ) throws URISyntaxException {
         LOG.debug("REST request to partial update Budget partially : {}, {}", id, budget);
         if (budget.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -155,8 +155,9 @@ public class BudgetResource {
         Optional<Budget> result = budgetService.partialUpdate(budget);
 
         return ResponseUtil.wrapOrNotFound(
-                result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, budget.getId().toString()));
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, budget.getId().toString())
+        );
     }
 
     /**
@@ -169,13 +170,13 @@ public class BudgetResource {
      */
     @GetMapping("")
     public ResponseEntity<List<Budget>> getAllBudgets(
-            BudgetCriteria criteria,
-            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        BudgetCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
         LOG.debug("REST request to get Budgets by criteria: {}", criteria);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
 
         // Gán userId của người dùng hiện tại vào criteria
         LongFilter userIdFilter = new LongFilter();
@@ -183,8 +184,7 @@ public class BudgetResource {
         criteria.setUserId(userIdFilter);
 
         Page<Budget> page = budgetQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil
-                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -226,7 +226,7 @@ public class BudgetResource {
         LOG.debug("REST request to delete Budget : {}", id);
         budgetService.delete(id);
         return ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                .build();
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

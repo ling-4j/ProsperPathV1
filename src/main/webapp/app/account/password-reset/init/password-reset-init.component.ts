@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import SharedModule from 'app/shared/shared.module';
 
@@ -10,7 +10,7 @@ import { PasswordResetInitService } from './password-reset-init.service';
   templateUrl: './password-reset-init.component.html',
 })
 export default class PasswordResetInitComponent implements AfterViewInit {
-  email = viewChild.required<ElementRef>('email');
+  @ViewChild('email', { static: false }) email!: ElementRef;
 
   success = signal(false);
   resetRequestForm;
@@ -26,8 +26,8 @@ export default class PasswordResetInitComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // eslint-disable-next-line
-    if (this.email()) {
-      this.email().nativeElement.focus();
+    if (this.email) {
+      this.email.nativeElement.focus();
     }
   }
 

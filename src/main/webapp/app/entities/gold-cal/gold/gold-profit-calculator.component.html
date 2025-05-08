@@ -12,7 +12,7 @@
       <!-- Nhóm nhập số lượng vàng -->
       <div class="quantity-box col-md-4 col-sm-12">
         <label jhiTranslate="gold.labels.quantity"> Số lượng vàng </label>
-        <input type="text" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()" min="1" class="quantity-field" jhiNumberFormat/>
+        <input type="text" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange()" min="1" class="quantity-field" jhiNumberFormat />
       </div>
 
       <!-- Loại vàng -->
@@ -26,13 +26,14 @@
 
       <!-- Giá mua -->
       <div class="input-box col-md-4 col-sm-12">
-        <label jhiTranslate="gold.labels.purchasePrice" >Giá mua (đ/chỉ):</label>
+        <label jhiTranslate="gold.labels.purchasePrice">Giá mua (đ/chỉ):</label>
         <input
           class="input-gold"
           type="text"
           [(ngModel)]="purchasePrice"
-          [placeholder]="'gold.labels.purchasePricePlaceholder'|translate"
-          min="0" jhiNumberFormat
+          [placeholder]="'gold.labels.purchasePricePlaceholder' | translate"
+          min="0"
+          jhiNumberFormat
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import PasswordStrengthBarComponent from 'app/account/password/password-strength-bar/password-strength-bar.component';
@@ -12,7 +12,7 @@ import { PasswordResetFinishService } from './password-reset-finish.service';
   templateUrl: './password-reset-finish.component.html',
 })
 export default class PasswordResetFinishComponent implements OnInit, AfterViewInit {
-  newPassword = viewChild.required<ElementRef>('newPassword');
+  @ViewChild('newPassword', { static: false }) newPassword!: ElementRef;
 
   initialized = signal(false);
   doNotMatch = signal(false);
@@ -45,8 +45,8 @@ export default class PasswordResetFinishComponent implements OnInit, AfterViewIn
 
   ngAfterViewInit(): void {
     // eslint-disable-next-line
-    if (this.newPassword()) {
-      this.newPassword().nativeElement.focus();
+    if (this.newPassword) {
+      this.newPassword.nativeElement.focus();
     }
   }
 

@@ -8,7 +8,6 @@ import com.mycompany.myapp.service.NotificationService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.NotificationCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -53,10 +52,11 @@ public class NotificationResource {
     private final UserService userService;
 
     public NotificationResource(
-            NotificationService notificationService,
-            NotificationRepository notificationRepository,
-            NotificationQueryService notificationQueryService,
-            UserService userService) {
+        NotificationService notificationService,
+        NotificationRepository notificationRepository,
+        NotificationQueryService notificationQueryService,
+        UserService userService
+    ) {
         this.notificationService = notificationService;
         this.notificationRepository = notificationRepository;
         this.notificationQueryService = notificationQueryService;
@@ -73,17 +73,15 @@ public class NotificationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Notification> createNotification(@Valid @RequestBody Notification notification)
-            throws URISyntaxException {
+    public ResponseEntity<Notification> createNotification(@Valid @RequestBody Notification notification) throws URISyntaxException {
         LOG.debug("REST request to save Notification : {}", notification);
         if (notification.getId() != null) {
             throw new BadRequestAlertException("A new notification cannot already have an ID", ENTITY_NAME, "idexists");
         }
         notification = notificationService.save(notification);
         return ResponseEntity.created(new URI("/api/notifications/" + notification.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
-                        notification.getId().toString()))
-                .body(notification);
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, notification.getId().toString()))
+            .body(notification);
     }
 
     /**
@@ -101,8 +99,9 @@ public class NotificationResource {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Notification> updateNotification(
-            @PathVariable(value = "id", required = false) final Long id,
-            @Valid @RequestBody Notification notification) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Notification notification
+    ) throws URISyntaxException {
         LOG.debug("REST request to update Notification : {}, {}", id, notification);
         if (notification.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -117,9 +116,8 @@ public class NotificationResource {
 
         notification = notificationService.update(notification);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                        notification.getId().toString()))
-                .body(notification);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notification.getId().toString()))
+            .body(notification);
     }
 
     /**
@@ -140,8 +138,9 @@ public class NotificationResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Notification> partialUpdateNotification(
-            @PathVariable(value = "id", required = false) final Long id,
-            @NotNull @RequestBody Notification notification) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Notification notification
+    ) throws URISyntaxException {
         LOG.debug("REST request to partial update Notification partially : {}, {}", id, notification);
         if (notification.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -157,9 +156,9 @@ public class NotificationResource {
         Optional<Notification> result = notificationService.partialUpdate(notification);
 
         return ResponseUtil.wrapOrNotFound(
-                result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                        notification.getId().toString()));
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notification.getId().toString())
+        );
     }
 
     /**
@@ -172,13 +171,13 @@ public class NotificationResource {
      */
     @GetMapping("")
     public ResponseEntity<List<Notification>> getAllNotifications(
-            NotificationCriteria criteria,
-            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        NotificationCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
         LOG.debug("REST request to get Notifications by criteria: {}", criteria);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
 
         // Gán userId của người dùng hiện tại vào criteria
         LongFilter userIdFilter = new LongFilter();
@@ -186,8 +185,7 @@ public class NotificationResource {
         criteria.setUserId(userIdFilter);
 
         Page<Notification> page = notificationQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil
-                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -229,7 +227,7 @@ public class NotificationResource {
         LOG.debug("REST request to delete Notification : {}", id);
         notificationService.delete(id);
         return ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                .build();
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }
