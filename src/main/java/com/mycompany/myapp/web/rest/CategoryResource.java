@@ -1,11 +1,15 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Category;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.service.CategoryQueryService;
 import com.mycompany.myapp.service.CategoryService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.CategoryCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -22,6 +26,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -46,21 +52,26 @@ public class CategoryResource {
 
     private final CategoryQueryService categoryQueryService;
 
+    private final UserService userService;
+
     public CategoryResource(
-        CategoryService categoryService,
-        CategoryRepository categoryRepository,
-        CategoryQueryService categoryQueryService
-    ) {
+            CategoryService categoryService,
+            CategoryRepository categoryRepository,
+            CategoryQueryService categoryQueryService,
+            UserService userService) {
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
         this.categoryQueryService = categoryQueryService;
+        this.userService = userService;
     }
 
     /**
      * {@code POST  /categories} : Create a new category.
      *
      * @param category the category to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new category, or with status {@code 400 (Bad Request)} if the category has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new category, or with status {@code 400 (Bad Request)} if
+     *         the category has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -71,25 +82,28 @@ public class CategoryResource {
         }
         category = categoryService.save(category);
         return ResponseEntity.created(new URI("/api/categories/" + category.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, category.getId().toString()))
-            .body(category);
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
+                        category.getId().toString()))
+                .body(category);
     }
 
     /**
      * {@code PUT  /categories/:id} : Updates an existing category.
      *
-     * @param id the id of the category to save.
+     * @param id       the id of the category to save.
      * @param category the category to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated category,
-     * or with status {@code 400 (Bad Request)} if the category is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the category couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated category,
+     *         or with status {@code 400 (Bad Request)} if the category is not
+     *         valid,
+     *         or with status {@code 500 (Internal Server Error)} if the category
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(
-        @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Category category
-    ) throws URISyntaxException {
+            @PathVariable(value = "id", required = false) final Long id,
+            @Valid @RequestBody Category category) throws URISyntaxException {
         LOG.debug("REST request to update Category : {}, {}", id, category);
         if (category.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -104,26 +118,30 @@ public class CategoryResource {
 
         category = categoryService.update(category);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, category.getId().toString()))
-            .body(category);
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
+                        category.getId().toString()))
+                .body(category);
     }
 
     /**
-     * {@code PATCH  /categories/:id} : Partial updates given fields of an existing category, field will ignore if it is null
+     * {@code PATCH  /categories/:id} : Partial updates given fields of an existing
+     * category, field will ignore if it is null
      *
-     * @param id the id of the category to save.
+     * @param id       the id of the category to save.
      * @param category the category to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated category,
-     * or with status {@code 400 (Bad Request)} if the category is not valid,
-     * or with status {@code 404 (Not Found)} if the category is not found,
-     * or with status {@code 500 (Internal Server Error)} if the category couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated category,
+     *         or with status {@code 400 (Bad Request)} if the category is not
+     *         valid,
+     *         or with status {@code 404 (Not Found)} if the category is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the category
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Category> partialUpdateCategory(
-        @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Category category
-    ) throws URISyntaxException {
+            @PathVariable(value = "id", required = false) final Long id,
+            @NotNull @RequestBody Category category) throws URISyntaxException {
         LOG.debug("REST request to partial update Category partially : {}, {}", id, category);
         if (category.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -139,9 +157,8 @@ public class CategoryResource {
         Optional<Category> result = categoryService.partialUpdate(category);
 
         return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, category.getId().toString())
-        );
+                result,
+                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, category.getId().toString()));
     }
 
     /**
@@ -149,17 +166,25 @@ public class CategoryResource {
      *
      * @param pageable the pagination information.
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of categories in body.
      */
     @GetMapping("")
     public ResponseEntity<List<Category>> getAllCategories(
-        CategoryCriteria criteria,
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
-    ) {
+            CategoryCriteria criteria,
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get Categories by criteria: {}", criteria);
+        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
 
+        // Gán userId của người dùng hiện tại vào criteria
+        LongFilter userIdFilter = new LongFilter();
+        userIdFilter.setEquals(currentUser.getId());
+        criteria.setUserId(userIdFilter);
         Page<Category> page = categoryQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil
+                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -167,7 +192,8 @@ public class CategoryResource {
      * {@code GET  /categories/count} : count all the categories.
      *
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count
+     *         in body.
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countCategories(CategoryCriteria criteria) {
@@ -179,7 +205,8 @@ public class CategoryResource {
      * {@code GET  /categories/:id} : get the "id" category.
      *
      * @param id the id of the category to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the category, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the category, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategory(@PathVariable("id") Long id) {
@@ -199,7 +226,7 @@ public class CategoryResource {
         LOG.debug("REST request to delete Category : {}", id);
         categoryService.delete(id);
         return ResponseEntity.noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
     }
 }
