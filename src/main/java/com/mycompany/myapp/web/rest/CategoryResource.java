@@ -8,7 +8,6 @@ import com.mycompany.myapp.service.CategoryService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.CategoryCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -26,7 +25,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -55,10 +53,11 @@ public class CategoryResource {
     private final UserService userService;
 
     public CategoryResource(
-            CategoryService categoryService,
-            CategoryRepository categoryRepository,
-            CategoryQueryService categoryQueryService,
-            UserService userService) {
+        CategoryService categoryService,
+        CategoryRepository categoryRepository,
+        CategoryQueryService categoryQueryService,
+        UserService userService
+    ) {
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
         this.categoryQueryService = categoryQueryService;
@@ -82,9 +81,8 @@ public class CategoryResource {
         }
         category = categoryService.save(category);
         return ResponseEntity.created(new URI("/api/categories/" + category.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
-                        category.getId().toString()))
-                .body(category);
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, category.getId().toString()))
+            .body(category);
     }
 
     /**
@@ -102,8 +100,9 @@ public class CategoryResource {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(
-            @PathVariable(value = "id", required = false) final Long id,
-            @Valid @RequestBody Category category) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Category category
+    ) throws URISyntaxException {
         LOG.debug("REST request to update Category : {}, {}", id, category);
         if (category.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -118,9 +117,8 @@ public class CategoryResource {
 
         category = categoryService.update(category);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
-                        category.getId().toString()))
-                .body(category);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, category.getId().toString()))
+            .body(category);
     }
 
     /**
@@ -140,8 +138,9 @@ public class CategoryResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Category> partialUpdateCategory(
-            @PathVariable(value = "id", required = false) final Long id,
-            @NotNull @RequestBody Category category) throws URISyntaxException {
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Category category
+    ) throws URISyntaxException {
         LOG.debug("REST request to partial update Category partially : {}, {}", id, category);
         if (category.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -157,8 +156,9 @@ public class CategoryResource {
         Optional<Category> result = categoryService.partialUpdate(category);
 
         return ResponseUtil.wrapOrNotFound(
-                result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, category.getId().toString()));
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, category.getId().toString())
+        );
     }
 
     /**
@@ -171,20 +171,19 @@ public class CategoryResource {
      */
     @GetMapping("")
     public ResponseEntity<List<Category>> getAllCategories(
-            CategoryCriteria criteria,
-            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        CategoryCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
         LOG.debug("REST request to get Categories by criteria: {}", criteria);
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities()
-                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
 
         // Gán userId của người dùng hiện tại vào criteria
         LongFilter userIdFilter = new LongFilter();
         userIdFilter.setEquals(currentUser.getId());
         criteria.setUserId(userIdFilter);
         Page<Category> page = categoryQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil
-                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -226,7 +225,7 @@ public class CategoryResource {
         LOG.debug("REST request to delete Category : {}", id);
         categoryService.delete(id);
         return ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                .build();
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

@@ -94,7 +94,7 @@
                 ></fa-icon>
                 <div class="flex-grow-1" (click)="handleNotificationClick(notification)">
                   <div class="small text-muted">{{ notification.createdAt | formatMediumDatetime }}</div>
-                  <div>{{ notification.message ? (notification.message | truncate: 10) : '' }}</div>
+                  <div>{{ notification.message ? (notification.message | truncate: 5) : '' }}</div>
                 </div>
               </li>
               <li>

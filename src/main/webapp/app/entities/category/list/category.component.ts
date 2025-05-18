@@ -70,4 +70,8 @@ export class CategoryComponent {
     this.page = page;
     this.pageChange.emit(page);
   }
+
+  handleBudgetClick(category: ICategory): void {
+    this.router.navigate(['/category', category.id, 'view']);
+  }
 }

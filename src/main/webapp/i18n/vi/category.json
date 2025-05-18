@@ -5,14 +5,14 @@
         "title": "Danh mục",
         "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Category",
+        "createOrEditLabel": "Thêm mới/cập nhật",
         "notFound": "Không tìm thấy"
       },
-      "created": "Một Danh mục mới được tạo với định danh {{ param }}",
-      "updated": "Một Danh mục cập nhật với định danh {{ param }}",
-      "deleted": "Một Danh mục đã xóa với định danh {{ param }}",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Xóa Danh mục {{ id }}?"
+        "question": "Xác nhận xóa?"
       },
       "detail": {
         "title": "Danh mục"

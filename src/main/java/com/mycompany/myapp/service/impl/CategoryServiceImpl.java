@@ -6,7 +6,6 @@ import com.mycompany.myapp.domain.enumeration.BudgeStatus;
 import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.service.CategoryService;
 import com.mycompany.myapp.service.UserService;
-
 import java.time.Instant;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -71,27 +70,27 @@ public class CategoryServiceImpl implements CategoryService {
         LOG.debug("Request to partially update Category : {}", category);
 
         return categoryRepository
-                .findById(category.getId())
-                .map(existingCategory -> {
-                    if (category.getCategoryName() != null) {
-                        existingCategory.setCategoryName(category.getCategoryName());
-                    }
-                    if (category.getCategoryType() != null) {
-                        existingCategory.setCategoryType(category.getCategoryType());
-                    }
-                    if (category.getCreatedAt() != null) {
-                        existingCategory.setCreatedAt(category.getCreatedAt());
-                    }
-                    if (category.getUpdatedAt() != null) {
-                        existingCategory.setUpdatedAt(category.getUpdatedAt());
-                    }
-                    if (category.getCategoryIcon() != null) {
-                        existingCategory.setCategoryIcon(category.getCategoryIcon());
-                    }
+            .findById(category.getId())
+            .map(existingCategory -> {
+                if (category.getCategoryName() != null) {
+                    existingCategory.setCategoryName(category.getCategoryName());
+                }
+                if (category.getCategoryType() != null) {
+                    existingCategory.setCategoryType(category.getCategoryType());
+                }
+                if (category.getCreatedAt() != null) {
+                    existingCategory.setCreatedAt(category.getCreatedAt());
+                }
+                if (category.getUpdatedAt() != null) {
+                    existingCategory.setUpdatedAt(category.getUpdatedAt());
+                }
+                if (category.getCategoryIcon() != null) {
+                    existingCategory.setCategoryIcon(category.getCategoryIcon());
+                }
 
-                    return existingCategory;
-                })
-                .map(categoryRepository::save);
+                return existingCategory;
+            })
+            .map(categoryRepository::save);
     }
 
     public Page<Category> findAllWithEagerRelationships(Pageable pageable) {

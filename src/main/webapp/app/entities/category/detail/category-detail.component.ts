@@ -7,6 +7,7 @@ import { ICategory } from '../category.model';
 
 @Component({
   selector: 'jhi-category-detail',
+  styleUrls: ['./category-detail.component.scss'],
   templateUrl: './category-detail.component.html',
   imports: [SharedModule, RouterModule, FormatMediumDatetimePipe],
 })

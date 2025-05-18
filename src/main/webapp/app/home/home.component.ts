@@ -130,8 +130,28 @@ export default class HomeComponent implements OnInit, OnDestroy {
             total: {
               show: true,
               label: 'Tổng',
-              formatter: (w: { globals: { seriesTotals: number[] } }): string =>
-                `${w.globals.seriesTotals.reduce((a, b) => a + b, 0).toLocaleString('vi-VN')} VND`,
+              formatter(w: { globals: { seriesTotals: number[] } }) {
+                const total = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
+                if (total >= 1_000_000_000) {
+                  const billion = total / 1_000_000_000;
+                  // Kiểm tra nếu total có dạng 1.aaa.xxx.(xxx) (ví dụ: 1.989.xxx.xxx)
+                  if (billion >= 1 && billion < 2 && billion % 1 !== 0) {
+                    const rounded = Math.ceil(billion * 100) / 100; // Làm tròn lên đến 2 chữ số thập phân
+                    return `${rounded.toFixed(2)} tỷ`;
+                  }
+                  return `${billion.toFixed(1)} tỷ`;
+                } else if (total >= 1_000_000) {
+                  const million = total / 1_000_000;
+                  // Kiểm tra nếu total có dạng 1.aaa.xxx
+                  if (million >= 1 && million < 2 && million % 1 !== 0) {
+                    const rounded = Math.ceil(million * 100) / 100; // Làm tròn lên đến 2 chữ số thập phân
+                    return `${rounded.toFixed(2)} triệu`;
+                  }
+                  return `${million.toFixed(1)} triệu`;
+                } else {
+                  return `${total.toLocaleString('vi-VN')} VND`;
+                }
+              },
             },
           },
         },

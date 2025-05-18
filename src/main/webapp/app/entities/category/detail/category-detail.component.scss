@@ -1,5 +1,5 @@
 /* ==========================================================================
-Budget Detail page styles
+category Detail page styles
 ========================================================================== */
 @use 'sass:color';
 
@@ -24,7 +24,7 @@ $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 $breakpoint-ipad-pro: 1024px; 
 
-.budget-container {
+.category-container {
   min-height: 84vh; // Đảm bảo chiều cao tối thiểu
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@ $breakpoint-ipad-pro: 1024px;
     }
   }
 
-  .budget-title {
+  .category-title {
     color: $teal !important; // Sử dụng biến $teal với !important để tăng độ ưu tiên
     font-weight: bold;
     font-size: 1.75rem;

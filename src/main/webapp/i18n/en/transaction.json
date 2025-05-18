@@ -5,14 +5,14 @@
         "title": "Transactions",
         "refreshListLabel": "Refresh",
         "createLabel": "New Transaction",
-        "createOrEditLabel": "Create or edit a Transaction",
+        "createOrEditLabel": "Create/Edit",
         "notFound": "No Transactions found"
       },
-      "created": "A new Transaction is created with identifier {{ param }}",
-      "updated": "A Transaction is updated with identifier {{ param }}",
-      "deleted": "A Transaction is deleted with identifier {{ param }}",
+      "created": "Complete created",
+      "updated": "Complete updated",
+      "deleted": "Complete deleted",
       "delete": {
-        "question": "Are you sure you want to delete Transaction {{ id }}?"
+        "question": "Confirm delete?"
       },
       "detail": {
         "title": "Transaction"
@@ -22,6 +22,7 @@
       "transactionType": "Type",
       "description": "Description",
       "transactionDate": "Date",
+      "transactionDate-detail": "Transaction Date",
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "category": "Category",

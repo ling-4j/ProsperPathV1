@@ -1,7 +1,6 @@
 /* ==========================================================================
-Transaction Detail page styles
+transaction Detail page styles
 ========================================================================== */
-
 @use 'sass:color';
 
 // Định nghĩa màu sắc chủ đạo
@@ -16,20 +15,17 @@ $border-color: #e1e8ed;
 $teal: #20c997; // Màu teal dưới dạng hex
 
 // Định nghĩa font
-$font-family-base:
-  'Segoe UI',
-  -apple-system,
-  BlinkMacSystemFont,
-  sans-serif;
+$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 
 // Breakpoints cho responsive
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
+$breakpoint-ipad-pro: 1024px; 
 
 .transaction-container {
-  min-height: 81vh; // Đảm bảo chiều cao tối thiểu
+  min-height: 84vh; // Đảm bảo chiều cao tối thiểu
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,11 +33,32 @@ $breakpoint-xl: 1200px;
   padding: 2rem; // Dùng rem để co giãn linh hoạt
 
   // Responsive cho container
-  @media (max-width: $breakpoint-md) {
+  @media (max-width: $breakpoint-ipad-pro) {
     padding: 1.5rem;
   }
-  @media (max-width: $breakpoint-sm) {
+  @media (max-width: $breakpoint-md) {
     padding: 1rem;
+  }
+  @media (max-width: $breakpoint-sm) {
+    padding: 0.5rem;
+  }
+
+  .col-lg-3 {
+    width: auto; // Đảm bảo container chiếm toàn bộ chiều rộng trên iPad Pro
+    // max-width: 700px; // Giới hạn chiều rộng tối đa cho iPad Pro
+
+    @media (min-width: $breakpoint-lg) {
+      max-width: 25%; // Giữ col-lg-3 trên PC
+    }
+    @media (max-width: $breakpoint-ipad-pro) {
+      max-width: 90%; // Mở rộng chiều rộng trên iPad Pro
+    }
+    @media (max-width: $breakpoint-md) {
+      max-width: 95%;
+    }
+    @media (max-width: $breakpoint-sm) {
+      max-width: 100%;
+    }
   }
 
   .transaction-title {
@@ -52,8 +69,11 @@ $breakpoint-xl: 1200px;
     margin-bottom: 1.5rem; // Thêm khoảng cách dưới tiêu đề
 
     // Responsive cho tiêu đề
-    @media (max-width: $breakpoint-md) {
+    @media (max-width: $breakpoint-ipad-pro) {
       font-size: 1.5rem;
+    }
+    @media (max-width: $breakpoint-md) {
+      font-size: 1.4rem;
     }
     @media (max-width: $breakpoint-sm) {
       font-size: 1.25rem;
@@ -61,23 +81,23 @@ $breakpoint-xl: 1200px;
   }
 
   .block {
-    background-color: $white; // Nền trắng, đồng bộ với settings
-    padding: 1.5rem; // Giảm padding để giống settings
+    background-color: $white;
+    padding: 1.5rem; 
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px; // Giới hạn chiều rộng tối đa
     font-family: $font-family-base;
     border: 1px solid $border-color;
 
     // Responsive cho block
+    @media (max-width: $breakpoint-ipad-pro) {
+      padding: 1.2rem;
+    }
     @media (max-width: $breakpoint-md) {
       padding: 1rem;
-      max-width: 90%;
     }
     @media (max-width: $breakpoint-sm) {
       padding: 0.75rem;
-      max-width: 100%;
     }
 
     .jh-entity-details {
@@ -86,8 +106,14 @@ $breakpoint-xl: 1200px;
         font-weight: 500;
         color: $dark-text;
         margin-bottom: 0.5rem;
+        text-align: left;
+        align-items: center;
+        display: flex;
 
         // Responsive cho dt
+        @media (max-width: $breakpoint-ipad-pro) {
+          font-size: 0.95rem;
+        }
         @media (max-width: $breakpoint-md) {
           font-size: 0.9rem;
         }
@@ -103,11 +129,7 @@ $breakpoint-xl: 1200px;
         padding: 0.75rem;
         border-radius: 5px;
         background-color: $light; // Nền nhẹ
-        text-align: justify; // Căn đều hai bên
-        display: flex;
-        align-items: center;
         gap: 0.5rem; // Khoảng cách giữa icon và text
-        flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
 
         fa-icon {
           font-size: 1rem;
@@ -115,6 +137,9 @@ $breakpoint-xl: 1200px;
           flex-shrink: 0;
 
           // Responsive cho icon
+          @media (max-width: $breakpoint-ipad-pro) {
+            font-size: 0.95rem;
+          }
           @media (max-width: $breakpoint-sm) {
             font-size: 0.9rem;
           }
@@ -124,6 +149,9 @@ $breakpoint-xl: 1200px;
           flex-grow: 1;
 
           // Responsive cho text
+          @media (max-width: $breakpoint-ipad-pro) {
+            font-size: 0.95rem;
+          }
           @media (max-width: $breakpoint-md) {
             font-size: 0.9rem;
           }
@@ -146,6 +174,10 @@ $breakpoint-xl: 1200px;
         margin: 0.25rem;
 
         // Responsive cho button
+        @media (max-width: $breakpoint-ipad-pro) {
+          padding: 0.5rem 1.3rem;
+          font-size: 0.85rem;
+        }
         @media (max-width: $breakpoint-md) {
           padding: 0.5rem 1.2rem;
           font-size: 0.8rem;

@@ -13,7 +13,7 @@
         "notification": "Notification",
         "transaction": "Transaction",
         "summary": "Summary",
-        "gold-cal": "Gold Calculate"
+        "gold-cal": "Gold Calculator"
       },
       "account": {
         "main": "Account",

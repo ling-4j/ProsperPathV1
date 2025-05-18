@@ -57,11 +57,10 @@ public class SummaryResource {
     private final UserService userService;
 
     public SummaryResource(
-        SummaryService summaryService,
-        SummaryRepository summaryRepository,
-        SummaryQueryService summaryQueryService,
-        UserService userService
-    ) {
+            SummaryService summaryService,
+            SummaryRepository summaryRepository,
+            SummaryQueryService summaryQueryService,
+            UserService userService) {
         this.summaryService = summaryService;
         this.summaryRepository = summaryRepository;
         this.summaryQueryService = summaryQueryService;
@@ -85,8 +84,9 @@ public class SummaryResource {
         }
         summary = summaryService.save(summary);
         return ResponseEntity.created(new URI("/api/summaries/" + summary.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, summary.getId().toString()))
-            .body(summary);
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME,
+                        summary.getId().toString()))
+                .body(summary);
     }
 
     /**
@@ -103,9 +103,8 @@ public class SummaryResource {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Summary> updateSummary(
-        @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Summary summary
-    ) throws URISyntaxException {
+            @PathVariable(value = "id", required = false) final Long id,
+            @Valid @RequestBody Summary summary) throws URISyntaxException {
         LOG.debug("REST request to update Summary : {}, {}", id, summary);
         if (summary.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -120,8 +119,9 @@ public class SummaryResource {
 
         summary = summaryService.update(summary);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, summary.getId().toString()))
-            .body(summary);
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME,
+                        summary.getId().toString()))
+                .body(summary);
     }
 
     /**
@@ -140,9 +140,8 @@ public class SummaryResource {
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Summary> partialUpdateSummary(
-        @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Summary summary
-    ) throws URISyntaxException {
+            @PathVariable(value = "id", required = false) final Long id,
+            @NotNull @RequestBody Summary summary) throws URISyntaxException {
         LOG.debug("REST request to partial update Summary partially : {}, {}", id, summary);
         if (summary.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -158,9 +157,8 @@ public class SummaryResource {
         Optional<Summary> result = summaryService.partialUpdate(summary);
 
         return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, summary.getId().toString())
-        );
+                result,
+                HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, summary.getId().toString()));
     }
 
     /**
@@ -173,13 +171,13 @@ public class SummaryResource {
      */
     @GetMapping("")
     public ResponseEntity<List<Summary>> getAllSummaries(
-        SummaryCriteria criteria,
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
-    ) {
+            SummaryCriteria criteria,
+            @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get Summaries by criteria: {}", criteria);
 
         Page<Summary> page = summaryQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        HttpHeaders headers = PaginationUtil
+                .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -221,8 +219,8 @@ public class SummaryResource {
         LOG.debug("REST request to delete Summary : {}", id);
         summaryService.delete(id);
         return ResponseEntity.noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
     }
 
     /**
@@ -239,7 +237,8 @@ public class SummaryResource {
         LOG.debug("REST request to get Summary for period: {}", period);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         // Xác định periodValue dựa trên period
@@ -271,10 +270,12 @@ public class SummaryResource {
      *         the financial change percentages.
      */
     @GetMapping("/financial-change")
-    public ResponseEntity<SummaryQueryService.FinancialChange> getFinancialChange(@RequestParam("period") String period) {
+    public ResponseEntity<SummaryQueryService.FinancialChange> getFinancialChange(
+            @RequestParam("period") String period) {
         LOG.debug("REST request to get FinancialChange for period: {}", period);
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         // Lấy phần trăm thay đổi
@@ -299,17 +300,18 @@ public class SummaryResource {
      */
     @GetMapping("/detailed")
     public ResponseEntity<Map<String, Object>> getDetailedFinancialData(
-        @RequestParam(value = "period", defaultValue = "MONTH") String period,
-        @RequestHeader("Authorization") String authorization
-    ) {
+            @RequestParam(value = "period", defaultValue = "MONTH") String period,
+            @RequestHeader("Authorization") String authorization) {
         LOG.debug("REST request to get detailed financial data for period: {}", period);
 
         // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+        User currentUser = userService.getUserWithAuthorities()
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
 
         try {
-            Map<String, Object> detailedData = summaryQueryService.getDetailedFinancialData(userId, period.toUpperCase());
+            Map<String, Object> detailedData = summaryQueryService.getDetailedFinancialData(userId,
+                    period.toUpperCase());
 
             LOG.debug("Detailed data for userId: {}, period: {}: {}", userId, period, detailedData);
 
@@ -332,7 +334,7 @@ public class SummaryResource {
     private String getPeriodValue(LocalDate date, String periodType) {
         switch (periodType.toUpperCase()) {
             case "WEEK":
-                int weekOfYear = date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+                int weekOfYear = date.get(WeekFields.ISO.weekOfWeekBasedYear());
                 return date.getYear() + "-" + String.format("%02d", weekOfYear);
             case "MONTH":
                 return date.format(DateTimeFormatter.ofPattern("yyyy-MM"));

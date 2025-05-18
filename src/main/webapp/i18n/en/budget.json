@@ -5,14 +5,14 @@
         "title": "Budgets",
         "refreshListLabel": "Refresh",
         "createLabel": "New Budget",
-        "createOrEditLabel": "Create or edit a Budget",
+        "createOrEditLabel": "Create or edit Budget",
         "notFound": "No Budgets found"
       },
-      "created": "A new Budget is created with identifier {{ param }}",
-      "updated": "A Budget is updated with identifier {{ param }}",
-      "deleted": "A Budget is deleted with identifier {{ param }}",
+      "created": "Complete created",
+      "updated": "Complete updated",
+      "deleted": "Complete deleted",
       "delete": {
-        "question": "Are you sure you want to delete Budget {{ id }}?"
+        "question": "Confirm delete?"
       },
       "detail": {
         "title": "Budget"

@@ -6,11 +6,10 @@ Main page styles
 
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (-moz-min-device-pixel-ratio: 2),
-  only screen and (-o-min-device-pixel-ratio: 2/1),
-  only screen and (min-resolution: 192dpi),
-  only screen and (min-resolution: 2dppx) {
-}
+only screen and (-moz-min-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2/1),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {}
 
 // Định nghĩa màu sắc chủ đạo
 $primary: #007bff; // Xanh dương
@@ -33,7 +32,7 @@ $font-family-base: 'Roboto', sans-serif;
   // background: linear-gradient(135deg, #1c1c1e, #2b2e4a, #3a3f5c);
 
   background: linear-gradient(145deg, #c5a8c4, #efe9f0, #f0f0f0);
-  min-height: 85vh;
+  min-height: 84vh;
 
   .row {
     margin: 0;
@@ -204,29 +203,29 @@ $font-family-base: 'Roboto', sans-serif;
 
             &.bg-primary {
               // background-color: $blue;
-              // background: linear-gradient(145deg, #146de0, #0f434d, #250b6d);
+              // background: linear-gradient(145deg, #080a81, #124a55, #35c4dd);
               background: linear-gradient(to bottom, #292dff, #35c4dd);
               color: $white;
             }
 
             &.bg-success {
               // background-color: $success;
-              // background: linear-gradient(0.1turn, #3f87a6, #dadd24, #f69d3c);
-              background: linear-gradient(to bottom, #006935, #00ff37);
+              // background: linear-gradient(0.1turn, #00ff37, #284b0c, #006935);
+              background: linear-gradient(to bottom, #006935, #1fd60f);
               color: $white;
             }
 
             &.bg-teal {
               // background-color: $teal;
-              // background: linear-gradient(0.6turn, #3f87a6, #dadd24, #f69d3c);
-              background: linear-gradient(to bottom, #f5c906, #dbd80e);
+              // background: linear-gradient(0.6turn, #f1f506, #4a4b11, #8a8703);
+              background: linear-gradient(to bottom, #f1f506, #7a7802);
               color: $white;
             }
 
             &.bg-danger {
               // background-color: $danger;
-              // background: linear-gradient(0.4turn, #5f0404, #3f0808, #e90d0d);
-              background: linear-gradient(to bottom, #6b0000, #ff0000);
+              // background: linear-gradient(0.4turn, #e90d0d, #3f0808, #5f0404);
+              background: linear-gradient(to bottom, #ff0000, #6b0000);
               color: $white;
             }
           }
@@ -377,52 +376,6 @@ $font-family-base: 'Roboto', sans-serif;
     .preview-text h4 {
       margin: 5px 0;
       color: #333;
-    }
-
-    .alerts-container {
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .alert {
-      text-align: left;
-      margin-bottom: 15px;
-      border-radius: 8px;
-    }
-
-    .alert-link {
-      cursor: pointer;
-      color: #007bff;
-      text-decoration: underline;
-    }
-
-    .alert-link:hover {
-      color: #0056b3;
-    }
-
-    .alert-auto-dismiss {
-      animation:
-        slideIn 0.5s forwards,
-        autoDismiss 3s 2s forwards;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes autoDismiss {
-      to {
-        opacity: 0;
-        transform: translateX(100%);
-      }
     }
   }
 }
@@ -710,15 +663,53 @@ $font-family-base: 'Roboto', sans-serif;
         padding: 15px;
       }
     }
+  }
+}
 
-    // Alert khi chưa đăng nhập
-    .alert {
-      padding: 10px;
-      font-size: 12px;
 
-      .alert-link {
-        font-size: 12px;
-      }
-    }
+.alerts-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.alert {
+  text-align: left;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.alert-link {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.alert-link:hover {
+  color: #0056b3;
+}
+
+.alert-auto-dismiss {
+  animation:
+    slideIn 0.5s forwards,
+    autoDismiss 3s 2s forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes autoDismiss {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
   }
 }

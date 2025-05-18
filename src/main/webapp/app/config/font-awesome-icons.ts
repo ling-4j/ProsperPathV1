@@ -1,5 +1,8 @@
 import {
   faArrowLeft,
+  faArrowDown,
+  faArrowUp,
+  faMinus,
   faAsterisk,
   faBan,
   faBars,
@@ -72,6 +75,9 @@ import {
 
 export const fontAwesomeIcons = [
   faArrowLeft,
+  faArrowDown,
+  faArrowUp,
+  faMinus,
   faAsterisk,
   faBan,
   faBars,

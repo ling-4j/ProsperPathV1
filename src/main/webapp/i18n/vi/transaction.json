@@ -5,14 +5,14 @@
         "title": "Giao dịch",
         "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Giao dịch",
+        "createOrEditLabel": "Thêm mới/cập nhật",
         "notFound": "Không tìm thấy Giao dịch nào"
       },
-      "created": "Một Giao dịch mới được tạo với định danh {{ param }}",
-      "updated": "Một Giao dịch cập nhật với định danh {{ param }}",
-      "deleted": "Một Giao dịch đã xóa với định danh {{ param }}",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Xóa Giao dịch {{ id }}?"
+        "question": "Xác nhận xóa?"
       },
       "detail": {
         "title": "Giao dịch"
@@ -22,6 +22,7 @@
       "transactionType": "Loại",
       "description": "Mô tả",
       "transactionDate": "Ngày",
+      "transactionDate-detail": "Ngày giao dịch",
       "createdAt": "Ngày tạo",
       "updatedAt": "Ngày cập nhật",
       "category": "Danh mục",

@@ -5,14 +5,14 @@
         "title": "Ngân sách",
         "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Ngân sách",
+        "createOrEditLabel": "Thêm mới/cập nhật",
         "notFound": "Không có Ngân sách nào"
       },
-      "created": "Một Ngân sách mới được tạo với định danh {{ param }}",
-      "updated": "Một Ngân sách cập nhật với định danh {{ param }}",
-      "deleted": "Một Ngân sách đã xóa với định danh {{ param }}",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Xóa Ngân sách {{ id }}?"
+        "question": "Xác nhận xóa?"
       },
       "detail": {
         "title": "Ngân sách"
