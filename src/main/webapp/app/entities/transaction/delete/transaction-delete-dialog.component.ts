@@ -9,6 +9,7 @@ import { TransactionService } from '../service/transaction.service';
 
 @Component({
   templateUrl: './transaction-delete-dialog.component.html',
+  styleUrls: ['./transaction-delete-dialog.component.scss'],
   imports: [SharedModule, FormsModule],
 })
 export class TransactionDeleteDialogComponent {

@@ -9,6 +9,7 @@ import { CategoryService } from '../service/category.service';
 
 @Component({
   templateUrl: './category-delete-dialog.component.html',
+  styleUrls: ['./category-delete-dialog.component.scss'],
   imports: [SharedModule, FormsModule],
 })
 export class CategoryDeleteDialogComponent {

@@ -1,4 +1,5 @@
 import {
+  faTrash,
   faArrowLeft,
   faArrowDown,
   faArrowUp,
@@ -74,6 +75,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export const fontAwesomeIcons = [
+  faTrash,
   faArrowLeft,
   faArrowDown,
   faArrowUp,

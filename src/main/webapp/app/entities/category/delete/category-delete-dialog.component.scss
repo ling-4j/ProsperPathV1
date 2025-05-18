@@ -1,0 +1,105 @@
+.modal-dialog {
+  max-width: 400px; /* Thu nhỏ container */
+  margin: 1.75rem auto; /* Căn giữa theo chiều dọc và ngang */
+}
+
+.modal-content {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  position: relative;
+  display: flex;
+  justify-content: center; /* Căn giữa tiêu đề */
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  text-align: center; /* Căn giữa nội dung văn bản */
+}
+
+.modal-body p {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.modal-footer {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center; /* Căn giữa các nút */
+  gap: 1rem; /* Khoảng cách giữa các nút */
+}
+
+.btn-outline-secondary,
+.btn-danger {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #e9ecef;
+  border-color: #ced4da;
+}
+
+.btn-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-close {
+  font-size: 1.25rem;
+  color: #6c757d;
+}
+
+.btn-close:hover {
+  color: #495057;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .modal-dialog {
+    max-width: 90%; /* Thu nhỏ hơn trên mobile */
+    margin: 1rem auto;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 0.75rem;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-body p {
+    font-size: 0.85rem;
+  }
+
+  .btn-outline-secondary,
+  .btn-danger {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .modal-dialog {
+    max-width: 450px;
+  }
+
+  .modal-title {
+    font-size: 1.05rem;
+  }
+}

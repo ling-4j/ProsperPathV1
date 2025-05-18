@@ -9,6 +9,7 @@ import { BudgetService } from '../service/budget.service';
 
 @Component({
   templateUrl: './budget-delete-dialog.component.html',
+  styleUrls: ['./budget-delete-dialog.component.scss'],
   imports: [SharedModule, FormsModule],
 })
 export class BudgetDeleteDialogComponent {
