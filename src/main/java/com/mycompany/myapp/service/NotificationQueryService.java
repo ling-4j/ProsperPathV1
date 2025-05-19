@@ -227,7 +227,7 @@ public class NotificationQueryService extends QueryService<Notification> {
      * @param transaction The transaction to check.
      */
     private void handleIncomeTransaction(User user, Budget budget, BigDecimal totalSpent, Transaction transaction) {
-        if (totalSpent.compareTo(budget.getBudgetAmount()) > 0) {
+        if (totalSpent.compareTo(budget.getBudgetAmount()) >= 0) {
             String message = formatIncomeMessage(budget, transaction);
             createNotification(user, budget, message, NotificationType.COMPLETE);
             updateBudgetStatus(budget, BudgeStatus.ENDED);
@@ -246,7 +246,7 @@ public class NotificationQueryService extends QueryService<Notification> {
      * @param transaction The transaction to check.
      */
     private void handleExpenseTransaction(User user, Budget budget, BigDecimal totalSpent, Transaction transaction) {
-        if (totalSpent.compareTo(budget.getBudgetAmount()) > 0) {
+        if (totalSpent.compareTo(budget.getBudgetAmount()) >= 0) {
             LOG.info(
                 "Budget ID: {} status updated to ENDED because total spent {} exceeds budget amount {}",
                 budget.getId(),
