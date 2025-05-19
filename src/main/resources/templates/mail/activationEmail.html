@@ -4,17 +4,99 @@
     <title th:text="#{email.activation.title}">JHipster activation</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    <style>
+      body {
+        background: #f6f8fa;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 480px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px #e0e0e0;
+        padding: 40px 32px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #2d7ff9;
+        font-size: 28px;
+        margin-bottom: 24px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      p {
+        color: #333;
+        font-size: 18px;
+        line-height: 1.7;
+        margin: 18px 0;
+      }
+
+      .btn {
+        display: inline-block;
+        background: #2d7ff9;
+        color: #fff !important;
+        padding: 16px 36px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 18px;
+        margin: 28px 0 18px 0;
+        box-shadow: 0 2px 8px #b3d1ff;
+        transition: background 0.2s;
+      }
+
+      .btn:hover {
+        background: #1a5fd7;
+      }
+
+      .footer {
+        color: #888;
+        font-size: 15px;
+        margin-top: 40px;
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 18px 4px;
+        }
+
+        h1 {
+          font-size: 22px;
+        }
+
+        .btn {
+          font-size: 16px;
+          padding: 12px 18px;
+        }
+      }
+    </style>
   </head>
+
   <body>
-    <p th:text="#{email.activation.greeting(${user.login})}">Dear</p>
-    <p th:text="#{email.activation.text1}">Your JHipster account has been created, please click on the URL below to activate it:</p>
-    <p>
-      <a th:with="url=(@{|${baseUrl}/account/activate?key=${user.activationKey}|})" th:href="${url}" th:text="${url}">Activation link</a>
-    </p>
-    <p>
-      <span th:text="#{email.activation.text2}">Regards, </span>
-      <br />
-      <em th:text="#{email.signature}">JHipster.</em>
-    </p>
+    <div class="container">
+      <h1 th:text="#{email.activation.title}">Account Activation</h1>
+      <p th:text="#{email.activation.greeting(${user.login})}">Dear</p>
+      <p th:text="#{email.activation.text1}">Your JHipster account has been created, please click on the URL below to activate it:</p>
+      <p>
+        <a
+          class="btn"
+          th:with="url=(@{|${baseUrl}/account/activate?key=${user.activationKey}|})"
+          th:href="${url}"
+          th:text="#{email.activation.btn}"
+          >Activate Account</a
+        >
+      </p>
+      <p class="footer">
+        <span th:text="#{email.activation.text2}">Regards, </span><br />
+        <em th:text="#{email.signature}">JHipster.</em>
+      </p>
+    </div>
   </body>
 </html>

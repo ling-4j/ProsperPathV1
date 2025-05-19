@@ -8,6 +8,7 @@ import { PasswordResetInitService } from './password-reset-init.service';
   selector: 'jhi-password-reset-init',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './password-reset-init.component.html',
+  styleUrls: ['./password-reset-init.component.scss'],
 })
 export default class PasswordResetInitComponent implements AfterViewInit {
   @ViewChild('email', { static: false }) email!: ElementRef;

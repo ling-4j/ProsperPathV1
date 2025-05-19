@@ -1,45 +1,44 @@
 <div class="category-container d-flex justify-content-center">
   <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
     @if (category(); as categoryRef) {
-    <h1 data-cy="categoryTitle" jhiTranslate="prosperPathApp.category.detail.title" class="category-title mb-4">category
-    </h1>
+      <h1 data-cy="categoryTitle" jhiTranslate="prosperPathApp.category.detail.title" class="category-title mb-4">category</h1>
 
-    <div class="block">
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="prosperPathApp.category.categoryName">Category Name</span></dt>
-        <dd>
-          @if (category()!.categoryIcon) {
-          <fa-icon [icon]="['fas', (categoryRef.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>
-          }
-          <span>{{ categoryRef.categoryName }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.category.categoryType">Category Type</span></dt>
-        <dd>
-          <span [jhiTranslate]="'prosperPathApp.CategoryType.' + (categoryRef.categoryType ?? 'null')">{{
-            { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[categoryRef.categoryType ?? 'null']
+      <div class="block">
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="prosperPathApp.category.categoryName">Category Name</span></dt>
+          <dd>
+            @if (category()!.categoryIcon) {
+              <fa-icon [icon]="['fas', (categoryRef.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>
+            }
+            <span>{{ categoryRef.categoryName }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.category.categoryType">Category Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'prosperPathApp.CategoryType.' + (categoryRef.categoryType ?? 'null')">{{
+              { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[categoryRef.categoryType ?? 'null']
             }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.category.createdAt">Created At</span></dt>
-        <dd>
-          <span>{{ categoryRef.createdAt | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.category.updatedAt">Updated At</span></dt>
-        <dd>
-          <span>{{ categoryRef.updatedAt | formatMediumDatetime }}</span>
-        </dd>
-      </dl>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.category.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ categoryRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.category.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ categoryRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
 
-      <div class="action-buttons text-center mt-4">
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>
-        </button>
+        <div class="action-buttons text-center mt-4">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>
+          </button>
 
-        <button type="button" [routerLink]="['/category', categoryRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>
-        </button>
+          <button type="button" [routerLink]="['/category', categoryRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+        </div>
       </div>
-    </div>
     }
   </div>
 </div>
-<dd>
+<dd></dd>

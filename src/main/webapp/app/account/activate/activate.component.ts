@@ -9,6 +9,7 @@ import { ActivateService } from './activate.service';
   selector: 'jhi-activate',
   imports: [SharedModule, RouterModule],
   templateUrl: './activate.component.html',
+  styleUrls: ['./activate.component.scss'],
 })
 export default class ActivateComponent implements OnInit {
   error = signal(false);

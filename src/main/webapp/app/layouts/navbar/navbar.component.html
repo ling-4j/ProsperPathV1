@@ -70,63 +70,64 @@
           </li>
         }
 
-        <!-- Biểu tượng thông báo -->
-        <li ngbDropdown class="nav-item dropdown pointer position-relative" display="dynamic">
-          <a class="nav-link" href="javascript:void(0);" id="notificationMenu" ngbDropdownToggle aria-expanded="false">
-            <fa-icon icon="bell"></fa-icon>
-            @if (unreadNotifications().length > 0) {
-              <span class="badge badge-notification">{{ unreadNotifications().length }}</span>
-            } @else {
-              <span class="badge badge-notification"></span>
-            }
-            <!-- Hiển thị số thông báo chưa đọc -->
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-notification" ngbDropdownMenu aria-labelledby="notificationMenu">
-            <ng-container *ngIf="unreadNotifications().length > 0; else noNotifications">
-              <li
-                *ngFor="let notification of unreadNotifications().slice(0, 3); let i = index"
-                class="dropdown-item d-flex align-items-start gap-2 pointer"
-              >
-                <fa-icon
-                  icon="circle"
-                  [ngClass]="{ 'text-success': !notification.isRead, 'text-muted': notification.isRead }"
-                  size="xs"
-                ></fa-icon>
-                <div class="flex-grow-1" (click)="handleNotificationClick(notification)">
-                  <div class="small text-muted">{{ notification.createdAt | formatMediumDatetime }}</div>
-                  <div>{{ notification.message ? (notification.message | truncate: 5) : '' }}</div>
-                </div>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a
-                  class="dropdown-item text-center"
-                  routerLink="/notification"
-                  (click)="collapseNavbar()"
-                  jhiTranslate="prosperPathApp.notification.dropdown.viewAll"
+        @if (account() !== null) {
+          <!-- Biểu tượng thông báo -->
+          <li ngbDropdown class="nav-item dropdown pointer position-relative" display="dynamic">
+            <a class="nav-link" href="javascript:void(0);" id="notificationMenu" ngbDropdownToggle aria-expanded="false">
+              <fa-icon icon="bell"></fa-icon>
+              @if (unreadNotifications().length > 0) {
+                <span class="badge badge-notification">{{ unreadNotifications().length }}</span>
+              } @else {
+                <span class="badge badge-notification"></span>
+              }
+              <!-- Hiển thị số thông báo chưa đọc -->
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-notification" ngbDropdownMenu aria-labelledby="notificationMenu">
+              <ng-container *ngIf="unreadNotifications().length > 0; else noNotifications">
+                <li
+                  *ngFor="let notification of unreadNotifications().slice(0, 3); let i = index"
+                  class="dropdown-item d-flex align-items-start gap-2 pointer"
                 >
-                  View all
-                </a>
-              </li>
-            </ng-container>
-            <ng-template #noNotifications>
-              <li class="dropdown-item text-muted text-center" jhiTranslate="prosperPathApp.notification.dropdown.noUnread">No unread</li>
-              <li>
-                <a
-                  class="dropdown-item text-center"
-                  routerLink="/notification"
-                  (click)="collapseNavbar()"
-                  jhiTranslate="prosperPathApp.notification.dropdown.viewAll"
-                >
-                  View all
-                </a>
-              </li>
-            </ng-template>
-          </ul>
-        </li>
-
+                  <fa-icon
+                    icon="circle"
+                    [ngClass]="{ 'text-success': !notification.isRead, 'text-muted': notification.isRead }"
+                    size="xs"
+                  ></fa-icon>
+                  <div class="flex-grow-1" (click)="handleNotificationClick(notification)">
+                    <div class="small text-muted">{{ notification.createdAt | formatMediumDatetime }}</div>
+                    <div>{{ notification.message ? (notification.message | truncate: 5) : '' }}</div>
+                  </div>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item text-center"
+                    routerLink="/notification"
+                    (click)="collapseNavbar()"
+                    jhiTranslate="prosperPathApp.notification.dropdown.viewAll"
+                  >
+                    View all
+                  </a>
+                </li>
+              </ng-container>
+              <ng-template #noNotifications>
+                <li class="dropdown-item text-muted text-center" jhiTranslate="prosperPathApp.notification.dropdown.noUnread">No unread</li>
+                <li>
+                  <a
+                    class="dropdown-item text-center"
+                    routerLink="/notification"
+                    (click)="collapseNavbar()"
+                    jhiTranslate="prosperPathApp.notification.dropdown.viewAll"
+                  >
+                    View all
+                  </a>
+                </li>
+              </ng-template>
+            </ul>
+          </li>
+        }
         <!-- Profile -->
         <li
           ngbDropdown

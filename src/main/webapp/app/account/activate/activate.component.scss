@@ -1,0 +1,72 @@
+@use 'sass:color';
+
+// Reuse settings page color variables
+$primary: #007bff; // Blue
+$warning: #ffc107; // Yellow
+$light: #f8f9fa; // Light gray
+$white: #ffffff; // White
+$gray: #e9ecef; // Light gray for inputs
+
+// Reuse font
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
+
+.activation-container {
+  min-height: 84vh; // Match settings page height
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+
+  .activation-title {
+    color: teal; // Match settings page title color
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .alert {
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
+
+    &.alert-danger {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb); // Match settings page
+      border: none;
+      color: #721c24;
+    }
+
+    &.alert-success {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb); // Match settings page
+      border: none;
+      color: #155724;
+    }
+
+    &.alert-info {
+      background: linear-gradient(135deg, #d1ecf1, #bee5eb); // For Google message
+      border: none;
+      color: #0c5460;
+    }
+
+    .alert-link {
+      color: inherit;
+      text-decoration: underline;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 576px) {
+    .activation-title {
+      font-size: 20px;
+    }
+
+    .alert {
+      font-size: 12px;
+      padding: 10px;
+    }
+  }
+}

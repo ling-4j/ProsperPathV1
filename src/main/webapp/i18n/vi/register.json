@@ -13,7 +13,7 @@
           "pattern": "Your username is invalid."
         }
       },
-      "success": "<strong>Đăng ký thành công!</strong> Bạn vui lòng đăng nhập tài khoản.",
+      "success": "<strong>Đăng ký thành công!</strong> Bạn vui lòng kiểm tra hộp thư để xác nhận tài khoản.",
       "error": {
         "fail": "<strong>Đăng ký thất bại!</strong> Vui lòng thử lại sau.",
         "userexists": "<strong>Tên tài khoản này đã được sử dụng!</strong> Bạn vui lòng chọn tên tài khoản khác.",

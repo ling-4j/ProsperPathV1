@@ -47,7 +47,9 @@
         <tbody>
           @for (category of categories; track trackId(category); let i = $index) {
             <tr data-cy="entityTable" class="budget-row">
-              <td (click)="handleBudgetClick(category)"><fa-icon [icon]="['fas', (category.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{ category.categoryName }}</td>
+              <td (click)="handleBudgetClick(category)">
+                <fa-icon [icon]="['fas', (category.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{ category.categoryName }}
+              </td>
               <td (click)="handleBudgetClick(category)" [jhiTranslate]="'prosperPathApp.CategoryType.' + (category.categoryType ?? 'null')">
                 {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[category.categoryType ?? 'null'] }}
               </td>

@@ -15,14 +15,18 @@ $border-color: #e1e8ed;
 $teal: #20c997; // Màu teal dưới dạng hex
 
 // Định nghĩa font
-$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 
 // Breakpoints cho responsive
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
-$breakpoint-ipad-pro: 1024px; 
+$breakpoint-ipad-pro: 1024px;
 
 .transaction-container {
   min-height: 84vh; // Đảm bảo chiều cao tối thiểu
@@ -82,7 +86,7 @@ $breakpoint-ipad-pro: 1024px;
 
   .block {
     background-color: $white;
-    padding: 1.5rem; 
+    padding: 1.5rem;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
