@@ -74,8 +74,8 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: https://prosper-path.onrender.com/
-    from: 'Prosper Path <<prosperPath@gmail.com>>'
+    base-url: https://prosper-path.onrender.com
+    from: 'Prosper Path <tendeplamspx1234@gmail.com>'
   logging:
     use-json-format: false
     logstash:
