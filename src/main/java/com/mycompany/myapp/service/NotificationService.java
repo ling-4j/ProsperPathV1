@@ -1,12 +1,14 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Notification;
+import com.mycompany.myapp.domain.Transaction;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link com.mycompany.myapp.domain.Notification}.
+ * Service Interface for managing
+ * {@link com.mycompany.myapp.domain.Notification}.
  */
 public interface NotificationService {
     /**
@@ -55,4 +57,22 @@ public interface NotificationService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Creates a notification for a transaction if it matches active budgets and
+     * exceeds/completes the budget.
+     *
+     * @param userId      The ID of the user.
+     * @param transaction The transaction to check.
+     */
+    void createNotificationForTransaction(Long userId, Transaction transaction);
+
+    /**
+     * Creates a warning notification for a transaction if it reaches or exceeds 85%
+     * of the budget.
+     *
+     * @param userId      The ID of the user.
+     * @param transaction The transaction to check.
+     */
+    void createWarningNotificationForTransaction(Long userId, Transaction transaction);
 }

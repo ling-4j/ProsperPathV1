@@ -21,29 +21,46 @@
         <ng-template
           #cardTemplate
           let-title="title"
-          let-icon="icon"
           let-value="value"
           let-percentage="percentage"
-          let-period="period"
-          let-headerClass="headerClass"
           let-cardClass="cardClass"
+          let-isPercentageFormat="isPercentageFormat"
+          let-valueClass="valueClass"
         >
           <div class="card mb-3" [ngClass]="cardClass" style="border-radius: 15px">
             <div class="card-body">
-              <h5 class="card-title">{{ title }}</h5>
-              <h3 class="card-value fw-bold">{{ value | currency: 'VND' }}</h3>
-              <span
-                class="badge"
-                [ngStyle]="
-                  percentage < 0
-                    ? { color: '#e90d0d', 'background-color': 'rgba(255, 255, 255, 0.6)', 'border-radius': '12px' }
-                    : { color: '#0c8b00', 'background-color': 'rgba(255, 255, 255, 0.6)', 'border-radius': '12px' }
-                "
-              >
-                {{ percentage }}%
-                <fa-icon *ngIf="percentage > 0" [icon]="['fas', 'arrow-up']" class="me-1"></fa-icon>
-                <fa-icon *ngIf="percentage < 0" [icon]="['fas', 'arrow-down']" class="me-1"></fa-icon>
-              </span>
+              <h5 class="card-title" [jhiTranslate]="title"></h5>
+              <h3 class="card-value fw-bold" [ngClass]="valueClass">
+                <ng-container *ngIf="isPercentageFormat; else currencyFormat">
+                  <span
+                    class="badge profit-badge"
+                    *ngIf="title === 'prosperPathApp.summary.profitLost'; else percentValue"
+                    [ngStyle]="{ color: '#fff', 'border-radius': '12px' }"
+                  >
+                    {{ value >= 0 ? '+' + value : value }}%
+                    <fa-icon *ngIf="value > 0" [icon]="['fas', 'arrow-up']" class="me-1"></fa-icon>
+                    <fa-icon *ngIf="value < 0" [icon]="['fas', 'arrow-down']" class="me-1"></fa-icon>
+                  </span>
+                  <ng-template #percentValue> {{ value >= 0 ? '+' + value : value }}% </ng-template>
+                </ng-container>
+                <ng-template #currencyFormat>
+                  {{ formatCurrencyShort(value) }}
+                </ng-template>
+              </h3>
+              <ng-container *ngIf="percentage !== undefined && percentage !== null && title !== 'prosperPathApp.summary.profitLost'">
+                <span
+                  class="badge"
+                  [ngStyle]="
+                    percentage < 0
+                      ? { color: '#e90d0d', 'background-color': 'rgba(255,255,255,0.6)', 'border-radius': '12px' }
+                      : { color: '#0c8b00', 'background-color': 'rgba(255,255,255,0.6)', 'border-radius': '12px' }
+                  "
+                >
+                  {{ percentage }}%
+                  <fa-icon *ngIf="percentage > 0" [icon]="['fas', 'arrow-up']" class="me-1"></fa-icon>
+                  <fa-icon *ngIf="percentage < 0" [icon]="['fas', 'arrow-down']" class="me-1"></fa-icon>
+                </span>
+              </ng-container>
             </div>
           </div>
         </ng-template>
@@ -115,7 +132,7 @@
                 *ngTemplateOutlet="
                   cardTemplate;
                   context: {
-                    title: 'Total Assets',
+                    title: 'prosperPathApp.summary.totalAssets',
                     value: totalAssets(),
                     percentage: assetsChangePercentage(),
                     period: selectedPeriod(),
@@ -129,11 +146,12 @@
                 *ngTemplateOutlet="
                   cardTemplate;
                   context: {
-                    title: 'Profit/Loss',
-                    value: totalProfit(),
-                    percentage: profitChangePercentage(),
+                    title: 'prosperPathApp.summary.profitLost',
+                    value: profitPercentage(),
                     period: selectedPeriod(),
                     cardClass: 'bg-success text-white',
+                    isPercentageFormat: true,
+                    valueClass: 'center-value',
                   }
                 "
               ></ng-container>
@@ -143,7 +161,7 @@
                 *ngTemplateOutlet="
                   cardTemplate;
                   context: {
-                    title: 'Total Income',
+                    title: 'prosperPathApp.summary.totalIncome',
                     value: totalIncome(),
                     percentage: incomeChangePercentage(),
                     period: selectedPeriod(),
@@ -157,7 +175,7 @@
                 *ngTemplateOutlet="
                   cardTemplate;
                   context: {
-                    title: 'Total Expense',
+                    title: 'prosperPathApp.summary.totalExpense',
                     value: totalExpense(),
                     percentage: expenseChangePercentage(),
                     period: selectedPeriod(),

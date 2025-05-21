@@ -1,10 +1,10 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[jhiNumberFormat]',
 })
-export class NumberFormatDirective {
+export class NumberFormatDirective implements OnInit {
   @Input() separator = ','; // Dấu phân cách, mặc định là ',' (có thể đổi thành '.')
 
   constructor(
@@ -12,20 +12,24 @@ export class NumberFormatDirective {
     private control: NgControl,
   ) {}
 
-  @HostListener('input', ['$event'])
-  onInput(event: Event): void {
-    const input = this.el.nativeElement as HTMLInputElement;
-    const value = input.value.replace(/[^0-9]/g, ''); // Chỉ giữ lại số
-
+  ngOnInit(): void {
+    // Khi load lại trang, format lại giá trị nếu có
+    const value = this.control.control?.value;
     if (value) {
-      // Định dạng số với dấu phân cách
-      const formattedValue = this.formatNumber(parseInt(value, 10));
-      input.value = formattedValue;
+      this.el.nativeElement.value = this.formatNumber(value);
+    }
+  }
 
-      // Lưu giá trị không có dấu phân cách vào form
-      this.control.control?.setValue(parseInt(value, 10), { emitEvent: false });
+  @HostListener('input', ['$event'])
+  onInput(): void {
+    const input = this.el.nativeElement as HTMLInputElement;
+    const value = input.value.replace(/[^0-9]/g, '');
+    if (value) {
+      this.control.control?.setValue(Number(value), { emitEvent: false });
+      setTimeout(() => (input.value = this.formatNumber(Number(value))));
     } else {
       this.control.control?.setValue(null, { emitEvent: false });
+      setTimeout(() => (input.value = ''));
     }
   }
 

@@ -15,21 +15,13 @@ import { FilterComponent, FilterOptions, IFilterOption, IFilterOptions } from 'a
 import { IBudget } from '../budget.model';
 import { BudgetService } from '../service/budget.service';
 import { BudgetDeleteDialogComponent } from '../delete/budget-delete-dialog.component';
+import { CurrencyShortPipe } from 'app/shared/truncate/currencyShort';
 
 @Component({
   selector: 'jhi-budget',
   styleUrls: ['./budget.component.scss'],
   templateUrl: './budget.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    FormatMediumDatePipe,
-    // FilterComponent,
-    // ItemCountComponent,
-  ],
+  imports: [RouterModule, FormsModule, SharedModule, SortDirective, SortByDirective, FormatMediumDatePipe, CurrencyShortPipe],
 })
 export class BudgetComponent {
   @Input() budgets: IBudget[] = [];

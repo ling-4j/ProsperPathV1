@@ -24,6 +24,7 @@ import { CategoryComponent } from '../../category/list/category.component';
 import { BudgetComponent } from 'app/entities/budget/list/budget.component';
 import { IBudget } from 'app/entities/budget/budget.model';
 import { BudgetService } from 'app/entities/budget/service/budget.service';
+import { CurrencyTypePipe } from 'app/shared/truncate/currencyType';
 
 // Định nghĩa kiểu cho queryObject
 interface QueryObject {
@@ -65,6 +66,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
     CategoryComponent,
     BudgetComponent,
     TruncatePipe,
+    CurrencyTypePipe,
   ],
   providers: [{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }],
 })

@@ -70,15 +70,13 @@ export default class HomeComponent implements OnInit, OnDestroy {
   totalAssets = signal(0);
   totalIncome = signal(0);
   totalExpense = signal(0);
-  totalProfit = signal(0);
   profitPercentage = signal(0);
-
   assetsChangePercentage = signal(0);
   incomeChangePercentage = signal(0);
   expenseChangePercentage = signal(0);
   profitChangePercentage = signal(0);
-
   errorMessage = signal<string | null>(null);
+  isMobile = signal(window.innerWidth < 768);
 
   progressRateChartOptions: Partial<ChartOptions> = {
     series: [{ name: 'Lợi nhuận', data: [] }],
@@ -103,13 +101,12 @@ export default class HomeComponent implements OnInit, OnDestroy {
     xaxis: { categories: [], labels: { style: { colors: '#6b7280', fontSize: '12px' } } },
     dataLabels: { enabled: false },
     colors: ['#1e90ff'],
-    tooltip: { y: { formatter: val => `${val.toLocaleString('vi-VN')} VND` } },
+    tooltip: { y: { formatter: HomeComponent.formatCurrencyShort } },
   };
-
   incomeVsExpenseDonutChartOptions: Partial<ChartOptions> = {
     series: [0, 0],
     chart: { type: 'donut', height: 240 },
-    labels: ['Thu nhập', 'Chi phí'],
+    labels: ['Thu nhập', 'Chi tiêu'],
     colors: ['#00c4b4', '#ff6f61'],
     legend: { position: 'top', fontSize: '12px', labels: { colors: '#6b7280' } },
     dataLabels: {
@@ -132,25 +129,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
               label: 'Tổng',
               formatter(w: { globals: { seriesTotals: number[] } }) {
                 const total = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
-                if (total >= 1_000_000_000) {
-                  const billion = total / 1_000_000_000;
-                  // Kiểm tra nếu total có dạng 1.aaa.xxx.(xxx) (ví dụ: 1.989.xxx.xxx)
-                  if (billion >= 1 && billion < 2 && billion % 1 !== 0) {
-                    const rounded = Math.ceil(billion * 100) / 100; // Làm tròn lên đến 2 chữ số thập phân
-                    return `${rounded.toFixed(2)} tỷ`;
-                  }
-                  return `${billion.toFixed(1)} tỷ`;
-                } else if (total >= 1_000_000) {
-                  const million = total / 1_000_000;
-                  // Kiểm tra nếu total có dạng 1.aaa.xxx
-                  if (million >= 1 && million < 2 && million % 1 !== 0) {
-                    const rounded = Math.ceil(million * 100) / 100; // Làm tròn lên đến 2 chữ số thập phân
-                    return `${rounded.toFixed(2)} triệu`;
-                  }
-                  return `${million.toFixed(1)} triệu`;
-                } else {
-                  return `${total.toLocaleString('vi-VN')} VND`;
-                }
+                return HomeComponent.formatCurrencyShort(total);
               },
             },
           },
@@ -159,11 +138,10 @@ export default class HomeComponent implements OnInit, OnDestroy {
     },
     responsive: [{ breakpoint: 767, options: { chart: { height: 200 } } }],
   };
-
   incomeVsExpenseLineChartOptions: Partial<ChartOptions> = {
     series: [
       { name: 'Thu nhập', data: [] },
-      { name: 'Chi phí', data: [] },
+      { name: 'Chi tiêu', data: [] },
     ],
     chart: {
       type: 'line',
@@ -187,7 +165,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
     dataLabels: { enabled: false },
     colors: ['#00c4b4', '#ff6f61'],
     legend: { position: 'top', fontSize: '12px', labels: { colors: '#6b7280' } },
-    tooltip: { y: { formatter: val => `${val.toLocaleString('vi-VN')} VND` } },
+    tooltip: { y: { formatter: HomeComponent.formatCurrencyShort } },
   };
 
   private readonly destroy$ = new Subject<void>();
@@ -236,7 +214,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.totalAssets.set(summary.totalAssets ?? 0);
     this.totalIncome.set(summary.totalIncome ?? 0);
     this.totalExpense.set(summary.totalExpense ?? 0);
-    this.totalProfit.set(summary.totalProfit ?? 0);
     this.profitPercentage.set(summary.profitPercentage ?? 0);
   }
 
@@ -250,12 +227,10 @@ export default class HomeComponent implements OnInit, OnDestroy {
   private updateChartData(detailedData: DetailedFinancialData): void {
     this.progressRateChartOptions.series = [{ name: 'Lợi nhuận', data: detailedData.progressRateData }];
     this.progressRateChartOptions.xaxis = { categories: detailedData.labels };
-
     this.incomeVsExpenseDonutChartOptions.series = [this.totalIncome() || 0, this.totalExpense() || 0];
-
     this.incomeVsExpenseLineChartOptions.series = [
       { name: 'Thu nhập', data: detailedData.incomeData },
-      { name: 'Chi phí', data: detailedData.expenseData },
+      { name: 'Chi tiêu', data: detailedData.expenseData },
     ];
     this.incomeVsExpenseLineChartOptions.xaxis = { categories: detailedData.labels };
   }
@@ -277,25 +252,38 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.totalAssets.set(0);
     this.totalIncome.set(0);
     this.totalExpense.set(0);
-    this.totalProfit.set(0);
     this.profitPercentage.set(0);
     this.assetsChangePercentage.set(0);
     this.incomeChangePercentage.set(0);
     this.expenseChangePercentage.set(0);
     this.profitChangePercentage.set(0);
-
     this.progressRateChartOptions.series = [{ name: 'Lợi nhuận', data: [] }];
     this.progressRateChartOptions.xaxis = { categories: [] };
     this.incomeVsExpenseDonutChartOptions.series = [0, 0];
     this.incomeVsExpenseLineChartOptions.series = [
       { name: 'Thu nhập', data: [] },
-      { name: 'Chi phí', data: [] },
+      { name: 'Chi tiêu', data: [] },
     ];
     this.incomeVsExpenseLineChartOptions.xaxis = { categories: [] };
   }
 
   login(): void {
     this.router.navigate(['/login']);
+  }
+
+  private static formatCurrencyShort(value: number): string {
+    const absValue = Math.abs(value);
+    if (absValue >= 1_000_000_000) {
+      return (value / 1_000_000_000).toFixed(2).replace(/\.00$/, '') + ' tỷ';
+    } else if (absValue >= 1_000_000) {
+      return (value / 1_000_000).toFixed(2).replace(/\.00$/, '') + ' triệu';
+    } else {
+      return value.toLocaleString('vi-VN') + 'VND';
+    }
+  }
+
+  formatCurrencyShort(value: number): string {
+    return HomeComponent.formatCurrencyShort(value);
   }
 
   ngOnDestroy(): void {

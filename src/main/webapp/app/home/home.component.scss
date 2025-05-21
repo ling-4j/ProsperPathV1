@@ -713,3 +713,23 @@ $font-family-base: 'Roboto', sans-serif;
     transform: translateX(100%);
   }
 }
+
+.center-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60%;
+  width: 100%;
+}
+
+.profit-badge {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  padding: 0 !important;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  box-shadow: none;
+}

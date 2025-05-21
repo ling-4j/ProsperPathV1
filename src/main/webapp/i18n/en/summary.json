@@ -24,6 +24,7 @@
       "totalIncome": "Total Income",
       "totalExpense": "Total Expense",
       "totalProfit": "Total Profit",
+      "profitLost": "Profit/Loss",
       "profitPercentage": "Profit Percentage",
       "createdAt": "Created At",
       "updatedAt": "Updated At",

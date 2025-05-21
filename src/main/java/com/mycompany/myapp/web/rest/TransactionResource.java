@@ -3,8 +3,6 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.domain.Transaction;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.TransactionRepository;
-import com.mycompany.myapp.service.NotificationQueryService;
-import com.mycompany.myapp.service.SummaryQueryService;
 import com.mycompany.myapp.service.TransactionQueryService;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
@@ -53,23 +51,17 @@ public class TransactionResource {
     private final TransactionRepository transactionRepository;
 
     private final TransactionQueryService transactionQueryService;
-    private final SummaryQueryService summaryQueryService;
-    private final NotificationQueryService notificationQueryService;
     private final UserService userService;
 
     public TransactionResource(
         TransactionService transactionService,
         TransactionRepository transactionRepository,
         TransactionQueryService transactionQueryService,
-        SummaryQueryService summaryQueryService,
-        UserService userService,
-        NotificationQueryService notificationQueryService
+        UserService userService
     ) {
-        this.notificationQueryService = notificationQueryService;
         this.transactionService = transactionService;
         this.transactionRepository = transactionRepository;
         this.transactionQueryService = transactionQueryService;
-        this.summaryQueryService = summaryQueryService;
         this.userService = userService;
     }
 
@@ -79,19 +71,8 @@ public class TransactionResource {
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
-        // Lưu giao dịch
+
         Transaction savedTransaction = transactionService.save(transaction);
-
-        // Cập nhật Summary
-        summaryQueryService.updateSummaryForTransaction(currentUser.getId(), null, savedTransaction);
-
-        // Call NotificationService to check and create notifications
-        if (savedTransaction.getCategory() != null) {
-            notificationQueryService.createNotificationForTransaction(currentUser.getId(), savedTransaction);
-            notificationQueryService.createWarningNotificationForTransaction(currentUser.getId(), savedTransaction);
-        }
 
         return ResponseEntity.created(new URI("/api/transactions/" + savedTransaction.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, savedTransaction.getId().toString()))
@@ -115,28 +96,8 @@ public class TransactionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
-
-        Transaction existingTransaction = transactionRepository.findById(id).orElseThrow();
-        if (!existingTransaction.getUser().getId().equals(currentUser.getId())) {
-            LOG.warn("User {} attempted to update transaction {} that does not belong to them", currentUser.getId(), id);
-            return ResponseEntity.status(403).build(); // Forbidden
-        }
-
-        // Lưu giao dịch cũ để cập nhật Summary
-        Transaction oldTransaction = transactionRepository.findById(id).orElseThrow();
-
-        // Cập nhật giao dịch
         Transaction updatedTransaction = transactionService.update(transaction);
 
-        // Cập nhật Summary: trừ giá trị cũ và cộng giá trị mới trong một lần gọi
-        summaryQueryService.updateSummaryForTransaction(currentUser.getId(), oldTransaction, updatedTransaction);
-
-        if (updatedTransaction.getCategory() != null) {
-            notificationQueryService.createNotificationForTransaction(currentUser.getId(), updatedTransaction);
-            notificationQueryService.createWarningNotificationForTransaction(currentUser.getId(), updatedTransaction);
-        }
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))
             .body(updatedTransaction);
@@ -248,17 +209,6 @@ public class TransactionResource {
     public ResponseEntity<Void> deleteTransaction(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Transaction : {}", id);
 
-        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
-        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
-        // Kiểm tra quyền truy cập
-        Transaction transaction = transactionRepository
-            .findById(id)
-            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-
-        // Cập nhật Summary trước khi xóa (trường hợp xóa: newTransaction = null)
-        summaryQueryService.updateSummaryForTransaction(currentUser.getId(), transaction, null);
-
-        // Xóa giao dịch
         transactionService.delete(id);
 
         return ResponseEntity.noContent()

@@ -178,7 +178,7 @@
                     }"
                   >
                     {{
-                      (transaction.transactionType === 'EXPENSE' ? -(transaction.amount ?? 0) : (transaction.amount ?? 0)) | currency: 'VND'
+                      (transaction.transactionType === 'EXPENSE' ? -(transaction.amount ?? 0) : (transaction.amount ?? 0)) | currencyType
                     }}
                   </td>
                   <td class="text-end action-column">

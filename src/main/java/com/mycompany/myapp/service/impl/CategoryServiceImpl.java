@@ -2,7 +2,7 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.domain.User;
-import com.mycompany.myapp.domain.enumeration.BudgeStatus;
+// import com.mycompany.myapp.domain.enumeration.BudgeStatus;
 import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.service.CategoryService;
 import com.mycompany.myapp.service.UserService;

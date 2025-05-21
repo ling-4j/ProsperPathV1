@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Summary;
+import com.mycompany.myapp.domain.Transaction;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,4 +56,13 @@ public interface SummaryService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Update or create a summary based on a transaction.
+     *
+     * @param userId the ID of the user.
+     * @param oldTransaction the old transaction (before update/delete, null if new).
+     * @param newTransaction the new transaction (after create/update, null if delete).
+     */
+    void updateSummaryForTransaction(Long userId, Transaction oldTransaction, Transaction newTransaction);
 }

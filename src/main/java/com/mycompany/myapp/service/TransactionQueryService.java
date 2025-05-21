@@ -8,7 +8,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.enumeration.TransactionType;
 import com.mycompany.myapp.repository.TransactionRepository;
-import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.criteria.TransactionCriteria;
 import jakarta.persistence.criteria.JoinType;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +16,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
