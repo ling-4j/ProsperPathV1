@@ -5,19 +5,22 @@
     <div>
       <h2 id="page-heading" data-cy="TransactionHeading">
         <div class="row align-items-center">
-          <div class="col-md-6 col-12 mb-2 mb-md-0 title">
+          <div class="col-md-6 col-12 mb-2 mb-md-0 title text-center text-md-start w-100">
             <span jhiTranslate="prosperPathApp.transaction.home.title">Transactions</span>
           </div>
-          <div class="col-md-6 col-12 d-flex justify-content-end gap-2">
-            <button class="btn btn-info refresh-btn" (click)="refresh()" [disabled]="isLoading">
+          <div class="col-md-6 col-12 d-flex justify-content-end gap-2 align-items-center">
+            <!-- Toggle button for mobile, hide refresh/create on mobile -->
+            <button class="btn btn-outline-secondary d-md-none me-2" type="button" (click)="showFilter = !showFilter">
+              <fa-icon icon="bars"></fa-icon>
+            </button>
+            <button class="btn btn-info refresh-btn d-none d-md-inline-flex" (click)="refresh()" [disabled]="isLoading">
               <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
               <span jhiTranslate="prosperPathApp.transaction.home.refreshListLabel" class="ms-1">Refresh list</span>
             </button>
-
             <button
               id="jh-create-entity"
               data-cy="entityCreateButton"
-              class="btn btn-primary jh-create-entity create-transaction"
+              class="btn btn-primary jh-create-entity create-transaction d-none d-md-inline-flex"
               [routerLink]="['/transaction/new']"
             >
               <fa-icon icon="plus"></fa-icon>
@@ -29,8 +32,25 @@
 
       <jhi-filter [filters]="filters"></jhi-filter>
 
-      <div class="row align-items-center mb-3 filter-row">
+      <!-- Filter row: show on desktop or when toggled on mobile -->
+      <div class="row align-items-center mb-3 filter-row" [class.d-none]="!showFilter && isMobile">
         <div class="col-12 filter-container">
+          <!-- Hai nút đầu trên mobile -->
+          <div class="mobile-top-btn-group d-md-none" *ngIf="showFilter">
+            <button class="btn btn-info refresh-btn" (click)="refresh()" [disabled]="isLoading">
+              <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.home.refreshListLabel" class="ms-1">Làm mới</span>
+            </button>
+            <button
+              id="jh-create-entity-mobile"
+              data-cy="entityCreateButtonMobile"
+              class="btn btn-primary jh-create-entity create-transaction"
+              [routerLink]="['/transaction/new']"
+            >
+              <fa-icon icon="plus"></fa-icon>
+              <span jhiTranslate="prosperPathApp.transaction.home.createLabel" class="ms-1">Thêm mới</span>
+            </button>
+          </div>
           <div class="filter-items">
             <div class="filter-item">
               <ng-select
@@ -83,19 +103,19 @@
           <div class="search-btn-container">
             <button class="btn btn-primary search-btn" (click)="search()">
               <fa-icon icon="search"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.btn.search" class="ms-1">Search</span>
+              <span jhiTranslate="prosperPathApp.transaction.btn.search" class="ms-1">Tìm</span>
             </button>
           </div>
           <div class="export-btn-container">
             <button class="btn btn-success export-btn" (click)="exportTransactions()">
               <fa-icon icon="file-excel"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.btn.exportExcel" class="ms-1">Export</span>
+              <span jhiTranslate="prosperPathApp.transaction.btn.exportExcel" class="ms-1">Excel</span>
             </button>
           </div>
           <div class="export-btn-container">
             <button class="btn btn-danger export-btn" (click)="exportToPDF()">
               <fa-icon icon="file-pdf"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.btn.exportPdf" class="ms-1">Export</span>
+              <span jhiTranslate="prosperPathApp.transaction.btn.exportPdf" class="ms-1">PDF</span>
             </button>
           </div>
         </div>

@@ -15,8 +15,7 @@ $teal: #20c997; // Màu teal cho tiêu đề
 $hover-bg: rgba(0, 123, 255, 0.05); // Màu nền khi hover vào dòng
 $dark-text: #212529; // Màu chữ đậm để tương phản với nền trắng
 // Định nghĩa font
-$font-family-base:
-  'Segoe UI',
+$font-family-base: 'Segoe UI',
   -apple-system,
   BlinkMacSystemFont,
   sans-serif;
@@ -73,35 +72,42 @@ $font-family-base:
       }
     }
 
-    .btn-cancel {
-      background-color: $light;
-      color: $white;
-      border: none;
-      border-radius: 5px;
-      padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
-      font-size: 14px;
-      font-weight: 500;
-      text-transform: uppercase;
-      transition: background-color 0.3s ease;
+    .form-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 12px;
 
-      &:hover {
-        background-color: color.adjust($primary, $lightness: -10%);
+      .btn-cancel {
+        // background-color: $light;
+        color: $white;
+        border: none;
+        border-radius: 5px;
+        padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: color.adjust($primary, $lightness: -10%);
+        }
       }
-    }
 
-    .btn-save {
-      background-color: $warning;
-      color: $white;
-      border: none;
-      border-radius: 5px;
-      padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
-      font-size: 14px;
-      font-weight: 500;
-      text-transform: uppercase;
-      transition: background-color 0.3s ease;
+      .btn-save {
+        background-color: $warning;
+        color: $white;
+        border: none;
+        border-radius: 5px;
+        padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
 
-      &:hover {
-        background-color: color.adjust($primary, $lightness: -10%);
+        &:hover {
+          background-color: color.adjust($primary, $lightness: -10%);
+        }
       }
     }
   }
@@ -137,6 +143,7 @@ $font-family-base:
     }
   }
 }
+
 .custom-ng-select {
   ::ng-deep .ng-select-container {
     height: 38px;

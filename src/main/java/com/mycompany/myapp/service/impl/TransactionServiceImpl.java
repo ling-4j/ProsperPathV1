@@ -8,6 +8,7 @@ import com.mycompany.myapp.service.SummaryService;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -52,42 +53,36 @@ public class TransactionServiceImpl implements TransactionService {
         if (transaction.getUser() == null) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication != null && authentication.isAuthenticated()) {
-                Optional<User> currentUser = userService.getUserWithAuthorities();
-                currentUser.ifPresent(transaction::setUser);
+                userService.getUserWithAuthorities().ifPresent(transaction::setUser);
             }
         }
+
         transaction.setCreatedAt(Instant.now());
         transaction.setUpdatedAt(Instant.now());
-
+        transaction.setTransactionDate(transaction.getTransactionDate());
         Transaction savedTransaction = transactionRepository.save(transaction);
-
         Long userId = savedTransaction.getUser().getId();
-
         summaryService.updateSummaryForTransaction(userId, null, savedTransaction);
-
-        // Tạo thông báo
         if (savedTransaction.getCategory() != null) {
             notificationService.createNotificationForTransaction(userId, savedTransaction);
             notificationService.createWarningNotificationForTransaction(userId, savedTransaction);
         }
-
         return savedTransaction;
     }
 
     @Override
     public Transaction update(Transaction transaction) {
         LOG.debug("Request to update Transaction : {}", transaction);
-        Transaction existingTransaction = transactionRepository
-                .findById(transaction.getId())
+        Transaction existingTransaction = transactionRepository.findById(transaction.getId())
                 .orElseThrow(
                         () -> new EntityNotFoundException("Transaction not found with id: " + transaction.getId()));
-
         Transaction oldTransaction = cloneTransaction(existingTransaction);
+
         transaction.setUpdatedAt(Instant.now());
+        transaction.setTransactionDate(transaction.getTransactionDate());
         Transaction updatedTransaction = transactionRepository.save(transaction);
         Long userId = updatedTransaction.getUser().getId();
         summaryService.updateSummaryForTransaction(userId, oldTransaction, updatedTransaction);
-
         if (transaction.getCategory() != null) {
             notificationService.createNotificationForTransaction(userId, transaction);
             notificationService.createWarningNotificationForTransaction(userId, transaction);

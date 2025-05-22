@@ -72,7 +72,7 @@ public class SummaryQueryService extends QueryService<Summary> {
      *         progressRateData)
      */
     public Map<String, Object> getDetailedFinancialData(Long userId, String period) {
-        LocalDate now = LocalDate.now(ZoneId.of("UTC+7"));
+        LocalDate now = LocalDate.now(ZoneId.of("UTC"));
         LocalDate startDate;
         LocalDate endDate;
 
@@ -86,15 +86,15 @@ public class SummaryQueryService extends QueryService<Summary> {
                 endDate = now.withDayOfMonth(now.lengthOfMonth());
                 break;
             case "YEAR":
-                startDate = now.withMonth(1).withDayOfMonth(1); // Ngày 1/1 của năm hiện tại
-                endDate = now.withMonth(12).withDayOfMonth(31); // Ngày 31/12 của năm hiện tại
+                startDate = now.withMonth(1).withDayOfMonth(1);
+                endDate = now.withMonth(12).withDayOfMonth(31);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid period: " + period);
         }
 
-        Instant startInstant = startDate.atStartOfDay(ZoneId.of("UTC+7")).toInstant();
-        Instant endInstant = endDate.atTime(23, 59, 59).atZone(ZoneId.of("UTC+7")).toInstant();
+        Instant startInstant = startDate.atStartOfDay(ZoneId.of("UTC")).toInstant();
+        Instant endInstant = endDate.atTime(23, 59, 59).atZone(ZoneId.of("UTC")).toInstant();
 
         List<Transaction> transactions = transactionRepository.findByUserIdAndTransactionDateBetween(userId, startInstant, endInstant);
         LOG.info(
@@ -152,7 +152,7 @@ public class SummaryQueryService extends QueryService<Summary> {
             BigDecimal income = BigDecimal.ZERO;
             BigDecimal expense = BigDecimal.ZERO;
             for (Transaction transaction : transactions) {
-                LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC+7")).toLocalDate();
+                LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toLocalDate();
                 if (transactionDate.equals(date)) {
                     if (transaction.getTransactionType() == TransactionType.INCOME) {
                         income = income.add(transaction.getAmount());
@@ -176,8 +176,8 @@ public class SummaryQueryService extends QueryService<Summary> {
         List<BigDecimal> expenseData,
         List<BigDecimal> progressRateData
     ) {
-        LocalDate monthStart = startDate; // Đã là ngày 1 của tháng
-        LocalDate monthEnd = endDate; // Đã là ngày cuối của tháng
+        LocalDate monthStart = startDate;
+        LocalDate monthEnd = endDate;
 
         int daysInMonth = monthEnd.getDayOfMonth();
         for (int i = 1; i <= daysInMonth; i += 5) {
@@ -190,7 +190,7 @@ public class SummaryQueryService extends QueryService<Summary> {
             BigDecimal income = BigDecimal.ZERO;
             BigDecimal expense = BigDecimal.ZERO;
             for (Transaction transaction : transactions) {
-                LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC+7")).toLocalDate();
+                LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toLocalDate();
                 if (!transactionDate.isBefore(startRange) && !transactionDate.isAfter(endRange)) {
                     if (transaction.getTransactionType() == TransactionType.INCOME) {
                         income = income.add(transaction.getAmount());
@@ -221,7 +221,7 @@ public class SummaryQueryService extends QueryService<Summary> {
             BigDecimal income = BigDecimal.ZERO;
             BigDecimal expense = BigDecimal.ZERO;
             for (Transaction transaction : transactions) {
-                LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("UTC+7")).toLocalDate();
+                LocalDate transactionDate = transaction.getTransactionDate().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toLocalDate();
                 if (transactionDate.getYear() == current.getYear() && transactionDate.getMonthValue() == current.getMonthValue()) {
                     if (transaction.getTransactionType() == TransactionType.INCOME) {
                         income = income.add(transaction.getAmount());

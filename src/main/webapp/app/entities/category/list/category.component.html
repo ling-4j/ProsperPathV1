@@ -25,10 +25,10 @@
       <span jhiTranslate="prosperPathApp.category.home.notFound">No Categories found</span>
     </div>
   } @else {
-    <div class="table-responsive table-entities" id="entities">
+    <div class="table-responsive table-entities category-table-wrapper" id="entities">
       <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)" class="budget-row">
+        <thead class="category-thead">
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
             <th scope="col" jhiSortBy="categoryName">
               <div class="d-flex">
                 <span jhiTranslate="prosperPathApp.category.category">Category</span>
@@ -41,19 +41,19 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col"></th>
+            <th scope="col" class="action-column"></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="category-tbody">
           @for (category of categories; track trackId(category); let i = $index) {
-            <tr data-cy="entityTable" class="budget-row">
+            <tr data-cy="entityTable" class="category-row">
               <td (click)="handleBudgetClick(category)">
                 <fa-icon [icon]="['fas', (category.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{ category.categoryName }}
               </td>
               <td (click)="handleBudgetClick(category)" [jhiTranslate]="'prosperPathApp.CategoryType.' + (category.categoryType ?? 'null')">
                 {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[category.categoryType ?? 'null'] }}
               </td>
-              <td class="text-end">
+              <td class="text-end action-column">
                 <div class="btn-group action-buttons">
                   <a [routerLink]="['/category', category.id, 'edit']" class="btn btn-primary btn-sm edit-btn" data-cy="entityEditButton">
                     <fa-icon icon="pencil-alt"></fa-icon>

@@ -25,6 +25,11 @@ import { BudgetComponent } from 'app/entities/budget/list/budget.component';
 import { IBudget } from 'app/entities/budget/budget.model';
 import { BudgetService } from 'app/entities/budget/service/budget.service';
 import { CurrencyTypePipe } from 'app/shared/truncate/currencyType';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // Định nghĩa kiểu cho queryObject
 interface QueryObject {
@@ -93,6 +98,8 @@ export class TransactionComponent implements OnInit {
   budgetTotalItems = signal<number>(0);
 
   // Filters
+  showFilter = false;
+  isMobile = false;
   filters: IFilterOptions = new FilterOptions();
   itemsPerPage = ITEMS_PER_PAGE;
 
@@ -151,6 +158,21 @@ export class TransactionComponent implements OnInit {
       .subscribe();
 
     this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
+
+    // Responsive: detect mobile
+    this.isMobile = window.innerWidth < 768;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+      if (!this.isMobile) {
+        this.showFilter = true; // Luôn hiển thị filter trên desktop
+      } else {
+        this.showFilter = false; // Ẩn filter mặc định trên mobile
+      }
+    });
+    // Khởi tạo trạng thái filter khi load lần đầu
+    if (!this.isMobile) {
+      this.showFilter = true;
+    }
   }
 
   delete(transaction: ITransaction): void {
@@ -393,8 +415,15 @@ export class TransactionComponent implements OnInit {
       ]),
     };
 
-    if (this.searchState.fromDate) queryObject['transactionDate.greaterThanOrEqual'] = this.searchState.fromDate.toISOString();
-    if (this.searchState.toDate) queryObject['transactionDate.lessThanOrEqual'] = this.searchState.toDate.toISOString();
+    // Convert fromDate/toDate từ Asia/Ho_Chi_Minh sang UTC ISO string
+    if (this.searchState.fromDate) {
+      const fromDateUTC = dayjs(this.searchState.fromDate).tz('Asia/Ho_Chi_Minh').startOf('day').utc().toISOString();
+      queryObject['transactionDate.greaterThanOrEqual'] = fromDateUTC;
+    }
+    if (this.searchState.toDate) {
+      const toDateUTC = dayjs(this.searchState.toDate).tz('Asia/Ho_Chi_Minh').endOf('day').utc().toISOString();
+      queryObject['transactionDate.lessThanOrEqual'] = toDateUTC;
+    }
     if (this.searchState.type) queryObject['transactionType.equals'] = this.searchState.type;
     if (this.searchState.category) queryObject['categoryId.equals'] = this.searchState.category.toString();
 
@@ -412,8 +441,14 @@ export class TransactionComponent implements OnInit {
 
     if (this.isSearchActive()) {
       if (this.searchState.category) queryParams['category'] = this.searchState.category;
-      if (this.searchState.fromDate) queryParams['fromDate'] = this.searchState.fromDate.toISOString();
-      if (this.searchState.toDate) queryParams['toDate'] = this.searchState.toDate.toISOString();
+      if (this.searchState.fromDate) {
+        const fromDateUTC = dayjs(this.searchState.fromDate).tz('Asia/Ho_Chi_Minh').startOf('day').utc().toISOString();
+        queryParams['fromDate'] = fromDateUTC;
+      }
+      if (this.searchState.toDate) {
+        const toDateUTC = dayjs(this.searchState.toDate).tz('Asia/Ho_Chi_Minh').endOf('day').utc().toISOString();
+        queryParams['toDate'] = toDateUTC;
+      }
       if (this.searchState.type) queryParams['type'] = this.searchState.type;
     }
 
