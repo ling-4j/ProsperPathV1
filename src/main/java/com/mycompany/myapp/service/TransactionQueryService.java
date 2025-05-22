@@ -146,8 +146,14 @@ public class TransactionQueryService extends QueryService<Transaction> {
                 row.createCell(0).setCellValue(transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "");
                 row.createCell(1).setCellValue(translateTransactionTypeToVietnamese(transaction.getTransactionType()));
                 row.createCell(2).setCellValue(transaction.getDescription());
+                // Chuyển đổi ngày giờ từ UTC sang Asia/Ho_Chi_Minh cho Excel
+                ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+                String dateString = transaction.getTransactionDate()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(zoneId)
+                    .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
                 Cell dateCell = row.createCell(3);
-                dateCell.setCellValue(transaction.getTransactionDate().atZone(java.time.ZoneId.systemDefault()).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+                dateCell.setCellValue(dateString);
                 dateCell.setCellStyle(dateStyle);
                 Cell amountCell = row.createCell(4);
                 double amount = transaction.getAmount().doubleValue();
@@ -229,7 +235,12 @@ public class TransactionQueryService extends QueryService<Transaction> {
                 typeCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(typeCell);
                 table.addCell(new Phrase(transaction.getDescription() != null ? transaction.getDescription() : "", dataFont));
-                String dateString = transaction.getTransactionDate().atZone(java.time.ZoneId.systemDefault()).format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                // Chuyển đổi ngày giờ từ UTC sang Asia/Ho_Chi_Minh
+                ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+                String dateString = transaction.getTransactionDate()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(zoneId)
+                    .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
                 PdfPCell dateCell = new PdfPCell(new Phrase(dateString, dataFont));
                 dateCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(dateCell);
