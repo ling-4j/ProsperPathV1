@@ -13,7 +13,11 @@ $dark-text: #212529;
 $danger: #dc3545;
 
 // Define font and breakpoints
-$font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 

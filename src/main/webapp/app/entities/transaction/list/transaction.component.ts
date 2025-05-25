@@ -320,20 +320,20 @@ export class TransactionComponent implements OnInit {
 
   exportTransactions(): void {
     const queryParams: QueryObject = {
-      category: this.category,
-      fromDate: this.fromDate?.toISOString() ?? null,
-      toDate: this.toDate?.toISOString() ?? null,
-      type: this.type,
+      category: this.category ?? null,
+      fromDate: this.fromDate ? dayjs(this.fromDate).tz('Asia/Ho_Chi_Minh').startOf('day').utc().toISOString() : null,
+      toDate: this.toDate ? dayjs(this.toDate).tz('Asia/Ho_Chi_Minh').endOf('day').utc().toISOString() : null,
+      type: this.type ?? null,
       page: 0,
       size: 0,
-      sort: 'transactionDate',
+      sort: 'transactionDate,desc',
     };
     this.transactionService.export(queryParams).subscribe({
       next(response: Blob) {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `transactions.xlsx`;
+        a.download = 'transactions.xlsx';
         a.click();
         window.URL.revokeObjectURL(url);
       },
@@ -343,13 +343,13 @@ export class TransactionComponent implements OnInit {
 
   exportToPDF(): void {
     const queryParams: QueryObject = {
-      category: this.category,
-      fromDate: this.fromDate?.toISOString() ?? null,
-      toDate: this.toDate?.toISOString() ?? null,
-      type: this.type,
+      category: this.category ?? null,
+      fromDate: this.fromDate ? dayjs(this.fromDate).tz('Asia/Ho_Chi_Minh').startOf('day').utc().toISOString() : null,
+      toDate: this.toDate ? dayjs(this.toDate).tz('Asia/Ho_Chi_Minh').endOf('day').utc().toISOString() : null,
+      type: this.type ?? null,
       page: 0,
       size: 0,
-      sort: 'transactionDate',
+      sort: 'transactionDate,desc',
     };
     this.transactionService.exportToPDF(queryParams).subscribe({
       next(response: Blob) {

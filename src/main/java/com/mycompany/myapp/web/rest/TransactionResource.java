@@ -13,7 +13,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -216,6 +219,16 @@ public class TransactionResource {
             .build();
     }
 
+    private Instant parseToInstant(String dateStr) {
+        if (dateStr == null) return null;
+        try {
+            return Instant.parse(dateStr);
+        } catch (DateTimeParseException e) {
+            // Nếu chỉ là yyyy-MM-dd thì lấy đầu ngày UTC
+            return LocalDate.parse(dateStr).atStartOfDay(ZoneId.of("UTC")).toInstant();
+        }
+    }
+
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportTransactions(
         @RequestParam(required = false) Long category,
@@ -232,28 +245,28 @@ public class TransactionResource {
             type,
             sort
         );
-
-        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
         User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
-
-        LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
-        LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;
-
+        Instant from = null;
+        Instant to = null;
+        try {
+            from = parseToInstant(fromDate);
+            to = parseToInstant(toDate);
+        } catch (Exception e) {
+            LOG.error("Invalid date format: fromDate={}, toDate={}", fromDate, toDate, e);
+            return ResponseEntity.badRequest().build();
+        }
         List<Transaction> transactions = transactionQueryService.findByFilters(userId, category, from, to, type);
-
         byte[] excelFile;
         try {
             excelFile = transactionQueryService.exportToExcel(userId, transactions, sort);
         } catch (Exception e) {
-            LOG.error("Failed to generate PDF: {}", e.getMessage(), e);
+            LOG.error("Failed to generate Excel: {}", e.getMessage(), e);
             return ResponseEntity.status(500).build();
         }
-
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=transactions.xlsx");
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
         return ResponseEntity.ok().headers(headers).body(excelFile);
     }
 
@@ -273,16 +286,18 @@ public class TransactionResource {
             type,
             sort
         );
-
-        // Lấy người dùng hiện tại và xử lý nếu không tồn tại
         User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
         Long userId = currentUser.getId();
-
-        LocalDate from = fromDate != null ? LocalDate.parse(fromDate) : null;
-        LocalDate to = toDate != null ? LocalDate.parse(toDate) : null;
-
+        Instant from = null;
+        Instant to = null;
+        try {
+            from = parseToInstant(fromDate);
+            to = parseToInstant(toDate);
+        } catch (Exception e) {
+            LOG.error("Invalid date format: fromDate={}, toDate={}", fromDate, toDate, e);
+            return ResponseEntity.badRequest().build();
+        }
         List<Transaction> transactions = transactionQueryService.findByFilters(userId, category, from, to, type);
-
         byte[] pdfFile;
         try {
             pdfFile = transactionQueryService.exportToPDF(userId, transactions, sort);
@@ -290,11 +305,9 @@ public class TransactionResource {
             LOG.error("Failed to generate PDF: {}", e.getMessage(), e);
             return ResponseEntity.status(500).build();
         }
-
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=transactions.pdf");
         headers.setContentType(MediaType.APPLICATION_PDF);
-
         return ResponseEntity.ok().headers(headers).body(pdfFile);
     }
 }

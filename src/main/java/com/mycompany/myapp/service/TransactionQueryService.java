@@ -29,6 +29,7 @@ import tech.jhipster.service.filter.LongFilter;
 @Service
 @Transactional(readOnly = true)
 public class TransactionQueryService extends QueryService<Transaction> {
+
     private static final Logger LOG = LoggerFactory.getLogger(TransactionQueryService.class);
     private final TransactionRepository transactionRepository;
 
@@ -55,21 +56,44 @@ public class TransactionQueryService extends QueryService<Transaction> {
         if (criteria != null) {
             if (criteria.getDistinct() != null) specification = specification.and(distinct(criteria.getDistinct()));
             if (criteria.getId() != null) specification = specification.and(buildRangeSpecification(criteria.getId(), Transaction_.id));
-            if (criteria.getAmount() != null) specification = specification.and(buildRangeSpecification(criteria.getAmount(), Transaction_.amount));
-            if (criteria.getTransactionType() != null) specification = specification.and(buildSpecification(criteria.getTransactionType(), Transaction_.transactionType));
-            if (criteria.getDescription() != null) specification = specification.and(buildStringSpecification(criteria.getDescription(), Transaction_.description));
-            if (criteria.getTransactionDate() != null) specification = specification.and(buildRangeSpecification(criteria.getTransactionDate(), Transaction_.transactionDate));
-            if (criteria.getCreatedAt() != null) specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), Transaction_.createdAt));
-            if (criteria.getUpdatedAt() != null) specification = specification.and(buildRangeSpecification(criteria.getUpdatedAt(), Transaction_.updatedAt));
-            if (criteria.getCategoryId() != null) specification = specification.and(buildSpecification(criteria.getCategoryId(), root -> root.join(Transaction_.category, JoinType.LEFT).get(Category_.id)));
-            if (criteria.getUserId() != null) specification = specification.and(buildSpecification(criteria.getUserId(), root -> root.join(Transaction_.user, JoinType.LEFT).get(User_.id)));
+            if (criteria.getAmount() != null) specification = specification.and(
+                buildRangeSpecification(criteria.getAmount(), Transaction_.amount)
+            );
+            if (criteria.getTransactionType() != null) specification = specification.and(
+                buildSpecification(criteria.getTransactionType(), Transaction_.transactionType)
+            );
+            if (criteria.getDescription() != null) specification = specification.and(
+                buildStringSpecification(criteria.getDescription(), Transaction_.description)
+            );
+            if (criteria.getTransactionDate() != null) specification = specification.and(
+                buildRangeSpecification(criteria.getTransactionDate(), Transaction_.transactionDate)
+            );
+            if (criteria.getCreatedAt() != null) specification = specification.and(
+                buildRangeSpecification(criteria.getCreatedAt(), Transaction_.createdAt)
+            );
+            if (criteria.getUpdatedAt() != null) specification = specification.and(
+                buildRangeSpecification(criteria.getUpdatedAt(), Transaction_.updatedAt)
+            );
+            if (criteria.getCategoryId() != null) specification = specification.and(
+                buildSpecification(criteria.getCategoryId(), root -> root.join(Transaction_.category, JoinType.LEFT).get(Category_.id))
+            );
+            if (criteria.getUserId() != null) specification = specification.and(
+                buildSpecification(criteria.getUserId(), root -> root.join(Transaction_.user, JoinType.LEFT).get(User_.id))
+            );
         }
         return specification;
     }
 
-    public List<Transaction> findByFilters(Long userId, Long category, LocalDate fromDate, LocalDate toDate, String type) {
-        LOG.debug("Finding transactions for userId: {}, category: {}, fromDate: {}, toDate: {}, type: {}", userId, category, fromDate, toDate, type);
-        if (userId == null) throw new IllegalArgumentException("userId cannot be null");
+    public List<Transaction> findByFilters(Long userId, Long category, Instant fromDate, Instant toDate, String type) {
+        LOG.debug(
+            "Finding transactions for userId: {}, category: {}, fromDate: {}, toDate: {}, type: {}",
+            userId,
+            category,
+            fromDate,
+            toDate,
+            type
+        );
+        if (userId == null) return List.of();
         TransactionCriteria criteria = new TransactionCriteria();
         criteria.setUserId(new LongFilter());
         criteria.getUserId().setEquals(userId);
@@ -77,24 +101,16 @@ public class TransactionQueryService extends QueryService<Transaction> {
             criteria.setCategoryId(new LongFilter());
             criteria.getCategoryId().setEquals(category);
         }
-        if (fromDate != null) {
-            Instant fromInstant = fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-            criteria.setTransactionDate(new InstantFilter());
-            criteria.getTransactionDate().setGreaterThanOrEqual(fromInstant);
-        }
-        if (toDate != null) {
-            Instant toInstant = toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant();
-            criteria.setTransactionDate(new InstantFilter());
-            criteria.getTransactionDate().setLessThanOrEqual(toInstant);
+        if (fromDate != null || toDate != null) {
+            InstantFilter dateFilter = new InstantFilter();
+            if (fromDate != null) dateFilter.setGreaterThanOrEqual(fromDate);
+            if (toDate != null) dateFilter.setLessThanOrEqual(toDate);
+            criteria.setTransactionDate(dateFilter);
         }
         if (type != null) {
-            try {
-                TransactionType transactionType = TransactionType.valueOf(type.toUpperCase());
-                criteria.setTransactionType(new TransactionCriteria.TransactionTypeFilter());
-                criteria.getTransactionType().setEquals(transactionType);
-            } catch (IllegalArgumentException e) {
-                LOG.warn("Invalid transaction type: {}. Ignoring type filter.", type);
-            }
+            TransactionCriteria.TransactionTypeFilter typeFilter = new TransactionCriteria.TransactionTypeFilter();
+            typeFilter.setEquals(TransactionType.valueOf(type));
+            criteria.setTransactionType(typeFilter);
         }
         Specification<Transaction> specification = createSpecification(criteria);
         return transactionRepository.findAll(specification);
@@ -103,10 +119,13 @@ public class TransactionQueryService extends QueryService<Transaction> {
     public byte[] exportToExcel(Long userId, List<Transaction> transactions, String sort) {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Transactions");
-            List<Transaction> sortedTransactions = transactions.stream().sorted((t1, t2) -> {
-                int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
-                return "transactionDate,asc".equalsIgnoreCase(sort) ? -compare : compare;
-            }).collect(Collectors.toList());
+            List<Transaction> sortedTransactions = transactions
+                .stream()
+                .sorted((t1, t2) -> {
+                    int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
+                    return "transactionDate,asc".equalsIgnoreCase(sort) ? -compare : compare;
+                })
+                .collect(Collectors.toList());
             String headerText = "Thống kê giao dịch";
             String[] headers = { "DANH MỤC", "LOẠI", "MÔ TẢ", "NGÀY", "SỐ TIỀN" };
             Row headerRow = sheet.createRow(0);
@@ -148,7 +167,8 @@ public class TransactionQueryService extends QueryService<Transaction> {
                 row.createCell(2).setCellValue(transaction.getDescription());
                 // Chuyển đổi ngày giờ từ UTC sang Asia/Ho_Chi_Minh cho Excel
                 ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
-                String dateString = transaction.getTransactionDate()
+                String dateString = transaction
+                    .getTransactionDate()
                     .atZone(ZoneId.of("UTC"))
                     .withZoneSameInstant(zoneId)
                     .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
@@ -170,7 +190,7 @@ public class TransactionQueryService extends QueryService<Transaction> {
             Row totalRow = sheet.createRow(rowIdx);
             Cell totalLabelCell = totalRow.createCell(0);
             totalLabelCell.setCellValue("Tổng");
-            
+
             CellStyle totalLabelStyle = workbook.createCellStyle();
             org.apache.poi.ss.usermodel.Font totalLabelFont = workbook.createFont();
             totalLabelFont.setBold(true);
@@ -214,10 +234,13 @@ public class TransactionQueryService extends QueryService<Transaction> {
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(Chunk.NEWLINE);
-            List<Transaction> sortedTransactions = transactions.stream().sorted((t1, t2) -> {
-                int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
-                return "transactionDate,desc".equalsIgnoreCase(sort) ? -compare : compare;
-            }).collect(Collectors.toList());
+            List<Transaction> sortedTransactions = transactions
+                .stream()
+                .sorted((t1, t2) -> {
+                    int compare = t1.getTransactionDate().compareTo(t2.getTransactionDate());
+                    return "transactionDate,desc".equalsIgnoreCase(sort) ? -compare : compare;
+                })
+                .collect(Collectors.toList());
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
             table.setWidths(new int[] { 2, 2, 4, 3, 3 });
@@ -231,13 +254,16 @@ public class TransactionQueryService extends QueryService<Transaction> {
             double totalAmount = 0;
             for (Transaction transaction : sortedTransactions) {
                 table.addCell(new Phrase(transaction.getCategory() != null ? transaction.getCategory().getCategoryName() : "", dataFont));
-                PdfPCell typeCell = new PdfPCell(new Phrase(translateTransactionTypeToVietnamese(transaction.getTransactionType()), dataFont));
+                PdfPCell typeCell = new PdfPCell(
+                    new Phrase(translateTransactionTypeToVietnamese(transaction.getTransactionType()), dataFont)
+                );
                 typeCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(typeCell);
                 table.addCell(new Phrase(transaction.getDescription() != null ? transaction.getDescription() : "", dataFont));
                 // Chuyển đổi ngày giờ từ UTC sang Asia/Ho_Chi_Minh
                 ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
-                String dateString = transaction.getTransactionDate()
+                String dateString = transaction
+                    .getTransactionDate()
                     .atZone(ZoneId.of("UTC"))
                     .withZoneSameInstant(zoneId)
                     .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));

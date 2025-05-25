@@ -11,7 +11,8 @@ $dark-text: #212529;
 $success: #28a745;
 $danger: #dc3545;
 
-$font-family-base: 'Segoe UI',
+$font-family-base:
+  'Segoe UI',
   -apple-system,
   BlinkMacSystemFont,
   sans-serif;
@@ -78,7 +79,6 @@ $md: 768px;
 }
 
 @media (max-width: $md) {
-
   .div1,
   .div2,
   .div3 {
@@ -108,7 +108,6 @@ $md: 768px;
 }
 
 @media (max-width: $sm) {
-
   .div1,
   .div2,
   .div3 {
@@ -407,7 +406,6 @@ $md: 768px;
 }
 
 @media (max-width: $sm) {
-
   .custom-input,
   .custom-select {
     height: 36px;
@@ -558,14 +556,14 @@ $md: 768px;
     max-width: 100%;
   }
 
-  .filter-row .filter-container>.search-btn-container,
-  .filter-row .filter-container>.export-btn-container {
+  .filter-row .filter-container > .search-btn-container,
+  .filter-row .filter-container > .export-btn-container {
     width: 100%;
     margin-bottom: 0.5rem;
   }
 
-  .filter-row .filter-container>.search-btn-container:last-child,
-  .filter-row .filter-container>.export-btn-container:last-child {
+  .filter-row .filter-container > .search-btn-container:last-child,
+  .filter-row .filter-container > .export-btn-container:last-child {
     margin-bottom: 0;
   }
 
