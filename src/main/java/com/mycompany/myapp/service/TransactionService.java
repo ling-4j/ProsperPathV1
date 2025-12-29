@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.Transaction}.
@@ -64,4 +65,11 @@ public interface TransactionService {
      * @return the list of transactions.
      */
     List<Transaction> findByUserId(Long userId);
+
+    /**
+     * Import transactions from a file.
+     *
+     * @param file the file containing transactions to import.
+     */
+    void importFromFile(MultipartFile file);
 }

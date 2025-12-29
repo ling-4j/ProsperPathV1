@@ -25,6 +25,8 @@ import { BudgetComponent } from 'app/entities/budget/list/budget.component';
 import { IBudget } from 'app/entities/budget/budget.model';
 import { BudgetService } from 'app/entities/budget/service/budget.service';
 import { CurrencyTypePipe } from 'app/shared/truncate/currencyType';
+import { TransactionImportDialogComponent } from './transaction-import-dialog.component';
+
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -71,7 +73,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
     CategoryComponent,
     BudgetComponent,
     TruncatePipe,
-    CurrencyTypePipe,
+    CurrencyTypePipe
   ],
   providers: [{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }],
 })
@@ -119,12 +121,12 @@ export class TransactionComponent implements OnInit {
     type: string | null;
     sortState: SortState;
   } = {
-    category: null,
-    fromDate: null,
-    toDate: null,
-    type: null,
-    sortState: { predicate: 'transactionDate', order: 'desc' },
-  };
+      category: null,
+      fromDate: null,
+      toDate: null,
+      type: null,
+      sortState: { predicate: 'transactionDate', order: 'desc' },
+    };
 
   // Dependencies
   private readonly router = inject(Router);
@@ -214,6 +216,20 @@ export class TransactionComponent implements OnInit {
     this.loadTransactions();
     this.loadCategories();
     this.loadBudgets();
+  }
+
+  // Mở dialog import
+  openImport(): void {
+    const modalRef = this.modalService.open(TransactionImportDialogComponent, {
+      size: 'lg',
+      backdrop: 'static',
+    });
+
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'imported') {
+        this.loadTransactions(); // reload list sau khi import
+      }
+    });
   }
 
   loadTransactions(): void {

@@ -15,8 +15,7 @@ $border-color: #e1e8ed;
 $teal: #20c997; // Màu teal dưới dạng hex
 
 // Định nghĩa font
-$font-family-base:
-  'Segoe UI',
+$font-family-base: 'Segoe UI',
   -apple-system,
   BlinkMacSystemFont,
   sans-serif;
@@ -40,26 +39,31 @@ $breakpoint-ipad-pro: 1024px;
   @media (max-width: $breakpoint-ipad-pro) {
     padding: 1.5rem;
   }
+
   @media (max-width: $breakpoint-md) {
     padding: 1rem;
   }
+
   @media (max-width: $breakpoint-sm) {
     padding: 0.5rem;
   }
 
-  .col-lg-3 {
+  .col-lg-6 {
     width: auto; // Đảm bảo container chiếm toàn bộ chiều rộng trên iPad Pro
     // max-width: 700px; // Giới hạn chiều rộng tối đa cho iPad Pro
 
     @media (min-width: $breakpoint-lg) {
-      max-width: 25%; // Giữ col-lg-3 trên PC
+      max-width: 50%; // Giữ col-lg-3 trên PC
     }
+
     @media (max-width: $breakpoint-ipad-pro) {
       max-width: 90%; // Mở rộng chiều rộng trên iPad Pro
     }
+
     @media (max-width: $breakpoint-md) {
       max-width: 95%;
     }
+
     @media (max-width: $breakpoint-sm) {
       max-width: 100%;
     }
@@ -76,9 +80,11 @@ $breakpoint-ipad-pro: 1024px;
     @media (max-width: $breakpoint-ipad-pro) {
       font-size: 1.5rem;
     }
+
     @media (max-width: $breakpoint-md) {
       font-size: 1.4rem;
     }
+
     @media (max-width: $breakpoint-sm) {
       font-size: 1.25rem;
     }
@@ -97,14 +103,23 @@ $breakpoint-ipad-pro: 1024px;
     @media (max-width: $breakpoint-ipad-pro) {
       padding: 1.2rem;
     }
+
     @media (max-width: $breakpoint-md) {
       padding: 1rem;
     }
+
     @media (max-width: $breakpoint-sm) {
       padding: 0.75rem;
     }
 
     .jh-entity-details {
+      .description-field {
+        // white-space: pre-wrap; // giữ xuống dòng từ Excel
+        word-break: break-word; // tránh tràn màn hình
+        line-height: 1.5;
+        font-size: 0.95rem;
+      }
+
       dt {
         font-size: 1rem; // Tương tự settings
         font-weight: 500;
@@ -118,9 +133,11 @@ $breakpoint-ipad-pro: 1024px;
         @media (max-width: $breakpoint-ipad-pro) {
           font-size: 0.95rem;
         }
+
         @media (max-width: $breakpoint-md) {
           font-size: 0.9rem;
         }
+
         @media (max-width: $breakpoint-sm) {
           font-size: 0.85rem;
         }
@@ -144,6 +161,7 @@ $breakpoint-ipad-pro: 1024px;
           @media (max-width: $breakpoint-ipad-pro) {
             font-size: 0.95rem;
           }
+
           @media (max-width: $breakpoint-sm) {
             font-size: 0.9rem;
           }
@@ -156,9 +174,11 @@ $breakpoint-ipad-pro: 1024px;
           @media (max-width: $breakpoint-ipad-pro) {
             font-size: 0.95rem;
           }
+
           @media (max-width: $breakpoint-md) {
             font-size: 0.9rem;
           }
+
           @media (max-width: $breakpoint-sm) {
             font-size: 0.85rem;
           }
@@ -182,10 +202,12 @@ $breakpoint-ipad-pro: 1024px;
           padding: 0.5rem 1.3rem;
           font-size: 0.85rem;
         }
+
         @media (max-width: $breakpoint-md) {
           padding: 0.5rem 1.2rem;
           font-size: 0.8rem;
         }
+
         @media (max-width: $breakpoint-sm) {
           padding: 0.4rem 1rem;
           font-size: 0.75rem;

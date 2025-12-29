@@ -110,8 +110,11 @@ public class UserService {
         }
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
-        newUser.setActivated(false);
+        // // new user is not active
+        // newUser.setActivated(false);
+
+        newUser.setActivated(true);
+        newUser.setActivationKey(null);
 
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
@@ -212,7 +215,8 @@ public class UserService {
     }
 
     /**
-     * Update basic information (first name, last name, email, language) for the current user.
+     * Update basic information (first name, last name, email, language) for the
+     * current user.
      *
      * @param firstName first name of user.
      * @param lastName  last name of user.
@@ -288,6 +292,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)

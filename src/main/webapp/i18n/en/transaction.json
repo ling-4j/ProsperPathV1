@@ -6,7 +6,8 @@
         "refreshListLabel": "Refresh",
         "createLabel": "New Transaction",
         "createOrEditLabel": "Create/Edit",
-        "notFound": "No Transactions found"
+        "notFound": "No Transactions found",
+        "importLabel": "Import"
       },
       "created": "Complete created",
       "updated": "Complete updated",

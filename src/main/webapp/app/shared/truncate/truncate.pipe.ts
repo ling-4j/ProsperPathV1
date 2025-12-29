@@ -5,14 +5,30 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class TruncatePipe implements PipeTransform {
-  transform(value: string, wordLimit = 10): string {
-    if (!value) {
-      return '';
+
+  transform(
+    value: string | null | undefined,
+    limit = 60
+  ): string {
+    if (!value) return '';
+
+    if (value.length <= limit) return value;
+
+    // Cắt tạm
+    let truncated = value.substring(0, limit);
+
+    // Ưu tiên cắt tại khoảng trắng cuối
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > limit * 0.6) {
+      truncated = truncated.substring(0, lastSpace);
+    } else {
+      // Nếu không có space, thử cắt theo dấu .
+      const lastDot = truncated.lastIndexOf('.');
+      if (lastDot > limit * 0.6) {
+        truncated = truncated.substring(0, lastDot + 1);
+      }
     }
-    const words = value.split(/\s+/); // Tách chuỗi thành mảng các từ
-    if (words.length <= wordLimit) {
-      return value;
-    }
-    return words.slice(0, wordLimit).join(' ') + '...'; // Cắt và thêm dấu ...
+
+    return truncated.trim() + '...';
   }
 }
