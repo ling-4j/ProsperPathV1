@@ -73,7 +73,7 @@ export class TransactionService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
-  
+
   import(formData: FormData): Observable<HttpResponse<{}>> {
     return this.http.post(`${this.resourceUrl}/import`, formData, { observe: 'response' });
   }

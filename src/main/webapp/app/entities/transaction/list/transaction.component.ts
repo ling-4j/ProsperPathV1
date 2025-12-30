@@ -73,7 +73,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
     CategoryComponent,
     BudgetComponent,
     TruncatePipe,
-    CurrencyTypePipe
+    CurrencyTypePipe,
   ],
   providers: [{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }],
 })
@@ -121,12 +121,12 @@ export class TransactionComponent implements OnInit {
     type: string | null;
     sortState: SortState;
   } = {
-      category: null,
-      fromDate: null,
-      toDate: null,
-      type: null,
-      sortState: { predicate: 'transactionDate', order: 'desc' },
-    };
+    category: null,
+    fromDate: null,
+    toDate: null,
+    type: null,
+    sortState: { predicate: 'transactionDate', order: 'desc' },
+  };
 
   // Dependencies
   private readonly router = inject(Router);

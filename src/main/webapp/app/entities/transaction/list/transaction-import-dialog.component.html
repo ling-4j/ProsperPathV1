@@ -1,17 +1,17 @@
 <div class="modal-header">
-    <h4 class="modal-title">Import Transactions</h4>
-    <button type="button" class="btn-close" (click)="cancel()"></button>
+  <h4 class="modal-title">Import Transactions</h4>
+  <button type="button" class="btn-close" (click)="cancel()"></button>
 </div>
 
 <div class="modal-body">
-    <input type="file" class="form-control" accept=".csv,.xlsx,.pdf" (change)="onFileSelected($event)" />
+  <input type="file" class="form-control" accept=".csv,.xlsx,.pdf" (change)="onFileSelected($event)" />
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-secondary" (click)="cancel()">
-        <span jhiTranslate="entity.action.cancel">Cancel</span>
-    </button>
-    <button class="btn btn-primary" (click)="import()" [disabled]="!selectedFile || isUploading">
-        <span jhiTranslate="entity.action.import">Import</span>
-    </button>
+  <button class="btn btn-secondary" (click)="cancel()">
+    <span jhiTranslate="entity.action.cancel">Cancel</span>
+  </button>
+  <button class="btn btn-primary" (click)="import()" [disabled]="!selectedFile || isUploading">
+    <span jhiTranslate="entity.action.import">Import</span>
+  </button>
 </div>

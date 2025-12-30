@@ -1,58 +1,57 @@
 <div class="transaction-container d-flex justify-content-center">
   <div class="col-lg-6 col-xl-5 bg-light p-4 shadow-sm rounded-4">
     @if (transaction(); as transactionRef) {
-    <h1 data-cy="transactionTitle" jhiTranslate="prosperPathApp.transaction.detail.title"
-      class="transaction-title mb-4">Transaction</h1>
+      <h1 data-cy="transactionTitle" jhiTranslate="prosperPathApp.transaction.detail.title" class="transaction-title mb-4">Transaction</h1>
 
-    <div class="block">
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="prosperPathApp.transaction.amount">Amount</span></dt>
-        <dd>
-          <span class="fw-bold">{{ transactionRef.amount | currencyType }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.transaction.transactionType">Transaction Type</span></dt>
-        <dd>
-          <span [jhiTranslate]="'prosperPathApp.TransactionType.' + (transactionRef.transactionType ?? 'null')">{{
-            { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transactionRef.transactionType ?? 'null']
+      <div class="block">
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="prosperPathApp.transaction.amount">Amount</span></dt>
+          <dd>
+            <span class="fw-bold">{{ transactionRef.amount | currencyType }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.transactionType">Transaction Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'prosperPathApp.TransactionType.' + (transactionRef.transactionType ?? 'null')">{{
+              { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transactionRef.transactionType ?? 'null']
             }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.transaction.description">Description</span></dt>
-        <dd class="description-field">
-          <span>{{ transactionRef.description }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.transaction.transactionDate-detail">Transaction Date</span></dt>
-        <dd>
-          <span>{{ transactionRef.transactionDate | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.transaction.createdAt">Created At</span></dt>
-        <dd>
-          <span>{{ transactionRef.createdAt | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.transaction.updatedAt">Updated At</span></dt>
-        <dd>
-          <span>{{ transactionRef.updatedAt | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="prosperPathApp.transaction.category">Category</span></dt>
-        <dd>
-          @if (transaction()!.category) {
-          <fa-icon [icon]="['fas', (transactionRef.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>
-          <span>{{ transactionRef.category?.categoryName }}</span>
-          } @else {
-          <span>{{ transactionRef.category?.categoryName }}</span>
-          }
-        </dd>
-      </dl>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.description">Description</span></dt>
+          <dd class="description-field">
+            <span>{{ transactionRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.transactionDate-detail">Transaction Date</span></dt>
+          <dd>
+            <span>{{ transactionRef.transactionDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ transactionRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.updatedAt">Updated At</span></dt>
+          <dd>
+            <span>{{ transactionRef.updatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.transaction.category">Category</span></dt>
+          <dd>
+            @if (transaction()!.category) {
+              <fa-icon [icon]="['fas', (transactionRef.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>
+              <span>{{ transactionRef.category?.categoryName }}</span>
+            } @else {
+              <span>{{ transactionRef.category?.categoryName }}</span>
+            }
+          </dd>
+        </dl>
 
-      <div class="action-buttons text-center mt-4">
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>
-        </button>
+        <div class="action-buttons text-center mt-4">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>
+          </button>
 
-        <button type="button" [routerLink]="['/transaction', transactionRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>
-        </button>
+          <button type="button" [routerLink]="['/transaction', transactionRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+        </div>
       </div>
-    </div>
     }
   </div>
 </div>

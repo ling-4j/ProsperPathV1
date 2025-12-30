@@ -8,7 +8,6 @@ import com.mycompany.myapp.service.SummaryService;
 import com.mycompany.myapp.service.TransactionService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-
 import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
@@ -40,11 +39,12 @@ public class TransactionServiceImpl implements TransactionService {
     private final NotificationService notificationService;
 
     public TransactionServiceImpl(
-            TransactionImportParser transactionImportParser,
-            TransactionRepository transactionRepository,
-            UserService userService,
-            SummaryService summaryService,
-            NotificationService notificationService) {
+        TransactionImportParser transactionImportParser,
+        TransactionRepository transactionRepository,
+        UserService userService,
+        SummaryService summaryService,
+        NotificationService notificationService
+    ) {
         this.transactionImportParser = transactionImportParser;
         this.transactionRepository = transactionRepository;
         this.userService = userService;
@@ -79,9 +79,8 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction update(Transaction transaction) {
         LOG.debug("Request to update Transaction : {}", transaction);
         Transaction existingTransaction = transactionRepository
-                .findById(transaction.getId())
-                .orElseThrow(
-                        () -> new EntityNotFoundException("Transaction not found with id: " + transaction.getId()));
+            .findById(transaction.getId())
+            .orElseThrow(() -> new EntityNotFoundException("Transaction not found with id: " + transaction.getId()));
         Transaction oldTransaction = cloneTransaction(existingTransaction);
 
         transaction.setUpdatedAt(Instant.now());
@@ -113,30 +112,30 @@ public class TransactionServiceImpl implements TransactionService {
         LOG.debug("Request to partially update Transaction : {}", transaction);
 
         return transactionRepository
-                .findById(transaction.getId())
-                .map(existingTransaction -> {
-                    if (transaction.getAmount() != null) {
-                        existingTransaction.setAmount(transaction.getAmount());
-                    }
-                    if (transaction.getTransactionType() != null) {
-                        existingTransaction.setTransactionType(transaction.getTransactionType());
-                    }
-                    if (transaction.getDescription() != null) {
-                        existingTransaction.setDescription(transaction.getDescription());
-                    }
-                    if (transaction.getTransactionDate() != null) {
-                        existingTransaction.setTransactionDate(transaction.getTransactionDate());
-                    }
-                    if (transaction.getCreatedAt() != null) {
-                        existingTransaction.setCreatedAt(transaction.getCreatedAt());
-                    }
-                    if (transaction.getUpdatedAt() != null) {
-                        existingTransaction.setUpdatedAt(transaction.getUpdatedAt());
-                    }
+            .findById(transaction.getId())
+            .map(existingTransaction -> {
+                if (transaction.getAmount() != null) {
+                    existingTransaction.setAmount(transaction.getAmount());
+                }
+                if (transaction.getTransactionType() != null) {
+                    existingTransaction.setTransactionType(transaction.getTransactionType());
+                }
+                if (transaction.getDescription() != null) {
+                    existingTransaction.setDescription(transaction.getDescription());
+                }
+                if (transaction.getTransactionDate() != null) {
+                    existingTransaction.setTransactionDate(transaction.getTransactionDate());
+                }
+                if (transaction.getCreatedAt() != null) {
+                    existingTransaction.setCreatedAt(transaction.getCreatedAt());
+                }
+                if (transaction.getUpdatedAt() != null) {
+                    existingTransaction.setUpdatedAt(transaction.getUpdatedAt());
+                }
 
-                    return existingTransaction;
-                })
-                .map(transactionRepository::save);
+                return existingTransaction;
+            })
+            .map(transactionRepository::save);
     }
 
     public Page<Transaction> findAllWithEagerRelationships(Pageable pageable) {
@@ -154,8 +153,8 @@ public class TransactionServiceImpl implements TransactionService {
     public void delete(Long id) {
         LOG.debug("Request to delete Transaction : {}", id);
         Transaction transaction = transactionRepository
-                .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Transaction not found with id: " + id));
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Transaction not found with id: " + id));
 
         validateDeletePermission(transaction);
 
@@ -167,14 +166,14 @@ public class TransactionServiceImpl implements TransactionService {
     private void validateDeletePermission(Transaction transaction) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            User currentUser = userService.getUserWithAuthorities()
-                    .orElseThrow(() -> new SecurityException("Current user not found"));
+            User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new SecurityException("Current user not found"));
             transaction.setUser(currentUser);
             if (!transaction.getUser().getId().equals(currentUser.getId())) {
                 LOG.warn(
-                        "User {} attempted to delete transaction {} that does not belong to them",
-                        currentUser.getId(),
-                        transaction.getId());
+                    "User {} attempted to delete transaction {} that does not belong to them",
+                    currentUser.getId(),
+                    transaction.getId()
+                );
                 throw new SecurityException("You are not authorized to delete this transaction");
             }
         }
@@ -189,17 +188,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public void importFromFile(MultipartFile file) {
-
         if (file.isEmpty()) {
-            throw new BadRequestAlertException(
-                    "File is empty",
-                    "transaction",
-                    "fileempty");
+            throw new BadRequestAlertException("File is empty", "transaction", "fileempty");
         }
 
-        User user = userService
-                .getUserWithAuthorities()
-                .orElseThrow(() -> new IllegalStateException("User not logged in"));
+        User user = userService.getUserWithAuthorities().orElseThrow(() -> new IllegalStateException("User not logged in"));
 
         List<Transaction> transactions = transactionImportParser.parse(file);
 
@@ -207,7 +200,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactions.forEach(tx -> {
             tx.setUser(user);
-            save(tx); // ✅ QUAN TRỌNG
+            save(tx);
         });
     }
 }
