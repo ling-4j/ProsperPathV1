@@ -36,6 +36,46 @@ const routes: Routes = [
     data: { pageTitle: 'Gold Calculator' },
     loadChildren: () => import('./gold-cal/gold-cal.routes').then(m => m.goldCalRoutes),
   },
+  {
+    path: 'member',
+    data: { pageTitle: 'prosperPathApp.member.home.title' },
+    loadChildren: () => import('./member/member.routes'),
+  },
+  {
+    path: 'team',
+    data: { pageTitle: 'prosperPathApp.team.home.title' },
+    loadChildren: () => import('./team/team.routes'),
+  },
+  {
+    path: 'team-member',
+    data: { pageTitle: 'prosperPathApp.teamMember.home.title' },
+    loadChildren: () => import('./team-member/team-member.routes'),
+  },
+  {
+    path: 'event',
+    data: { pageTitle: 'prosperPathApp.event.home.title' },
+    loadChildren: () => import('./event/event.routes'),
+  },
+  {
+    path: 'bill',
+    data: { pageTitle: 'prosperPathApp.bill.home.title' },
+    loadChildren: () => import('./bill/bill.routes'),
+  },
+  {
+    path: 'bill-participant',
+    data: { pageTitle: 'prosperPathApp.billParticipant.home.title' },
+    loadChildren: () => import('./bill-participant/bill-participant.routes'),
+  },
+  {
+    path: 'event-balance',
+    data: { pageTitle: 'prosperPathApp.eventBalance.home.title' },
+    loadChildren: () => import('./event-balance/event-balance.routes'),
+  },
+  {
+    path: 'settlement',
+    data: { pageTitle: 'prosperPathApp.settlement.home.title' },
+    loadChildren: () => import('./settlement/settlement.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

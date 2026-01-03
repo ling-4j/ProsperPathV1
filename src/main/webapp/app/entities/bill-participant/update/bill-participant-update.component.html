@@ -1,0 +1,93 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-bill-participant-heading"
+        data-cy="BillParticipantCreateUpdateHeading"
+        jhiTranslate="prosperPathApp.billParticipant.home.createOrEditLabel"
+      >
+        Create or edit a Bill Participant
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="prosperPathApp.billParticipant.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let shareAmountRef = editForm.get('shareAmount')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_shareAmount" jhiTranslate="prosperPathApp.billParticipant.shareAmount">Share Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="shareAmount"
+            id="field_shareAmount"
+            data-cy="shareAmount"
+            formControlName="shareAmount"
+          />
+          @if (shareAmountRef.invalid && (shareAmountRef.dirty || shareAmountRef.touched)) {
+            <div>
+              @if (editForm.get('shareAmount')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('shareAmount')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_bill" jhiTranslate="prosperPathApp.billParticipant.bill">Bill</label>
+          <select class="form-control" id="field_bill" data-cy="bill" name="bill" formControlName="bill" [compareWith]="compareBill">
+            <option [ngValue]="null"></option>
+            @for (billOption of billsSharedCollection; track $index) {
+              <option [ngValue]="billOption">{{ billOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_member" jhiTranslate="prosperPathApp.billParticipant.member">Member</label>
+          <select
+            class="form-control"
+            id="field_member"
+            data-cy="member"
+            name="member"
+            formControlName="member"
+            [compareWith]="compareMember"
+          >
+            <option [ngValue]="null"></option>
+            @for (memberOption of membersSharedCollection; track $index) {
+              <option [ngValue]="memberOption">{{ memberOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

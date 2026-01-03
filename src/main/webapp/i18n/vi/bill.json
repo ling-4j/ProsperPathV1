@@ -1,0 +1,29 @@
+{
+  "prosperPathApp": {
+    "bill": {
+      "home": {
+        "title": "HÓA ĐƠN",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm Bill",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Bill",
+        "notFound": "No Bills found",
+        "add": "Thêm Bill"
+      },
+      "created": "Một Bill mới được tạo với định danh {{ param }}",
+      "updated": "Một Bill cập nhật với định danh {{ param }}",
+      "deleted": "Một Bill đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Bill {{ id }}?"
+      },
+      "detail": {
+        "title": "Hóa đơn"
+      },
+      "id": "ID",
+      "name": "Tên",
+      "amount": "Số tiền",
+      "createdAt": "Ngày tạo",
+      "event": "Sự kiện",
+      "payer": "Người trả"
+    }
+  }
+}

@@ -13,7 +13,8 @@
         "notification": "Thông báo",
         "transaction": "Giao dịch",
         "summary": "Thống kê",
-        "gold-cal": "Máy tính Vàng"
+        "gold-cal": "Máy tính Vàng",
+        "event": "Chia hóa đơn"
       },
       "account": {
         "main": "Tài khoản",

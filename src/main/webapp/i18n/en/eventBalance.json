@@ -1,0 +1,32 @@
+{
+  "prosperPathApp": {
+    "eventBalance": {
+      "home": {
+        "title": "SHARE BILL",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Event Balance",
+        "createOrEditLabel": "Create or edit a Event Balance",
+        "notFound": "No Event Balances found"
+      },
+      "created": "A new Event Balance is created with identifier {{ param }}",
+      "updated": "A Event Balance is updated with identifier {{ param }}",
+      "deleted": "A Event Balance is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Event Balance {{ id }}?"
+      },
+      "detail": {
+        "title": "Event Balance"
+      },
+      "id": "ID",
+      "paid": "Paid",
+      "shouldPay": "Should Pay",
+      "balance": "Balance",
+      "event": "Event",
+      "member": "Member",
+      "result": "result",
+      "sentTo": "Sent to {{name}}: {{amount}}",
+      "receiveBy": "Receive by {{name}}: {{amount}}",
+      "qrCode": "QR code"
+    }
+  }
+}

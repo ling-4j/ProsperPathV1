@@ -1,0 +1,31 @@
+{
+  "prosperPathApp": {
+    "billParticipant": {
+      "home": {
+        "title": "Người tham gia Bill",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Bill Participant",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Bill Participant",
+        "notFound": "No Bill Participants found"
+      },
+      "actions": {
+        "add": "Thêm người tham gia Bill",
+        "saveSplit": "Lưu chia tiền",
+        "cancel": "Hủy"
+      },
+      "created": "Một Bill Participant mới được tạo với định danh {{ param }}",
+      "updated": "Một Bill Participant cập nhật với định danh {{ param }}",
+      "deleted": "Một Bill Participant đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Bill Participant {{ id }}?"
+      },
+      "detail": {
+        "title": "Người tham gia Bill"
+      },
+      "id": "ID",
+      "shareAmount": "Share Amount",
+      "bill": "Bill",
+      "member": "Member"
+    }
+  }
+}

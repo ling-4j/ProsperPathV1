@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <h2>Create Bill</h2>
+
+    <form [formGroup]="editForm" (ngSubmit)="save()">
+      <div class="mb-3">
+        <label class="form-label">Bill name</label>
+        <input class="form-control" formControlName="name" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Amount</label>
+        <input type="number" class="form-control" formControlName="amount" jhiNumberFormat />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Payer</label>
+        <select class="form-control" formControlName="payer">
+          <option [ngValue]="null"></option>
+          @for (m of members; track m.id) {
+            <option [ngValue]="m">{{ m.name }}</option>
+          }
+        </select>
+      </div>
+
+      <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Save</button>
+
+      <button class="btn btn-secondary ms-2" type="button" (click)="cancel()">Cancel</button>
+    </form>
+  </div>
+</div>

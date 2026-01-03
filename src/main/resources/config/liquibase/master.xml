@@ -17,12 +17,26 @@
     <include file="config/liquibase/changelog/20250320031111_added_entity_Notification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250320031112_added_entity_Transaction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250320072040_added_entity_Summary.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093449_added_entity_Member.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093450_added_entity_Team.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093451_added_entity_TeamMember.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093452_added_entity_Event.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093453_added_entity_Bill.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093454_added_entity_BillParticipant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093455_added_entity_EventBalance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093456_added_entity_Settlement.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250320031109_added_entity_constraints_Budget.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250320031112_added_entity_constraints_Transaction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250320031111_added_entity_constraints_Notification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250320072040_added_entity_constraints_Summary.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250320031110_added_entity_constraints_Category.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093451_added_entity_constraints_TeamMember.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093452_added_entity_constraints_Event.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093453_added_entity_constraints_Bill.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093454_added_entity_constraints_BillParticipant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093455_added_entity_constraints_EventBalance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260103093456_added_entity_constraints_Settlement.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

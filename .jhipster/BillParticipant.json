@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20260103093454"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "shareAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "BillParticipant",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "bill",
+      "relationshipName": "bill",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "member",
+      "relationshipName": "member",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

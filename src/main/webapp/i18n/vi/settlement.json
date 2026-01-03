@@ -1,0 +1,27 @@
+{
+  "prosperPathApp": {
+    "settlement": {
+      "home": {
+        "title": "Settlements",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Settlement",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Settlement",
+        "notFound": "No Settlements found"
+      },
+      "created": "Một Settlement mới được tạo với định danh {{ param }}",
+      "updated": "Một Settlement cập nhật với định danh {{ param }}",
+      "deleted": "Một Settlement đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Settlement {{ id }}?"
+      },
+      "detail": {
+        "title": "Settlement"
+      },
+      "id": "ID",
+      "amount": "Amount",
+      "event": "Event",
+      "fromMember": "From Member",
+      "toMember": "To Member"
+    }
+  }
+}

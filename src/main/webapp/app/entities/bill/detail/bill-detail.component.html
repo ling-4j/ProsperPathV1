@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (bill(); as billRef) {
+      <div>
+        <h2 data-cy="billDetailsHeading">
+          <span jhiTranslate="prosperPathApp.bill.detail.title">Bill</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="prosperPathApp.bill.name">Name</span></dt>
+          <dd>
+            <span>{{ billRef.name }}</span>
+          </dd>
+
+          <dt><span jhiTranslate="prosperPathApp.bill.amount">Amount</span></dt>
+          <dd>
+            <span>{{ billRef.amount | currencyType }}</span>
+          </dd>
+
+          <dt><span jhiTranslate="prosperPathApp.bill.event">Event</span></dt>
+          <dd>
+            @if (bill()!.event) {
+              <div>
+                <a [routerLink]="['/event', bill()!.event?.id, 'view']">{{ billRef.event?.name }}</a>
+              </div>
+            }
+          </dd>
+
+          <dt><span jhiTranslate="prosperPathApp.bill.payer">Payer</span></dt>
+          <dd>
+            @if (bill()!.payer) {
+              <div>
+                <a [routerLink]="['/member', bill()!.payer?.id, 'view']">{{ billRef.payer?.name }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <hr />
+
+        <h4><span jhiTranslate="prosperPathApp.billParticipant.home.title">Split Bill</span></h4>
+
+        @for (m of members; track m.id) {
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <input type="checkbox" [(ngModel)]="m.selected" />
+            <span class="flex-grow-1">{{ m.name }}</span>
+          </div>
+        }
+
+        <button class="btn btn-primary">
+          <span jhiTranslate="prosperPathApp.billParticipant.actions.saveSplit">Save Split</span>
+        </button>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/bill', billRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

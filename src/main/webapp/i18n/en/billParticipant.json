@@ -1,0 +1,31 @@
+{
+  "prosperPathApp": {
+    "billParticipant": {
+      "home": {
+        "title": "Bill Participants",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Bill Participant",
+        "createOrEditLabel": "Create or edit a Bill Participant",
+        "notFound": "No Bill Participants found"
+      },
+      "actions": {
+        "add": "Add Bill Participant",
+        "saveSplit": "Save split",
+        "cancel": "Cancel"
+      },
+      "created": "A new Bill Participant is created with identifier {{ param }}",
+      "updated": "A Bill Participant is updated with identifier {{ param }}",
+      "deleted": "A Bill Participant is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Bill Participant {{ id }}?"
+      },
+      "detail": {
+        "title": "Bill Participant"
+      },
+      "id": "ID",
+      "shareAmount": "Share Amount",
+      "bill": "Bill",
+      "member": "Member"
+    }
+  }
+}

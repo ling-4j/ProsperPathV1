@@ -69,22 +69,22 @@ public class BudgetQueryService extends QueryService<Budget> {
             if (criteria.getDistinct() != null) {
                 specification = specification.and(distinct(criteria.getDistinct()));
             }
-            if (criteria.getId() != null) {
+            if (criteria.getId() != null && criteria.getId().getEquals() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Budget_.id));
             }
-            if (criteria.getBudgetAmount() != null) {
+            if (criteria.getBudgetAmount() != null && criteria.getBudgetAmount().getEquals() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getBudgetAmount(), Budget_.budgetAmount));
             }
-            if (criteria.getStartDate() != null) {
+            if (criteria.getStartDate() != null && criteria.getStartDate().getEquals() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getStartDate(), Budget_.startDate));
             }
-            if (criteria.getEndDate() != null) {
+            if (criteria.getEndDate() != null && criteria.getEndDate().getEquals() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEndDate(), Budget_.endDate));
             }
-            if (criteria.getCreatedAt() != null) {
+            if (criteria.getCreatedAt() != null && criteria.getCreatedAt().getEquals() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), Budget_.createdAt));
             }
-            if (criteria.getUpdatedAt() != null) {
+            if (criteria.getUpdatedAt() != null && criteria.getUpdatedAt().getEquals() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUpdatedAt(), Budget_.updatedAt));
             }
             if (criteria.getStatus() != null) {

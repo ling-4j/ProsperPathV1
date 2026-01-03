@@ -1,0 +1,26 @@
+{
+  "prosperPathApp": {
+    "member": {
+      "home": {
+        "title": "Members",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "New Member",
+        "createOrEditLabel": "Create/Edit Member",
+        "notFound": "No Members found"
+      },
+      "created": "A new Member is created with identifier {{ param }}",
+      "updated": "A Member is updated with identifier {{ param }}",
+      "deleted": "A Member is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Member {{ id }}?"
+      },
+      "detail": {
+        "title": "Member"
+      },
+      "id": "ID",
+      "name": "Name",
+      "note": "Note",
+      "createdAt": "Created At"
+    }
+  }
+}

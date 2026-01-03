@@ -1,0 +1,26 @@
+{
+  "prosperPathApp": {
+    "member": {
+      "home": {
+        "title": "Thành viên",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới",
+        "createOrEditLabel": "Thêm mới/cập nhật Thành viên",
+        "notFound": "No Members found"
+      },
+      "created": "Một Member mới được tạo với định danh {{ param }}",
+      "updated": "Một Member cập nhật với định danh {{ param }}",
+      "deleted": "Một Member đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Member {{ id }}?"
+      },
+      "detail": {
+        "title": "Thành viên"
+      },
+      "id": "ID",
+      "name": "Tên",
+      "note": "Ghi chú",
+      "createdAt": "Ngày tạo"
+    }
+  }
+}

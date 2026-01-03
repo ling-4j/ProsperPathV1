@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (settlement(); as settlementRef) {
+      <div>
+        <h2 data-cy="settlementDetailsHeading"><span jhiTranslate="prosperPathApp.settlement.detail.title">Settlement</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ settlementRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.settlement.amount">Amount</span></dt>
+          <dd>
+            <span>{{ settlementRef.amount }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.settlement.event">Event</span></dt>
+          <dd>
+            @if (settlement()!.event) {
+              <div>
+                <a [routerLink]="['/event', settlement()!.event?.id, 'view']">{{ settlementRef.event?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.settlement.fromMember">From Member</span></dt>
+          <dd>
+            @if (settlement()!.fromMember) {
+              <div>
+                <a [routerLink]="['/member', settlement()!.fromMember?.id, 'view']">{{ settlementRef.fromMember?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.settlement.toMember">To Member</span></dt>
+          <dd>
+            @if (settlement()!.toMember) {
+              <div>
+                <a [routerLink]="['/member', settlement()!.toMember?.id, 'view']">{{ settlementRef.toMember?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/settlement', settlementRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (eventBalance(); as eventBalanceRef) {
+      <div>
+        <h2 data-cy="eventBalanceDetailsHeading"><span jhiTranslate="prosperPathApp.eventBalance.detail.title">Event Balance</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ eventBalanceRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.eventBalance.paid">Paid</span></dt>
+          <dd>
+            <span>{{ eventBalanceRef.paid }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.eventBalance.shouldPay">Should Pay</span></dt>
+          <dd>
+            <span>{{ eventBalanceRef.shouldPay }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.eventBalance.balance">Balance</span></dt>
+          <dd>
+            <span>{{ eventBalanceRef.balance }}</span>
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.eventBalance.event">Event</span></dt>
+          <dd>
+            @if (eventBalance()!.event) {
+              <div>
+                <a [routerLink]="['/event', eventBalance()!.event?.id, 'view']">{{ eventBalanceRef.event?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="prosperPathApp.eventBalance.member">Member</span></dt>
+          <dd>
+            @if (eventBalance()!.member) {
+              <div>
+                <a [routerLink]="['/member', eventBalance()!.member?.id, 'view']">{{ eventBalanceRef.member?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/event-balance', eventBalanceRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

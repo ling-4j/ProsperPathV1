@@ -1,0 +1,245 @@
+@use 'sass:color';
+
+$primary: #007bff;
+$warning: #ffc107;
+$light: #f8f9fa;
+$white: #fff;
+$border-color: #dee2e6;
+$teal: #20c997;
+$hover-bg: rgba(0, 123, 255, 0.05);
+$dark-text: #212529;
+$success: #28a745;
+$danger: #dc3545;
+
+$sm: 576px;
+$md: 768px;
+
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 8px;
+  height: 84vh;
+  overflow: hidden;
+
+  @media (max-width: $md) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 10px;
+    height: auto;
+    padding: 10px;
+  }
+}
+
+.div1 {
+  // background-color: white;
+  grid-column: span 4;
+  grid-row: span 5;
+  overflow-y: auto;
+
+  .card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+  }
+}
+
+.div2 {
+  grid-column-start: 5;
+  grid-row: span 2;
+
+  @media (max-width: $md) {
+    grid-column: 1/-1;
+    grid-row: auto;
+  }
+}
+
+.div3 {
+  grid-column-start: 5;
+  grid-row-start: 3;
+  grid-row: span 3;
+
+  @media (max-width: $md) {
+    grid-column: 1/-1;
+    grid-row: auto;
+  }
+}
+
+/* CARD STYLES */
+.event-card {
+  background: $white;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  font-family: $font-family-base;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    background: $hover-bg;
+
+    .action-buttons {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .card-body {
+    padding: 1rem;
+    flex: 1;
+    text-align: center;
+
+    .card-subTitle {
+      font-size: 2rem;
+      font-weight: 500;
+      color: $dark-text;
+      margin-bottom: 0.25rem;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $teal;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+      font-size: 1.2rem;
+      color: $dark-text;
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  .action-buttons {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+    pointer-events: none; // Không thể click khi ẩn
+
+    .btn {
+      pointer-events: all; // Cho phép click khi hiển thị
+      font-size: 0.8rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+
+      &.edit-btn {
+        background: $primary;
+        color: $white;
+
+        &:hover {
+          background: color.adjust($primary, $lightness: -10%);
+          transform: scale(1.05);
+        }
+      }
+
+      &.delete-btn {
+        background: $danger;
+        color: $white;
+
+        &:hover {
+          background: color.adjust($danger, $lightness: -10%);
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}
+
+/* CARD LIST GRID */
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/* Responsive */
+@media (max-width: $md) {
+  .event-card {
+    .action-buttons {
+      bottom: 8px;
+    }
+  }
+}
+
+@media (max-width: $sm) {
+  .event-card {
+    .card-body {
+      .card-title {
+        font-size: 1rem;
+      }
+
+      .card-text {
+        font-size: 0.85rem;
+      }
+    }
+
+    .action-buttons {
+      gap: 0.4rem;
+      bottom: 6px;
+    }
+  }
+}
+
+/* PAGINATION */
+.pagination-container {
+  margin-top: 1rem;
+
+  .custom-pagination {
+    display: flex;
+    gap: 5px;
+
+    .page-item {
+      .page-link {
+        padding: 0.4rem 0.6rem;
+        border: none;
+        background: $white;
+        color: $primary;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: $light;
+        }
+      }
+
+      &.active .page-link {
+        background: $primary;
+        color: $white;
+      }
+
+      &.disabled .page-link {
+        color: #adb5bd;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+/* RESPONSIVE FILTER ROW, BUTTONS */
+@media (max-width: $md) {
+  .action-buttons {
+    justify-content: flex-start;
+  }
+}

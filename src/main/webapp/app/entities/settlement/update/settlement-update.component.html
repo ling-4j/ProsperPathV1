@@ -1,0 +1,103 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-settlement-heading"
+        data-cy="SettlementCreateUpdateHeading"
+        jhiTranslate="prosperPathApp.settlement.home.createOrEditLabel"
+      >
+        Create or edit a Settlement
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="prosperPathApp.settlement.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let amountRef = editForm.get('amount')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_amount" jhiTranslate="prosperPathApp.settlement.amount">Amount</label>
+          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
+          @if (amountRef.invalid && (amountRef.dirty || amountRef.touched)) {
+            <div>
+              @if (editForm.get('amount')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('amount')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_event" jhiTranslate="prosperPathApp.settlement.event">Event</label>
+          <select class="form-control" id="field_event" data-cy="event" name="event" formControlName="event" [compareWith]="compareEvent">
+            <option [ngValue]="null"></option>
+            @for (eventOption of eventsSharedCollection; track $index) {
+              <option [ngValue]="eventOption">{{ eventOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fromMember" jhiTranslate="prosperPathApp.settlement.fromMember">From Member</label>
+          <select
+            class="form-control"
+            id="field_fromMember"
+            data-cy="fromMember"
+            name="fromMember"
+            formControlName="fromMember"
+            [compareWith]="compareMember"
+          >
+            <option [ngValue]="null"></option>
+            @for (memberOption of membersSharedCollection; track $index) {
+              <option [ngValue]="memberOption">{{ memberOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_toMember" jhiTranslate="prosperPathApp.settlement.toMember">To Member</label>
+          <select
+            class="form-control"
+            id="field_toMember"
+            data-cy="toMember"
+            name="toMember"
+            formControlName="toMember"
+            [compareWith]="compareMember"
+          >
+            <option [ngValue]="null"></option>
+            @for (memberOption of membersSharedCollection; track $index) {
+              <option [ngValue]="memberOption">{{ memberOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

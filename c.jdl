@@ -1,0 +1,71 @@
+entity Member {
+  name String required
+  note String
+  createdAt Instant
+}
+
+entity Team {
+  name String required
+  createdAt Instant
+}
+
+entity TeamMember {
+  joinedAt Instant
+}
+
+entity Event {
+  name String required
+  description String
+  createdAt Instant
+}
+
+entity Bill {
+  name String required
+  amount BigDecimal required
+  createdAt Instant
+}
+
+entity BillParticipant {
+  shareAmount BigDecimal required
+}
+
+entity EventBalance {
+  paid BigDecimal required
+  shouldPay BigDecimal required
+  balance BigDecimal required
+}
+
+entity Settlement {
+  amount BigDecimal required
+}
+
+relationship ManyToOne {
+  /* Team membership */
+  TeamMember{team} to Team
+  TeamMember{member} to Member
+
+  /* Event */
+  Event{team} to Team
+  Event{keyPayer} to Member
+
+  /* Bill */
+  Bill{event} to Event
+  Bill{payer} to Member
+
+  /* Bill participants */
+  BillParticipant{bill} to Bill
+  BillParticipant{member} to Member
+
+  /* Final balance */
+  EventBalance{event} to Event
+  EventBalance{member} to Member
+
+  /* Settlement */
+  Settlement{event} to Event
+  Settlement{fromMember} to Member
+  Settlement{toMember} to Member
+}
+
+service * with serviceImpl
+paginate * with pagination
+filter *
