@@ -141,94 +141,93 @@
         </div>
       } @else {
         <div class="table-responsive table-entities" id="entities">
-          <table class="table table-striped" aria-describedby="page-heading">
+          <table class="table table-striped mobile-simple-table" aria-describedby="page-heading">
             <thead>
               <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-                <th scope="col">
-                  <div class="d-flex justify-content-center">STT</div>
+                <!-- Full columns on desktop -->
+                <th scope="col" class="d-none d-md-table-cell text-center">STT</th>
+                <th scope="col" class="d-none d-md-table-cell" jhiSortBy="category.id">
+                  <span jhiTranslate="prosperPathApp.transaction.category">Category</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
                 </th>
-                <th scope="col" jhiSortBy="category.id">
-                  <div class="d-flex align-items-center">
-                    <span jhiTranslate="prosperPathApp.transaction.category">Category</span>
-                    <fa-icon class="ms-1" icon="sort"></fa-icon>
-                  </div>
+                <th scope="col" class="d-none d-md-table-cell" jhiSortBy="transactionType">
+                  <span jhiTranslate="prosperPathApp.transaction.transactionType">Type</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
                 </th>
-                <th scope="col" jhiSortBy="transactionType">
-                  <div class="d-flex align-items-center">
-                    <span jhiTranslate="prosperPathApp.transaction.transactionType">Transaction Type</span>
-                    <fa-icon class="ms-1" icon="sort"></fa-icon>
-                  </div>
+                <th scope="col" class="d-none d-md-table-cell" jhiSortBy="description">
+                  <span jhiTranslate="prosperPathApp.transaction.description">Description</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
                 </th>
-                <th scope="col" jhiSortBy="description">
-                  <div class="d-flex align-items-center">
-                    <span jhiTranslate="prosperPathApp.transaction.description">Description</span>
-                    <fa-icon class="ms-1" icon="sort"></fa-icon>
-                  </div>
-                </th>
+
+                <!-- Minimal columns: always visible on mobile, Date first -->
                 <th scope="col" jhiSortBy="transactionDate">
-                  <div class="d-flex align-items-center">
-                    <span jhiTranslate="prosperPathApp.transaction.transactionDate">Transaction Date</span>
-                    <fa-icon class="ms-1" icon="sort"></fa-icon>
-                  </div>
+                  <span jhiTranslate="prosperPathApp.transaction.transactionDate">Date</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
                 </th>
-                <th scope="col" jhiSortBy="amount">
-                  <div class="d-flex justify-content-end align-items-center">
-                    <span jhiTranslate="prosperPathApp.transaction.amount">Amount</span>
-                    <fa-icon class="ms-1" icon="sort"></fa-icon>
-                  </div>
+                <th scope="col" class="text-end" jhiSortBy="amount">
+                  <span jhiTranslate="prosperPathApp.transaction.amount">Amount</span>
+                  <fa-icon class="ms-1" icon="sort"></fa-icon>
                 </th>
-                <th scope="col" class="action-column"></th>
+
+                <!-- Actions only desktop -->
+                <th scope="col" class="d-none d-md-table-cell action-column"></th>
               </tr>
             </thead>
             <tbody>
               @for (transaction of transactions(); track trackId(transaction); let i = $index) {
-                <tr data-cy="entityTable" class="budget-row">
-                  <td class="text-center" (click)="handleBudgetClick(transaction)">{{ i + 1 + (page - 1) * itemsPerPage }}</td>
-                  <td class="text-break" (click)="handleBudgetClick(transaction)">
-                    @if (transaction.category?.id != null) {
-                      <fa-icon [icon]="['fas', (transaction.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{
-                        transaction.category?.categoryName
-                      }}
-                    } @else {
-                       {{ transaction.category?.categoryName }}
+                <tr class="budget-row" (click)="handleBudgetClick(transaction)" style="cursor: pointer">
+                  <!-- Desktop-only columns -->
+                  <td class="d-none d-md-table-cell text-center">{{ i + 1 + (page - 1) * itemsPerPage }}</td>
+                  <td class="d-none d-md-table-cell">
+                    @if (transaction.category?.categoryName) {
+                      <fa-icon [icon]="['fas', (transaction.category?.categoryIcon ?? 'tag').replace('fa-', '')]" class="me-1"></fa-icon>
+                      {{ transaction.category?.categoryName }}
                     }
                   </td>
-                  <td
-                    [jhiTranslate]="'prosperPathApp.TransactionType.' + (transaction.transactionType ?? 'null')"
-                    (click)="handleBudgetClick(transaction)"
-                  >
-                    {{ { null: '', INCOME: 'INCOME', EXPENSE: 'EXPENSE' }[transaction.transactionType ?? 'null'] }}
+                  <td class="d-none d-md-table-cell">
+                    <span
+                      [ngClass]="{
+                        'text-success': transaction.transactionType === 'INCOME',
+                        'text-danger': transaction.transactionType === 'EXPENSE',
+                      }"
+                    >
+                      {{ transaction.transactionType === 'INCOME' ? 'Income' : 'Expense' }}
+                    </span>
                   </td>
-                  <td class="text-break" (click)="handleBudgetClick(transaction)">
+                  <td class="d-none d-md-table-cell text-break">
                     {{ transaction.description ? (transaction.description | truncate: 20) : '' }}
                   </td>
-                  <td (click)="handleBudgetClick(transaction)">{{ transaction.transactionDate | formatMediumDatetime }}</td>
+
+                  <!-- Date: always visible -->
+                  <td class="text-muted fw-medium">
+                    {{ transaction.transactionDate | formatMediumDatetime }}
+                  </td>
+
+                  <!-- Amount: always visible, colored -->
                   <td
-                    (click)="handleBudgetClick(transaction)"
                     class="text-end fw-bold"
                     [ngClass]="{
+                      'text-success': transaction.transactionType === 'INCOME',
                       'text-danger': transaction.transactionType === 'EXPENSE',
-                      'text-primary': transaction.transactionType === 'INCOME',
                     }"
                   >
-                    {{
-                      (transaction.transactionType === 'EXPENSE' ? -(transaction.amount ?? 0) : (transaction.amount ?? 0)) | currencyType
-                    }}
+                    {{ transaction.transactionType === 'EXPENSE' ? '-' : '' }}{{ transaction.amount ?? 0 | currencyType }}
                   </td>
-                  <td class="text-end action-column">
+
+                  <!-- Desktop actions -->
+                  <td class="d-none d-md-table-cell text-end">
                     <div class="btn-group action-buttons">
                       <a
                         [routerLink]="['/transaction', transaction.id, 'edit']"
                         class="btn btn-primary btn-sm edit-btn"
-                        data-cy="entityEditButton"
+                        (click)="$event.stopPropagation()"
                       >
                         <fa-icon icon="pencil-alt"></fa-icon>
                       </a>
                       <button
-                        type="submit"
-                        (click)="delete(transaction)"
+                        type="button"
+                        (click)="delete(transaction); $event.stopPropagation()"
                         class="btn btn-danger btn-sm delete-btn"
-                        data-cy="entityDeleteButton"
                       >
                         <fa-icon icon="times"></fa-icon>
                       </button>

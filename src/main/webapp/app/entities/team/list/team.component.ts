@@ -41,7 +41,7 @@ export class TeamComponent implements OnInit {
   private readonly ngZone = inject(NgZone);
 
   trackId(_: number, item: ITeam): number {
-    return item.id!;
+    return item.id;
   }
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class TeamComponent implements OnInit {
   }
 
   onScroll(): void {
-    const el = this.scrollContainer.nativeElement;
+    const el = this.scrollContainer.nativeElement as HTMLElement;
     if (el.scrollHeight - el.scrollTop <= el.clientHeight + 10) {
       this.loadNextBatch();
     }

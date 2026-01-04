@@ -33,7 +33,6 @@ export class SettlementUpdateComponent implements OnInit {
   protected memberService = inject(MemberService);
   protected activatedRoute = inject(ActivatedRoute);
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: SettlementFormGroup = this.settlementFormService.createSettlementFormGroup();
 
   compareEvent = (o1: IEvent | null, o2: IEvent | null): boolean => this.eventService.compareEvent(o1, o2);

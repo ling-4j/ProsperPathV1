@@ -45,7 +45,7 @@ export class EventComponent implements OnInit {
   protected ngZone = inject(NgZone);
 
   trackId(index: number, item: IEvent): number {
-    return item.id!;
+    return item.id;
   }
 
   ngOnInit(): void {

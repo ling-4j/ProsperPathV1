@@ -47,9 +47,8 @@ export class BillParticipantService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
-  saveBillParticipants(billId: number, memberIds: number[]): Observable<HttpResponse<void>> {
-    // Gọi POST lên endpoint mới
-    return this.http.post<void>(`${this.resourceUrl}/save-bill-participants/${billId}`, memberIds, { observe: 'response' });
+  saveBillParticipants(billId: number, memberIds: number[]): Observable<HttpResponse<{}>> {
+    return this.http.post<{}>(`${this.resourceUrl}/save-bill-participants/${billId}`, memberIds, { observe: 'response' });
   }
 
   getBillParticipantIdentifier(billParticipant: Pick<IBillParticipant, 'id'>): number {

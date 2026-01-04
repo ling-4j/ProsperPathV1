@@ -13,7 +13,7 @@
             [routerLink]="['/budget/new']"
           >
             <fa-icon icon="plus"></fa-icon>
-            <span jhiTranslate="prosperPathApp.budget.home.createLabel">Create a new Budget</span>
+            <span jhiTranslate="prosperPathApp.budget.home.createLabel" class="ms-1">Create a new Budget</span>
           </button>
         </div>
       </div>
@@ -26,69 +26,86 @@
     </div>
   } @else {
     <div class="table-responsive table-entities budget-table-wrapper" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
+      <table class="table table-striped budget-mobile-table" aria-describedby="page-heading">
         <thead class="budget-thead">
           <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-            <th scope="col" jhiSortBy="budgetAmount">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.budgetAmount">Budget Amount</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
+            <!-- Always visible first: Amount (main column) -->
+            <th scope="col" class="text-end" jhiSortBy="budgetAmount">
+              <span jhiTranslate="prosperPathApp.budget.budgetAmount">Amount</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
             </th>
+
+            <!-- Visible on desktop only -->
+            <th scope="col" class="d-none d-md-table-cell" jhiSortBy="startDate">
+              <span jhiTranslate="prosperPathApp.budget.startDate">Start Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </th>
+            <th scope="col" class="d-none d-md-table-cell" jhiSortBy="endDate">
+              <span jhiTranslate="prosperPathApp.budget.endDate">End Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </th>
+
+            <!-- Always visible -->
             <th scope="col" jhiSortBy="category.id">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.category">Category</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
+              <span jhiTranslate="prosperPathApp.budget.category">Category</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
             </th>
-            <th scope="col" jhiSortBy="startDate">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.startDate">Start Date</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
+            <th scope="col" class="text-center" jhiSortBy="status">
+              <span jhiTranslate="prosperPathApp.budget.status">Status</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
             </th>
-            <th scope="col" jhiSortBy="endDate">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.endDate">End Date</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="status">
-              <div class="d-flex">
-                <span jhiTranslate="prosperPathApp.budget.status">Status</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" class="action-column"></th>
+
+            <!-- Actions only on desktop -->
+            <th scope="col" class="d-none d-md-table-cell action-column"></th>
           </tr>
         </thead>
         <tbody class="budget-tbody">
           @for (budget of budgets; track trackId(budget)) {
-            <tr data-cy="entityTable" class="budget-row">
-              <td class="fw-bold" (click)="handleBudgetClick(budget)">{{ budget.budgetAmount ?? 0 | currencyShort }}</td>
-              <td (click)="handleBudgetClick(budget)">
-                @if (budget.category?.id != null) {
-                  <fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon> {{
-                    budget.category?.categoryName
-                  }}
-                } @else {
-                   {{ budget.category?.categoryName }}
-                }
+            <tr class="budget-row" (click)="handleBudgetClick(budget)" style="cursor: pointer">
+              <!-- Amount - always visible, bold, right-aligned -->
+              <td class="text-end fw-bold">
+                {{ budget.budgetAmount ?? 0 | currencyShort }}
               </td>
-              <td (click)="handleBudgetClick(budget)">{{ budget.startDate | formatMediumDate }}</td>
-              <td (click)="handleBudgetClick(budget)">{{ budget.endDate | formatMediumDate }}</td>
-              <td (click)="handleBudgetClick(budget)" align="center">
-                <fa-icon *ngIf="budget.status === 'ACTIVE'" [icon]="['fas', 'circle-check']" class="text-success"></fa-icon>
-                <fa-icon *ngIf="budget.status === 'ENDED'" [icon]="['fas', 'circle-xmark']" class="text-danger"></fa-icon>
-                <fa-icon *ngIf="budget.status === 'INACTIVE'" [icon]="['fas', 'circle-exclamation']" class="text-warning"></fa-icon>
-                <fa-icon *ngIf="budget.status === 'PENDING'" [icon]="['fas', 'circle']" class="text-warning"></fa-icon>
+
+              <!-- Start & End Date - desktop only -->
+              <td class="d-none d-md-table-cell text-muted text-center">
+                {{ budget.startDate | formatMediumDate }}
               </td>
-              <td class="text-end action-column">
+              <td class="d-none d-md-table-cell text-muted text-center">
+                {{ budget.endDate | formatMediumDate }}
+              </td>
+
+              <!-- Category - always visible -->
+              <td>
+                <div class="d-flex align-items-center">
+                  @if (budget.category?.id != null) {
+                    <fa-icon [icon]="['fas', (budget.category?.categoryIcon ?? '').replace('fa-', '')]"></fa-icon>
+                    {{ budget.category?.categoryName }}
+                  } @else {
+                    {{ budget.category?.categoryName }}
+                  }
+                </div>
+              </td>
+
+              <!-- Status - always visible, centered -->
+              <td class="text-center">
+                <fa-icon *ngIf="budget.status === 'ACTIVE'" [icon]="['fas', 'circle-check']" class="text-success fs-5"></fa-icon>
+                <fa-icon *ngIf="budget.status === 'ENDED'" [icon]="['fas', 'circle-xmark']" class="text-danger fs-5"></fa-icon>
+                <fa-icon *ngIf="budget.status === 'INACTIVE'" [icon]="['fas', 'circle-exclamation']" class="text-warning fs-5"></fa-icon>
+                <fa-icon *ngIf="budget.status === 'PENDING'" [icon]="['fas', 'circle']" class="text-muted fs-5"></fa-icon>
+              </td>
+
+              <!-- Actions - desktop only -->
+              <td class="d-none d-md-table-cell text-end">
                 <div class="btn-group action-buttons">
-                  <a [routerLink]="['/budget', budget.id, 'edit']" class="btn btn-primary btn-sm edit-btn" data-cy="entityEditButton">
+                  <a
+                    [routerLink]="['/budget', budget.id, 'edit']"
+                    class="btn btn-primary btn-sm edit-btn"
+                    (click)="$event.stopPropagation()"
+                  >
                     <fa-icon icon="pencil-alt"></fa-icon>
                   </a>
-                  <button type="submit" (click)="delete(budget)" class="btn btn-danger btn-sm delete-btn" data-cy="entityDeleteButton">
+                  <button type="button" (click)="delete(budget); $event.stopPropagation()" class="btn btn-danger btn-sm delete-btn">
                     <fa-icon icon="times"></fa-icon>
                   </button>
                 </div>

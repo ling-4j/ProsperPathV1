@@ -41,7 +41,7 @@ export class MemberComponent implements OnInit {
   protected ngZone = inject(NgZone);
 
   trackId(index: number, item: IMember): number {
-    return item.id!;
+    return item.id;
   }
 
   ngOnInit(): void {
@@ -77,7 +77,7 @@ export class MemberComponent implements OnInit {
   }
 
   onScroll(): void {
-    const el = this.scrollContainer.nativeElement;
+    const el = this.scrollContainer.nativeElement as HTMLElement;
     if (el.scrollHeight - el.scrollTop <= el.clientHeight + 10) {
       this.loadNextBatch();
     }

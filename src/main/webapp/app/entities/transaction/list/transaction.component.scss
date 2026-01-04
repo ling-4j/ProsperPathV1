@@ -186,33 +186,49 @@ $md: 768px;
   }
 }
 
-@media (max-width: $md) {
-  .table {
+.mobile-simple-table {
+  thead th {
+    background: #f8f9fa;
     font-size: 0.85rem;
+    padding: 0.6rem 0.5rem;
   }
 
-  .table th,
-  .table td {
-    padding: 0.5rem;
+  tbody td {
+    padding: 0.85rem 0.5rem;
+    vertical-align: middle;
   }
 
-  .table .action-column {
-    width: 80px;
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  // Make date and amount stand out
+  tbody td:first-child {
+    font-weight: 500;
+    color: $dark-text;
+  }
+
+  tbody td:last-child {
+    font-size: 1.05rem;
   }
 }
 
 @media (max-width: $sm) {
-  .table {
-    font-size: 0.8rem;
-  }
+  .mobile-simple-table {
+    font-size: 0.95rem;
 
-  .table th,
-  .table td {
-    padding: 0.4rem;
-  }
+    thead th {
+      padding: 0.5rem;
+      font-size: 0.8rem;
+    }
 
-  .table .action-column {
-    width: 60px;
+    tbody td {
+      padding: 0.75rem 0.5rem;
+    }
+
+    tbody td:last-child {
+      font-size: 1.1rem;
+    }
   }
 }
 

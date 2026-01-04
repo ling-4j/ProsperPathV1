@@ -33,7 +33,6 @@ export class TeamMemberUpdateComponent implements OnInit {
   protected memberService = inject(MemberService);
   protected activatedRoute = inject(ActivatedRoute);
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: TeamMemberFormGroup = this.teamMemberFormService.createTeamMemberFormGroup();
 
   compareTeam = (o1: ITeam | null, o2: ITeam | null): boolean => this.teamService.compareTeam(o1, o2);

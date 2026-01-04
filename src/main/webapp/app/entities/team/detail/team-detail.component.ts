@@ -1,8 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
-import { FormatMediumDatetimePipe } from 'app/shared/date';
 import { ITeam } from '../team.model';
 
 import { inject } from '@angular/core';
@@ -18,7 +17,7 @@ import dayjs from 'dayjs/esm';
   styleUrls: ['./team-detail.component.scss'],
   imports: [SharedModule, RouterModule],
 })
-export class TeamDetailComponent {
+export class TeamDetailComponent implements OnInit {
   private teamMemberService = inject(TeamMemberService);
   private memberService = inject(MemberService);
   teamMembers: ITeamMember[] = [];
@@ -32,7 +31,7 @@ export class TeamDetailComponent {
   }
 
   loadTeamMembers(): void {
-    const teamId = this.team()!.id!;
+    const teamId = this.team()!.id;
     this.teamMemberService.query({ 'teamId.equals': teamId }).subscribe(res => {
       this.teamMembers = res.body ?? [];
     });
@@ -44,7 +43,7 @@ export class TeamDetailComponent {
   }
 
   addMember(member: IMember): void {
-    const teamId = this.team()!.id!;
+    const teamId = this.team()!.id;
 
     const teamMember: NewTeamMember = {
       id: null,
@@ -62,7 +61,7 @@ export class TeamDetailComponent {
     return this.allMembers.filter(m => !usedIds.includes(m.id));
   }
   removeMember(teamMember: ITeamMember): void {
-    this.teamMemberService.delete(teamMember.id!).subscribe(() => {
+    this.teamMemberService.delete(teamMember.id).subscribe(() => {
       this.loadTeamMembers();
     });
   }

@@ -28,13 +28,13 @@ $breakpoint-xl: 1200px;
   .header-container {
     display: flex;
     align-items: center;
-    justify-content: space-between; // Align title at start, button at end
+    justify-content: space-between;
     gap: 1rem;
 
     @media (max-width: $breakpoint-sm) {
-      flex-direction: row; // Keep items in a row on mobile
-      align-items: center; // Vertically center items
-      justify-content: space-between; // Ensure title is at start, button at end
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
     }
   }
 
@@ -42,20 +42,20 @@ $breakpoint-xl: 1200px;
     flex: 0 0 auto;
 
     @media (max-width: $breakpoint-sm) {
-      width: auto; // Adjust width to fit content on mobile
-      text-align: left; // Align title to the left on mobile
+      width: auto;
+      text-align: left;
 
       &.create-btn-container {
-        margin-left: 0; // Remove margin-left on mobile
-        text-align: right; // Align button to the right on mobile
+        margin-left: 0;
+        text-align: right;
       }
     }
 
     .title {
-      font-size: 1.75rem; // Specified font size
-      font-weight: 700; // Specified font weight
-      color: $teal; // Specified color
-      margin-bottom: 1rem; // Specified margin
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $teal;
+      margin-bottom: 1rem;
     }
   }
 }
@@ -168,34 +168,6 @@ $breakpoint-xl: 1200px;
     position: relative;
   }
 
-  @media (max-width: $breakpoint-md) {
-    font-size: 0.85rem;
-
-    th,
-    td {
-      padding: 0.5rem;
-    }
-
-    .action-column {
-      width: 80px;
-      min-width: 80px;
-    }
-  }
-
-  @media (max-width: $breakpoint-sm) {
-    font-size: 0.8rem;
-
-    th,
-    td {
-      padding: 0.4rem;
-    }
-
-    .action-column {
-      width: 60px;
-      min-width: 60px;
-    }
-  }
-
   .budget-row {
     transition:
       background-color 0.3s ease,
@@ -272,6 +244,72 @@ $breakpoint-xl: 1200px;
           font-size: 0.8rem;
         }
       }
+    }
+  }
+}
+
+.budget-mobile-table {
+  thead th {
+    background: #f8f9fa;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.5rem;
+    text-transform: uppercase;
+    text-align: left !important;
+    vertical-align: middle;
+  }
+
+  thead th.text-end {
+    text-align: left !important;
+  }
+
+  tbody td {
+    padding: 0.85rem 0.5rem;
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  tbody td.amount-cell {
+    text-align: end;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  tbody td.category-cell {
+    display: flex;
+    align-items: center;
+  }
+  tbody td.status-cell {
+    text-align: center;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tbody fa-icon {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: $breakpoint-xl) {
+  .budget-mobile-table {
+    thead th {
+      font-size: 0.8rem;
+      padding: 0.5rem;
+      text-align: left !important;
+    }
+
+    tbody td {
+      padding: 0.75rem 0.5rem;
+      text-align: left !important;
+    }
+
+    tbody td.amount-cell {
+      font-size: 1.15rem;
+    }
+
+    tbody fa-icon {
+      font-size: 1.4rem;
     }
   }
 }

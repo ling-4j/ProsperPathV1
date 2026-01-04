@@ -46,7 +46,7 @@ export class TeamUpdateComponent implements OnInit {
 
       if (team?.id) {
         this.teamMemberService.query({ 'teamId.equals': team.id }).subscribe(res => {
-          this.selectedMembers = (res.body ?? []).map(tm => tm.member!).filter(Boolean) as IMember[];
+          this.selectedMembers = (res.body ?? []).map(tm => tm.member!).filter(Boolean);
           this.updateSelectAllState();
         });
       } else {
@@ -103,7 +103,6 @@ export class TeamUpdateComponent implements OnInit {
     this.isAllSelected = this.allMembers.every(member => this.isMemberSelected(member));
   }
 
-  // Optional: Getter for available (unselected) members if needed elsewhere
   get availableMembers(): IMember[] {
     const selectedIds = this.selectedMembers.map(m => m.id);
     return this.allMembers.filter(m => !selectedIds.includes(m.id));
@@ -111,7 +110,6 @@ export class TeamUpdateComponent implements OnInit {
 
   save(): void {
     if (this.selectedMembers.length === 0) {
-      // Validation handled in template, but keep as fallback
       return;
     }
 
@@ -121,20 +119,26 @@ export class TeamUpdateComponent implements OnInit {
     const saveObs: Observable<HttpResponse<ITeam>> =
       teamToSave.id !== null ? this.teamService.update(teamToSave) : this.teamService.create(teamToSave);
 
-    saveObs.pipe(finalize(() => {})).subscribe({
-      next: res => this.syncTeamMembers(res.body!.id!),
-      error: () => this.onSaveError(),
-    });
+    saveObs
+      .pipe(
+        finalize((): void => {
+          // intentionally empty
+        }),
+      )
+      .subscribe({
+        next: res => this.syncTeamMembers(res.body!.id),
+        error: (): void => this.onSaveError(),
+      });
   }
 
   private syncTeamMembers(teamId: number): void {
     this.teamMemberService.query({ 'teamId.equals': teamId }).subscribe(res => {
       const existing = res.body ?? [];
       const existingMemberIds = existing.map(tm => tm.member?.id).filter(Boolean) as number[];
-      const selectedMemberIds = this.selectedMembers.map(m => m.id!);
+      const selectedMemberIds = this.selectedMembers.map(m => m.id);
 
-      const toAdd = this.selectedMembers.filter(m => !existingMemberIds.includes(m.id!));
-      const toRemove = existing.filter(tm => !selectedMemberIds.includes(tm.member!.id!));
+      const toAdd = this.selectedMembers.filter(m => !existingMemberIds.includes(m.id));
+      const toRemove = existing.filter(tm => !selectedMemberIds.includes(tm.member!.id));
 
       const operations: Observable<any>[] = [
         ...toAdd.map(m =>
@@ -142,10 +146,10 @@ export class TeamUpdateComponent implements OnInit {
             id: null,
             joinedAt: dayjs(),
             team: { id: teamId },
-            member: { id: m.id! },
+            member: { id: m.id },
           } as NewTeamMember),
         ),
-        ...toRemove.map(tm => this.teamMemberService.delete(tm.id!)),
+        ...toRemove.map(tm => this.teamMemberService.delete(tm.id)),
       ];
 
       if (operations.length === 0) {

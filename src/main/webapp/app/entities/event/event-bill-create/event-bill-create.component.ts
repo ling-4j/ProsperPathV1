@@ -40,10 +40,9 @@ export class EventBillCreateComponent implements OnInit {
   ngOnInit(): void {
     this.eventId = Number(this.route.snapshot.paramMap.get('id'));
 
-    // 1️⃣ Load event (để lấy teamId)
     this.eventService.find(this.eventId).subscribe(res => {
       this.event = res.body!;
-      this.loadTeamMembers(this.event.team!.id!);
+      this.loadTeamMembers(this.event.team!.id);
     });
   }
 

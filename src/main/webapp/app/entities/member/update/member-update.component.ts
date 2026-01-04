@@ -25,7 +25,6 @@ export class MemberUpdateComponent implements OnInit {
   protected memberFormService = inject(MemberFormService);
   protected activatedRoute = inject(ActivatedRoute);
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: MemberFormGroup = this.memberFormService.createMemberFormGroup();
 
   ngOnInit(): void {

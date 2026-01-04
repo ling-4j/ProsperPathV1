@@ -1,4 +1,4 @@
-import { Component, input, inject, effect } from '@angular/core';
+import { Component, input, inject, effect, NgZone } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -18,11 +18,12 @@ import { CurrencyTypePipe } from 'app/shared/truncate/currencyType';
 export class BillDetailComponent {
   bill = input<IBill | null>(null);
 
+  protected ngZone = inject(NgZone);
   protected teamMemberService = inject(TeamMemberService);
   protected billParticipantService = inject(BillParticipantService);
   protected eventService = inject(EventService);
 
-  existingParticipants: Map<number, number> = new Map();
+  existingParticipants: Map<number, number> = new Map<number, number>();
 
   allSelected = false;
   indeterminate = false;
@@ -53,7 +54,7 @@ export class BillDetailComponent {
 
       this.teamMemberService.query({ 'teamId.equals': teamId }).subscribe(res2 => {
         this.members = (res2.body ?? []).map(tm => ({
-          id: tm.member!.id!,
+          id: tm.member!.id,
           name: tm.member?.name ?? undefined,
           selected: false,
           shareAmount: 0,
@@ -100,7 +101,7 @@ export class BillDetailComponent {
         };
       });
 
-      this.updateSelectAllState(); // Safe to call — now public
+      this.updateSelectAllState();
     });
   }
 
@@ -110,8 +111,12 @@ export class BillDetailComponent {
 
     const selectedMemberIds = this.members.filter(m => m.selected).map(m => m.id);
 
-    this.billParticipantService.saveBillParticipants(billId, selectedMemberIds).subscribe(() => {
-      this.loadBillParticipants(billId);
+    this.billParticipantService.saveBillParticipants(billId, selectedMemberIds).subscribe({
+      next: () => {
+        setTimeout(() => {
+          this.previousState();
+        }, 300);
+      },
     });
   }
 

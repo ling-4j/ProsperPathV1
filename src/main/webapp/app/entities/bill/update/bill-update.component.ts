@@ -34,7 +34,6 @@ export class BillUpdateComponent implements OnInit {
   protected memberService = inject(MemberService);
   protected activatedRoute = inject(ActivatedRoute);
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: BillFormGroup = this.billFormService.createBillFormGroup();
 
   compareEvent = (o1: IEvent | null, o2: IEvent | null): boolean => this.eventService.compareEvent(o1, o2);
