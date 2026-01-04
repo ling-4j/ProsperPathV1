@@ -8,11 +8,11 @@
         "createOrEditLabel": "Thêm mới hoặc cập nhật Team Member",
         "notFound": "No Team Members found"
       },
-      "created": "Một Team Member mới được tạo với định danh {{ param }}",
-      "updated": "Một Team Member cập nhật với định danh {{ param }}",
-      "deleted": "Một Team Member đã xóa với định danh {{ param }}",
+      "created": "Complete created",
+      "updated": "Complete updated",
+      "deleted": "Complete deleted",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Team Member {{ id }}?"
+        "question": "Confirm delete?"
       },
       "detail": {
         "title": "Team Member"

@@ -8,11 +8,11 @@
         "createOrEditLabel": "Create/edit Event",
         "notFound": "No Events found"
       },
-      "created": "A new Event is created with identifier {{ param }}",
-      "updated": "A Event is updated with identifier {{ param }}",
-      "deleted": "A Event is deleted with identifier {{ param }}",
+      "created": "Complete created",
+      "updated": "Complete updated",
+      "deleted": "Complete deleted",
       "delete": {
-        "question": "Are you sure you want to delete Event {{ id }}?"
+        "question": "Confirm delete?"
       },
       "detail": {
         "title": "Event"

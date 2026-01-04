@@ -13,11 +13,11 @@
         "saveSplit": "Save split",
         "cancel": "Cancel"
       },
-      "created": "A new Bill Participant is created with identifier {{ param }}",
-      "updated": "A Bill Participant is updated with identifier {{ param }}",
-      "deleted": "A Bill Participant is deleted with identifier {{ param }}",
+      "created": "Complete created",
+      "updated": "Complete updated",
+      "deleted": "Complete deleted",
       "delete": {
-        "question": "Are you sure you want to delete Bill Participant {{ id }}?"
+        "question": "Confirm delete?"
       },
       "detail": {
         "title": "Bill Participant"

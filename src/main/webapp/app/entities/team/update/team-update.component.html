@@ -4,8 +4,6 @@
 
     <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
-        <jhi-alert-error></jhi-alert-error>
-
         <!-- Team Name -->
         @let nameRef = editForm.get('name')!;
         <div class="mb-3">

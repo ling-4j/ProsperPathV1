@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the constraints for entity Team.
+    -->
+    <changeSet id="20260103093450-2" author="jhipster">
+
+        <!-- NOT NULL constraint for name -->
+        <addNotNullConstraint tableName="team"
+                              columnName="name"
+                              columnDataType="varchar(255)"/>
+                              
+        <!-- If there is a foreign key to user, add it here (optional) -->
+        <!--
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="team"
+                                 constraintName="fk_team__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+        -->
+    </changeSet>
+
+</databaseChangeLog>

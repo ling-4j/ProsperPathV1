@@ -1,6 +1,8 @@
 @use 'sass:color';
 
 $primary: #007bff;
+$success: #28a745;
+$info: #17a2b8;
 $warning: #ffc107;
 $light: #f8f9fa;
 $white: #f5f7fa;
@@ -21,7 +23,7 @@ $breakpoint-lg: 992px;
 $breakpoint-ipad-pro: 1024px;
 
 .bill-container {
-  min-height: 100vh;
+  min-height: 84vh; // match event-container
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,33 +32,11 @@ $breakpoint-ipad-pro: 1024px;
   @media (max-width: $breakpoint-ipad-pro) {
     padding: 1.5rem;
   }
-
   @media (max-width: $breakpoint-md) {
     padding: 1rem;
   }
-
   @media (max-width: $breakpoint-sm) {
     padding: 0.5rem;
-  }
-
-  .col-lg-6 {
-    width: auto;
-
-    @media (min-width: $breakpoint-lg) {
-      max-width: 35%;
-    }
-
-    @media (max-width: $breakpoint-ipad-pro) {
-      max-width: 90%;
-    }
-
-    @media (max-width: $breakpoint-md) {
-      max-width: 95%;
-    }
-
-    @media (max-width: $breakpoint-sm) {
-      max-width: 100%;
-    }
   }
 
   .bill-title {
@@ -68,11 +48,9 @@ $breakpoint-ipad-pro: 1024px;
     @media (max-width: $breakpoint-ipad-pro) {
       font-size: 1.5rem;
     }
-
     @media (max-width: $breakpoint-md) {
       font-size: 1.4rem;
     }
-
     @media (max-width: $breakpoint-sm) {
       font-size: 1.25rem;
     }
@@ -90,11 +68,9 @@ $breakpoint-ipad-pro: 1024px;
     @media (max-width: $breakpoint-ipad-pro) {
       padding: 1.2rem;
     }
-
     @media (max-width: $breakpoint-md) {
       padding: 1rem;
     }
-
     @media (max-width: $breakpoint-sm) {
       padding: 0.75rem;
     }
@@ -111,14 +87,16 @@ $breakpoint-ipad-pro: 1024px;
       }
 
       dd {
-        text-align: center;
         font-size: 1.25rem;
-        padding-right: 55px;
-        // margin-bottom: 1rem;
         padding: 0.75rem;
         border-radius: 5px;
         background-color: $light;
+        text-align: center;
+        margin-right: 50px;
 
+        @media (max-width: $breakpoint-ipad-pro) {
+          font-size: 1.1rem;
+        }
         @media (max-width: $breakpoint-sm) {
           font-size: 0.9rem;
         }
@@ -140,12 +118,25 @@ $breakpoint-ipad-pro: 1024px;
       overflow-y: auto;
 
       .form-check {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
         .form-check-input {
           margin-top: 0.35em;
         }
-
         .form-check-label {
           font-size: 0.95rem;
+          flex-grow: 1;
+        }
+      }
+
+      .row > .col-6 {
+        &:nth-child(odd) {
+          padding-right: 0.75rem;
+        }
+        &:nth-child(even) {
+          padding-left: 0.75rem;
         }
       }
     }
@@ -195,28 +186,6 @@ $breakpoint-ipad-pro: 1024px;
           }
         }
       }
-    }
-  }
-}
-
-.member-split-list {
-  .form-check {
-    .form-check-input {
-      margin-top: 0.35em;
-    }
-
-    .form-check-label {
-      font-size: 0.95rem;
-    }
-  }
-
-  .row > .col-6 {
-    &:nth-child(odd) {
-      padding-right: 0.75rem;
-    }
-
-    &:nth-child(even) {
-      padding-left: 0.75rem;
     }
   }
 }

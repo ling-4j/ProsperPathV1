@@ -9,11 +9,11 @@
         "notFound": "No Bills found",
         "add": "Add Bill"
       },
-      "created": "A new Bill is created with identifier {{ param }}",
-      "updated": "A Bill is updated with identifier {{ param }}",
-      "deleted": "A Bill is deleted with identifier {{ param }}",
+      "created": "Complete created",
+      "updated": "Complete updated",
+      "deleted": "Complete deleted",
       "delete": {
-        "question": "Are you sure you want to delete Bill {{ id }}?"
+        "question": "Confirm delete?"
       },
       "detail": {
         "title": "Bill"
