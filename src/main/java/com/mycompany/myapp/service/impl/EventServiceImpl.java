@@ -31,9 +31,22 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public Event update(Event event) {
         LOG.debug("Request to update Event : {}", event);
-        return eventRepository.save(event);
+
+        Event existingEvent = eventRepository
+            .findById(event.getId())
+            .orElseThrow(() -> new RuntimeException("Event not found with id " + event.getId()));
+
+        existingEvent.setName(event.getName());
+        existingEvent.setDescription(event.getDescription());
+        existingEvent.setCreatedAt(event.getCreatedAt());
+        existingEvent.setTeam(event.getTeam());
+        existingEvent.setKeyPayer(event.getKeyPayer());
+
+        // Save changes
+        return eventRepository.save(existingEvent);
     }
 
     @Override
