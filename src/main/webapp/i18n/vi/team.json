@@ -5,7 +5,7 @@
         "title": "Nhóm",
         "refreshListLabel": "Refresh list",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới/cập nhật Thành viên",
+        "createOrEditLabel": "Thêm/Sửa Nhóm",
         "notFound": "No Teams found"
       },
       "created": "Một Team mới được tạo với định danh {{ param }}",

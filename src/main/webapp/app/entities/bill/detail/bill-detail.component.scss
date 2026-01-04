@@ -1,0 +1,222 @@
+@use 'sass:color';
+
+$primary: #007bff;
+$warning: #ffc107;
+$light: #f8f9fa;
+$white: #f5f7fa;
+$gray: #e9ecef;
+$dark-text: #333;
+$border-color: #e1e8ed;
+$teal: #20c997;
+
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-ipad-pro: 1024px;
+
+.bill-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  @media (max-width: $breakpoint-ipad-pro) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 1rem;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 0.5rem;
+  }
+
+  .col-lg-6 {
+    width: auto;
+
+    @media (min-width: $breakpoint-lg) {
+      max-width: 35%;
+    }
+
+    @media (max-width: $breakpoint-ipad-pro) {
+      max-width: 90%;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      max-width: 95%;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      max-width: 100%;
+    }
+  }
+
+  .bill-title {
+    color: $teal !important;
+    font-weight: bold;
+    font-size: 2.5rem;
+    text-align: center;
+
+    @media (max-width: $breakpoint-ipad-pro) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .block {
+    background-color: $white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    font-family: $font-family-base;
+    border: 1px solid $border-color;
+
+    @media (max-width: $breakpoint-ipad-pro) {
+      padding: 1.2rem;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      padding: 1rem;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 0.75rem;
+    }
+
+    .jh-entity-details {
+      dt {
+        font-size: 1rem;
+        font-weight: 500;
+        color: $dark-text;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9rem;
+        }
+      }
+
+      dd {
+        text-align: center;
+        font-size: 1.25rem;
+        padding-right: 55px;
+        // margin-bottom: 1rem;
+        padding: 0.75rem;
+        border-radius: 5px;
+        background-color: $light;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: $teal;
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .member-split-list {
+      background-color: $light;
+      padding: 0.75rem;
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+
+      .form-check {
+        .form-check-input {
+          margin-top: 0.35em;
+        }
+
+        .form-check-label {
+          font-size: 0.95rem;
+        }
+      }
+    }
+
+    .btn-warning {
+      background-color: $warning;
+      border-color: $warning;
+      color: white;
+      font-weight: 500;
+
+      &:hover {
+        background-color: color.adjust($warning, $lightness: -10%);
+      }
+    }
+
+    .action-buttons {
+      text-align: center;
+      margin-top: 1.5rem;
+
+      .btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.875rem;
+        border-radius: 5px;
+        margin: 0.25rem;
+
+        @media (max-width: $breakpoint-sm) {
+          padding: 0.5rem 1rem;
+          font-size: 0.8rem;
+        }
+
+        &.btn-info {
+          background-color: #6c757d;
+          border-color: #6c757d;
+          color: white;
+
+          &:hover {
+            background-color: color.adjust(#6c757d, $lightness: -10%);
+          }
+        }
+
+        &.btn-primary {
+          background-color: $primary;
+          border-color: $primary;
+
+          &:hover {
+            background-color: color.adjust($primary, $lightness: -10%);
+          }
+        }
+      }
+    }
+  }
+}
+
+.member-split-list {
+  .form-check {
+    .form-check-input {
+      margin-top: 0.35em;
+    }
+
+    .form-check-label {
+      font-size: 0.95rem;
+    }
+  }
+
+  .row > .col-6 {
+    &:nth-child(odd) {
+      padding-right: 0.75rem;
+    }
+
+    &:nth-child(even) {
+      padding-left: 0.75rem;
+    }
+  }
+}

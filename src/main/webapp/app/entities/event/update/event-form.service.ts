@@ -60,8 +60,12 @@ export class EventFormService {
       }),
       description: new FormControl(eventRawValue.description),
       createdAt: new FormControl(eventRawValue.createdAt),
-      team: new FormControl(eventRawValue.team),
-      keyPayer: new FormControl(eventRawValue.keyPayer),
+      team: new FormControl(eventRawValue.team, {
+        validators: [Validators.required],
+      }),
+      keyPayer: new FormControl(eventRawValue.keyPayer, {
+        validators: [Validators.required],
+      }),
     });
   }
 

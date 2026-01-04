@@ -2,19 +2,22 @@
 
 $primary: #007bff;
 $warning: #ffc107;
-$light: #f8f9fa;
-$white: #fff;
-$border-color: #dee2e6;
-$teal: #20c997;
-$hover-bg: rgba(0, 123, 255, 0.05);
-$dark-text: #212529;
 $success: #28a745;
 $danger: #dc3545;
+$info: #27a8a1;
+$white: #fff;
+$light: #f8f9fa;
+$border-color: #f4e6e6cf;
+$text-dark: #212529;
+$teal: #20c997;
+
+$hover-bg: rgba(0, 123, 255, 0.05);
 
 $sm: 576px;
-$md: 768px;
+$md: 1200px;
+$xl: 1200px;
 
-$font-family-base:
+$font-base:
   'Segoe UI',
   -apple-system,
   BlinkMacSystemFont,
@@ -31,61 +34,104 @@ $font-family-base:
   @media (max-width: $md) {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
-    gap: 10px;
     height: auto;
     padding: 10px;
+    overflow: visible;
   }
+}
+
+.div1,
+.div2,
+.div3 {
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .div1 {
-  // background-color: white;
   grid-column: span 4;
   grid-row: span 5;
-  overflow-y: auto;
-
-  .card-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 12px;
-  }
+  position: relative;
 }
 
 .div2 {
-  grid-column-start: 5;
+  grid-column: 5;
   grid-row: span 2;
-
-  @media (max-width: $md) {
-    grid-column: 1/-1;
-    grid-row: auto;
-  }
 }
 
 .div3 {
-  grid-column-start: 5;
-  grid-row-start: 3;
-  grid-row: span 3;
+  grid-column: 5;
+  grid-row: 3 / span 3;
+}
 
-  @media (max-width: $md) {
-    grid-column: 1/-1;
-    grid-row: auto;
+@media (min-width: $md) {
+  .div2,
+  .div3 {
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
 }
 
-/* CARD STYLES */
+@media (max-width: $md) {
+  .div1,
+  .div2,
+  .div3 {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    width: auto;
+  }
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $teal;
+}
+
+.btn-primary {
+  border-radius: 8px;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: color.adjust(#20c997, $lightness: -10%);
+    transform: scale(1.05);
+  }
+}
+
+.btn-warning {
+  border-radius: 8px;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: color.adjust($info, $lightness: -10%);
+    transform: scale(1.05);
+  }
+}
+
+.card-list {
+  margin-top: 30px;
+  padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
 .event-card {
-  background: $white;
+  background: #fcf4f4;
+  border: 1px solid $border-color;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  font-family: $font-family-base;
-  display: flex;
-  flex-direction: column;
+  font-family: $font-base;
   cursor: pointer;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease;
   position: relative;
   overflow: hidden;
+  transition: 0.25s ease;
 
   &:hover {
     transform: translateY(-3px);
@@ -100,26 +146,23 @@ $font-family-base:
 
   .card-body {
     padding: 1rem;
-    flex: 1;
     text-align: center;
 
     .card-subTitle {
       font-size: 2rem;
       font-weight: 500;
-      color: $dark-text;
-      margin-bottom: 0.25rem;
+      color: $text-dark;
     }
+
     .card-title {
       font-size: 1.5rem;
       font-weight: 700;
       color: $teal;
-      margin-bottom: 0.5rem;
     }
 
     .card-text {
       font-size: 1.2rem;
-      color: $dark-text;
-      margin-bottom: 0.25rem;
+      color: $text-dark;
     }
   }
 
@@ -132,17 +175,14 @@ $font-family-base:
     gap: 0.5rem;
     opacity: 0;
     visibility: hidden;
-    transition:
-      opacity 0.3s ease,
-      visibility 0.3s ease;
-    pointer-events: none; // Không thể click khi ẩn
+    pointer-events: none;
+    transition: 0.25s ease;
 
     .btn {
-      pointer-events: all; // Cho phép click khi hiển thị
+      pointer-events: all;
       font-size: 0.8rem;
       padding: 0.35rem 0.6rem;
       border-radius: 6px;
-      transition: all 0.2s ease;
 
       &.edit-btn {
         background: $primary;
@@ -150,7 +190,6 @@ $font-family-base:
 
         &:hover {
           background: color.adjust($primary, $lightness: -10%);
-          transform: scale(1.05);
         }
       }
 
@@ -160,86 +199,87 @@ $font-family-base:
 
         &:hover {
           background: color.adjust($danger, $lightness: -10%);
-          transform: scale(1.05);
         }
       }
     }
   }
 }
 
-/* CARD LIST GRID */
-.card-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
+.carousel-pagination {
+  pointer-events: none;
 }
 
-/* Responsive */
+.nav-btn {
+  pointer-events: all;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(33, 37, 41, 0.75);
+  color: $white;
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  z-index: 5;
+
+  &:hover:not(:disabled) {
+    background: rgba(33, 37, 41, 0.95);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+  }
+
+  &.left {
+    left: -18px;
+  }
+
+  &.right {
+    right: -18px;
+  }
+}
+
+@media (max-width: $xl) {
+  .card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: $md) {
-  .event-card {
-    .action-buttons {
-      bottom: 8px;
-    }
+  .card-list {
+    grid-template-columns: 1fr;
+  }
+
+  .carousel-pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    pointer-events: all;
+  }
+
+  .nav-btn {
+    position: static;
+    transform: none;
   }
 }
 
 @media (max-width: $sm) {
   .event-card {
-    .card-body {
-      .card-title {
-        font-size: 1rem;
-      }
+    .card-title {
+      font-size: 1rem;
+    }
 
-      .card-text {
-        font-size: 0.85rem;
-      }
+    .card-text {
+      font-size: 0.85rem;
     }
 
     .action-buttons {
-      gap: 0.4rem;
       bottom: 6px;
+      gap: 0.4rem;
     }
-  }
-}
-
-/* PAGINATION */
-.pagination-container {
-  margin-top: 1rem;
-
-  .custom-pagination {
-    display: flex;
-    gap: 5px;
-
-    .page-item {
-      .page-link {
-        padding: 0.4rem 0.6rem;
-        border: none;
-        background: $white;
-        color: $primary;
-        border-radius: 4px;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: $light;
-        }
-      }
-
-      &.active .page-link {
-        background: $primary;
-        color: $white;
-      }
-
-      &.disabled .page-link {
-        color: #adb5bd;
-        cursor: not-allowed;
-      }
-    }
-  }
-}
-
-/* RESPONSIVE FILTER ROW, BUTTONS */
-@media (max-width: $md) {
-  .action-buttons {
-    justify-content: flex-start;
   }
 }

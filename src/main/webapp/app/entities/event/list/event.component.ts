@@ -5,13 +5,12 @@ import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
-import { FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
-import { ItemCountComponent } from 'app/shared/pagination';
+import { SortService, type SortState, sortStateSignal } from 'app/shared/sort';
+import { FormatMediumDatePipe } from 'app/shared/date';
 import { FormsModule } from '@angular/forms';
-import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
+import { PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
-import { FilterComponent, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
+import { FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
 import { IEvent } from '../event.model';
 
 import { EntityArrayResponseType, EventService } from '../service/event.service';
@@ -24,19 +23,7 @@ import { TruncatePipe } from '../../../shared/truncate/truncate.pipe';
   selector: 'jhi-event',
   templateUrl: './event.component.html',
   styleUrls: ['./event.component.scss'],
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    // SortDirective,
-    // SortByDirective,
-    FormatMediumDatePipe,
-    FilterComponent,
-    ItemCountComponent,
-    TeamComponent,
-    MemberComponent,
-    TruncatePipe,
-  ],
+  imports: [RouterModule, FormsModule, SharedModule, FormatMediumDatePipe, TeamComponent, MemberComponent, TruncatePipe],
 })
 export class EventComponent implements OnInit {
   subscription: Subscription | null = null;
@@ -46,7 +33,7 @@ export class EventComponent implements OnInit {
   sortState = sortStateSignal({});
   filters: IFilterOptions = new FilterOptions();
 
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 9;
   totalItems = 0;
   page = 1;
 
@@ -75,11 +62,17 @@ export class EventComponent implements OnInit {
   delete(event: IEvent): void {
     const modalRef = this.modalService.open(EventDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.event = event;
-    // unsubscribe not needed because closed completes on modal close
+
     modalRef.closed
       .pipe(
         filter(reason => reason === ITEM_DELETED_EVENT),
         tap(() => this.load()),
+        tap(() => {
+          if (this.events().length === 0 && this.page !== 1) {
+            this.page = 1;
+            this.handleNavigation(1, this.sortState(), this.filters.filterOptions);
+          }
+        }),
       )
       .subscribe();
   }
@@ -90,6 +83,11 @@ export class EventComponent implements OnInit {
         this.onResponseSuccess(res);
       },
     });
+  }
+
+  refresh(): void {
+    this.page = 1;
+    this.handleNavigation(1, this.sortState(), this.filters.filterOptions);
   }
 
   navigateToWithComponentValues(event: SortState): void {
@@ -111,6 +109,20 @@ export class EventComponent implements OnInit {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.events.set(dataFromBody);
+
+    const currentPageHasNoData = dataFromBody.length === 0;
+    const notOnFirstPage = this.page > 1;
+    const thereAreSomeItemsInTotal = this.totalItems > 0;
+
+    if (currentPageHasNoData && notOnFirstPage) {
+      if (thereAreSomeItemsInTotal) {
+        this.page = 1;
+        this.handleNavigation(1, this.sortState(), this.filters.filterOptions);
+      } else {
+        this.page = 1;
+        this.handleNavigation(1, this.sortState(), this.filters.filterOptions);
+      }
+    }
   }
 
   protected fillComponentAttributesFromResponseBody(data: IEvent[] | null): IEvent[] {

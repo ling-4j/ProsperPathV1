@@ -15,6 +15,7 @@ import { IMember } from 'app/entities/member/member.model';
   standalone: true,
   selector: 'jhi-event-bill-create',
   templateUrl: './event-bill-create.component.html',
+  styleUrls: ['./event-bill-create.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class EventBillCreateComponent implements OnInit {

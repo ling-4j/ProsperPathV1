@@ -1,71 +1,91 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-event-heading" data-cy="EventCreateUpdateHeading" jhiTranslate="prosperPathApp.event.home.createOrEditLabel">
-        Create or edit a Event
-      </h2>
+<div class="event-container d-flex justify-content-center">
+  <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
+    <h1 data-cy="eventTitle" jhiTranslate="prosperPathApp.event.home.createOrEditLabel" class="event-title">Create or edit an Event</h1>
 
+    <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
-        <jhi-alert-error />
+        <jhi-alert-error></jhi-alert-error>
+
+        <!-- Event Name -->
         @let nameRef = editForm.get('name')!;
         <div class="mb-3">
-          <label class="form-label" for="field_name" jhiTranslate="prosperPathApp.event.name">Name</label>
-          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <label class="form-label" for="field_name" jhiTranslate="prosperPathApp.event.name">
+            Name <span class="text-danger">*</span>
+          </label>
+          <input type="text" class="form-control" id="field_name" data-cy="name" formControlName="name" placeholder="Enter event name" />
           @if (nameRef.invalid && (nameRef.dirty || nameRef.touched)) {
             <div>
-              @if (editForm.get('name')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              @if (nameRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required"> This field is required. </small>
               }
             </div>
           }
         </div>
 
+        <!-- Created At -->
         <div class="mb-3">
-          <label class="form-label" for="field_createdAt" jhiTranslate="prosperPathApp.event.createdAt">Created At</label>
-          <div class="d-flex">
-            <input
-              id="field_createdAt"
-              data-cy="createdAt"
-              type="datetime-local"
-              class="form-control"
-              name="createdAt"
-              formControlName="createdAt"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
+          <label class="form-label" for="field_createdAt" jhiTranslate="prosperPathApp.event.createdAt"> Created At </label>
+          <input
+            id="field_createdAt"
+            data-cy="createdAt"
+            type="datetime-local"
+            class="form-control"
+            name="createdAt"
+            formControlName="createdAt"
+          />
         </div>
 
+        <!-- Team -->
         <div class="mb-3">
-          <label class="form-label" for="field_team" jhiTranslate="prosperPathApp.event.team">Team</label>
-          <select class="form-control" id="field_team" data-cy="team" name="team" formControlName="team" [compareWith]="compareTeam">
-            <option [ngValue]="null"></option>
-            @for (teamOption of teamsSharedCollection; track $index) {
+          <label class="form-label" for="field_team" jhiTranslate="prosperPathApp.event.team">
+            Team <span class="text-danger">*</span>
+          </label>
+          <select class="form-control" id="field_team" data-cy="team" formControlName="team" [compareWith]="compareTeam">
+            <option [ngValue]="null">-- Select a Team --</option>
+            @for (teamOption of teamsSharedCollection; track teamOption.id) {
               <option [ngValue]="teamOption">{{ teamOption.name }}</option>
             }
           </select>
+          @if (editForm.get('team')?.invalid && (editForm.get('team')?.dirty || editForm.get('team')?.touched)) {
+            <div class="invalid-feedback d-block">
+              @if (editForm.get('team')?.errors?.required) {
+                <small jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
         </div>
 
+        <!-- Key Payer -->
         <div class="mb-3">
-          <label class="form-label" for="field_keyPayer" jhiTranslate="prosperPathApp.event.keyPayer">Key Payer</label>
-          <select
-            class="form-control"
-            id="field_keyPayer"
-            data-cy="keyPayer"
-            name="keyPayer"
-            formControlName="keyPayer"
-            [compareWith]="compareMember"
-          >
-            <option [ngValue]="null"></option>
-            @for (memberOption of membersSharedCollection; track $index) {
+          <label class="form-label" for="field_keyPayer" jhiTranslate="prosperPathApp.event.keyPayer">
+            Key Payer <span class="text-danger">*</span>
+          </label>
+          <select class="form-control" id="field_keyPayer" data-cy="keyPayer" formControlName="keyPayer" [compareWith]="compareMember">
+            <option [ngValue]="null">-- Select a Key Payer --</option>
+            @for (memberOption of membersSharedCollection; track memberOption.id) {
               <option [ngValue]="memberOption">{{ memberOption.name }}</option>
             }
           </select>
+          @if (editForm.get('keyPayer')?.invalid && (editForm.get('keyPayer')?.dirty || editForm.get('keyPayer')?.touched)) {
+            <div class="invalid-feedback d-block">
+              @if (editForm.get('keyPayer')?.errors?.required) {
+                <small jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
         </div>
       </div>
 
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+      <!-- Buttons -->
+      <div class="form-buttons">
+        <button
+          type="button"
+          id="cancel-save"
+          data-cy="entityCreateCancelButton"
+          class="btn btn-secondary btn-cancel"
+          (click)="previousState()"
+        >
+          <fa-icon icon="ban"></fa-icon> Cancel
         </button>
 
         <button
@@ -73,7 +93,7 @@
           id="save-entity"
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
+          class="btn btn-save"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>

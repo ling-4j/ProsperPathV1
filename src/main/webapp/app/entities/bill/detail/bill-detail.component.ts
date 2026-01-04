@@ -12,6 +12,7 @@ import { CurrencyTypePipe } from 'app/shared/truncate/currencyType';
 @Component({
   selector: 'jhi-bill-detail',
   templateUrl: './bill-detail.component.html',
+  styleUrls: ['./bill-detail.component.scss'],
   imports: [SharedModule, RouterModule, FormsModule, CurrencyTypePipe],
 })
 export class BillDetailComponent {
@@ -22,6 +23,9 @@ export class BillDetailComponent {
   protected eventService = inject(EventService);
 
   existingParticipants: Map<number, number> = new Map();
+
+  allSelected = false;
+  indeterminate = false;
 
   members: {
     id: number;
@@ -60,6 +64,21 @@ export class BillDetailComponent {
     });
   }
 
+  // Made PUBLIC so template can call it
+  updateSelectAllState(): void {
+    const selectedCount = this.members.filter(m => m.selected).length;
+    this.allSelected = selectedCount === this.members.length && this.members.length > 0;
+    this.indeterminate = selectedCount > 0 && selectedCount < this.members.length;
+  }
+
+  // Made PUBLIC explicitly
+  toggleSelectAll(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.members.forEach(m => (m.selected = checked));
+    this.allSelected = checked;
+    this.indeterminate = false;
+  }
+
   loadBillParticipants(billId: number): void {
     this.billParticipantService.query({ 'billId.equals': billId }).subscribe(res => {
       const participants = res.body ?? [];
@@ -80,6 +99,8 @@ export class BillDetailComponent {
           shareAmount: p?.shareAmount ?? 0,
         };
       });
+
+      this.updateSelectAllState(); // Safe to call — now public
     });
   }
 

@@ -14,6 +14,7 @@ import { MemberFormGroup, MemberFormService } from './member-form.service';
 @Component({
   selector: 'jhi-member-update',
   templateUrl: './member-update.component.html',
+  styleUrls: ['./member-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class MemberUpdateComponent implements OnInit {

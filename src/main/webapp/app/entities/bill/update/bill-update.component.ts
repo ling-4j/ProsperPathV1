@@ -18,6 +18,7 @@ import { BillFormGroup, BillFormService } from './bill-form.service';
 @Component({
   selector: 'jhi-bill-update',
   templateUrl: './bill-update.component.html',
+  styleUrls: ['./bill-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class BillUpdateComponent implements OnInit {

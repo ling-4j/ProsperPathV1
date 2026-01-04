@@ -71,6 +71,8 @@ import {
   faCircleXmark, // Đánh dấu không hoàn thành
   faCircle,
   faFileInvoiceDollar, // Hóa đơn tiền tệ
+  faUpload,
+  faBuildingColumns,
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -147,5 +149,7 @@ export const fontAwesomeIcons = [
   faCircleXmark, // Đánh dấu không hoàn thành
   faCircle,
   faFileInvoiceDollar, // Hóa đơn tiền tệ
+  faUpload,
+  faBuildingColumns,
   // jhipster-needle-add-icon-import
 ];

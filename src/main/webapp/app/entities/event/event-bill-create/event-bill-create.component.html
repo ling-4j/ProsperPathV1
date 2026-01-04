@@ -1,31 +1,39 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <h2>Create Bill</h2>
+<div class="bill-add-container d-flex justify-content-center py-4">
+  <div class="col-lg-4 col-md-6 col-sm-8 bg-light p-4 shadow-sm rounded-4">
+    <h2 class="bill-title text-center mb-4">Create Bill</h2>
 
-    <form [formGroup]="editForm" (ngSubmit)="save()">
+    <form [formGroup]="editForm" (ngSubmit)="save()" class="form">
+      <!-- Bill Name -->
       <div class="mb-3">
-        <label class="form-label">Bill name</label>
-        <input class="form-control" formControlName="name" />
+        <label class="form-label"> Bill name <span class="text-danger">*</span> </label>
+        <input type="text" class="form-control" formControlName="name" placeholder="Enter bill name" />
       </div>
 
+      <!-- Amount -->
       <div class="mb-3">
-        <label class="form-label">Amount</label>
-        <input type="number" class="form-control" formControlName="amount" jhiNumberFormat />
+        <label class="form-label"> Amount <span class="text-danger">*</span> </label>
+        <input type="number" class="form-control" formControlName="amount" jhiNumberFormat placeholder="0.00" step="0.01" />
       </div>
 
+      <!-- Payer -->
       <div class="mb-3">
-        <label class="form-label">Payer</label>
+        <label class="form-label"> Payer <span class="text-danger">*</span> </label>
         <select class="form-control" formControlName="payer">
-          <option [ngValue]="null"></option>
+          <option [ngValue]="null">-- Select a Payer --</option>
           @for (m of members; track m.id) {
             <option [ngValue]="m">{{ m.name }}</option>
           }
         </select>
       </div>
 
-      <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Save</button>
+      <!-- Buttons -->
+      <div class="form-buttons text-center mt-4">
+        <button type="button" class="btn btn-secondary btn-cancel me-3" (click)="cancel()">Cancel</button>
 
-      <button class="btn btn-secondary ms-2" type="button" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-save" [disabled]="editForm.invalid">
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
     </form>
   </div>
 </div>

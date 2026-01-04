@@ -1,0 +1,133 @@
+@use 'sass:color';
+
+$primary: #007bff;
+$warning: #ffc107;
+$light: #f8f9fa;
+$white: #f5f7fa;
+$gray: #e9ecef;
+$border-color: #dee2e6;
+$teal: #20c997;
+$dark-text: #333;
+
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
+
+.bill-container {
+  min-height: 81vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .bill-title {
+    color: $teal;
+    font-weight: bold;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .form {
+    background-color: #f5f7fa;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    font-family: $font-family-base;
+
+    .mb-3 {
+      margin-bottom: 8px;
+
+      label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 4px;
+        display: block;
+      }
+
+      .form-control {
+        background-color: $gray;
+        border: none;
+        border-radius: 5px;
+        padding: 6px 10px;
+        font-size: 14px;
+        color: #333;
+
+        &:focus {
+          background-color: $gray;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          border-color: $primary;
+        }
+
+        &::placeholder {
+          color: #999;
+        }
+      }
+    }
+
+    .form-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 12px;
+
+      .btn-cancel {
+        color: $white;
+        border: none;
+        border-radius: 5px;
+        padding: 6px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: color.adjust($primary, $lightness: -10%);
+        }
+      }
+
+      .btn-save {
+        background-color: $warning;
+        color: $white;
+        border: none;
+        border-radius: 5px;
+        padding: 6px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: color.adjust($warning, $lightness: -10%);
+        }
+      }
+    }
+  }
+
+  .alert {
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
+
+    &.alert-danger {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      border: none;
+      color: #721c24;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .form {
+      padding: 10px;
+    }
+    .btn-save,
+    .btn-cancel {
+      padding: 5px 12px;
+      font-size: 12px;
+    }
+  }
+}

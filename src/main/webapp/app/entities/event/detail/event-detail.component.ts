@@ -16,6 +16,7 @@ import { CurrencyTypePipe } from 'app/shared/truncate/currencyType';
 @Component({
   selector: 'jhi-event-detail',
   templateUrl: './event-detail.component.html',
+  styleUrls: ['./event-detail.component.scss'],
   imports: [SharedModule, RouterModule, CurrencyTypePipe],
 })
 export class EventDetailComponent {

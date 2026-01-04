@@ -5,7 +5,7 @@
         "title": "Events",
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Event",
-        "createOrEditLabel": "Create or edit a Event",
+        "createOrEditLabel": "Create/edit Event",
         "notFound": "No Events found"
       },
       "created": "A new Event is created with identifier {{ param }}",

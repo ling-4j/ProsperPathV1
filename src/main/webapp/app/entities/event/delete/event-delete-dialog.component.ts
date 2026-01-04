@@ -9,6 +9,7 @@ import { EventService } from '../service/event.service';
 
 @Component({
   templateUrl: './event-delete-dialog.component.html',
+  styleUrls: ['./event-delete-dialog.component.scss'],
   imports: [SharedModule, FormsModule],
 })
 export class EventDeleteDialogComponent {

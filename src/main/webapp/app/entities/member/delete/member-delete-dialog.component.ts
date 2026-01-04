@@ -9,6 +9,7 @@ import { MemberService } from '../service/member.service';
 
 @Component({
   templateUrl: './member-delete-dialog.component.html',
+  styleUrls: ['./member-delete-dialog.component.scss'],
   imports: [SharedModule, FormsModule],
 })
 export class MemberDeleteDialogComponent {

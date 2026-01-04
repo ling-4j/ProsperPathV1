@@ -9,6 +9,7 @@ import { TeamService } from '../service/team.service';
 
 @Component({
   templateUrl: './team-delete-dialog.component.html',
+  styleUrls: ['./team-delete-dialog.component.scss'],
   imports: [SharedModule, FormsModule],
 })
 export class TeamDeleteDialogComponent {

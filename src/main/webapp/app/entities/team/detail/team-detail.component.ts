@@ -15,6 +15,7 @@ import dayjs from 'dayjs/esm';
 @Component({
   selector: 'jhi-team-detail',
   templateUrl: './team-detail.component.html',
+  styleUrls: ['./team-detail.component.scss'],
   imports: [SharedModule, RouterModule],
 })
 export class TeamDetailComponent {

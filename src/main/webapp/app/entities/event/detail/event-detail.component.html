@@ -1,118 +1,136 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+<div class="event-container d-flex justify-content-center">
+  <div class="col-lg-6 bg-light p-4 shadow-sm rounded-4">
     @if (event(); as eventRef) {
-      <div>
-        <h2 data-cy="eventDetailsHeading">
-          <span jhiTranslate="prosperPathApp.event.detail.title">Event</span>
-        </h2>
+      <h1 data-cy="eventTitle" jhiTranslate="prosperPathApp.event.detail.title" class="event-title mb-4">Event Details</h1>
 
-        <hr />
+      <div class="block">
+        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert></jhi-alert>
 
-        <jhi-alert-error />
-        <jhi-alert />
-
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="prosperPathApp.event.name">Name</span></dt>
+        <!-- Event Basic Info -->
+        <dl class="row-md jh-entity-details mb-4">
+          <dt class="text">
+            <b><span jhiTranslate="prosperPathApp.event.name">Name</span></b>
+          </dt>
           <dd>
             <span>{{ eventRef.name }}</span>
           </dd>
 
           <dt><span jhiTranslate="prosperPathApp.event.team">Team</span></dt>
           <dd>
-            @if (event()!.team) {
-              <div>
-                <a [routerLink]="['/team', event()!.team?.id, 'view']">{{ eventRef.team?.name }}</a>
-              </div>
+            @if (eventRef.team) {
+              <a [routerLink]="['/team', eventRef.team.id, 'view']" class="text-primary">
+                {{ eventRef.team.name }}
+              </a>
+            } @else {
+              <span class="text-muted">—</span>
             }
           </dd>
 
           <dt><span jhiTranslate="prosperPathApp.event.keyPayer">Key Payer</span></dt>
           <dd>
-            @if (event()!.keyPayer) {
-              <div>
-                <a [routerLink]="['/member', event()!.keyPayer?.id, 'view']">{{ eventRef.keyPayer?.name }}</a>
-              </div>
+            @if (eventRef.keyPayer) {
+              <a [routerLink]="['/member', eventRef.keyPayer.id, 'view']" class="text-primary">
+                {{ eventRef.keyPayer.name }}
+              </a>
+            } @else {
+              <span class="text-muted">—</span>
             }
           </dd>
         </dl>
 
-        <hr />
+        <!-- Bills Section -->
+        <h4 class="section-title">Bills</h4>
+        <button class="btn btn-success btn-sm mb-3 w-100" (click)="addBill()">+ Add Bill</button>
 
-        <h4><span jhiTranslate="prosperPathApp.bill.home.title">Bills</span></h4>
+        @if (bills.length === 0) {
+          <div class="alert alert-info small py-2 text-center">No bills yet</div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-sm table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th jhiTranslate="prosperPathApp.bill.name">Name</th>
+                  <th jhiTranslate="prosperPathApp.bill.amount">Amount</th>
+                  <th jhiTranslate="prosperPathApp.bill.payer">Payer</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (bill of bills; track bill.id) {
+                  <tr (click)="goToBill(bill.id!)" class="clickable-row">
+                    <td>{{ bill.name }}</td>
+                    <td>{{ bill.amount | currencyType }}</td>
+                    <td>{{ bill.payer?.name || '—' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
 
-        <button class="btn btn-success btn-sm mb-2" (click)="addBill()">
-          <span jhiTranslate="prosperPathApp.bill.home.add">+ Add Bill</span>
-        </button>
+        <!-- Balances Section -->
+        <h4 class="section-title mt-4">Balances</h4>
+        @if (balances.length === 0) {
+          <div class="alert alert-info small py-2 text-center">No balances calculated</div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-sm table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th jhiTranslate="prosperPathApp.eventBalance.member">Member</th>
+                  <th jhiTranslate="prosperPathApp.eventBalance.paid">Paid</th>
+                  <th jhiTranslate="prosperPathApp.eventBalance.shouldPay">Should Pay</th>
+                  <th jhiTranslate="prosperPathApp.eventBalance.balance">Balance</th>
+                  <th jhiTranslate="prosperPathApp.eventBalance.result">Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (b of balances; track b.id) {
+                  <tr>
+                    <td>
+                      <strong>{{ b.member?.name }}</strong>
+                    </td>
+                    <td>{{ b.paid | currencyType }}</td>
+                    <td>{{ b.shouldPay | currencyType }}</td>
+                    <td [class.text-success]="(b.balance ?? 0) >= 0" [class.text-danger]="(b.balance ?? 0) < 0">
+                      <strong>{{ b.balance | currencyType }}</strong>
+                    </td>
+                    <td>
+                      @if ((b.balance ?? 0) < 0 && b.member?.name !== eventRef.keyPayer?.name) {
+                        <span
+                          class="text-danger"
+                          jhiTranslate="prosperPathApp.eventBalance.sentTo"
+                          [translateValues]="{ name: eventRef.keyPayer?.name, amount: -(b.balance ?? 0) | currencyType }"
+                        >
+                        </span>
+                      } @else if ((b.balance ?? 0) > 0 && b.member?.name !== eventRef.keyPayer?.name) {
+                        <span
+                          class="text-success"
+                          jhiTranslate="prosperPathApp.eventBalance.receiveBy"
+                          [translateValues]="{ name: eventRef.keyPayer?.name, amount: b.balance ?? 0 | currencyType }"
+                        >
+                        </span>
+                      } @else {
+                        <b class="text-info" jhiTranslate="prosperPathApp.eventBalance.qrCode">QR Code</b>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
 
-        <table class="table table-sm" *ngIf="bills.length > 0">
-          <thead>
-            <tr>
-              <th><span jhiTranslate="prosperPathApp.bill.name">Name</span></th>
-              <th><span jhiTranslate="prosperPathApp.bill.amount">Amount</span></th>
-              <th><span jhiTranslate="prosperPathApp.bill.payer">Payer</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (bill of bills; track bill.id) {
-              <tr (click)="goToBill(bill.id!)" style="cursor: pointer">
-                <td>{{ bill.name }}</td>
-                <td>{{ bill.amount | currencyType }}</td>
-                <td>{{ bill.payer?.name }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
+        <!-- Action Buttons -->
+        <div class="action-buttons text-center mt-4">
+          <button type="button" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>
+          </button>
 
-        <h4><span jhiTranslate="prosperPathApp.eventBalance.home.title">Balances</span></h4>
-
-        <table class="table table-sm" *ngIf="balances.length > 0">
-          <thead>
-            <tr>
-              <th><span jhiTranslate="prosperPathApp.eventBalance.member">Member</span></th>
-              <th><span jhiTranslate="prosperPathApp.eventBalance.paid">Paid</span></th>
-              <th><span jhiTranslate="prosperPathApp.eventBalance.shouldPay">Should Pay</span></th>
-              <th><span jhiTranslate="prosperPathApp.eventBalance.balance">Balance</span></th>
-              <th><span jhiTranslate="prosperPathApp.eventBalance.result">Result</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (b of balances; track b.id) {
-              <tr>
-                <td>{{ b.member?.name }}</td>
-                <td>{{ b.paid | currencyType }}</td>
-                <td>{{ b.shouldPay | currencyType }}</td>
-                <td [class.text-success]="(b.balance ?? 0) >= 0" [class.text-danger]="(b.balance ?? 0) < 0">
-                  {{ b.balance | currencyType }}
-                </td>
-                <td>
-                  @if ((b.balance ?? 0) < 0 && b.member?.name !== eventRef.keyPayer?.name) {
-                    <span
-                      jhiTranslate="prosperPathApp.eventBalance.sentTo"
-                      [translateValues]="{ name: eventRef.keyPayer?.name, amount: (b.balance | currencyType) }"
-                    >
-                    </span>
-                  } @else if ((b.balance ?? 0) > 0 && b.member?.name !== eventRef.keyPayer?.name) {
-                    <span
-                      jhiTranslate="prosperPathApp.eventBalance.receiveBy"
-                      [translateValues]="{ name: eventRef.keyPayer?.name, amount: (b.balance | currencyType) }"
-                    >
-                    </span>
-                  } @else {
-                    <b><span jhiTranslate="prosperPathApp.eventBalance.qrCode">Qr code</span></b>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
-
-        <button type="button" [routerLink]="['/event', eventRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
+          <button type="button" [routerLink]="['/event', eventRef.id, 'edit']" class="btn btn-primary ms-2">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+        </div>
       </div>
     }
   </div>

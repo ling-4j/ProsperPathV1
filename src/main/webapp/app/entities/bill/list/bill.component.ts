@@ -27,7 +27,7 @@ import { BillDeleteDialogComponent } from '../delete/bill-delete-dialog.componen
     SortDirective,
     SortByDirective,
     FormatMediumDatetimePipe,
-    FilterComponent,
+    // FilterComponent,
     ItemCountComponent,
   ],
 })

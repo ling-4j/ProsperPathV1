@@ -2,6 +2,7 @@
 
 $primary: #007bff;
 $warning: #ffc107;
+$info: #17a2b8;
 $light: #f8f9fa;
 $white: #fff;
 $border-color: #dee2e6;
@@ -237,9 +238,21 @@ $md: 768px;
     }
   }
 
-  &.btn-info {
+  &.btn-warning {
     background: $warning;
     border-color: $warning;
+    color: $dark-text;
+
+    &:hover {
+      background: color.adjust($warning, $lightness: -10%);
+      border-color: color.adjust($warning, $lightness: -10%);
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-info {
+    background: $info;
+    border-color: $info;
     color: $dark-text;
 
     &:hover {

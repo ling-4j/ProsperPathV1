@@ -8,6 +8,7 @@ import { IMember } from '../member.model';
 @Component({
   selector: 'jhi-member-detail',
   templateUrl: './member-detail.component.html',
+  styleUrls: ['./member-detail.component.scss'],
   imports: [SharedModule, RouterModule],
 })
 export class MemberDetailComponent {

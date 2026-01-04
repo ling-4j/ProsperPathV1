@@ -1,48 +1,91 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-team-heading" data-cy="TeamCreateUpdateHeading" jhiTranslate="prosperPathApp.team.home.createOrEditLabel">
-        Create or edit a Team
-      </h2>
+<div class="team-container d-flex justify-content-center">
+  <div class="col-lg-3 bg-light p-4 shadow-sm rounded-4">
+    <h1 data-cy="teamTitle" jhiTranslate="prosperPathApp.team.home.createOrEditLabel" class="team-title">Create or edit a Team</h1>
 
+    <form class="form" name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <div>
-        <jhi-alert-error />
+        <jhi-alert-error></jhi-alert-error>
 
+        <!-- Team Name -->
         @let nameRef = editForm.get('name')!;
         <div class="mb-3">
-          <label class="form-label" for="field_name" jhiTranslate="prosperPathApp.team.name">Name</label>
-          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <label class="form-label" for="field_name" jhiTranslate="prosperPathApp.team.name">
+            Team Name <span class="text-danger">*</span>
+          </label>
+          <input type="text" class="form-control" id="field_name" data-cy="name" formControlName="name" placeholder="Enter team name" />
           @if (nameRef.invalid && (nameRef.dirty || nameRef.touched)) {
             <div>
-              @if (editForm.get('name')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              @if (nameRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required"> This field is required. </small>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Members Selection -->
+        <div class="mb-3">
+          <label class="form-label"> Select Members <span class="text-danger">*</span> </label>
+
+          <!-- Validation Message -->
+          @if (selectedMembers.length === 0 && (editForm.touched || isSaving)) {
+            <small class="form-text text-danger d-block mb-2"> Please select at least one member. </small>
+          }
+
+          <!-- No Members Available -->
+          @if (allMembers.length === 0) {
+            <div class="alert alert-info small py-2">No members available</div>
+          } @else {
+            <!-- Select All Checkbox -->
+            <div class="form-check mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="select-all-members"
+                [checked]="isAllSelected"
+                (change)="toggleSelectAll($event)"
+              />
+              <label class="form-check-label fw-bold" for="select-all-members"> Select All / Deselect All </label>
+            </div>
+
+            <!-- Scrollable Member List -->
+            <div class="member-checkbox-list">
+              @for (member of allMembers; track member.id) {
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [id]="'member-' + member.id"
+                    [checked]="isMemberSelected(member)"
+                    (change)="onMemberToggle(member, $event)"
+                  />
+                  <label class="form-check-label" [for]="'member-' + member.id">
+                    {{ member.name }}
+                  </label>
+                </div>
               }
             </div>
           }
         </div>
       </div>
 
-      <h4>Select Members</h4>
-      <div *ngIf="allMembers.length === 0" class="alert alert-info">No members available</div>
-      <div *ngIf="allMembers.length > 0" class="mb-3">
-        <div *ngFor="let member of allMembers">
-          <input type="checkbox" [value]="member.id" (change)="onMemberToggle(member, $event)" />
-          {{ member.name }}
-        </div>
-        <div *ngIf="selectedMembers.length === 0" class="text-danger">Please select at least 1 member</div>
-      </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+      <!-- Buttons -->
+      <div class="form-buttons">
+        <button
+          type="button"
+          id="cancel-save"
+          data-cy="entityCreateCancelButton"
+          class="btn btn-secondary btn-cancel"
+          (click)="previousState()"
+        >
+          <fa-icon icon="ban"></fa-icon> Cancel
         </button>
 
         <button
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
+          [disabled]="editForm.invalid || isSaving || selectedMembers.length === 0"
+          class="btn btn-save"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>

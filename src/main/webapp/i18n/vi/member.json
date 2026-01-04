@@ -5,7 +5,7 @@
         "title": "Thành viên",
         "refreshListLabel": "Refresh list",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới/cập nhật Thành viên",
+        "createOrEditLabel": "Thêm/Sửa Thành viên",
         "notFound": "No Members found"
       },
       "created": "Một Member mới được tạo với định danh {{ param }}",

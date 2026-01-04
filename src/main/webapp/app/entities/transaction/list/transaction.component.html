@@ -13,7 +13,7 @@
             <button class="btn btn-outline-secondary d-md-none me-2" type="button" (click)="showFilter = !showFilter">
               <fa-icon icon="bars"></fa-icon>
             </button>
-            <button class="btn btn-info refresh-btn d-none d-md-inline-flex" (click)="refresh()" [disabled]="isLoading">
+            <button class="btn btn-warning refresh-btn d-none d-md-inline-flex" (click)="refresh()" [disabled]="isLoading">
               <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
               <span jhiTranslate="prosperPathApp.transaction.home.refreshListLabel" class="ms-1">Refresh list</span>
             </button>
@@ -29,7 +29,7 @@
             <button
               id="jh-import-entity"
               data-cy="entityImportButton"
-              class="btn btn-primary jh-import-entity import-transaction"
+              class="btn btn-info jh-import-entity import-transaction d-none d-md-inline-flex"
               (click)="openImport()"
             >
               <fa-icon icon="upload"></fa-icon>
@@ -44,11 +44,9 @@
       <!-- Filter row: show on desktop or when toggled on mobile -->
       <div class="row align-items-center mb-3 filter-row" [class.d-none]="!showFilter && isMobile">
         <div class="col-12 filter-container">
-          <!-- Hai nút đầu trên mobile -->
           <div class="mobile-top-btn-group d-md-none" *ngIf="showFilter">
-            <button class="btn btn-info refresh-btn" (click)="refresh()" [disabled]="isLoading">
+            <button class="btn btn-warning refresh-btn" (click)="refresh()" [disabled]="isLoading">
               <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.home.refreshListLabel" class="ms-1">Làm mới</span>
             </button>
             <button
               id="jh-create-entity-mobile"
@@ -57,16 +55,14 @@
               [routerLink]="['/transaction/new']"
             >
               <fa-icon icon="plus"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.home.createLabel" class="ms-1">Thêm mới</span>
             </button>
             <button
               id="jh-import-entity-mobile"
               data-cy="entityImportButtonMobile"
-              class="btn btn-primary jh-import-entity import-transaction"
+              class="btn btn-info jh-import-entity import-transaction"
               [routerLink]="['/transaction/import']"
             >
-              <fa-icon icon="plus"></fa-icon>
-              <span jhiTranslate="prosperPathApp.transaction.home.importLabel" class="ms-1">Import</span>
+              <fa-icon icon="upload"></fa-icon>
             </button>
           </div>
           <div class="filter-items">

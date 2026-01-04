@@ -1,23 +1,41 @@
 @if (team) {
-  <form name="deleteForm" (ngSubmit)="confirmDelete(team.id!)">
-    <div class="modal-header">
-      <h4 class="modal-title" data-cy="teamDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
+  <form name="deleteForm" (ngSubmit)="confirmDelete(team.id!)" #deleteForm="ngForm">
+    <div class="modal-header border-bottom-0">
+      <h4 class="modal-title text-primary fw-bold mx-auto" data-cy="teamDeleteDialogHeading" jhiTranslate="entity.delete.title">
+        <fa-icon [icon]="['fas', 'trash']" class="me-2 text-danger"></fa-icon>
+        Confirm Delete Operation
+      </h4>
+      <button type="button" class="btn-close position-absolute end-0 top-0 mt-2 me-2" (click)="cancel()" aria-label="Close"></button>
     </div>
 
-    <div class="modal-body">
-      <jhi-alert-error />
-      <p id="jhi-delete-team-heading" jhiTranslate="prosperPathApp.team.delete.question" [translateValues]="{ id: team.id }">
+    <div class="modal-body text-center">
+      <jhi-alert-error></jhi-alert-error>
+      <p
+        id="jhi-delete-team-heading"
+        class="text-muted fs-6"
+        jhiTranslate="prosperPathApp.team.delete.question"
+        [translateValues]="{ id: team.name }"
+      >
         Are you sure you want to delete Team {{ team.id }}?
       </p>
     </div>
 
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
-        <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    <div class="modal-footer border-top-0">
+      <button type="button" class="btn btn-outline-secondary mx-2" (click)="cancel()" aria-label="Cancel deletion">
+        <fa-icon [icon]="['fas', 'times']" class="me-2"></fa-icon>
+        <span jhiTranslate="entity.action.cancel">Cancel</span>
       </button>
 
-      <button id="jhi-confirm-delete-team" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
-        <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
+      <button
+        id="jhi-confirm-delete-team"
+        data-cy="entityConfirmDeleteButton"
+        type="submit"
+        class="btn btn-danger mx-2"
+        [disabled]="deleteForm.invalid"
+        aria-label="Confirm deletion"
+      >
+        <fa-icon [icon]="['fas', 'check']" class="me-2"></fa-icon>
+        <span jhiTranslate="entity.action.delete">Delete</span>
       </button>
     </div>
   </form>

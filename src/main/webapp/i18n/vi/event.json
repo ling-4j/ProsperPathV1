@@ -5,7 +5,7 @@
         "title": "Sự kiện",
         "refreshListLabel": "Refresh list",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới/cập nhật Sự kiện",
+        "createOrEditLabel": "Thêm/Sửa Sự kiện",
         "notFound": "No Events found"
       },
       "created": "Một Event mới được tạo với định danh {{ param }}",

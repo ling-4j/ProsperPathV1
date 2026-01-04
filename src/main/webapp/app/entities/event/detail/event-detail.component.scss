@@ -1,0 +1,191 @@
+@use 'sass:color';
+
+$primary: #007bff;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
+$light: #f8f9fa;
+$white: #f5f7fa;
+$gray: #e9ecef;
+$dark-text: #333;
+$border-color: #e1e8ed;
+$teal: #20c997;
+
+$font-family-base:
+  'Segoe UI',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-ipad-pro: 1024px;
+
+.event-container {
+  min-height: 84vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  @media (max-width: $breakpoint-ipad-pro) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 1rem;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 0.5rem;
+  }
+
+  .event-title {
+    color: $teal !important;
+    font-weight: bold;
+    font-size: 2.5rem;
+    text-align: center;
+
+    @media (max-width: $breakpoint-ipad-pro) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .block {
+    background-color: $white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    font-family: $font-family-base;
+    border: 1px solid $border-color;
+
+    @media (max-width: $breakpoint-ipad-pro) {
+      padding: 1.2rem;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      padding: 1rem;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 0.75rem;
+    }
+
+    .jh-entity-details {
+      dt {
+        font-size: 1rem;
+        font-weight: 500;
+        color: $dark-text;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9rem;
+        }
+      }
+
+      dd {
+        font-size: 1.25rem;
+        // margin-bottom: 1rem;
+        padding: 0.75rem;
+        border-radius: 5px;
+        background-color: $light;
+        text-align: center;
+        margin-right: 50px;
+
+        @media (max-width: $breakpoint-ipad-pro) {
+          font-size: 1.1rem;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9rem;
+        }
+
+        .text {
+          font-weight: bold;
+          font-size: 2rem;
+        }
+      }
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: $teal;
+      margin-bottom: 0.5rem;
+    }
+
+    .table {
+      font-size: 0.9rem;
+      margin-bottom: 0;
+
+      th {
+        font-weight: 500;
+        color: $dark-text;
+        font-size: 0.85rem;
+      }
+
+      td {
+        vertical-align: middle;
+      }
+
+      .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: $light !important;
+        }
+      }
+    }
+
+    .alert {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .action-buttons {
+      text-align: center;
+      margin-top: 1.5rem;
+
+      .btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.875rem;
+        border-radius: 5px;
+        margin: 0.25rem;
+
+        @media (max-width: $breakpoint-sm) {
+          padding: 0.5rem 1rem;
+          font-size: 0.8rem;
+        }
+
+        &.btn-info {
+          background-color: #6c757d;
+          border-color: #6c757d;
+          color: white;
+
+          &:hover {
+            background-color: color.adjust(#6c757d, $lightness: -10%);
+          }
+        }
+
+        &.btn-primary {
+          background-color: $primary;
+          border-color: $primary;
+
+          &:hover {
+            background-color: color.adjust($primary, $lightness: -10%);
+          }
+        }
+      }
+    }
+  }
+}

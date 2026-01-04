@@ -18,6 +18,7 @@ import { EventFormGroup, EventFormService } from './event-form.service';
 @Component({
   selector: 'jhi-event-update',
   templateUrl: './event-update.component.html',
+  styleUrls: ['./event-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class EventUpdateComponent implements OnInit {

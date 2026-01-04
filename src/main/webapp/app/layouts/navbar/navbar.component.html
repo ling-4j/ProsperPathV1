@@ -1,4 +1,4 @@
-<nav data-cy="navbar" class="navbar navbar-expand-md">
+<nav data-cy="navbar" class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
@@ -7,18 +7,9 @@
     </a>
 
     <!-- Toggler cho mobile -->
-    <a
-      class="navbar-toggler d-lg-none"
-      href="javascript:void(0);"
-      data-toggle="collapse"
-      data-target="#navbarResponsive"
-      aria-controls="navbarResponsive"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      (click)="toggleNavbar()"
-    >
+    <button class="navbar-toggler d-xl-none" type="button" aria-label="Toggle navigation" (click)="toggleNavbar()">
       <fa-icon icon="bars"></fa-icon>
-    </a>
+    </button>
 
     <!-- Menu và các biểu tượng -->
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
@@ -33,7 +24,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/transaction" (click)="collapseNavbar()">
-              <fa-icon icon="money-bill-transfer" [fixedWidth]="true" class="me-1"></fa-icon>
+              <fa-icon icon="building-columns" [fixedWidth]="true" class="me-1"></fa-icon>
               <span jhiTranslate="global.menu.entities.transaction">Transaction</span>
             </a>
           </li>
@@ -45,7 +36,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/event" (click)="collapseNavbar()">
-              <fa-icon icon="calculator" [fixedWidth]="true" class="me-1"></fa-icon>
+              <fa-icon icon="money-bill-transfer" [fixedWidth]="true" class="me-1"></fa-icon>
               <span jhiTranslate="global.menu.entities.event">event</span>
             </a>
           </li>

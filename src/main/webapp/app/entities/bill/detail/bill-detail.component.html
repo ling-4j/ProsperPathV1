@@ -1,17 +1,14 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+<div class="bill-container d-flex justify-content-center">
+  <div class="col-lg-6 bg-light p-4 shadow-sm rounded-4">
     @if (bill(); as billRef) {
-      <div>
-        <h2 data-cy="billDetailsHeading">
-          <span jhiTranslate="prosperPathApp.bill.detail.title">Bill</span>
-        </h2>
+      <h1 data-cy="billTitle" class="bill-title mb-4" jhiTranslate="prosperPathApp.bill.detail.title">Bill Details</h1>
 
-        <hr />
+      <div class="block">
+        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert></jhi-alert>
 
-        <jhi-alert-error />
-        <jhi-alert />
-
-        <dl class="row-md jh-entity-details">
+        <!-- Bill Basic Info -->
+        <dl class="row-md jh-entity-details mb-4">
           <dt><span jhiTranslate="prosperPathApp.bill.name">Name</span></dt>
           <dd>
             <span>{{ billRef.name }}</span>
@@ -19,50 +16,84 @@
 
           <dt><span jhiTranslate="prosperPathApp.bill.amount">Amount</span></dt>
           <dd>
-            <span>{{ billRef.amount | currencyType }}</span>
+            <span class="fw-bold">{{ billRef.amount | currencyType }}</span>
           </dd>
 
           <dt><span jhiTranslate="prosperPathApp.bill.event">Event</span></dt>
           <dd>
-            @if (bill()!.event) {
-              <div>
-                <a [routerLink]="['/event', bill()!.event?.id, 'view']">{{ billRef.event?.name }}</a>
-              </div>
+            @if (billRef.event) {
+              <a [routerLink]="['/event', billRef.event.id, 'view']" class="text-primary">
+                {{ billRef.event.name }}
+              </a>
+            } @else {
+              <span class="text-muted">—</span>
             }
           </dd>
 
           <dt><span jhiTranslate="prosperPathApp.bill.payer">Payer</span></dt>
           <dd>
-            @if (bill()!.payer) {
-              <div>
-                <a [routerLink]="['/member', bill()!.payer?.id, 'view']">{{ billRef.payer?.name }}</a>
-              </div>
+            @if (billRef.payer) {
+              <a [routerLink]="['/member', billRef.payer.id, 'view']" class="text-primary">
+                {{ billRef.payer.name }}
+              </a>
+            } @else {
+              <span class="text-muted">—</span>
             }
           </dd>
         </dl>
 
-        <hr />
+        <!-- Split Bill Section -->
+        <h4 class="section-title">Split Bill</h4>
+        <div class="member-split-list mb-4">
+          @if (members.length === 0) {
+            <div class="alert alert-info small py-2 text-center">No members available</div>
+          } @else {
+            <!-- Select All Checkbox -->
+            <div class="form-check mb-3 border-bottom pb-3">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                id="select-all"
+                [checked]="allSelected"
+                (change)="toggleSelectAll($event)"
+              />
+              <label class="form-check-label fw-bold" for="select-all"> Select All </label>
+            </div>
 
-        <h4><span jhiTranslate="prosperPathApp.billParticipant.home.title">Split Bill</span></h4>
+            <!-- Members in 2 columns -->
+            <div class="row">
+              @for (m of members; track m.id; let i = $index) {
+                <div class="col-6 mb-2">
+                  <div class="form-check d-flex align-items-center">
+                    <input
+                      class="form-check-input me-3"
+                      type="checkbox"
+                      [id]="'member-' + m.id"
+                      [(ngModel)]="m.selected"
+                      (change)="updateSelectAllState()"
+                    />
+                    <label class="form-check-label flex-grow-1" [for]="'member-' + m.id">
+                      {{ m.name }}
+                    </label>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
 
-        @for (m of members; track m.id) {
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <input type="checkbox" [(ngModel)]="m.selected" />
-            <span class="flex-grow-1">{{ m.name }}</span>
-          </div>
-        }
+        <button class="btn btn-warning btn-sm w-100 mb-3" (click)="saveParticipants()">Save Split</button>
 
-        <button class="btn btn-primary" (click)="saveParticipants()">
-          <span jhiTranslate="prosperPathApp.billParticipant.actions.saveSplit">Save Split</span>
-        </button>
+        <!-- Action Buttons -->
+        <div class="action-buttons text-center">
+          <button type="button" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left"></fa-icon>
+          </button>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
-
-        <button type="button" [routerLink]="['/bill', billRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
+          <button type="button" [routerLink]="['/bill', billRef.id, 'edit']" class="btn btn-primary ms-2">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+        </div>
       </div>
     }
   </div>
