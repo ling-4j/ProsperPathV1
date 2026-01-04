@@ -3,6 +3,7 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.repository.TeamRepository;
 import com.mycompany.myapp.service.criteria.TeamCriteria;
+import jakarta.persistence.criteria.JoinType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -83,6 +84,13 @@ public class TeamQueryService extends QueryService<Team> {
             }
             if (criteria.getCreatedAt() != null && criteria.getCreatedAt().getEquals() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), Team_.createdAt));
+            }
+            if (criteria.getMemberId() != null) {
+                specification = specification.and(
+                    buildSpecification(criteria.getMemberId(), root ->
+                        root.join("teamMembers", JoinType.LEFT).join("member", JoinType.LEFT).get("id")
+                    )
+                );
             }
         }
         return specification;

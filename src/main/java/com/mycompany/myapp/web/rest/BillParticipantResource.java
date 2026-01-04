@@ -5,7 +5,6 @@ import com.mycompany.myapp.repository.BillParticipantRepository;
 import com.mycompany.myapp.service.BillParticipantQueryService;
 import com.mycompany.myapp.service.BillParticipantService;
 import com.mycompany.myapp.service.criteria.BillParticipantCriteria;
-import com.mycompany.myapp.service.impl.BillParticipantServiceImpl;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

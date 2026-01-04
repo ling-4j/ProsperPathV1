@@ -8,12 +8,15 @@ import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.*;
 
 /**
- * Criteria class for the {@link com.mycompany.myapp.domain.Team} entity. This class is used
- * in {@link com.mycompany.myapp.web.rest.TeamResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.mycompany.myapp.domain.Team} entity. This
+ * class is used
+ * in {@link com.mycompany.myapp.web.rest.TeamResource} to receive all the
+ * possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /teams?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
- * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
+ * As Spring is unable to properly convert the types, unless specific
+ * {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
 @ParameterObject
@@ -29,6 +32,22 @@ public class TeamCriteria implements Serializable, Criteria {
     private InstantFilter createdAt;
 
     private Boolean distinct;
+    private LongFilter memberId;
+
+    public LongFilter getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(LongFilter memberId) {
+        this.memberId = memberId;
+    }
+
+    public LongFilter memberId() {
+        if (memberId == null) {
+            setMemberId(new LongFilter());
+        }
+        return memberId;
+    }
 
     public TeamCriteria() {}
 
@@ -146,10 +165,10 @@ public class TeamCriteria implements Serializable, Criteria {
     @Override
     public String toString() {
         return "TeamCriteria{" +
-            optionalId().map(f -> "id=" + f + ", ").orElse("") +
-            optionalName().map(f -> "name=" + f + ", ").orElse("") +
-            optionalCreatedAt().map(f -> "createdAt=" + f + ", ").orElse("") +
-            optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
-        "}";
+                optionalId().map(f -> "id=" + f + ", ").orElse("") +
+                optionalName().map(f -> "name=" + f + ", ").orElse("") +
+                optionalCreatedAt().map(f -> "createdAt=" + f + ", ").orElse("") +
+                optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
+                "}";
     }
 }

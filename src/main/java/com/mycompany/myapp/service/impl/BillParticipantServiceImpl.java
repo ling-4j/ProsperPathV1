@@ -104,7 +104,7 @@ public class BillParticipantServiceImpl implements BillParticipantService {
         for (Long memberId : memberIds) {
             BillParticipant bp = new BillParticipant();
             bp.setBill(bill);
-            bp.setMember(memberRepository.getReferenceById(memberId)); // <-- đây mới đúng
+            bp.setMember(memberRepository.getReferenceById(memberId));
             bp.setShareAmount(share);
             billParticipantRepository.save(bp);
         }

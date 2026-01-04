@@ -1,15 +1,21 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Member;
 import com.mycompany.myapp.domain.Team;
+import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.repository.MemberRepository;
 import com.mycompany.myapp.repository.TeamRepository;
 import com.mycompany.myapp.service.TeamQueryService;
 import com.mycompany.myapp.service.TeamService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.TeamCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -43,20 +50,32 @@ public class TeamResource {
     private final TeamService teamService;
 
     private final TeamRepository teamRepository;
+    private final MemberRepository memberRepository;
 
     private final TeamQueryService teamQueryService;
+    private final UserService userService;
 
-    public TeamResource(TeamService teamService, TeamRepository teamRepository, TeamQueryService teamQueryService) {
+    public TeamResource(
+        TeamService teamService,
+        TeamRepository teamRepository,
+        TeamQueryService teamQueryService,
+        UserService userService,
+        MemberRepository memberRepository
+    ) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
         this.teamQueryService = teamQueryService;
+        this.userService = userService;
+        this.memberRepository = memberRepository;
     }
 
     /**
      * {@code POST  /teams} : Create a new team.
      *
      * @param team the team to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new team, or with status {@code 400 (Bad Request)} if the team has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new team, or with status {@code 400 (Bad Request)} if the
+     *         team has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -74,11 +93,13 @@ public class TeamResource {
     /**
      * {@code PUT  /teams/:id} : Updates an existing team.
      *
-     * @param id the id of the team to save.
+     * @param id   the id of the team to save.
      * @param team the team to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated team,
-     * or with status {@code 400 (Bad Request)} if the team is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the team couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated team,
+     *         or with status {@code 400 (Bad Request)} if the team is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the team
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -103,14 +124,17 @@ public class TeamResource {
     }
 
     /**
-     * {@code PATCH  /teams/:id} : Partial updates given fields of an existing team, field will ignore if it is null
+     * {@code PATCH  /teams/:id} : Partial updates given fields of an existing team,
+     * field will ignore if it is null
      *
-     * @param id the id of the team to save.
+     * @param id   the id of the team to save.
      * @param team the team to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated team,
-     * or with status {@code 400 (Bad Request)} if the team is not valid,
-     * or with status {@code 404 (Not Found)} if the team is not found,
-     * or with status {@code 500 (Internal Server Error)} if the team couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated team,
+     *         or with status {@code 400 (Bad Request)} if the team is not valid,
+     *         or with status {@code 404 (Not Found)} if the team is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the team
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -143,7 +167,8 @@ public class TeamResource {
      *
      * @param pageable the pagination information.
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of teams in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of teams in body.
      */
     @GetMapping("")
     public ResponseEntity<List<Team>> getAllTeams(
@@ -152,8 +177,23 @@ public class TeamResource {
     ) {
         LOG.debug("REST request to get Teams by criteria: {}", criteria);
 
+        // Lấy user hiện tại
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+
+        List<Member> members = memberRepository.findByUserId(currentUser.getId());
+        if (members.isEmpty()) {
+            return ResponseEntity.ok().body(Collections.emptyList());
+        }
+        // Nếu muốn lọc theo tất cả member
+        LongFilter memberFilter = new LongFilter();
+        memberFilter.setIn(members.stream().map(Member::getId).toList());
+        criteria.setMemberId(memberFilter);
+
+        // Lấy page Team theo criteria (TeamQueryService vẫn dùng bình thường)
         Page<Team> page = teamQueryService.findByCriteria(criteria, pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
@@ -161,7 +201,8 @@ public class TeamResource {
      * {@code GET  /teams/count} : count all the teams.
      *
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count
+     *         in body.
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countTeams(TeamCriteria criteria) {
@@ -173,7 +214,8 @@ public class TeamResource {
      * {@code GET  /teams/:id} : get the "id" team.
      *
      * @param id the id of the team to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the team, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the team, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Team> getTeam(@PathVariable("id") Long id) {

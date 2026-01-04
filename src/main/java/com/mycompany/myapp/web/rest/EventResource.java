@@ -1,15 +1,21 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Event;
+import com.mycompany.myapp.domain.Member;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.EventRepository;
+import com.mycompany.myapp.repository.MemberRepository;
 import com.mycompany.myapp.service.EventQueryService;
 import com.mycompany.myapp.service.EventService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.criteria.EventCriteria;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -41,22 +48,33 @@ public class EventResource {
     private String applicationName;
 
     private final EventService eventService;
-
+    private final UserService userService;
+    private final MemberRepository memberRepository;
     private final EventRepository eventRepository;
 
     private final EventQueryService eventQueryService;
 
-    public EventResource(EventService eventService, EventRepository eventRepository, EventQueryService eventQueryService) {
+    public EventResource(
+        EventService eventService,
+        EventRepository eventRepository,
+        EventQueryService eventQueryService,
+        UserService userService,
+        MemberRepository memberRepository
+    ) {
+        this.memberRepository = memberRepository;
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.eventQueryService = eventQueryService;
+        this.userService = userService;
     }
 
     /**
      * {@code POST  /events} : Create a new event.
      *
      * @param event the event to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new event, or with status {@code 400 (Bad Request)} if the event has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new event, or with status {@code 400 (Bad Request)} if the
+     *         event has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -74,11 +92,13 @@ public class EventResource {
     /**
      * {@code PUT  /events/:id} : Updates an existing event.
      *
-     * @param id the id of the event to save.
+     * @param id    the id of the event to save.
      * @param event the event to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated event,
-     * or with status {@code 400 (Bad Request)} if the event is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the event couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated event,
+     *         or with status {@code 400 (Bad Request)} if the event is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the event
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -103,14 +123,17 @@ public class EventResource {
     }
 
     /**
-     * {@code PATCH  /events/:id} : Partial updates given fields of an existing event, field will ignore if it is null
+     * {@code PATCH  /events/:id} : Partial updates given fields of an existing
+     * event, field will ignore if it is null
      *
-     * @param id the id of the event to save.
+     * @param id    the id of the event to save.
      * @param event the event to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated event,
-     * or with status {@code 400 (Bad Request)} if the event is not valid,
-     * or with status {@code 404 (Not Found)} if the event is not found,
-     * or with status {@code 500 (Internal Server Error)} if the event couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated event,
+     *         or with status {@code 400 (Bad Request)} if the event is not valid,
+     *         or with status {@code 404 (Not Found)} if the event is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the event
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -143,7 +166,8 @@ public class EventResource {
      *
      * @param pageable the pagination information.
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of events in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of events in body.
      */
     @GetMapping("")
     public ResponseEntity<List<Event>> getAllEvents(
@@ -151,6 +175,15 @@ public class EventResource {
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Events by criteria: {}", criteria);
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new EntityNotFoundException("Current user not found"));
+
+        List<Member> members = memberRepository.findByUserId(currentUser.getId());
+        if (members.isEmpty()) {
+            return ResponseEntity.ok().body(Collections.emptyList());
+        }
+        LongFilter keyPayerFilter = new LongFilter();
+        keyPayerFilter.setIn(members.stream().map(Member::getId).toList());
+        criteria.setKeyPayerId(keyPayerFilter);
 
         Page<Event> page = eventQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -161,7 +194,8 @@ public class EventResource {
      * {@code GET  /events/count} : count all the events.
      *
      * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count
+     *         in body.
      */
     @GetMapping("/count")
     public ResponseEntity<Long> countEvents(EventCriteria criteria) {
@@ -173,7 +207,8 @@ public class EventResource {
      * {@code GET  /events/:id} : get the "id" event.
      *
      * @param id the id of the event to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the event, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the event, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Event> getEvent(@PathVariable("id") Long id) {

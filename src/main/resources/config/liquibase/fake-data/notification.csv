@@ -1,11 +1,11 @@
 id;message;notification_type;is_read;created_at;user_id
 1;fooey brightly;OTHER;true;2025-03-19T06:36:10;1
 2;interchange though;BUDGET_EXCEEDED;true;2025-03-19T22:52:25;2
-3;after gee;OTHER;true;2025-03-19T15:33:59;2
+3;after gee;OTHER;true;2025-03-19T15:33:59;1
 4;now finally;BUDGET_EXCEEDED;true;2025-03-20T01:37:52;1
 5;woot whereas in-joke;BUDGET_EXCEEDED;true;2025-03-19T18:33:23;1
-6;concerning even;OTHER;false;2025-03-19T11:30:07;1
-7;till;OTHER;false;2025-03-19T15:08:33;1
-8;drain;OTHER;true;2025-03-19T16:49:09;1
+6;concerning even;OTHER;false;2025-03-19T11:30:07;2
+7;till;OTHER;false;2025-03-19T15:08:33;2
+8;drain;OTHER;true;2025-03-19T16:49:09;2
 9;round wetly vivid;OTHER;false;2025-03-19T19:13:45;1
 10;on boohoo new;OTHER;true;2025-03-19T03:41:09;2

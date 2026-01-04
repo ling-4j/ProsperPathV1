@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Team.
@@ -27,7 +29,17 @@ public class Team implements Serializable {
     @Column(name = "created_at")
     private Instant createdAt;
 
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TeamMember> teamMembers = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+    public Set<TeamMember> getTeamMembers() {
+        return teamMembers;
+    }
+
+    public void setTeamMembers(Set<TeamMember> teamMembers) {
+        this.teamMembers = teamMembers;
+    }
 
     public Long getId() {
         return this.id;
@@ -68,7 +80,8 @@ public class Team implements Serializable {
         this.createdAt = createdAt;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -83,7 +96,8 @@ public class Team implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -91,9 +105,9 @@ public class Team implements Serializable {
     @Override
     public String toString() {
         return "Team{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", createdAt='" + getCreatedAt() + "'" +
-            "}";
+                "id=" + getId() +
+                ", name='" + getName() + "'" +
+                ", createdAt='" + getCreatedAt() + "'" +
+                "}";
     }
 }

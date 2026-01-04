@@ -30,6 +30,8 @@ public class MemberCriteria implements Serializable, Criteria {
 
     private InstantFilter createdAt;
 
+    private LongFilter userId;
+
     private Boolean distinct;
 
     public MemberCriteria() {}
@@ -39,6 +41,7 @@ public class MemberCriteria implements Serializable, Criteria {
         this.name = other.optionalName().map(StringFilter::copy).orElse(null);
         this.note = other.optionalNote().map(StringFilter::copy).orElse(null);
         this.createdAt = other.optionalCreatedAt().map(InstantFilter::copy).orElse(null);
+        this.userId = other.optionalUserId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
 
@@ -123,6 +126,25 @@ public class MemberCriteria implements Serializable, Criteria {
         this.createdAt = createdAt;
     }
 
+    public LongFilter getUserId() {
+        return userId;
+    }
+
+    public Optional<LongFilter> optionalUserId() {
+        return Optional.ofNullable(userId);
+    }
+
+    public LongFilter userId() {
+        if (userId == null) {
+            setUserId(new LongFilter());
+        }
+        return userId;
+    }
+
+    public void setUserId(LongFilter userId) {
+        this.userId = userId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -156,13 +178,14 @@ public class MemberCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(note, that.note) &&
             Objects.equals(createdAt, that.createdAt) &&
+            Objects.equals(userId, that.userId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, note, createdAt, distinct);
+        return Objects.hash(id, name, note, createdAt, userId, distinct);
     }
 
     // prettier-ignore
@@ -173,6 +196,7 @@ public class MemberCriteria implements Serializable, Criteria {
             optionalName().map(f -> "name=" + f + ", ").orElse("") +
             optionalNote().map(f -> "note=" + f + ", ").orElse("") +
             optionalCreatedAt().map(f -> "createdAt=" + f + ", ").orElse("") +
+            optionalUserId().map(f -> "userId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

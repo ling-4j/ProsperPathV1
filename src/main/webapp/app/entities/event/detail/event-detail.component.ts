@@ -33,7 +33,7 @@ export class EventDetailComponent {
       const ev = this.event();
       if (ev?.id) {
         this.loadBills();
-        this.loadBalances(); // ⭐⭐ QUAN TRỌNG
+        this.loadBalances();
       }
     });
   }

@@ -3,6 +3,7 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.repository.MemberRepository;
 import com.mycompany.myapp.service.criteria.MemberCriteria;
+import jakarta.persistence.criteria.JoinType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -86,6 +87,11 @@ public class MemberQueryService extends QueryService<Member> {
             }
             if (criteria.getCreatedAt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), Member_.createdAt));
+            }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(
+                    buildSpecification(criteria.getUserId(), root -> root.join(Member_.user, JoinType.LEFT).get(User_.id))
+                );
             }
         }
         return specification;
