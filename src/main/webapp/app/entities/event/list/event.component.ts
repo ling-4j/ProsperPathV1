@@ -33,7 +33,7 @@ export class EventComponent implements OnInit {
   sortState = sortStateSignal({});
   filters: IFilterOptions = new FilterOptions();
 
-  itemsPerPage = 9;
+  itemsPerPage = 8;
   totalItems = 0;
   page = 1;
 

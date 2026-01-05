@@ -3,16 +3,16 @@
     "event": {
       "home": {
         "title": "Sự kiện",
-        "refreshListLabel": "Refresh list",
+        "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm/Sửa Sự kiện",
-        "notFound": "No Events found"
+        "createOrEditLabel": "Thêm/Sửa",
+        "notFound": "Trống"
       },
-      "created": "Một Event mới được tạo với định danh {{ param }}",
-      "updated": "Một Event cập nhật với định danh {{ param }}",
-      "deleted": "Một Event đã xóa với định danh {{ param }}",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Event {{ id }}?"
+        "question": "Xác nhận xóa?"
       },
       "detail": {
         "title": "Sự kiện"

@@ -5,8 +5,8 @@
         "title": "Danh mục",
         "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới/cập nhật",
-        "notFound": "Không tìm thấy"
+        "createOrEditLabel": "Thêm/Sửa",
+        "notFound": "Trống"
       },
       "created": "Thêm mới thành công",
       "updated": "Cập nhật thành công",

@@ -5,8 +5,8 @@
         "title": "Ngân sách",
         "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm mới/cập nhật",
-        "notFound": "Không có Ngân sách nào"
+        "createOrEditLabel": "Thêm/Sửa",
+        "notFound": "Trống"
       },
       "created": "Thêm mới thành công",
       "updated": "Cập nhật thành công",

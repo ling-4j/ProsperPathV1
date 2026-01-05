@@ -3,9 +3,9 @@
     "bill": {
       "home": {
         "title": "BILL",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create Bill",
-        "createOrEditLabel": "Create/Edit Bill",
+        "refreshListLabel": "Refresh",
+        "createLabel": "New Bill",
+        "createOrEditLabel": "Create/Edit",
         "notFound": "No Bills yet",
         "add": "Add Bill"
       },

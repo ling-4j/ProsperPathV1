@@ -3,17 +3,17 @@
     "bill": {
       "home": {
         "title": "HÓA ĐƠN",
-        "refreshListLabel": "Refresh list",
+        "refreshListLabel": "Làm mới",
         "createLabel": "Thêm Bill",
-        "createOrEditLabel": "Thêm/Sửa Bill",
-        "notFound": "Chưa có Bill",
+        "createOrEditLabel": "Thêm/Sửa",
+        "notFound": "Trống",
         "add": "Thêm Bill"
       },
-      "created": "Một Bill mới được tạo với định danh {{ param }}",
-      "updated": "Một Bill cập nhật với định danh {{ param }}",
-      "deleted": "Một Bill đã xóa với định danh {{ param }}",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Bill {{ id }}?"
+        "question": "Xác nhận xóa?"
       },
       "splitBill": "Chia bill",
       "selectAll": "Chọn tất cả",

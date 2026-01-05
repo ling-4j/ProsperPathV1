@@ -3,16 +3,16 @@
     "teamMember": {
       "home": {
         "title": "Team Members",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Team Member",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Team Member",
-        "notFound": "No Team Members found"
+        "refreshListLabel": "Làm mới",
+        "createLabel": "Thêm mới",
+        "createOrEditLabel": "Thêm/Sửa",
+        "notFound": "Trống"
       },
-      "created": "Complete created",
-      "updated": "Complete updated",
-      "deleted": "Complete deleted",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Confirm delete?"
+        "question": "Xác nhận xóa?"
       },
       "detail": {
         "title": "Team Member"

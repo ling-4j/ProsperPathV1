@@ -3,16 +3,16 @@
     "team": {
       "home": {
         "title": "Nhóm",
-        "refreshListLabel": "Refresh list",
+        "refreshListLabel": "Làm mới",
         "createLabel": "Thêm mới",
-        "createOrEditLabel": "Thêm/Sửa Nhóm",
-        "notFound": "No Teams found"
+        "createOrEditLabel": "Thêm/Sửa",
+        "notFound": "Trống"
       },
-      "created": "Một Team mới được tạo với định danh {{ param }}",
-      "updated": "Một Team cập nhật với định danh {{ param }}",
-      "deleted": "Một Team đã xóa với định danh {{ param }}",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Team {{ id }}?"
+        "question": "Xác nhận xóa?"
       },
       "selectMem": "Chọn thành viên",
       "selectAll": "Chọn tất cả",

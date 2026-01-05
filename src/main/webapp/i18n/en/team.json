@@ -3,9 +3,9 @@
     "team": {
       "home": {
         "title": "Teams",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Team",
-        "createOrEditLabel": "Create/Edit Team",
+        "refreshListLabel": "Refresh",
+        "createLabel": "New Team",
+        "createOrEditLabel": "Create/Edit",
         "notFound": "No Teams found"
       },
       "created": "Complete created",

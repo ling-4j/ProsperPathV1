@@ -8,11 +8,11 @@
         "createOrEditLabel": "Thêm mới hoặc cập nhật Event Balance",
         "notFound": "Chưa có data"
       },
-      "created": "Một Event Balance mới được tạo với định danh {{ param }}",
-      "updated": "Một Event Balance cập nhật với định danh {{ param }}",
-      "deleted": "Một Event Balance đã xóa với định danh {{ param }}",
+      "created": "Thêm mới thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": " Xóa thành công",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Event Balance {{ id }}?"
+        "question": "Xác nhận xóa?"
       },
       "detail": {
         "title": "Kết quả"

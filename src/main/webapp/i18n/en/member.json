@@ -3,9 +3,9 @@
     "member": {
       "home": {
         "title": "Members",
-        "refreshListLabel": "Refresh list",
+        "refreshListLabel": "Refresh",
         "createLabel": "New Member",
-        "createOrEditLabel": "Create/Edit Member",
+        "createOrEditLabel": "Create/Edit",
         "notFound": "No Members found"
       },
       "created": "Complete created",

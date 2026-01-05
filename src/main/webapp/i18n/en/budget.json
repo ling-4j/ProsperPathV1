@@ -5,7 +5,7 @@
         "title": "Budgets",
         "refreshListLabel": "Refresh",
         "createLabel": "New Budget",
-        "createOrEditLabel": "Create or edit Budget",
+        "createOrEditLabel": "Create/Edit",
         "notFound": "No Budgets found"
       },
       "created": "Complete created",

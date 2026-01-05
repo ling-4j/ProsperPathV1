@@ -3,9 +3,9 @@
     "event": {
       "home": {
         "title": "Events",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Event",
-        "createOrEditLabel": "Create/edit Event",
+        "refreshListLabel": "Refresh",
+        "createLabel": "New Event",
+        "createOrEditLabel": "Create/Edit",
         "notFound": "No Events found"
       },
       "created": "Complete created",

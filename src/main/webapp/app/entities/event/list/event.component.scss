@@ -27,8 +27,8 @@ $font-base:
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
-  gap: 8px;
-  height: 84vh;
+  gap: 20px;
+  height: 83.9vh;
   overflow: hidden;
 
   @media (max-width: $xl) {
@@ -49,12 +49,15 @@ $font-base:
   border: 1px solid $border-color;
   border-radius: 10px;
   padding: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .div1 {
   grid-column: span 4;
   grid-row: span 5;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .div2 {
@@ -93,18 +96,7 @@ h2 {
   color: $teal;
 }
 
-.btn-primary {
-  border-radius: 8px;
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: color.adjust(#20c997, $lightness: -10%);
-    transform: scale(1.05);
-  }
-}
-
+.btn-primary,
 .btn-warning {
   border-radius: 8px;
   font-size: 0.9rem;
@@ -112,79 +104,122 @@ h2 {
   transition: all 0.3s ease;
 
   &:hover {
-    background: color.adjust($info, $lightness: -10%);
     transform: scale(1.05);
   }
 }
 
+.btn-primary:hover {
+  background: color.adjust(#20c997, $lightness: -10%);
+}
+
+.btn-warning:hover {
+  background: color.adjust($info, $lightness: -10%);
+}
+
 .card-list {
-  margin-top: 30px;
-  padding: 15px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  padding: 30px 20px;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  min-height: 60vh;
 }
 
 .event-card {
-  background: #fcf4f4;
-  border: 1px solid $border-color;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
   font-family: $font-base;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: 0.25s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  width: 320px;
+  height: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-    background: $hover-bg;
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, rgba(32, 201, 151, 0.15), rgba(255, 255, 255, 0.75));
+    border: 1px solid rgba(32, 201, 151, 0.25);
 
     .action-buttons {
       opacity: 1;
-      visibility: visible;
+      transform: translateY(0);
     }
   }
 
   .card-body {
-    padding: 1rem;
+    padding: 2rem 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+  }
 
-    .card-subTitle {
-      font-size: 2rem;
-      font-weight: 500;
-      color: $text-dark;
-    }
+  .card-subTitle {
+    font-size: 3rem;
+    font-weight: 600;
+    color: $teal;
+    margin-bottom: 0.8rem;
+    opacity: 0.9;
+    box-shadow: 0 6px 16px 10px rgba(0, 0, 0, 0.08);
+    border-radius: 15px;
+    padding: 8px;
+  }
 
-    .card-title {
-      font-size: 1.5rem;
-      font-weight: 700;
+  .card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin-bottom: 1.2rem;
+    line-height: 1.3;
+  }
+
+  .card-text {
+    font-size: 1.8rem;
+    color: $text-dark;
+    opacity: 0.85;
+    margin-bottom: 0.8rem;
+
+    strong {
       color: $teal;
-    }
-
-    .card-text {
-      font-size: 1.2rem;
-      color: $text-dark;
+      font-weight: 600;
     }
   }
 
   .action-buttons {
     position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 16px;
+    transform: translateY(10px);
     display: flex;
-    gap: 0.5rem;
+    gap: 12px;
     opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: 0.25s ease;
+    transition: all 0.3s ease;
 
     .btn {
-      pointer-events: all;
-      font-size: 0.8rem;
-      padding: 0.35rem 0.6rem;
-      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.12);
+      }
 
       &.edit-btn {
         background: $primary;
@@ -195,7 +230,7 @@ h2 {
         }
       }
 
-      &.delete-btn {
+      &.btn-delete {
         background: $danger;
         color: $white;
 
@@ -207,81 +242,96 @@ h2 {
   }
 }
 
+/* Pagination Arrows */
 .carousel-pagination {
   pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+  z-index: 10;
 }
 
 .nav-btn {
   pointer-events: all;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: none;
-  background: rgba(33, 37, 41, 0.75);
+  background: rgba(33, 37, 41, 0.8);
   color: $white;
-  font-size: 22px;
+  font-size: 24px;
   cursor: pointer;
-  transition: 0.2s ease;
-  z-index: 5;
+  transition: 0.3s ease;
 
   &:hover:not(:disabled) {
-    background: rgba(33, 37, 41, 0.95);
-    transform: translateY(-50%) scale(1.1);
+    background: rgba(33, 37, 41, 1);
+    transform: scale(1.15);
   }
 
   &:disabled {
-    opacity: 0.25;
-  }
-
-  &.left {
-    left: -18px;
-  }
-
-  &.right {
-    right: -18px;
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 }
 
+/* Responsive Adjustments */
 @media (max-width: $xl) {
   .card-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
   }
 }
 
 @media (max-width: $md) {
   .card-list {
     grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  .event-card {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    min-height: 280px;
   }
 
   .carousel-pagination {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-    pointer-events: all;
+    position: static;
+    transform: none;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 0;
   }
 
   .nav-btn {
     position: static;
-    transform: none;
+    width: 50px;
+    height: 50px;
+    font-size: 28px;
   }
 }
 
 @media (max-width: $sm) {
   .event-card {
+    .card-subTitle {
+      font-size: 3rem;
+    }
+
     .card-title {
-      font-size: 1rem;
+      font-size: 2rem;
     }
 
     .card-text {
-      font-size: 0.85rem;
+      font-size: 1.8rem;
     }
 
     .action-buttons {
-      bottom: 6px;
-      gap: 0.4rem;
+      bottom: 8px;
     }
   }
 }

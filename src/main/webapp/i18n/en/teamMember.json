@@ -3,9 +3,9 @@
     "teamMember": {
       "home": {
         "title": "Team Members",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Team Member",
-        "createOrEditLabel": "Create or edit a Team Member",
+        "refreshListLabel": "Refresh",
+        "createLabel": "New Member",
+        "createOrEditLabel": "Create/Edit",
         "notFound": "No Team Members found"
       },
       "created": "Complete created",

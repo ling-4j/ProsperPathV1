@@ -4,7 +4,7 @@
 <div class="parent">
   <!-- Main Event Card List -->
   <div class="div1">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center">
       <h2 class="title" data-cy="EventHeading" jhiTranslate="prosperPathApp.event.home.title">Events</h2>
       <div class="button-alignment-container d-flex gap-2">
         <button class="btn btn-warning" (click)="refresh()" [disabled]="isLoading">
@@ -21,17 +21,17 @@
       <span jhiTranslate="prosperPathApp.event.home.notFound">No Events found</span>
     </div>
 
-    <!-- Event Cards -->
-    <div *ngIf="events().length > 0" class="card-list">
+    <!-- Event Cards - Centered Grid -->
+    <div *ngIf="events().length > 0" class="card-list" #cardList>
       <div *ngFor="let event of events(); trackBy: trackId" class="event-card" (click)="handleEventClick(event)">
-        <div class="card-body d-flex flex-column">
+        <div class="card-body">
           <h5 class="card-subTitle">{{ event.createdAt | formatMediumDate }}</h5>
           <h5 class="card-title">{{ event.name ? (event.name | truncate: 18) : '' }}</h5>
           <p class="card-text mb-1">
             <strong jhiTranslate="prosperPathApp.event.team">Team:</strong>
             <span *ngIf="event.team"
-              ><b> {{ event.team.name }}</b>
-            </span>
+              ><b>{{ event.team.name }}</b></span
+            >
             <span *ngIf="!event.team">—</span>
           </p>
           <p class="card-text mb-2">
@@ -60,9 +60,9 @@
       </div>
     </div>
 
+    <!-- Pagination Arrows -->
     <div *ngIf="events().length > 0" class="carousel-pagination">
       <button class="nav-btn left" [disabled]="page === 1" (click)="navigateToPage(page - 1)">‹</button>
-
       <button class="nav-btn right" [disabled]="page * itemsPerPage >= totalItems" (click)="navigateToPage(page + 1)">›</button>
     </div>
   </div>
