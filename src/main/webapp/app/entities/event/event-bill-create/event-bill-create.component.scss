@@ -1,6 +1,10 @@
 .bill-add-container {
+  min-height: 90vh;
+  align-items: center;
+
   .bill-title {
-    color: #20c997; /* Teal */
+    color: #20c997;
+    /* Teal */
     font-weight: bold;
     font-size: 1.6rem;
   }
@@ -33,7 +37,8 @@
       }
 
       .btn-save {
-        background-color: #ffc107; /* Yellow */
+        background-color: #ffc107;
+        /* Yellow */
         color: white;
         border: none;
         padding: 0.5rem 1.5rem;

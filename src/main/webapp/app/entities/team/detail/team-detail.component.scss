@@ -22,7 +22,7 @@ $breakpoint-lg: 992px;
 $breakpoint-ipad-pro: 1024px;
 
 .team-container {
-  min-height: 84vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,10 +41,8 @@ $breakpoint-ipad-pro: 1024px;
   }
 
   .col-lg-3 {
-    width: auto;
-
     @media (min-width: $breakpoint-lg) {
-      max-width: 25%;
+      max-width: 55%;
     }
 
     @media (max-width: $breakpoint-ipad-pro) {
@@ -102,44 +100,14 @@ $breakpoint-ipad-pro: 1024px;
     }
 
     .jh-entity-details {
-      dt {
-        font-size: 1rem;
-        font-weight: 500;
-        color: $dark-text;
-        margin-bottom: 0.5rem;
-
-        @media (max-width: $breakpoint-ipad-pro) {
-          font-size: 0.95rem;
-        }
-
-        @media (max-width: $breakpoint-md) {
-          font-size: 0.9rem;
-        }
-
-        @media (max-width: $breakpoint-sm) {
-          font-size: 0.85rem;
-        }
-      }
-
       dd {
-        font-size: 1rem;
-        color: $dark-text;
+        font-size: 2rem;
+        color: $primary;
         margin-bottom: 1rem;
         padding: 0.75rem;
         border-radius: 5px;
-        background-color: $light;
-
-        @media (max-width: $breakpoint-ipad-pro) {
-          font-size: 0.95rem;
-        }
-
-        @media (max-width: $breakpoint-md) {
-          font-size: 0.9rem;
-        }
-
-        @media (max-width: $breakpoint-sm) {
-          font-size: 0.85rem;
-        }
+        text-align: center;
+        font-weight: bold;
       }
     }
 

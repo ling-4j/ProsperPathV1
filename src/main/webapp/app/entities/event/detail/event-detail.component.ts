@@ -62,6 +62,6 @@ export class EventDetailComponent {
   }
 
   previousState(): void {
-    window.history.back();
+    this.router.navigate(['/event']);
   }
 }

@@ -23,29 +23,18 @@ $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 
 .notification-container {
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  padding: 2rem; // Dùng rem để co giãn linh hoạt
-  min-height: 80vh; // Đảm bảo chiều cao tối thiểu
-
-  // Responsive cho container
-  @media (max-width: $breakpoint-md) {
-    padding: 1rem;
-    min-height: 60vh; // Giảm chiều cao trên mobile
-  }
-
-  @media (max-width: $breakpoint-sm) {
-    padding: 0.5rem;
-    min-height: 50vh;
-  }
+  margin: 10px;
 
   .notification-title {
     color: $primary;
     font-weight: 700;
     font-size: 1.75rem;
-    text-align: center; // Căn giữa tiêu đề
+    text-align: center;
 
     // Responsive cho tiêu đề
     @media (max-width: $breakpoint-md) {
@@ -58,26 +47,26 @@ $breakpoint-xl: 1200px;
 
   .block {
     background-color: $light;
-    padding: 2rem; // Dùng rem
+    padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     font-family: $font-family-base;
-    border: 1px solid $border-color; // Thêm viền nhẹ
+    border: 1px solid $border-color;
 
     // Responsive cho block
     @media (max-width: $breakpoint-md) {
       padding: 1.5rem;
-      max-width: 90%; // Giảm chiều rộng trên tablet
+      max-width: 90%;
     }
     @media (max-width: $breakpoint-sm) {
       padding: 1rem;
-      max-width: 100%; // Toàn màn hình trên mobile
+      max-width: 100%;
     }
 
     .icon-container {
       .warning-icon {
-        font-size: 2.5rem; // Tăng kích thước icon
+        font-size: 2.5rem;
 
         // Responsive cho icon
         @media (max-width: $breakpoint-md) {
@@ -126,7 +115,7 @@ $breakpoint-xl: 1200px;
         margin-bottom: 1.5rem;
         padding: 0.75rem; // Dùng rem
         border-radius: 5px;
-        background-color: #f9f9f9; // Nền nhẹ để làm nổi bật giá trị
+        background-color: #f9f9f9;
 
         // Responsive cho dd
         @media (max-width: $breakpoint-md) {
@@ -142,18 +131,18 @@ $breakpoint-xl: 1200px;
       .notification-message {
         font-size: 1.3rem;
         line-height: 1.6;
-        background-color: #f1f8ff; // Nền xanh nhạt nhẹ để làm nổi bật thông điệp
-        border-left: 4px solid $primary; // Viền trái xanh
-        text-align: justify; // Căn đều hai bên
+        background-color: #f1f8ff;
+        border-left: 4px solid $primary;
+        text-align: justify;
         // display: flex;
         align-items: center;
-        gap: 0.75rem; // Khoảng cách giữa các phần tử
-        flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
+        gap: 0.75rem;
+        flex-wrap: wrap;
 
         fa-icon {
           font-size: 1.1rem;
           color: $primary;
-          flex-shrink: 0; // Ngăn icon bị co lại
+          flex-shrink: 0;
 
           // Responsive cho icon
           @media (max-width: $breakpoint-sm) {
@@ -162,7 +151,7 @@ $breakpoint-xl: 1200px;
         }
 
         span {
-          flex-grow: 1; // Cho phép text giãn ra để lấp đầy không gian
+          flex-grow: 1;
 
           // Responsive cho text
           @media (max-width: $breakpoint-md) {
@@ -174,7 +163,6 @@ $breakpoint-xl: 1200px;
         }
 
         .fw-bold {
-          // Đảm bảo tên danh mục không bị xuống dòng không cần thiết
           white-space: nowrap;
         }
       }
@@ -195,7 +183,7 @@ $breakpoint-xl: 1200px;
 
     .action-buttons {
       .btn {
-        padding: 0.75rem 1.5rem; // Tăng padding cho nút
+        padding: 0.75rem 1.5rem;
         font-size: 1rem;
         transition: all 0.3s ease;
         border-radius: 30px;
@@ -211,7 +199,7 @@ $breakpoint-xl: 1200px;
         }
 
         &.btn-info {
-          background-color: #6c757d; // Màu xám cho nút Back
+          background-color: #6c757d;
           border-color: #6c757d;
           color: #fff;
 

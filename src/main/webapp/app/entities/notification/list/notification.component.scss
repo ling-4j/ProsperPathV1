@@ -26,7 +26,7 @@ $breakpoint-xl: 1200px;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  min-height: 84vh;
+  min-height: 90vh;
 
   // Responsive cho container
   @media (max-width: $breakpoint-md) {
@@ -58,7 +58,7 @@ $breakpoint-xl: 1200px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 800px; // Giới hạn chiều rộng tối đa trên desktop
+    max-width: 800px;
     font-family: $font-family-base;
 
     // Responsive cho block
@@ -136,11 +136,11 @@ $breakpoint-xl: 1200px;
           font-size: 1.1rem;
           color: $dark-text;
           line-height: 1.5;
-          text-align: justify; // Căn đều hai bên
+          text-align: justify;
           //   display: flex;
           align-items: center;
           gap: 0.75rem;
-          flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ
+          flex-wrap: wrap;
 
           fa-icon {
             font-size: 1.1rem;
@@ -167,7 +167,7 @@ $breakpoint-xl: 1200px;
           }
 
           .fw-bold {
-            white-space: nowrap; // Ngăn tên danh mục xuống dòng
+            white-space: nowrap;
           }
         }
 

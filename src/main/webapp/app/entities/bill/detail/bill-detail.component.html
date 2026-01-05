@@ -43,10 +43,10 @@
         </dl>
 
         <!-- Split Bill Section -->
-        <h4 class="section-title">Split Bill</h4>
+        <h4 class="section-title" jhiTranslate="prosperPathApp.bill.splitBill">Split Bill</h4>
         <div class="member-split-list mb-4">
           @if (members.length === 0) {
-            <div class="alert alert-info small py-2 text-center">No members available</div>
+            <div class="alert alert-info small py-2 text-center" jhiTranslate="prosperPathApp.bill.memAvailable">No members available</div>
           } @else {
             <!-- Select All Checkbox -->
             <div class="form-check mb-3 border-bottom pb-3">
@@ -57,7 +57,7 @@
                 [checked]="allSelected"
                 (change)="toggleSelectAll($event)"
               />
-              <label class="form-check-label fw-bold" for="select-all"> Select All </label>
+              <label class="form-check-label fw-bold" for="select-all" jhiTranslate="prosperPathApp.bill.selectAll"> Select All </label>
             </div>
 
             <!-- Members in 2 columns -->
@@ -82,7 +82,9 @@
           }
         </div>
 
-        <button class="btn btn-warning btn-sm w-100 mb-3" (click)="saveParticipants()">Save Split</button>
+        <button class="btn btn-warning btn-sm w-100 mb-3" (click)="saveParticipants()" jhiTranslate="prosperPathApp.bill.savaSplit">
+          Save Split
+        </button>
 
         <!-- Action Buttons -->
         <div class="action-buttons text-center">

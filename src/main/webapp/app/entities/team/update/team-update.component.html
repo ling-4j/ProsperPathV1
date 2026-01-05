@@ -22,16 +22,18 @@
 
         <!-- Members Selection -->
         <div class="mb-3">
-          <label class="form-label"> Select Members <span class="text-danger">*</span> </label>
+          <label class="form-label" jhiTranslate="prosperPathApp.team.selectMem"> Select Members <span class="text-danger">*</span> </label>
 
           <!-- Validation Message -->
           @if (selectedMembers.length === 0 && (editForm.touched || isSaving)) {
-            <small class="form-text text-danger d-block mb-2"> Please select at least one member. </small>
+            <small class="form-text text-danger d-block mb-2" jhiTranslate="prosperPathApp.team.memSelect">
+              Please select at least one member.
+            </small>
           }
 
           <!-- No Members Available -->
           @if (allMembers.length === 0) {
-            <div class="alert alert-info small py-2">No members available</div>
+            <div class="alert alert-info small py-2" jhiTranslate="prosperPathApp.team.memAvailable">No members available</div>
           } @else {
             <!-- Select All Checkbox -->
             <div class="form-check mb-2">
@@ -42,7 +44,9 @@
                 [checked]="isAllSelected"
                 (change)="toggleSelectAll($event)"
               />
-              <label class="form-check-label fw-bold" for="select-all-members"> Select All / Deselect All </label>
+              <label class="form-check-label fw-bold" for="select-all-members" jhiTranslate="prosperPathApp.team.selectAll">
+                Select All / Deselect All
+              </label>
             </div>
 
             <!-- Scrollable Member List -->

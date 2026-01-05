@@ -4,24 +4,29 @@
       <h1 data-cy="teamTitle" jhiTranslate="prosperPathApp.team.detail.title" class="team-title mb-4">Team Details</h1>
 
       <div class="block">
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="prosperPathApp.team.name">Team Name</span></dt>
+        <dl class="jh-entity-details">
           <dd>
             <span>{{ teamRef.name }}</span>
           </dd>
         </dl>
 
         <!-- Current Team Members - 2 Columns -->
-        <h4 class="mt-4 mb-3">Members in this team</h4>
+        <h4 class="mt-4 mb-3" jhiTranslate="prosperPathApp.team.mem">Members in this team</h4>
         @if (teamMembers.length === 0) {
-          <div class="alert alert-warning small py-2">No members in this team</div>
+          <div class="alert alert-warning small py-2" jhiTranslate="prosperPathApp.team.memDetail">No members in this team</div>
         } @else {
           <div class="row g-2 member-grid">
             @for (tm of teamMembers; track tm.id) {
               <div class="col-6">
                 <div class="member-item d-flex justify-content-between align-items-center p-2 bg-light rounded">
                   <span class="text-truncate">{{ tm.member?.name }}</span>
-                  <button class="btn btn-sm btn-outline-danger ms-2 flex-shrink-0" (click)="removeMember(tm)">Remove</button>
+                  <button
+                    class="btn btn-sm btn-outline-danger ms-2 flex-shrink-0"
+                    (click)="removeMember(tm)"
+                    jhiTranslate="prosperPathApp.team.remove"
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             }
@@ -29,16 +34,22 @@
         }
 
         <!-- Add Members - 2 Columns -->
-        <h4 class="mt-4 mb-3">Add members</h4>
+        <h4 class="mt-4 mb-3" jhiTranslate="prosperPathApp.team.memAdd">Add members</h4>
         @if (availableMembers.length === 0) {
-          <div class="alert alert-info small py-2">All members are already in this team</div>
+          <div class="alert alert-info small py-2" jhiTranslate="prosperPathApp.team.memAlready">All members are already in this team</div>
         } @else {
           <div class="row g-2 member-grid">
             @for (member of availableMembers; track member.id) {
               <div class="col-6">
                 <div class="member-item d-flex justify-content-between align-items-center p-2 bg-white border rounded">
                   <span class="text-truncate">{{ member.name }}</span>
-                  <button class="btn btn-sm btn-success ms-2 flex-shrink-0" (click)="addMember(member)">Add</button>
+                  <button
+                    class="btn btn-sm btn-success ms-2 flex-shrink-0"
+                    (click)="addMember(member)"
+                    jhiTranslate="prosperPathApp.team.add"
+                  >
+                    Add
+                  </button>
                 </div>
               </div>
             }

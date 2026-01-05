@@ -29,12 +29,12 @@ $breakpoint-xl: 1200px;
 $breakpoint-ipad-pro: 1024px;
 
 .budget-container {
-  min-height: 84vh; // Đảm bảo chiều cao tối thiểu
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  padding: 2rem; // Dùng rem để co giãn linh hoạt
+  padding: 2rem;
 
   // Responsive cho container
   @media (max-width: $breakpoint-ipad-pro) {
@@ -48,14 +48,13 @@ $breakpoint-ipad-pro: 1024px;
   }
 
   .col-lg-3 {
-    width: auto; // Đảm bảo container chiếm toàn bộ chiều rộng trên iPad Pro
-    // max-width: 700px; // Giới hạn chiều rộng tối đa cho iPad Pro
+    width: auto;
 
     @media (min-width: $breakpoint-lg) {
-      max-width: 25%; // Giữ col-lg-3 trên PC
+      max-width: 25%;
     }
     @media (max-width: $breakpoint-ipad-pro) {
-      max-width: 90%; // Mở rộng chiều rộng trên iPad Pro
+      max-width: 90%;
     }
     @media (max-width: $breakpoint-md) {
       max-width: 95%;
@@ -66,11 +65,11 @@ $breakpoint-ipad-pro: 1024px;
   }
 
   .budget-title {
-    color: $teal !important; // Sử dụng biến $teal với !important để tăng độ ưu tiên
+    color: $teal !important;
     font-weight: bold;
     font-size: 1.75rem;
-    text-align: center; // Căn giữa tiêu đề
-    margin-bottom: 1.5rem; // Thêm khoảng cách dưới tiêu đề
+    text-align: center;
+    margin-bottom: 1.5rem;
 
     // Responsive cho tiêu đề
     @media (max-width: $breakpoint-ipad-pro) {
@@ -129,11 +128,11 @@ $breakpoint-ipad-pro: 1024px;
       dd {
         font-size: 1rem;
         color: $dark-text;
-        margin-bottom: 1rem; // Giảm khoảng cách, tương tự settings
+        margin-bottom: 1rem;
         padding: 0.75rem;
         border-radius: 5px;
-        background-color: $light; // Nền nhẹ
-        gap: 0.5rem; // Khoảng cách giữa icon và text
+        background-color: $light;
+        gap: 0.5rem;
 
         fa-icon {
           font-size: 1rem;
@@ -168,13 +167,12 @@ $breakpoint-ipad-pro: 1024px;
 
     .action-buttons {
       text-align: center;
-      margin-top: 1.5rem; // Thêm khoảng cách trên
-
+      margin-top: 1.5rem;
       .btn {
-        padding: 0.6rem 1.5rem; // Tương tự padding của nút save trong settings
-        font-size: 0.875rem; // Tương tự settings
+        padding: 0.6rem 1.5rem;
+        font-size: 0.875rem;
         transition: all 0.3s ease;
-        border-radius: 5px; // Đồng bộ với settings
+        border-radius: 5px;
         margin: 0.25rem;
 
         // Responsive cho button

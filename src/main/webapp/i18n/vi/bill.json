@@ -6,7 +6,7 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Thêm Bill",
         "createOrEditLabel": "Thêm/Sửa Bill",
-        "notFound": "No Bills found",
+        "notFound": "Chưa có Bill",
         "add": "Thêm Bill"
       },
       "created": "Một Bill mới được tạo với định danh {{ param }}",
@@ -15,15 +15,19 @@
       "delete": {
         "question": "Bạn có chắc là muốn xóa Bill {{ id }}?"
       },
+      "splitBill": "Chia bill",
+      "selectAll": "Chọn tất cả",
+      "savaSplit": "Lưu chia bill",
       "detail": {
         "title": "Hóa đơn"
       },
       "id": "ID",
-      "name": "Tên",
+      "name": "Tên Bill",
       "amount": "Số tiền",
       "createdAt": "Ngày tạo",
       "event": "Sự kiện",
-      "payer": "Người trả"
+      "payer": "Người trả",
+      "memAvailable": "Không có thành viên"
     }
   }
 }

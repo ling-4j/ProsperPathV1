@@ -6,7 +6,7 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Event Balance",
         "createOrEditLabel": "Create or edit a Event Balance",
-        "notFound": "No Event Balances found"
+        "notFound": "No data yet"
       },
       "created": "Complete created",
       "updated": "Complete updated",
@@ -23,7 +23,7 @@
       "balance": "Balance",
       "event": "Event",
       "member": "Member",
-      "result": "result",
+      "result": "Result",
       "sentTo": "Sent to {{name}}: {{amount}}",
       "receiveBy": "Receive by {{name}}: {{amount}}",
       "qrCode": "QR code"

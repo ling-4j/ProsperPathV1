@@ -29,187 +29,194 @@ $breakpoint-xl: 1200px;
 $breakpoint-ipad-pro: 1024px;
 
 .category-container {
-  min-height: 84vh; // Đảm bảo chiều cao tối thiểu
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  padding: 2rem; // Dùng rem để co giãn linh hoạt
+  padding: 2rem;
 
   // Responsive cho container
   @media (max-width: $breakpoint-ipad-pro) {
     padding: 1.5rem;
   }
+
   @media (max-width: $breakpoint-md) {
     padding: 1rem;
   }
+
   @media (max-width: $breakpoint-sm) {
     padding: 0.5rem;
   }
 
   .col-lg-3 {
-    width: auto; // Đảm bảo container chiếm toàn bộ chiều rộng trên iPad Pro
-    // max-width: 700px; // Giới hạn chiều rộng tối đa cho iPad Pro
+    width: auto;
 
     @media (min-width: $breakpoint-lg) {
-      max-width: 25%; // Giữ col-lg-3 trên PC
+      max-width: 25%;
     }
+
     @media (max-width: $breakpoint-ipad-pro) {
-      max-width: 90%; // Mở rộng chiều rộng trên iPad Pro
-    }
-    @media (max-width: $breakpoint-md) {
-      max-width: 95%;
-    }
-    @media (max-width: $breakpoint-sm) {
-      max-width: 100%;
-    }
-  }
-
-  .category-title {
-    color: $teal !important; // Sử dụng biến $teal với !important để tăng độ ưu tiên
-    font-weight: bold;
-    font-size: 1.75rem;
-    text-align: center; // Căn giữa tiêu đề
-    margin-bottom: 1.5rem; // Thêm khoảng cách dưới tiêu đề
-
-    // Responsive cho tiêu đề
-    @media (max-width: $breakpoint-ipad-pro) {
-      font-size: 1.5rem;
-    }
-    @media (max-width: $breakpoint-md) {
-      font-size: 1.4rem;
-    }
-    @media (max-width: $breakpoint-sm) {
-      font-size: 1.25rem;
-    }
-  }
-
-  .block {
-    background-color: $white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    font-family: $font-family-base;
-    border: 1px solid $border-color;
-
-    // Responsive cho block
-    @media (max-width: $breakpoint-ipad-pro) {
-      padding: 1.2rem;
-    }
-    @media (max-width: $breakpoint-md) {
-      padding: 1rem;
-    }
-    @media (max-width: $breakpoint-sm) {
-      padding: 0.75rem;
+      max-width: 90%;
     }
 
-    .jh-entity-details {
-      dt {
-        font-size: 1rem; // Tương tự settings
-        font-weight: 500;
-        color: $dark-text;
-        margin-bottom: 0.5rem;
-        text-align: left;
-        align-items: center;
-        display: flex;
+    .category-title {
+      color: $teal !important;
+      font-weight: bold;
+      font-size: 1.75rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
 
-        // Responsive cho dt
-        @media (max-width: $breakpoint-ipad-pro) {
-          font-size: 0.95rem;
-        }
-        @media (max-width: $breakpoint-md) {
-          font-size: 0.9rem;
-        }
-        @media (max-width: $breakpoint-sm) {
-          font-size: 0.85rem;
-        }
+      // Responsive cho tiêu đề
+      @media (max-width: $breakpoint-ipad-pro) {
+        font-size: 1.5rem;
       }
 
-      dd {
-        font-size: 1rem;
-        color: $dark-text;
-        margin-bottom: 1rem; // Giảm khoảng cách, tương tự settings
+      @media (max-width: $breakpoint-md) {
+        font-size: 1.4rem;
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 1.25rem;
+      }
+    }
+
+    .block {
+      background-color: $white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      font-family: $font-family-base;
+      border: 1px solid $border-color;
+
+      // Responsive cho block
+      @media (max-width: $breakpoint-ipad-pro) {
+        padding: 1.2rem;
+      }
+
+      @media (max-width: $breakpoint-md) {
+        padding: 1rem;
+      }
+
+      @media (max-width: $breakpoint-sm) {
         padding: 0.75rem;
-        border-radius: 5px;
-        background-color: $light; // Nền nhẹ
-        gap: 0.5rem; // Khoảng cách giữa icon và text
+      }
 
-        fa-icon {
+      .jh-entity-details {
+        dt {
           font-size: 1rem;
-          color: $primary;
-          flex-shrink: 0;
+          font-weight: 500;
+          color: $dark-text;
+          margin-bottom: 0.5rem;
+          text-align: left;
+          align-items: center;
+          display: flex;
 
-          // Responsive cho icon
+          // Responsive cho dt
           @media (max-width: $breakpoint-ipad-pro) {
             font-size: 0.95rem;
           }
-          @media (max-width: $breakpoint-sm) {
-            font-size: 0.9rem;
-          }
-        }
 
-        span {
-          flex-grow: 1;
-
-          // Responsive cho text
-          @media (max-width: $breakpoint-ipad-pro) {
-            font-size: 0.95rem;
-          }
           @media (max-width: $breakpoint-md) {
             font-size: 0.9rem;
           }
+
           @media (max-width: $breakpoint-sm) {
             font-size: 0.85rem;
           }
         }
-      }
-    }
 
-    .action-buttons {
-      text-align: center;
-      margin-top: 1.5rem; // Thêm khoảng cách trên
+        dd {
+          font-size: 1rem;
+          color: $dark-text;
+          margin-bottom: 1rem;
+          padding: 0.75rem;
+          border-radius: 5px;
+          background-color: $light;
+          gap: 0.5rem;
 
-      .btn {
-        padding: 0.6rem 1.5rem; // Tương tự padding của nút save trong settings
-        font-size: 0.875rem; // Tương tự settings
-        transition: all 0.3s ease;
-        border-radius: 5px; // Đồng bộ với settings
-        margin: 0.25rem;
+          fa-icon {
+            font-size: 1rem;
+            color: $primary;
+            flex-shrink: 0;
 
-        // Responsive cho button
-        @media (max-width: $breakpoint-ipad-pro) {
-          padding: 0.5rem 1.3rem;
-          font-size: 0.85rem;
-        }
-        @media (max-width: $breakpoint-md) {
-          padding: 0.5rem 1.2rem;
-          font-size: 0.8rem;
-        }
-        @media (max-width: $breakpoint-sm) {
-          padding: 0.4rem 1rem;
-          font-size: 0.75rem;
-        }
+            // Responsive cho icon
+            @media (max-width: $breakpoint-ipad-pro) {
+              font-size: 0.95rem;
+            }
 
-        &.btn-info {
-          background-color: #6c757d;
-          border-color: #6c757d;
-          color: $white;
+            @media (max-width: $breakpoint-sm) {
+              font-size: 0.9rem;
+            }
+          }
 
-          &:hover {
-            background-color: color.adjust(#6c757d, $lightness: -10%);
-            border-color: color.adjust(#6c757d, $lightness: -10%);
+          span {
+            flex-grow: 1;
+
+            // Responsive cho text
+            @media (max-width: $breakpoint-ipad-pro) {
+              font-size: 0.95rem;
+            }
+
+            @media (max-width: $breakpoint-md) {
+              font-size: 0.9rem;
+            }
+
+            @media (max-width: $breakpoint-sm) {
+              font-size: 0.85rem;
+            }
           }
         }
+      }
 
-        &.btn-primary {
-          background-color: $primary;
-          border-color: $primary;
-          color: $white;
+      .action-buttons {
+        text-align: center;
+        margin-top: 1.5rem;
 
-          &:hover {
-            background-color: color.adjust($primary, $lightness: -10%);
-            border-color: color.adjust($primary, $lightness: -10%);
+        .btn {
+          padding: 0.6rem 1.5rem;
+          font-size: 0.875rem;
+          transition: all 0.3s ease;
+          border-radius: 5px;
+          margin: 0.25rem;
+
+          // Responsive cho button
+          @media (max-width: $breakpoint-ipad-pro) {
+            padding: 0.5rem 1.3rem;
+            font-size: 0.85rem;
+          }
+
+          @media (max-width: $breakpoint-md) {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
+          }
+
+          @media (max-width: $breakpoint-sm) {
+            padding: 0.4rem 1rem;
+            font-size: 0.75rem;
+          }
+
+          &.btn-info {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: $white;
+
+            &:hover {
+              background-color: color.adjust(#6c757d, $lightness: -10%);
+              border-color: color.adjust(#6c757d, $lightness: -10%);
+            }
+          }
+
+          &.btn-primary {
+            background-color: $primary;
+            border-color: $primary;
+            color: $white;
+
+            &:hover {
+              background-color: color.adjust($primary, $lightness: -10%);
+              border-color: color.adjust($primary, $lightness: -10%);
+            }
           }
         }
       }

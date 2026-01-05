@@ -14,12 +14,22 @@
       "delete": {
         "question": "Bạn có chắc là muốn xóa Team {{ id }}?"
       },
+      "selectMem": "Chọn thành viên",
+      "selectAll": "Chọn tất cả",
+      "add": "Thêm",
+      "remove": "Xóa",
       "detail": {
         "title": "Nhóm"
       },
       "id": "ID",
       "name": "Tên nhóm",
-      "createdAt": "Ngày tạo"
+      "createdAt": "Ngày tạo",
+      "memAdd": "Thêm thành viên",
+      "mem": "Thành viên nhóm",
+      "memDetail": "Không có thành viên",
+      "memAlready": "Toàn bộ đã là thành viên",
+      "memSelect": "Hãy chọn ít nhất 1 thành viên",
+      "memAvailable": "Không có thành viên"
     }
   }
 }

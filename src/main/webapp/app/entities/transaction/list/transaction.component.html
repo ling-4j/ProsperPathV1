@@ -60,7 +60,7 @@
               id="jh-import-entity-mobile"
               data-cy="entityImportButtonMobile"
               class="btn btn-info jh-import-entity import-transaction"
-              [routerLink]="['/transaction/import']"
+              (click)="openImport()"
             >
               <fa-icon icon="upload"></fa-icon>
             </button>

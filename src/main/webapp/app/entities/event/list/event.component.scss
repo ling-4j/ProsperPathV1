@@ -31,12 +31,14 @@ $font-base:
   height: 84vh;
   overflow: hidden;
 
-  @media (max-width: $md) {
+  @media (max-width: $xl) {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
-    height: auto;
     padding: 10px;
     overflow: visible;
+    height: 88vh;
+    justify-content: center;
+    align-items: center;
   }
 }
 

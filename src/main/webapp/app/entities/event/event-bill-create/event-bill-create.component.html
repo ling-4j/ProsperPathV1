@@ -1,23 +1,42 @@
 <div class="bill-add-container d-flex justify-content-center py-4">
   <div class="col-lg-4 col-md-6 col-sm-8 bg-light p-4 shadow-sm rounded-4">
-    <h2 class="bill-title text-center mb-4">Create Bill</h2>
+    <h2 class="bill-title text-center mb-4" jhiTranslate="prosperPathApp.bill.home.createLabel">Create Bill</h2>
 
     <form [formGroup]="editForm" (ngSubmit)="save()" class="form">
       <!-- Bill Name -->
+      @let nameRef = editForm.get('name')!;
       <div class="mb-3">
-        <label class="form-label"> Bill name <span class="text-danger">*</span> </label>
+        <label class="form-label" jhiTranslate="prosperPathApp.bill.name"> Name <span class="text-danger">*</span> </label>
         <input type="text" class="form-control" formControlName="name" placeholder="Enter bill name" />
+        @if (nameRef.invalid && (nameRef.dirty || nameRef.touched)) {
+          <div>
+            @if (nameRef.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required"> This field is required. </small>
+            }
+          </div>
+        }
       </div>
 
       <!-- Amount -->
+      @let amountRef = editForm.get('amount')!;
       <div class="mb-3">
-        <label class="form-label"> Amount <span class="text-danger">*</span> </label>
+        <label class="form-label" jhiTranslate="prosperPathApp.bill.amount"> Amount <span class="text-danger">*</span> </label>
         <input type="number" class="form-control" formControlName="amount" jhiNumberFormat placeholder="0.00" step="0.01" />
+        @if (amountRef.invalid && (amountRef.dirty || amountRef.touched)) {
+          <div>
+            @if (amountRef.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required"> This field is required. </small>
+            }
+            @if (amountRef.errors?.number) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.number"> This field should be a number. </small>
+            }
+          </div>
+        }
       </div>
 
       <!-- Payer -->
       <div class="mb-3">
-        <label class="form-label"> Payer <span class="text-danger">*</span> </label>
+        <label class="form-label" jhiTranslate="prosperPathApp.bill.payer"> Payer <span class="text-danger">*</span> </label>
         <select class="form-control" formControlName="payer">
           <option [ngValue]="null">-- Select a Payer --</option>
           @for (m of members; track m.id) {

@@ -19,16 +19,24 @@ $font-family-base:
   sans-serif;
 
 $sm: 576px;
-$md: 768px;
+$md: 850px;
+$xl: 1200px;
 
 .parent {
-  height: 84vh;
+  height: 83.9vh;
   // min-height: 84vh;
   display: grid;
   grid-template-columns: 3fr 2fr;
   grid-template-rows: auto auto;
   gap: 20px;
   overflow: hidden;
+
+  @media (min-width: $md) and (max-width: $xl) {
+    grid-template: auto auto auto/1fr;
+    gap: 15px;
+    height: 87vh;
+    padding: 10px;
+  }
 
   @media (max-width: $md) {
     grid-template: auto auto auto/1fr;
@@ -79,7 +87,7 @@ $md: 768px;
   font-family: $font-family-base;
 }
 
-@media (max-width: $md) {
+@media (max-width: $xl) {
   .div1,
   .div2,
   .div3 {
@@ -521,34 +529,6 @@ $md: 768px;
   .filter-row .filter-container .button-group {
     margin-left: auto;
     align-items: center;
-  }
-}
-
-@media (max-width: $md) {
-  .filter-row .filter-container {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .filter-row .filter-container .button-group {
-    grid-template-columns: repeat(3, 1fr);
-    width: 100%;
-  }
-
-  .filter-row .filter-container .filter-item {
-    min-width: 140px;
-    max-width: 180px;
-  }
-
-  #page-heading .row .col-md-6.d-flex {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-  }
-
-  #page-heading .row .col-md-6.d-flex .btn {
-    width: 100%;
   }
 }
 

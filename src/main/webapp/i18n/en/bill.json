@@ -4,14 +4,17 @@
       "home": {
         "title": "BILL",
         "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Bill",
-        "createOrEditLabel": "Create or edit a Bill",
-        "notFound": "No Bills found",
+        "createLabel": "Create Bill",
+        "createOrEditLabel": "Create/Edit Bill",
+        "notFound": "No Bills yet",
         "add": "Add Bill"
       },
       "created": "Complete created",
       "updated": "Complete updated",
       "deleted": "Complete deleted",
+      "splitBill": "Split Bill",
+      "selectAll": "Select All",
+      "savaSplit": "Sava Split",
       "delete": {
         "question": "Confirm delete?"
       },
@@ -23,7 +26,8 @@
       "amount": "Amount",
       "createdAt": "Created At",
       "event": "Event",
-      "payer": "Payer"
+      "payer": "Payer",
+      "memAvailable": "No members available"
     }
   }
 }

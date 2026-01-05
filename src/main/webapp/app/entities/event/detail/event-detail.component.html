@@ -40,11 +40,13 @@
         </dl>
 
         <!-- Bills Section -->
-        <h4 class="section-title">Bills</h4>
-        <button class="btn btn-success btn-sm mb-3 w-100" (click)="addBill()">+ Add Bill</button>
+        <h4 class="section-title" jhiTranslate="prosperPathApp.bill.home.title">Bills</h4>
+        <button class="btn btn-success btn-sm mb-3 w-100" (click)="addBill()" jhiTranslate="prosperPathApp.bill.home.add">
+          + Add Bill
+        </button>
 
         @if (bills.length === 0) {
-          <div class="alert alert-info small py-2 text-center">No bills yet</div>
+          <div class="alert alert-info small py-2 text-center" jhiTranslate="prosperPathApp.bill.home.notFound">No bills yet</div>
         } @else {
           <div class="table-responsive">
             <table class="table table-sm table-hover">
@@ -69,9 +71,11 @@
         }
 
         <!-- Balances Section -->
-        <h4 class="section-title mt-4">Balances</h4>
+        <h4 class="section-title mt-4" jhiTranslate="prosperPathApp.eventBalance.home.title">Balances</h4>
         @if (balances.length === 0) {
-          <div class="alert alert-info small py-2 text-center">No balances calculated</div>
+          <div class="alert alert-info small py-2 text-center" jhiTranslate="prosperPathApp.eventBalance.home.notFound">
+            No balances calculated
+          </div>
         } @else {
           <div class="table-responsive">
             <table class="table table-sm table-hover">

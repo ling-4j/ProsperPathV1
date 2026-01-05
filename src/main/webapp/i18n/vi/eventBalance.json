@@ -6,7 +6,7 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Thêm mới một Event Balance",
         "createOrEditLabel": "Thêm mới hoặc cập nhật Event Balance",
-        "notFound": "No Event Balances found"
+        "notFound": "Chưa có data"
       },
       "created": "Một Event Balance mới được tạo với định danh {{ param }}",
       "updated": "Một Event Balance cập nhật với định danh {{ param }}",

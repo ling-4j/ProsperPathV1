@@ -14,12 +14,22 @@
       "delete": {
         "question": "Confirm delete?"
       },
+      "selectMem": "Select Members",
+      "selectAll": "Select All",
+      "add": "Add",
+      "remove": "Remove",
       "detail": {
         "title": "Team"
       },
       "id": "ID",
       "name": "Name",
-      "createdAt": "Created At"
+      "createdAt": "Created At",
+      "memAdd": "Add members",
+      "mem": "Members in this team",
+      "memDetail": "No members in this team",
+      "memAlready": "All members are already in this team",
+      "memSelect": "Please select at least one member.",
+      "memAvailable": "No members available"
     }
   }
 }

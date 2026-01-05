@@ -22,33 +22,37 @@ $font-family-base:
   sans-serif;
 
 .category-container {
-  min-height: 81vh; // Đảm bảo chiều cao tối thiểu là toàn màn hình
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
 
+  .rounded-4 {
+    width: auto;
+  }
+
   .category-title {
     color: #008080;
-    font-weight: bold; // Ẩn tiêu đề "Sign in" để khớp với thiết kế
+    font-weight: bold;
   }
 
   .form {
-    background-color: #f5f7fa; // Đổi màu nền thành trắng
-    padding: 15px; // Giảm padding để form nhỏ gọn hơn
+    background-color: #f5f7fa;
+    padding: 15px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     font-family: $font-family-base;
 
     .mb-3 {
-      margin-bottom: 8px; // Giảm khoảng cách giữa các trường để khớp với hình
+      margin-bottom: 8px;
 
       label {
         font-size: 14px;
         font-weight: 500;
         color: #333;
-        margin-bottom: 4px; // Giảm margin để gọn hơn
+        margin-bottom: 4px;
         display: block;
       }
 
@@ -56,7 +60,7 @@ $font-family-base:
         background-color: $gray;
         border: none;
         border-radius: 5px;
-        padding: 6px 10px; // Giảm padding để input nhỏ gọn hơn
+        padding: 6px 10px;
         font-size: 14px;
         color: #333;
         transition: all 0.3s ease;
@@ -84,7 +88,7 @@ $font-family-base:
         color: $white;
         border: none;
         border-radius: 5px;
-        padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
+        padding: 6px 18px;
         font-size: 14px;
         font-weight: 500;
         text-transform: uppercase;
@@ -100,7 +104,7 @@ $font-family-base:
         color: $white;
         border: none;
         border-radius: 5px;
-        padding: 6px 18px; // Giảm padding để nút nhỏ gọn hơn
+        padding: 6px 18px;
         font-size: 14px;
         font-weight: 500;
         text-transform: uppercase;
@@ -126,7 +130,7 @@ $font-family-base:
     }
 
     &.alert-warning {
-      display: none; // Ẩn thông báo "You don't have an account yet?" vì không có trong thiết kế
+      display: none;
     }
   }
 
@@ -201,7 +205,7 @@ $font-family-base:
     color: $dark-text !important;
     background-color: $white;
     display: flex;
-    align-items: center; // Đưa icon vào giữa
+    align-items: center;
 
     &.ng-option-selected,
     &.ng-option-marked {
